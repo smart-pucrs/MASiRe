@@ -2,6 +2,5 @@
 
 class Generator:
 
-  def __init__(self, config):
-
-    self.a = 'a'
+    def __init__(self, config):
+        self.a = 'a'
