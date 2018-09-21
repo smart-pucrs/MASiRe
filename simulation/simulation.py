@@ -1,11 +1,12 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/CitySimulation.java
 
-from world import *
-from generator import *
-from action_executor import *
+from world import World
+from generator import Generator
+from action_executor import ActionExecutor
 
 class Simulation:
 
+  # config file is already a dict in here
   def __init__(self, config):
 
     self.step = 0

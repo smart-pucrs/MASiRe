@@ -172,7 +172,7 @@ class ActionExecutor:
  			#log(failed)
 
 
- 	def agent_deliver(self, kind, item, amount = None):
+ 	def agent_deliver(agent, kind, item, amount = None):
 	 	if amount is None:
 	 		try:
 	 			if kind is 'physical':
