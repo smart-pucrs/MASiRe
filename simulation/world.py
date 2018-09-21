@@ -2,14 +2,11 @@
 
 class World:
 
-  def __init__(self, config):
+    def __init__(self, config):
+        self.agents = dict()
 
-    self.agents = dict()
+    def initial_percepts(self):
+        return
 
-  def initialPercepts(self):
-
-    return
-
-  def percepts(self, agent):
-
-    return
+    def percepts(self, agent):
+        return

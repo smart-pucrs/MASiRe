@@ -35,3 +35,4 @@ class Generator:
   def generateFlood(self):
 
     random_period = random.randint(self.config[generate][flood])
+

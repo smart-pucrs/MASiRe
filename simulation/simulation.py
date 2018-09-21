@@ -6,28 +6,23 @@ from action_executor import ActionExecutor
 
 class Simulation:
 
-  # config file is already a dict in here
-  def __init__(self, config):
+    def __init__(self, config):
+        self.step = 0
+        self.world = World(config)
+        self.generator = Generator(config)
+        self.action_executor = ActionExecutor(config)
 
-    self.step = 0
-    self.world = World(config)
-    self.generator = Generator(config)
-    self.action_executor = ActionExecutor(config)
+    def start(self):
+        # returns initial percepts for each agent
 
-  def start(self):
+        return self.world.initialPercepts()
 
-    # returns initial percepts for each agent
+    def pre_step(self, step):
+        # returns percepts for each agent
 
-    return self.world.initialPercepts()
+        percepts = dict()
 
-  def pre_step(self, step):
+        for agent in self.world.agents:
+            percepts[agent.name] = self.world.percepts(agent)
 
-    # returns percepts for each agent
-    
-    percepts = dict()
-
-    for agent in self.world.agents:
-
-      percepts[agent.name] = self.world.percepts(agent)
-
-    return percepts
+        return percepts
