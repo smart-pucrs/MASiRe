@@ -1,5 +1,7 @@
 class Flood:
 
+  # still missing location attribute
+
   def __init__(self, period, dimensions, photos, water_samples):
 
     self.period = period
