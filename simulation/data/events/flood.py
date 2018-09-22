@@ -1,7 +1,7 @@
 class Flood:
 
-  def __init__(self, duration, center, dimensions):
+  def __init__(self, period, center, dimensions):
 
-    self.duration = duration
+    self.period = period
     self.center = center
     self.dimensions = dimensions
