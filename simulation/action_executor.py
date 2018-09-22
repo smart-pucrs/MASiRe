@@ -11,12 +11,12 @@ class ActionExecutor:
  	def parse_parameters():
  		#parses the parameters of an action
 
- 	def execute(agent, command):
+ 	def execute(self, agent, command):
  		action = parse_action(command)
  		parameters = parse_parameters(command) 
 
  		if action is None:
- 			agent.set_last_action_result(False)
+ 			agent.last_action_result = False
  			#log(failed_no_action)
 
  		elif action is 'move':
@@ -27,21 +27,21 @@ class ActionExecutor:
 		 			if parameters.size() == 1:
 		 				facility = parameters[0]
 		 				try:
-		 					if(agent.get_route is None):
+		 					if(agent.route is None):
 		 						try:
-		 							route = create_route_facility(agent.get_location, facility)
-		 							agent.set_route(route)
+		 							route = _map.create_route_facility(agent.role.location, facility) #not implemented yet
+		 							agent.route = route
 		 						except:
 		 							#log(failed_unknown_facility)
 		 					else: 
-		 						agent.set_route(agent.get_route().get_next_node())
+		 						agent.location = agent.route.next_node() #not implemented yet
 		 				except:
 		 					#log(failed_no_route)
 		 			elif parameters.size() == 2:
 		 				latitude = parameters[0]
 		 				longitude = parameters[1]
 		 				try:
-		 					route.create_route_location(agent.get_location, latitude, longitude)
+		 					agent.location = [latitude, longitude]
 		 				except:
 		 					#log(failed_no_route)
  				except:
@@ -54,9 +54,9 @@ class ActionExecutor:
 	 		else:
 	 			try:
 		 			if parameters.size() == 1:
-		 				agent_deliver('pyshical', parameters[0])
+		 				agent_deliver(agent, parameters[0])
 		 			elif parameters.size() == 2:
-		 				agent_deliver('physical', parameters[0], parameters[1])
+		 				agent_deliver(agent, parameters[0], parameters[1])
 	 			except:
 	 				#log(failed)
 
@@ -78,8 +78,9 @@ class ActionExecutor:
  				#log(failed_wrong_param)
  			else:
  				try:
- 					if check_cdm_location(agent.get_location): #not implemented yet
- 						agent.charge()
+ 					facility = _map.get_facility(agent.location) #not implemented yet		
+ 					if facility.id is 'cdm':
+ 						cdm.charge(agent) #not implemented yet
  					else:
  						#log(failed_location)
  				except:
@@ -91,17 +92,17 @@ class ActionExecutor:
  				#log(failed_wrong_param)
  			else:
  				try:
-					victim = search_victim(parameters[0]) #not implemented yet
+					victim = _map.search_victim(parameters[0]) #not implemented yet
  					if victim is None:
  						#log(failed_unknown_item)
- 					try:
- 						victim.rescue_victim()
- 					except:
- 						#log(failed_location)
- 					weight = victim.get_weight()
- 					if agent.get_free_physical_capacity() > victim.get_weight():
- 						agent.add_physical_item(victim.get_name(), weight)
+ 					if victim.location is agent.location
+ 						_map.remove_victim(victim) #not implemented yet
  					else:
+ 						#log(failed_location)
+ 					weight = victim.get_weight() #not implemented yet
+ 					try:
+ 						agent.add_physical_item(victim.get_name())
+ 					except:
  						#log(failed_capacity)
  				except:
  					#log(failed)	
@@ -112,13 +113,15 @@ class ActionExecutor:
 		 		#log(failed_wrong_param)
 		 	else:
 		 		try:
-		 			if agent.get_free_physical_capacity() > 0: #?
+		 			facility = _map.get_facility(agent.location) #not implemented yet
+		 			if facility.id = 'water':
 		 				try:
-		 					water.collect(agent) #not implemented yet
+		 					#create sample of water
+		 					agent.add_physical_item(water)
 		 				except:
-		 					#log(failed_location)
+		 					#log(failed_capacity)
 		 			else:
-		 				#log(failed_capacity)
+		 				#log(failed_location)
 		 		except:
 		 			#log(failed)
 
@@ -128,14 +131,15 @@ class ActionExecutor:
  				#log(failed_wrong_param)
  			else:
  				try:
- 					if agent.get_free_virtual_capacity() > 0: #?
+ 					facility = _map.get_facility(agent.location) #not implemented yet
+ 					if facility.id = 'photo':
  						try:
- 							role.get_photograph(agent.get_location()) #not implemented yet
- 							agent.add_virtual_item('photo') # photo_1, 2, 3 ... (?) - amount?
+ 							#create photo
+ 							agent.add_virtual_item(photo)
  						except:
- 							#log(failed_location)
+ 							#log(failed_capacity)
  					else:
- 						#log(failed_capacity)
+ 						#log(failed_location)
  				except:
  					#log(failed)
 
@@ -146,9 +150,11 @@ class ActionExecutor:
  			else:
  				try:
  					if parameters.size() == 1:
- 						_map.search_social_asset(radius) #not implemented yet - agent location(?)
+ 						assets = _map.search_social_asset(radius, agent.location) #not implemented yet
+ 						#show assets to agent
  					else:
- 						_map.search_social_asset(radius, latitude, longitude) #not implemented yet - agent location(?)
+ 						assets = _map.search_social_asset(radius, latitude, longitude) #not implemented yet
+ 						#show assets to agent
  				except:
  					#log(failed)
 
@@ -158,10 +164,8 @@ class ActionExecutor:
  				#log(failed_wrong_param)
  			else:
  				try:
- 					if agent.get_free_virtual_capacity() == agent.get_initial_virtual_capacity():
- 						success = world.analyze() #not implemented yet (world?)
- 						if success:
- 							agent.remove_virtual_item('photo') #photo_1, 2,3 ... (?) - amount?
+ 					if agent.virtual_storage is not agent.role.virual_capacity:
+ 						agent.remove_virtual_item('photo')
  					else:
  						#log(failed_item_amount)
  				except:
@@ -172,36 +176,36 @@ class ActionExecutor:
  			#log(failed)
 
 
- 	def agent_deliver(self, kind, item, amount = None):
+ 	def agent_deliver(self, agent, kind, amount = None):
+		total_removed = 0
 	 	if amount is None:
 	 		try:
 	 			if kind is 'physical':
-	 				agent.remove_physical_item(item)
+	 				total_removed = agent.remove_physical_item('physical')
 	 			elif kind is 'virtual':
-	 				agent.remove_virtual_item(item)
+	 				total_removed = agent.remove_virtual_item('virtual')
 	 			else:
 	 				#log(failed_invalid_kind)
-	 				raise Exception('invalid kind for delivery')
 	 		except:
 	 			#log(failed_unknown_item)
 	 		try:
-	 			cdm.deliver(item) #not implemented yet
+	 			cdm.deliver(agent, kind, total_removed) #not implemented yet
 	 		except:
 	 			#log(failed_location)
 	 	elif amount is not None:
 	 		try:
-	 			verify(amount)#not implemented yet
+	 			verify(amount) #not implemented yet
 	 		except:
 	 			#log(failed_item_amount)
 	 		try:
 	 			if kind is 'physical':
-	 				agent.remove_physical_item(name)
+	 				total_removed = agent.remove_physical_item('physical', amount)
 	 			elif kind is 'virtual':
-	 				agent.remove_virtual_item(name)
+	 				total_removed = agent.remove_virtual_item('virtual', amount)
 	 		except:
 	 			#log(failed_unknown_item)
 	 		try:
-	 			cdm.deliver(item, amount) #not implemented yet
+	 			cdm.deliver(agent, kind, total_removed) #not implemented yet
 	 		except:
 	 			#log(failed_location)
 
