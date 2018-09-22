@@ -1,5 +1,6 @@
 class Photo:
 
-  def __init__(self):
+  def __init__(self, size, victims):
 
-    self.a = 'a'
+    self.size = size
+    self.victims = victims
