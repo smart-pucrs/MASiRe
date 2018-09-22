@@ -183,7 +183,7 @@ class ActionExecutor:
 	 		except:
 	 			#log(failed_unknown_item)
 	 		try:
-	 			cdm.deliver(agent, kind, total_removed) #not implemented yet
+	 			cdm.deliver(kind, total_removed) #not implemented yet
 	 		except:
 	 			#log(failed_location)
 	 	elif amount is not None:
@@ -199,7 +199,7 @@ class ActionExecutor:
 	 		except:
 	 			#log(failed_unknown_item)
 	 		try:
-	 			cdm.deliver(agent, kind, total_removed) #not implemented yet
+	 			cdm.deliver(kind, total_removed) #not implemented yet
 	 		except:
 	 			#log(failed_location)
 
