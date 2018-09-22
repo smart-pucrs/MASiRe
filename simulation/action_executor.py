@@ -5,12 +5,6 @@ class ActionExecutor:
  	def __init__(self, config):
  		self.a = 'a'
 
- 	def parse_action():
- 		#parses the action in a string of commands
-
- 	def parse_parameters():
- 		#parses the parameters of an action
-
  	def execute(self, agent, command):
  		action = parse_action(command)
  		parameters = parse_parameters(command) 
