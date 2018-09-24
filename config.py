@@ -3,8 +3,6 @@ from pprint import pprint
 
 with open('config.json') as f:
     data = json.load(f)
-#data["maps"][0]["id"] 
-
 
 idMatch = data["map"]["id"]
 steps = data["map"]["steps"]
@@ -57,8 +55,34 @@ percieveBoat = data["roles"]["boat"]["percieve"]
 kindBoat = data["roles"]["boat"]["kind"]
 
 
+quadSize = data["generate"]["quadSize"]
+floodProbability = data["generate"]["floodProbability"]
 
+floodMinPeriod = data["generate"]["flood"]["minPeriod"]
+floodMaxPeriod = data["generate"]["flood"]["maxPeriod"]
 
+circleMinRad = data["generate"]["flood"]["circle"]["minRadius"]
+circleMaxRad = data["generate"]["flood"]["circle"]["maxRadius"]
 
+rectMinHeight = data["generate"]["flood"]["rectangle"]["minHeight"]
+rectMaxHeight = data["generate"]["flood"]["rectangle"]["minHeight"]
+rectMinLength = data["generate"]["flood"]["rectangle"]["minLength"]
+rectMaxLength = data["generate"]["flood"]["rectangle"]["maxLength"]
 
-print(percieveBoat)
+photoSize = data["generate"]["photo"]["size"]
+photoMinAmount = data["generate"]["photo"]["minAmount"]
+photoMaxAmount = data["generate"]["photo"]["maxAmount"]
+photoVictimProb = data["generate"]["photo"]["victimProbability"]
+
+victimMinSize = data["generate"]["victim"]["minSize"]
+victimMaxSize = data["generate"]["victim"]["maxSize"]
+victimMinAmount = data["generate"]["victim"]["minAmount"]
+victimMaxAmount = data["generate"]["victim"]["maxAmount"]
+victimMinLifetime = data["generate"]["victim"]["minLifetime"]
+victimMaxLifetime = data["generate"]["victim"]["maxLifetime"]
+
+waterSampleSize = data["generate"]["waterSample"]["size"]
+waterSampleMin = data["generate"]["waterSample"]["minAmount"]
+WaterSampleMax = data["generate"]["waterSample"]["maxAmount"]
+
+print(victimMinLifetime)
