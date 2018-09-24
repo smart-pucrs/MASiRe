@@ -105,8 +105,8 @@
       "rectangle": {
         "minHeight": 30,
         "maxHeight": 70,
-        "minLenght": 20,
-        "maxLenght": 60
+        "minLength": 20,
+        "maxLength": 60
       }
     },
     "photo": {
