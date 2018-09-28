@@ -4,17 +4,21 @@ class Agent:
 
 #constructor with agent's private attributes
 	def __init__ (self, id, role):
-		self.id = identifier 
+		self.id = id 
 		self.role = role
 		self.last_action = None
 		self.last_action_result = True
 		self.location = [0,0]
 		self.route = None
-		self.physical_storage = role.physical_capacity
-		self.virtual_storage = role.virtual_capacity
+		self.physical_storage = 0#role.physical_capacity
+		self.virtual_storage = 0#role.virtual_capacity
 		self.physical_storage_vector = []
 		self.virtual_storage_vector = []
 
+	def __repr__(self):
+
+		return str(self.id) + ' - ' + self.role
+'''
 	def discharge(self):
 		self.role.actual_battery = 0
 
@@ -25,7 +29,7 @@ class Agent:
 		weight = item.get_weight()
 		if weight < self.physical_storage:
 			if amount is not None:
-				if total=weight*amount < self.physical_storage:
+				if total_weight*amount < self.physical_storage:
 					self.physical_storage -= total
 					while e < amount:
 						self.virtual_storage_vector.append(item)
@@ -84,7 +88,7 @@ class Agent:
 				lst[e] = lst[lst.size()-1]
 				lst[lst.size()-1] = aux_item
 				remove(self, lst, item, amount-=1, removed.append(lst.pop()))
-
+'''
 
 
 

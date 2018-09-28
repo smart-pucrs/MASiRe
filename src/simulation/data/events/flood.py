@@ -11,4 +11,8 @@ class Flood:
 
   def __str__(self):
 
-    return "FLOOOOOOOD"
+    return 'FLOOOOOOOD'
+
+  def __repr__(self):
+
+    return 'FLOOOOOOOD'
