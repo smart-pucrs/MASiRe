@@ -17,12 +17,17 @@ class Simulation:
 
         self.world.events = self.generator.generateEvents()
 
-        for agent in self.config['agents']:
+        agents = []
 
-            print(self.config['agents'][agent])
+        for agent_type in self.config['_types']:
 
-        # returns initial percepts for each agent
-        return self.world.initialPercepts()
+            agents_number = self.config['agents'][agent_type]
+
+            for x in range(agents_number):
+
+                agents.append(self.world.create_agent(agent_type))
+
+        return (agents, self.world.initialPercepts())
 
     def pre_step(self, step):
         # returns percepts for each agent
