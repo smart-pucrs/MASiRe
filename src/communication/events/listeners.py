@@ -26,9 +26,9 @@ def handle_connection(message):
     emit('received_jobs_result', verified)
 
 
-@socketio.on('connecting_agents')
+@socketio.on('connect')
 def respond_to_request(message=None):
-    global init
+    global init, valid_time
 
     init = time.time()
     _thread.start_new_thread(start_timer, (None,))

@@ -32,7 +32,7 @@ def on_response_jobs(args):
 
 socketIO = SocketIO('localhost', 5000, LoggingNamespace)
 socketIO.on('connection_result', on_response)
-socketIO.emit('connecting_agents', json.dumps(agent_accepted))
+socketIO.emit('connect', json.dumps(agent_accepted))
 
 socketIO.on('received_jobs_result', on_response_jobs)
 socketIO.emit('receive_jobs', json.dumps(step_config_agent))
