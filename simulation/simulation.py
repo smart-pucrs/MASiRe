@@ -10,6 +10,7 @@ class Simulation:
     def __init__(self, config):
 
         self.step = 0
+        self.config = config
         self.world = World(config)
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config)
@@ -17,7 +18,9 @@ class Simulation:
     def start(self):
         # creates agents and roles
 
+        for agent in self.config['agents']:
 
+            print(self.config['agents'][agent])
 
         # returns initial percepts for each agent
 
@@ -34,6 +37,6 @@ class Simulation:
 
         return percepts
 
-    def simulate(self):
-        return
+    def step(self, actions):
 
+        return 

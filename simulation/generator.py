@@ -12,11 +12,11 @@ class Generator:
   def __init__(self, config):
 
     self.config = config
-    random.seed(config['randomSeed'])
+    random.seed(config['map']['randomSeed'])
 
   def generateEvents(self):
 
-    events = [None for x in range(self.config['steps'])]
+    events = [None for x in range(self.config['map']['steps'])]
 
     for step in range(len(events)):
 
