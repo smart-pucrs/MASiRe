@@ -5,20 +5,33 @@ class ActionExecutor:
     def __init__(self, config):
         self.a = 'a'
 
-    def execute(self, agent, command):
-        action = 'a'
-        parameters = 'a' 
+    def execute_all(commands):
+
+        action_results = [None for x in range(len(commands))]
+
+        for idx, command in enumerate(commands):
+
+            action_results[idx] = self.execute(command)
+
+        return action_results
+
+    def execute(self, command):
+        # command = ('id', ('move', '34', '32'))
+        
+        agent = command[0]
+        action = command[1][0]
+        parameters = list(command[1][1:])
 
         if action == None:
             agent.last_action_result = False
             pass #log(failed_no_action)
 
         elif action == 'move':
-            if parameters.size() < 1 or parameters.size() > 2:
+            if len(parameters) < 1 or len(parameters) > 2:
                     pass #log(failed_wrong_param)
             else:        
                 try:
-                    if parameters.size() == 1:
+                    if len(parameters) == 1:
                         facility = parameters[0]
                         try:
                             if(agent.route == None):
@@ -31,7 +44,7 @@ class ActionExecutor:
                                 agent.location = agent.route.next_node() #not implemented yet
                         except:
                             pass #log(failed_no_route)
-                    elif parameters.size() == 2:
+                    elif len(parameters) == 2:
                         latitude = parameters[0]
                         longitude = parameters[1]
                         try:
@@ -43,32 +56,32 @@ class ActionExecutor:
 
 
         elif action == 'deliver_physical':
-            if parameters.size() < 1 or parameters.size() > 2:
+            if len(parameters) < 1 or len(parameters) > 2:
                 pass#log(failed_wrong_param)
             else:
                 try:
-                    if parameters.size() == 1:
+                    if len(parameters) == 1:
                         agent_deliver(agent, parameters[0])
-                    elif parameters.size() == 2:
+                    elif len(parameters) == 2:
                         agent_deliver(agent, parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
         elif action == 'deliver_virtual':
-            if parameters.size() < 1 or parameters.size() > 2:
+            if len(parameters) < 1 or len(parameters) > 2:
                     pass#log(failed_wrong_param)    
             else:
                 try:
-                    if parameters.size() == 1:
+                    if len(parameters) == 1:
                         agent_deliver('virtual', parameters[0])
-                    elif parameters.size() == 2:
+                    elif len(parameters) == 2:
                         agent_deliver('virtual', parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
 
         elif action == 'charge':
-            if parameters.size() > 0:
+            if len(parameters) > 0:
                 pass#log(failed_wrong_param)
             else:
                 try:
@@ -82,7 +95,7 @@ class ActionExecutor:
 
 
         elif action == 'rescue_victim':
-            if parameters.size() > 1:
+            if len(parameters) > 1:
                 pass#log(failed_wrong_param)
             else:
                 try:
@@ -103,7 +116,7 @@ class ActionExecutor:
 
 
         elif action == 'collect_water':
-            if parameters.size() > 0:
+            if len(parameters) > 0:
                 pass#log(failed_wrong_param)
             else:
                 try:
@@ -121,7 +134,7 @@ class ActionExecutor:
 
 
         elif action == 'photograph':
-            if parameters.size() > 0:
+            if len(parameters) > 0:
                 pass#log(failed_wrong_param)
             else:
                 try:
@@ -139,11 +152,11 @@ class ActionExecutor:
 
 
         elif action == 'search_social_asset':
-            if parameters.size() != 1 or parameters.size != 3:
+            if len(parameters) != 1 or parameters.size != 3:
                 pass#log(failed_wrong_param)
             else:
                 try:
-                    if parameters.size() == 1:
+                    if len(parameters) == 1:
                         assets = world_map.search_social_asset(radius, agent.location) #not implemented yet
                         #show assets to agent
                     else:
@@ -154,7 +167,7 @@ class ActionExecutor:
 
 
         elif action == 'analyze_photo':
-            if parameters.size() > 0:
+            if len(parameters) > 0:
                 pass#log(failed_wrong_param)
             else:
                 try:
