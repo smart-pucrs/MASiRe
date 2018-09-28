@@ -1,19 +1,20 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 
+
 class ActionExecutor:
 
     def __init__(self, config):
         self.a = 'a'
 
-    def execute_all(commands):
 
+    def execute_all(self, commands):
         action_results = [None for x in range(len(commands))]
 
         for idx, command in enumerate(commands):
-
             action_results[idx] = self.execute(command)
 
         return action_results
+
 
     def execute(self, command):
         # command = ('id', ('move', '34', '32'))
@@ -61,9 +62,9 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        agent_deliver(agent, parameters[0])
+                        # agent_deliver(agent, parameters[0])
                     elif len(parameters) == 2:
-                        agent_deliver(agent, parameters[0], parameters[1])
+                        # agent_deliver(agent, parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
@@ -73,9 +74,9 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        agent_deliver('virtual', parameters[0])
+                        # agent_deliver('virtual', parameters[0])
                     elif len(parameters) == 2:
-                        agent_deliver('virtual', parameters[0], parameters[1])
+                        # agent_deliver('virtual', parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
@@ -85,7 +86,7 @@ class ActionExecutor:
                 pass#log(failed_wrong_param)
             else:
                 try:
-                    facility = world_map.get_facility(agent.location) #not implemented yet        
+                    facility = world_map.get_facility(agent.location) #not implemented yet
                     if facility.id == 'cdm':
                         cdm.charge(agent) #not implemented yet
                     else:
