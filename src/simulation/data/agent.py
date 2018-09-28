@@ -3,9 +3,9 @@
 class Agent:
 
 #constructor with agent's private attributes
-	def __init__ (self, identifier, role):
+	def __init__ (self, id, role):
+		self.id = identifier 
 		self.role = role
-		self.identifier = identifier 
 		self.last_action = None
 		self.last_action_result = True
 		self.location = [0,0]

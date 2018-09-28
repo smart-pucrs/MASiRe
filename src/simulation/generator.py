@@ -14,11 +14,11 @@ class Generator:
     def __init__(self, config):
 
         self.config = config
-        random.seed(config['randomSeed'])
+        random.seed(config['map']['randomSeed'])
 
     def generateEvents(self):
 
-        events = [None for x in range(self.config['steps'])]
+        events = [None for x in range(self.config['map']['steps'])]
 
         for step in range(len(events)):
 
@@ -56,9 +56,9 @@ class Generator:
                                self.config['generate']['flood']['rectangle']['maxHeight'])
             )
 
-            dimensions['lenght'] = (
-                random.randint(self.config['generate']['flood']['rectangle']['minLenght'],
-                               self.config['generate']['flood']['rectangle']['maxLenght'])
+            dimensions['length'] = (
+                random.randint(self.config['generate']['flood']['rectangle']['minLength'],
+                               self.config['generate']['flood']['rectangle']['maxLength'])
             )
 
         # flood photo events
