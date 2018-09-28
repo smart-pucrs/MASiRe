@@ -26,7 +26,7 @@ def handle_connection(message):
     emit('received_jobs_result', verified)
 
 
-@socketio.on('connecting_agents')
+@socketio.on('connect')
 def respond_to_request(message=None):
     global init
 
