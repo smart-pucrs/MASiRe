@@ -29,7 +29,7 @@ class ActionExecutor:
 
         elif action == 'move':
             if len(parameters) < 1 or len(parameters) > 2:
-                    pass #log(failed_wrong_param)
+                pass #log(failed_wrong_param)
             else:        
                 try:
                     if len(parameters) == 1:
@@ -62,9 +62,9 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        # agent_deliver(agent, parameters[0])
+                        pass# agent_deliver(agent, parameters[0])
                     elif len(parameters) == 2:
-                        # agent_deliver(agent, parameters[0], parameters[1])
+                        pass# agent_deliver(agent, parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
@@ -74,9 +74,9 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        # agent_deliver('virtual', parameters[0])
+                        pass# agent_deliver('virtual', parameters[0])
                     elif len(parameters) == 2:
-                        # agent_deliver('virtual', parameters[0], parameters[1])
+                        pass# agent_deliver('virtual', parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 

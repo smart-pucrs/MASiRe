@@ -33,7 +33,7 @@ class Agent:
 					self.physical_storage -= total
 					while e < amount:
 						self.virtual_storage_vector.append(item)
-						e++
+						e += 1
 			else:
 				self.physical_storage_vector.append(item)
 				self.physical_storage -= weight
@@ -43,11 +43,11 @@ class Agent:
 		size = item.get_size()
 		if size < self.virtual_storage:
 			if amount is not None:
-				if total=size*amount < self.virtual_storage:
+				if total_size * amount < self.virtual_storage:
 					self.virtual_storage -= total
 					while e < amount:
 						self.virtual_storage_vector.append(item)
-						e++
+						e += 1
 			else:
 				self.virtual_storage_vector.append(item)
 				self.virtual_storage -= size

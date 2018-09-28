@@ -1,6 +1,6 @@
-from src.simulation.action_executor import ActionExecutor
-from src.simulation.world import World
-from src.simulation.generator import Generator
+from action_executor import ActionExecutor
+from world import World
+from generator import Generator
 
 
 class Simulation:
@@ -15,7 +15,7 @@ class Simulation:
     def start(self):
         # creates agents and roles
 
-        self.world.events = self.generator.generateEvents()
+        self.world.events = self.generator.generate_events()
 
         print(self.world.events)
 
