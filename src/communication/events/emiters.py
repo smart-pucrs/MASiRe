@@ -7,4 +7,3 @@ def response_to_action(response, token):
 
 def ack():
     print('message was received!')
-

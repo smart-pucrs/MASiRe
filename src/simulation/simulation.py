@@ -1,12 +1,11 @@
-from world import World
-from generator import Generator
-from action_executor import ActionExecutor
-from data.role import Role
+from src.simulation.action_executor import ActionExecutor
+from src.simulation.world import World
+from src.simulation.generator import Generator
+
 
 class Simulation:
 
     def __init__(self, config):
-
         self.step = 0
         self.config = config
         self.world = World(config)
@@ -23,7 +22,6 @@ class Simulation:
             print(self.config['agents'][agent])
 
         # returns initial percepts for each agent
-
         return self.world.initialPercepts()
 
     def pre_step(self, step):
