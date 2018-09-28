@@ -5,7 +5,7 @@ class ActionExecutor:
     def __init__(self, config):
         self.a = 'a'
 
-    def execute_all(commands):
+    def execute_all(self, commands):
 
         action_results = [None for x in range(len(commands))]
 
