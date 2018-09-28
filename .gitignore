@@ -82,6 +82,9 @@ modules.xml
 .idea/misc.xml
 *.ipr
 
+### macOS ###
+*.DS_Store
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
