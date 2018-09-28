@@ -14,11 +14,11 @@ class World:
         return []
 
     def percepts(self, agent):
-        
+
         return []
 
     def create_agent(self, agent_type):
 
         # in the future this method should also generate info about the agents location (i think)
-
-        return Agent(agent_counter, agent_type)
+        self.agent_counter += 1
+        return Agent(self.agent_counter, agent_type)
