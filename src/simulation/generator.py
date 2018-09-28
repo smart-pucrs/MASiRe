@@ -1,108 +1,107 @@
-# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/util/Generator.java
+# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/util
+# /Generator.java
 
 import random
 
-from data.events.flood import Flood
-from data.events.photo import Photo
-from data.events.victim import Victim
-from data.events.water_sample import WaterSample
+from .data.events.flood import Flood
+from .data.events.photo import Photo
+from .data.events.victim import Victim
+from .data.events.water_sample import WaterSample
+
 
 class Generator:
 
-  def __init__(self, config):
+    def __init__(self, config):
 
-    self.config = config
-    random.seed(config['randomSeed'])
+        self.config = config
+        random.seed(config['randomSeed'])
 
-  def generateEvents(self):
+    def generateEvents(self):
 
-    events = [None for x in range(self.config['steps'])]
+        events = [None for x in range(self.config['steps'])]
 
-    for step in range(len(events)):
+        for step in range(len(events)):
 
-      # generate floods (index 0) and photo events (index 1)
+            # generate floods (index 0) and photo events (index 1)
 
-      if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10: 
-        
-        events[step] = self.generateFlood()
+            if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
+                events[step] = self.generateFlood()
 
-    return events
+        return events
 
-  def generateFlood(self):
+    def generateFlood(self):
 
-    # flood period
+        # flood period
 
-    period = random.randint(self.config['generate']['flood']['minPeriod'],
-                            self.config['generate']['flood']['maxPeriod'])
+        period = random.randint(self.config['generate']['flood']['minPeriod'],
+                                self.config['generate']['flood']['maxPeriod'])
 
-    # flood dimensions
+        # flood dimensions
 
-    dimensions = dict()
+        dimensions = dict()
 
-    dimensions['shape'] = 'circle' if random.randint(0, 100) % 2 == 0 else 'rectangle'
+        dimensions['shape'] = 'circle' if random.randint(0, 100) % 2 == 0 else 'rectangle'
 
-    if dimensions['shape'] == 'circle':
+        if dimensions['shape'] == 'circle':
 
-      dimensions['radius'] = (
-        random.randint(self.config['generate']['flood']['circle']['minRadius'],
-        self.config['generate']['flood']['circle']['maxRadius'])
-      )
-                              
-    else:
+            dimensions['radius'] = (
+                random.randint(self.config['generate']['flood']['circle']['minRadius'],
+                               self.config['generate']['flood']['circle']['maxRadius'])
+            )
 
-      dimensions['height'] = (
-        random.randint(self.config['generate']['flood']['rectangle']['minHeight'],
-        self.config['generate']['flood']['rectangle']['maxHeight'])
-      )
+        else:
 
-      dimensions['lenght'] = (
-        random.randint(self.config['generate']['flood']['rectangle']['minLenght'],
-        self.config['generate']['flood']['rectangle']['maxLenght'])
-      )
+            dimensions['height'] = (
+                random.randint(self.config['generate']['flood']['rectangle']['minHeight'],
+                               self.config['generate']['flood']['rectangle']['maxHeight'])
+            )
 
-    # flood photo events
+            dimensions['lenght'] = (
+                random.randint(self.config['generate']['flood']['rectangle']['minLenght'],
+                               self.config['generate']['flood']['rectangle']['maxLenght'])
+            )
 
-    photos = [None for x in range(random.randint(
-      self.config['generate']['photo']['minAmount'],
-      self.config['generate']['photo']['maxAmount']
-    ))]
+        # flood photo events
 
-    for x in range(len(photos)):
-      
-      photo_size = self.config['generate']['photo']['size']
-
-      if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability'] * 100: 
-
-        photo_victims = [None for x in range(random.randint(
-          self.config['generate']['victim']['minAmount'],
-          self.config['generate']['victim']['maxAmount']
+        photos = [None for x in range(random.randint(
+            self.config['generate']['photo']['minAmount'],
+            self.config['generate']['photo']['maxAmount']
         ))]
 
-        for y in range(len(photo_victims)):
+        for x in range(len(photos)):
 
-          victim_size = random.randint(
-            self.config['generate']['victim']['minSize'],
-            self.config['generate']['victim']['maxSize']
-          )
+            photo_size = self.config['generate']['photo']['size']
 
-          victim_lifetime = random.randint(
-            self.config['generate']['victim']['minLifetime'],
-            self.config['generate']['victim']['maxLifetime']
-          )
+            if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability'] * 100:
 
-          photo_victims[y] = Victim(victim_size, victim_lifetime)
+                photo_victims = [None for x in range(random.randint(
+                    self.config['generate']['victim']['minAmount'],
+                    self.config['generate']['victim']['maxAmount']
+                ))]
 
-      photos[x] = Photo(photo_size, photo_victims)
+                for y in range(len(photo_victims)):
+                    victim_size = random.randint(
+                        self.config['generate']['victim']['minSize'],
+                        self.config['generate']['victim']['maxSize']
+                    )
 
-    # flood water sample events
+                    victim_lifetime = random.randint(
+                        self.config['generate']['victim']['minLifetime'],
+                        self.config['generate']['victim']['maxLifetime']
+                    )
 
-    water_samples = [None for x in range(random.randint(
-        self.config['generate']['waterSample']['minAmount'],
-        self.config['generate']['waterSample']['maxAmount']
-    ))]
+                    photo_victims[y] = Victim(victim_size, victim_lifetime)
 
-    for x in range(len(water_samples)):
+            photos[x] = Photo(photo_size, photo_victims)
 
-      water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'])
+        # flood water sample events
 
-    return Flood(period, dimensions, photos, water_samples)
+        water_samples = [None for x in range(random.randint(
+            self.config['generate']['waterSample']['minAmount'],
+            self.config['generate']['waterSample']['maxAmount']
+        ))]
+
+        for x in range(len(water_samples)):
+            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'])
+
+        return Flood(period, dimensions, photos, water_samples)

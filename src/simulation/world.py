@@ -3,15 +3,10 @@
 class World:
 
     def __init__(self, config):
-        
-        
-
         self.agents = dict()
 
     def initial_percepts(self):
-        
         return
 
     def percepts(self, agent):
-        
         return

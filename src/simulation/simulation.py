@@ -1,9 +1,9 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/CitySimulation.java
 
-from world import World
-from generator import Generator
-from action_executor import ActionExecutor
-from data.role import Role
+from .world import World
+from .generator import Generator
+from .action_executor import ActionExecutor
+from .data.role import Role
 
 class Simulation:
 
