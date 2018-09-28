@@ -62,9 +62,11 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        pass# agent_deliver(agent, parameters[0])
+                        pass
+                        # agent_deliver(agent, parameters[0])
                     elif len(parameters) == 2:
-                        pass# agent_deliver(agent, parameters[0], parameters[1])
+                        pass
+                        # agent_deliver(agent, parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 
@@ -74,9 +76,11 @@ class ActionExecutor:
             else:
                 try:
                     if len(parameters) == 1:
-                        pass# agent_deliver('virtual', parameters[0])
+                        pass
+                        # agent_deliver('virtual', parameters[0])
                     elif len(parameters) == 2:
-                        pass# agent_deliver('virtual', parameters[0], parameters[1])
+                        pass
+                        # agent_deliver('virtual', parameters[0], parameters[1])
                 except:
                     pass#log(failed)
 

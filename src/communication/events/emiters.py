@@ -2,7 +2,19 @@ from flask_socketio import emit
 
 
 def response_to_action(response, token):
-    emit(token, response, callback=ack)
+    emit(token+'/action_respone', response, callback=ack)
+
+
+def response_to_action_deliver(event, response):
+    emit(event, response)
+
+
+def response_to_action_connect(event, response):
+    emit(event, response)
+
+
+def emit_pre_step(pre_step, token):
+    emit(token+'/pre_step', pre_step, callback=ack)
 
 
 def ack():

@@ -69,12 +69,21 @@ def handle_request(agent):
     return 'agent not added to done jobs list'
 
 
+def containParameters(agent):
+    if agent[1][1] == '' or agent[1][1] is None:
+        if agent[1][2] == '' or agent[1][2] is None:
+            return False
+        return False
+
+    return True
+
+
 def verify_json(agent):
     f = open('agents.json', 'r').read()
     json_string = f.rstrip()
     available_agents = json.loads(json_string)
 
-    if agent[1][1] == '' or agent[1][1] is None or agent[1][2] == '' or agent[1][2] is None:
+    if not containParameters(agent):
         return False
 
     if not agent_is_present(agent, available_agents['agents']):
