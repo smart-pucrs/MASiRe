@@ -6,7 +6,7 @@ from flask import jsonify, json
 from flask_socketio import emit
 
 from src.communication.ActionResult import ActionResult
-from src import socketio
+from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action
 from src.communication.events.prepare_action import verify_method
 from src.communication.AgentManager import AgentManager

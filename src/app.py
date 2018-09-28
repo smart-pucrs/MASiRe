@@ -1,5 +1,5 @@
 #!/bin/env python
-from . import create_app, socketio
+from src.__init__ import create_app, socketio
 
 app = create_app(debug=True)
 
