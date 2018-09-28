@@ -1,6 +1,9 @@
 from flask import json
 
 
+agents = [()]
+
+
 def verify_method(method, agent):
     if method == 'deliver_virtual':
         return deliver_physical_load(agent)
@@ -58,10 +61,12 @@ def move(agent):
     return handle_request(agent)
 
 
+# ============= Handle Requests ============ #
 def handle_request(agent):
     if verify_json(agent):
         agents.append(agent)
         return 'agent added to done jobs list'
+    return 'agent not added to done jobs list'
 
 
 def verify_json(agent):
@@ -69,7 +74,7 @@ def verify_json(agent):
     json_string = f.rstrip()
     available_agents = json.loads(json_string)
 
-    if agent['parameters'] == '' or agent['parameters'] is None:
+    if agent[1][1] == '' or agent[1][1] is None or agent[1][2] == '' or agent[1][2] is None:
         return False
 
     if not agent_is_present(agent, available_agents['agents']):
@@ -80,7 +85,7 @@ def verify_json(agent):
 
 def agent_is_present(agent, agents_list):
     for ag in agents_list:
-        if ag['Name'] == agent['id']:
+        if ag['Name'] == agent[0]:
             return True
 
     return False

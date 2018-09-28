@@ -1,34 +1,41 @@
 import _thread
 import time
-
 import jwt
-from flask import jsonify, json
-from flask_socketio import emit
+import json
 
 from src.communication.ActionResult import ActionResult
-from src import socketio
+from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action
 from src.communication.events.prepare_action import verify_method
 from src.communication.AgentManager import AgentManager
+from flask_socketio import emit
 
 agent_manager = AgentManager()
+response = True
+init = time.time()
 
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
-    agent = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
-    method = agent['method']
-    emit('received_jobs_result', verify_method(method, agent))
+    agent = json.loads(message)
+
+    agent = (agent['id'], (agent['method'], agent['parameters'][0], agent['parameters'][1]))
+    method = agent[1][0]
+
+    verified = verify_method(method, agent)
+    emit('received_jobs_result', verified)
 
 
-@socketio.on('connect')
+@socketio.on('connecting_agents')
 def respond_to_request(message=None):
     global init
+
     init = time.time()
     _thread.start_new_thread(start_timer, (None,))
-    time.sleep(5)
+    # time.sleep(5)
     emit('connection_result', {'success': True})
-    if not retorno:
+
+    if not response:
         # socketio.
         pass
 
@@ -49,8 +56,9 @@ def call_responses(results):
 
 
 def start_timer(input=None):
-    global retorno
+    global response
+
     while 1:
         if time.time() - init > 3:
-            retorno = False
+            response = False
             break

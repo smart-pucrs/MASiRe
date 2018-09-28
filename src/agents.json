@@ -1,0 +1,46 @@
+{
+  "agents": [
+    {
+      "Name": "Ubuntu2",
+      "Version": "9",
+      "Type": "apt",
+      "Owner": "SPI"
+    },
+    {
+      "Name": "Ubuntu",
+      "Version": "17.10",
+      "Type": "apt",
+      "Owner": "Canonical"
+    },
+    {
+      "Name": "Fedora",
+      "Version": "26",
+      "Type": "dnf",
+      "Owner": "Red Hat"
+    },
+    {
+      "Name": "CentOS",
+      "Version": "7",
+      "Type": "yum",
+      "Owner": "Red Hat"
+    },
+    {
+      "Name": "OpenSUSE",
+      "Version": "42.3",
+      "Type": "zypper",
+      "Owner": "Novell"
+    },
+    {
+      "Name": "Arch Linux",
+      "Version": "Rolling Release",
+      "Type": "pacman",
+      "Owner": "SPI"
+    },
+    {
+      "Name": "Gentoo",
+      "Version": "Rolling Release",
+      "Type": "emerge",
+      "Owner": "Gentoo Foundation"
+    }
+  ]
+}
