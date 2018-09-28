@@ -83,7 +83,7 @@ def verify_json(agent):
     json_string = f.rstrip()
     available_agents = json.loads(json_string)
 
-    if containParameters(agent):
+    if not containParameters(agent):
         return False
 
     if not agent_is_present(agent, available_agents['agents']):
