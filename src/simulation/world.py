@@ -14,7 +14,7 @@ class World:
         self.roles = dict()
         self.agents = dict()
         self.agent_counter = 0
-        self.active_events = None
+        self.active_events = []
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config)
 

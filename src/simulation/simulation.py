@@ -25,12 +25,12 @@ class Simulation:
         percepts = dict()
 
         for agent in self.world.agents:
-            percepts[agent.name] = self.world.percepts(agent)
+            percepts[agent.id] = self.world.percepts(agent)
 
         return percepts
 
     def do_step(self, actions):
-        action_results =  self.world.execute_actions(actions)
+        action_results = self.world.execute_actions(actions)
         self.step += 1
         
         return action_results
