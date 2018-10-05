@@ -17,9 +17,27 @@ const agent_accepted = {
 };
 
 step_config_agent = {
+    'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJOYW1lIjoiTmlzc2FuIiwiVmVyc2lvbiI6IjEuMyIsIlR5cGUiOiJDYXIiLCJPd25lciI6Ijg3NDYyIn0.jBzTytj9vhXC8eNsZe_f7LBXLCFdVjG65v9Znp3ZVQA',
     'id': '1',
     'method': 'move',
     'parameters': ['24', '32']
+}
+
+
+function sendRandomJobs(){
+
+    const  moves = ['move','deliver','photograph','rescue_victim']
+
+    const rand =  moves[Math.floor(Math.random()*4)]
+
+    const move = {
+    'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJOYW1lIjoiTmlzc2FuIiwiVmVyc2lvbiI6IjEuMyIsIlR5cGUiOiJDYXIiLCJPd25lciI6Ijg3NDYyIn0.jBzTytj9vhXC8eNsZe_f7LBXLCFdVjG65v9Znp3ZVQA',
+    'id': '1',
+    'method': rand,
+    'parameters': [Math.random()*100,Math.random()*100]
+    }
+
+    return move
 }
 
 axios.post('http://127.0.0.1:5000/requestConnection',agent_accepted).then(response =>{
@@ -29,7 +47,11 @@ axios.post('http://127.0.0.1:5000/requestConnection',agent_accepted).then(respon
     const socket = client.connect(address);
     socket.on('connection_result', ()=>socket.emit('ready',{data:data.encoded}));
     socket.on(data.encoded+'/connecting_agents', (result)=>console.log(result))
-    socket.on(data.encoded+'/pre_step', ()=>socket.emit('receive_jobs',step_config_agent))
+    socket.on(data.encoded+'/pre_step', (result)=>{
+        console.log(result)
+        socket.emit('receive_jobs',sendRandomJobs())
+    })
+    socket.on('received_jobs_result',(result)=>console.log(result))
 
 }).catch(err => console.log(err));
 
