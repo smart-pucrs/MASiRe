@@ -7,4 +7,6 @@ simulation = Simulation(config)
 
 print(simulation.start())
 
+simulation.do_step([('1', ('move', '34', '32'))])
 
+print(simulation.world.events)

@@ -2,14 +2,15 @@
 
 class Role:
 
-	def __init__(self, identifier, config):
-		self.speed = config['roles'][identifier]['speed']
-		self.physical_capacity = config['roles'][identifier]['capacity_physical']
-		self.virtual_capacity = config['roles'][identifier]['capacity_virtual']
-		self.battery = config['roles'][identifier]['battery']
-		self.abilities = config['roles'][identifier]['abilities']
-		self.perceive = config['roles'][identifier]['perceive']
-		self.roads = config['roles'][identifier]['kind']
+	def __init__(self, id, config):
+		self.id = id
+		self.roads = config['roles'][id]['kind']
+		self.speed = config['roles'][id]['speed']
+		self.battery = config['roles'][id]['battery']
+		self.percieve = config['roles'][id]['percieve']
+		self.abilities = config['roles'][id]['abilities']
+		self.virtual_capacity = config['roles'][id]['capacity_virtual']
+		self.physical_capacity = config['roles'][id]['capacity_physical']
 
 
 
