@@ -1,7 +1,5 @@
-from action_executor import ActionExecutor
 from world import World
 from generator import Generator
-
 
 class Simulation:
 
@@ -9,39 +7,30 @@ class Simulation:
         self.step = 0
         self.config = config
         self.world = World(config)
-        self.generator = Generator(config)
-        self.action_executor = ActionExecutor(config)
 
     def start(self):
-        # creates agents and roles
+        self.world.generate_events()
+        self.world.create_roles()
 
-        self.world.events = self.generator.generate_events()
+        return (self.world.create_agents(), self.world.initial_percepts())
 
-        print(self.world.events)
+    def do_pre_step(self):
+        self.world.active_events = [event for event in self.world.active_events if event[0] + event[1].period >= self.step]
+        
+        event_step = self.world.events[self.step]
 
-        agents = []
-
-        for agent_type in self.config['agents']:
-
-            agents_number = self.config['agents'][agent_type]
-
-            for x in range(agents_number):
-
-                agents.append(self.world.create_agent(agent_type))
-
-        return (agents, self.world.initial_percepts())
-
-    def pre_step(self, step):
-        # returns percepts for each agent
+        if event_step: 
+            self.world.active_events.append((self.step, event_step))
 
         percepts = dict()
 
         for agent in self.world.agents:
-            
             percepts[agent.name] = self.world.percepts(agent)
 
         return percepts
 
-    def step(self, actions):
-
-        return 
+    def do_step(self, actions):
+        action_results =  self.world.execute_actions(actions)
+        self.step += 1
+        
+        return action_results

@@ -4,24 +4,21 @@
 class ActionExecutor:
 
     def __init__(self, config):
-        self.a = 'a'
+        self.config = config
 
+    def execute_actions(self, world, actions):
+        action_results = [None for x in range(len(actions))]
 
-    def execute_all(self, commands):
-        action_results = [None for x in range(len(commands))]
-
-        for idx, command in enumerate(commands):
-            action_results[idx] = self.execute(command)
+        for idx, command in enumerate(actions):
+            action_results[idx] = self.execute(world.agents[int(command[0])],
+                                               command[1])
 
         return action_results
 
-
-    def execute(self, command):
-        # command = ('id', ('move', '34', '32'))
-        
-        agent = command[0]
-        action = command[1][0]
-        parameters = list(command[1][1:])
+    def execute(self, agent, action):
+        # action = ('move', '34', '32')
+        print(agent)
+        print(action)
 
         if action == None:
             agent.last_action_result = False
@@ -219,5 +216,5 @@ class ActionExecutor:
             try:
                 cdm.deliver(agent, kind, total_removed) #not implemented yet
             except:
-                pass#log(failed_location)
+                pass#log(failed_location)'''
 

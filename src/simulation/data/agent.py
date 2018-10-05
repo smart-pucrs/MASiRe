@@ -6,18 +6,16 @@ class Agent:
 	def __init__ (self, id, role):
 		self.id = id 
 		self.role = role
-		self.last_action = None
-		self.last_action_result = True
-		self.location = [0,0]
 		self.route = None
-		self.physical_storage = 0#role.physical_capacity
-		self.virtual_storage = 0#role.virtual_capacity
-		self.physical_storage_vector = []
-		self.virtual_storage_vector = []
+		self.location = [0,0]
+		self.last_action = None
+		self.virtual_storage = []
+		self.physical_storage = []
+		self.last_action_result = True
 
 	def __repr__(self):
+		return str(self.id) + ' - ' + self.role.id
 
-		return str(self.id) + ' - ' + self.role
 '''
 	def discharge(self):
 		self.role.actual_battery = 0

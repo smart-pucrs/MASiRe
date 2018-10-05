@@ -8,7 +8,6 @@ from data.events.photo import Photo
 from data.events.victim import Victim
 from data.events.water_sample import WaterSample
 
-
 class Generator:
 
     def __init__(self, config):
@@ -40,7 +39,7 @@ class Generator:
 
         dimensions = dict()
 
-        dimensions['shape'] = 'circle' if random.randint(0, 100) % 2 == 0 else 'rectangle'
+        dimensions['shape'] = 'circle' if random.randint(0, 1) == 0 else 'rectangle'
 
         if dimensions['shape'] == 'circle':
 
