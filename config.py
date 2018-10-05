@@ -85,4 +85,4 @@ water_sample_size = data["generate"]["waterSample"]["size"]
 water_sample_min = data["generate"]["waterSample"]["minAmount"]
 water_sample_max = data["generate"]["waterSample"]["maxAmount"]
 
-print(victimMinLifetime)
+#print(quad_size)
