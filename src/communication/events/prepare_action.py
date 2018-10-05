@@ -79,16 +79,6 @@ def containParameters(agent):
 
 
 def verify_json(agent):
-    f = open('agents.json', 'r').read()
-    json_string = f.rstrip()
-    available_agents = json.loads(json_string)
-
-    if not containParameters(agent):
-        return False
-
-    if not agent_is_present(agent, available_agents['agents']):
-        return False
-
     return True
 
 
