@@ -11,8 +11,11 @@ class ActionExecutor:
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
-            action_results[idx] = self.execute(world.agents[int(command[0])],
-                                               command[1])
+            agent = world.agents[int(command[0])]
+            action = command[1]
+
+            self.execute(agent, action)
+            action_results[idx] = agent.last_action_result
 
         return action_results
 
@@ -20,6 +23,9 @@ class ActionExecutor:
         # action = ('move', '34', '32')
         print(agent)
         print(action)
+
+        action_name = action[0]
+        action_parameters = action[1:]
 
         if action == None:
             agent.last_action_result = False

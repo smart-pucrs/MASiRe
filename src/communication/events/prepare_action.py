@@ -15,6 +15,7 @@ def handle_request(agent):
 
 
 def verify_json(agent):
+
     f = open('agents.json', 'r').read()
     json_string = f.rstrip()
     available_agents = json.loads(json_string)

@@ -5,7 +5,7 @@ import json
 from src.communication.action_result import ActionResult
 from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action_connect, response_to_action_deliver, \
-    response_to_action_ready
+    response_to_action_ready, emit_pre_step
 from src.communication.events.prepare_action import handle_request
 from src.communication.agent_manager import AgentManager
 
@@ -17,21 +17,27 @@ agents = []
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
-    global init_general
 
-    agent = json.loads(message)
-    agent = (agent['id'], (agent['method'], agent['parameters'][0], agent['parameters'][1]))
+    agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
+    method = agent[1][0]
 
-    verified = handle_request(agent)
+    from src.manager import SimulationInstance
+    simulation_manager = SimulationInstance.get_instance('')
+    response = simulation_manager.do_step([agent])
+    response = ('received_jobs_result', response)
+    call_responses(response, 'receive_jobs','')
 
-    response = ('received_jobs_result', verified)
-    call_responses(response, 'receive_jobs')
 
 
 @socketio.on('connect')
 def respond_to_request(message=None):
     global init_general, agents
 
+    init = time.time()
+
+    response = ('connection_result', {'success': True})
+
+    call_responses(response, 'connect', '')
     if init_general is None:
         init_general = time.time()
 
@@ -40,7 +46,7 @@ def respond_to_request(message=None):
         if len(agents) <= 5:
             response[1] = 'Success'
             response = (response[0], response[1])
-            call_responses(response, 'connect')
+            call_responses(response, 'connect','')
 
         else:
             response[1] = 'Failure'
@@ -56,15 +62,16 @@ def respond_to_request_ready(message):
     decoded = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
     print('ready  :', decoded)
     agent_manager.manage_agents(decoded)
-    action_result = [ActionResult(message['data'], 'Let it be'), ActionResult(message['data'], 'Let it be2'),
-                     ActionResult(message['data'], 'Let it be3')]
-    call_responses(action_result, 'ready')
+    from src.manager import SimulationInstance
+    simulation_manager = SimulationInstance.get_instance('')
+    call_responses(simulation_manager.agents_list(), 'ready', message['data'])
+    response = simulation_manager.do_pre_step()
+    emit_pre_step(response, message['data'])
 
 
-def call_responses(results, caller):
+def call_responses(results, caller, token):
     if caller == 'ready':
-        for result in results:
-            response_to_action_ready(result.response, result.token)
+        response_to_action_ready(json.dumps(results), token)
 
     elif caller == 'connect':
         response_to_action_connect(results[0], results[1])

@@ -1,4 +1,5 @@
-# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/WorldState.java
+# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data
+# /WorldState.java
 from src.simulation.action_executor import ActionExecutor
 from src.simulation.data.agent import Agent
 from src.simulation.data.role import Role
@@ -14,7 +15,7 @@ class World:
         self.roles = dict()
         self.agents = dict()
         self.agent_counter = 0
-        self.active_events = None
+        self.active_events = []
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config)
 
