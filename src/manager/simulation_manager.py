@@ -1,4 +1,4 @@
-from src.communication.events.emiters import response_to_action, emit_pre_step
+from src.communication.events.emiters import response_to_action_connect, emit_pre_step
 from src.simulation.simulation import Simulation
 
 
@@ -13,7 +13,7 @@ class SimulationManager:
     def do_step(self, actions_list):
         step_response = self.simulation.do_step(actions_list)
         for action_response in step_response:
-            response_to_action(action_response.response, action_response.token)
+            response_to_action_connect(action_response.response, action_response.token)
 
     def do_pre_step(self):
         pre_step_response = self.simulation.do_pre_step()

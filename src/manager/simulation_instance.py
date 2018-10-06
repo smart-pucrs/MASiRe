@@ -1,4 +1,4 @@
-from src.manager.SimulationManager import SimulationManager
+from src.manager.simulation_manager import SimulationManager
 import json
 
 simulation_manager = None
@@ -14,6 +14,6 @@ def get_instance():
 
 def start_manager(path):
     global simulation_manager
-    f = open(path,'r').read()
+    f = open(path, 'r').read()
     config = json.loads(f)
     simulation_manager = SimulationManager(config)

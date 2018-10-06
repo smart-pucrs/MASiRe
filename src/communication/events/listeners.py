@@ -2,12 +2,12 @@ import time
 import jwt
 import json
 
-from src.communication.ActionResult import ActionResult
+from src.communication.action_result import ActionResult
 from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action_connect, response_to_action_deliver, \
     response_to_action_ready
 from src.communication.events.prepare_action import handle_request
-from src.communication.AgentManager import AgentManager
+from src.communication.agent_manager import AgentManager
 
 agent_manager = AgentManager()
 init_general = None
@@ -35,7 +35,7 @@ def respond_to_request(message=None):
     if init_general is None:
         init_general = time.time()
 
-    if time.time() - init_general < 320:
+    if time.time() - init_general < 30:
         response = ['connection_result', '']
         if len(agents) <= 5:
             response[1] = 'Success'

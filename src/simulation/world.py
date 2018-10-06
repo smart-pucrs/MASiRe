@@ -1,8 +1,8 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/WorldState.java
-from action_executor import ActionExecutor
-from data.role import Role
-from data.agent import Agent
-from generator import Generator
+from src.simulation.action_executor import ActionExecutor
+from src.simulation.data.agent import Agent
+from src.simulation.data.role import Role
+from src.simulation.generator import Generator
 
 
 class World:

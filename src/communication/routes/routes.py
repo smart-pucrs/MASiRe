@@ -5,7 +5,6 @@ from src.communication import main
 
 @main.route('/list')
 def list_agents():
-    data = request.get_data()
     f = open('agents.json', 'r').read()
     json_string = f.rstrip()
     available_agents = json.loads(json_string)

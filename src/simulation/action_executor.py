@@ -1,4 +1,5 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
+from src.simulation.data import cdm
 
 
 class ActionExecutor:

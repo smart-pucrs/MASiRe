@@ -3,10 +3,11 @@
 
 import random
 
-from data.events.flood import Flood
-from data.events.photo import Photo
-from data.events.victim import Victim
-from data.events.water_sample import WaterSample
+from src.simulation.data.events.flood import Flood
+from src.simulation.data.events.photo import Photo
+from src.simulation.data.events.victim import Victim
+from src.simulation.data.events.water_sample import WaterSample
+
 
 class Generator:
 
@@ -59,7 +60,6 @@ class Generator:
                 random.randint(self.config['generate']['flood']['rectangle']['minLength'],
                                self.config['generate']['flood']['rectangle']['maxLength'])
             )
-
 
         photos = self.generate_photos()
         water_samples = self.generate_water_samples()

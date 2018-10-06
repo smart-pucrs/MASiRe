@@ -2,19 +2,20 @@
 
 class Agent:
 
-#constructor with agent's private attributes
-	def __init__ (self, id, role):
-		self.id = id 
-		self.role = role
-		self.route = None
-		self.location = [0,0]
-		self.last_action = None
-		self.virtual_storage = []
-		self.physical_storage = []
-		self.last_action_result = True
+    # constructor with agent's private attributes
+    def __init__(self, id, role):
+        self.id = id
+        self.role = role
+        self.route = None
+        self.location = [0, 0]
+        self.last_action = None
+        self.virtual_storage = []
+        self.physical_storage = []
+        self.last_action_result = True
 
-	def __repr__(self):
-		return str(self.id) + ' - ' + self.role.id
+    def __repr__(self):
+        return str(self.id) + ' - ' + self.role.id
+
 
 '''
 	def discharge(self):
@@ -87,9 +88,3 @@ class Agent:
 				lst[lst.size()-1] = aux_item
 				remove(self, lst, item, amount-=1, removed.append(lst.pop()))
 '''
-
-
-
-
-
-

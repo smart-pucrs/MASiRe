@@ -1,5 +1,5 @@
-from world import World
-from generator import Generator
+from src.simulation.world import World
+
 
 class Simulation:
 
