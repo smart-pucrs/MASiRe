@@ -46,7 +46,7 @@ def respond_to_request(message=None):
         if len(agents) <= 5:
             response[1] = 'Success'
             response = (response[0], response[1])
-            call_responses(response, 'connect')
+            call_responses(response, 'connect','')
 
         else:
             response[1] = 'Failure'
