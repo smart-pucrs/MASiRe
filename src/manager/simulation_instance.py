@@ -4,16 +4,10 @@ import json
 simulation_manager = None
 
 
-def get_instance():
+def get_instance(path):
     global simulation_manager
     if simulation_manager is None:
-        print('Simulations has not been started')
-        return None
+        f = open(path, 'r').read()
+        config = json.loads(f)
+        simulation_manager = SimulationManager(config)
     return simulation_manager
-
-
-def start_manager(path):
-    global simulation_manager
-    f = open(path, 'r').read()
-    config = json.loads(f)
-    simulation_manager = SimulationManager(config)
