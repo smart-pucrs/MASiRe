@@ -2,22 +2,22 @@
 
 class Agent:
 
-    # constructor with agent's private attributes
-    def __init__(self, id, role):
-        self.id = id
-        self.role = role
-        self.route = None
-        self.location = [0, 0]
-        self.last_action = None
-        self.virtual_storage = []
-        self.physical_storage = []
-        self.last_action_result = True
+#constructor with agent's private attributes
+	def __init__ (self, identifier, role):
+		self.role = role
+		self.identifier = identifier 
+		self.last_action = None
+		self.last_action_result = True
+		self.location = [0,0]
+		self.route = None
+		self.physical_storage = role.physical_capacity
+		self.virtual_storage = role.virtual_capacity
+		self.physical_storage_vector = []
+		self.virtual_storage_vector = []
 
-    def __repr__(self):
-        return str(self.id) + ' - ' + self.role.id
+	def __repr__(self):
+		return str(self.id) + ' - ' + self.role
 
-
-'''
 	def discharge(self):
 		self.role.actual_battery = 0
 
@@ -25,36 +25,50 @@ class Agent:
 		self.role.actual_battery = role.total_battery
 
 	def add_physical_item(self, item, amount=None):
+
 		weight = item.get_weight()
 		if weight < self.physical_storage:
 			if amount is not None:
-				if total_weight*amount < self.physical_storage:
-					self.physical_storage -= total
+				if weight*amount < self.physical_storage:
+					self.physical_storage -= weight*amount
 					while e < amount:
 						self.virtual_storage_vector.append(item)
-						e += 1
+						e+=1
 			else:
 				self.physical_storage_vector.append(item)
 				self.physical_storage -= weight
-		else raise Exception('failed_capacity')
+
+		else:
+			raise Failed_capacity('The agent does not have enough physical storage.')
 
 	def add_virtual_item(self, item, amount=None):
+
 		size = item.get_size()
 		if size < self.virtual_storage:
 			if amount is not None:
-				if total_size * amount < self.virtual_storage:
-					self.virtual_storage -= total
+				if size*amount < self.virtual_storage:
+					self.virtual_storage -= size*amount
 					while e < amount:
 						self.virtual_storage_vector.append(item)
-						e += 1
+						e+=1
 			else:
 				self.virtual_storage_vector.append(item)
 				self.virtual_storage -= size
-		else raise Exception('failed_capacity')
+
+		else:
+			raise Failed_capacity('The agent does not have enough virtual storage.')
 		
 			
 	def remove_physical_item(self, item, amount=None):
+
+		if self.virtual_storage is self.role.virual_capacity:
+			raise Failed_item_amount('The agents has no victims to deliver.')
+
+		if !self.virtual_storage_vector.contains(item):
+			raise Failed_unknown_item('No physical item with this ID is storaged.')
+
 		vector = self.physical_storage_vector
+
 		if amount is None:
 			removed = remove(vector, item, vector.size(), [])
 			#print(removed)
@@ -67,7 +81,15 @@ class Agent:
 
 
 	def remove_virtual_item(self, item, amount=None):
+
+		if self.virtual_storage is self.role.virual_capacity:
+			raise Failed_item_amount('The agents has no photos to deliver.')
+
+		if !self.virtual_storage_vector.contains(item):
+			raise Failed_unknown_item('No virtual item with this ID is storaged.')
+
 		vector = self.virtual_storage_vector
+
 		if amount is None:
 			removed = remove(vector, item, vector.size(), [])
 			#print(removed)
@@ -78,7 +100,8 @@ class Agent:
 			for e in removed:
 				self.virtual_storage += removed.get_size()
 
-	def remove(self, lst, item, amount, removed):
+
+	def remove(self, lst, item, removed, amount=None):
 		if amount == 0:
 			return removed
 		for e in lst:
@@ -86,5 +109,12 @@ class Agent:
 				aux_item = lst[e]
 				lst[e] = lst[lst.size()-1]
 				lst[lst.size()-1] = aux_item
-				remove(self, lst, item, amount-=1, removed.append(lst.pop()))
-'''
+				amount = amount - 1
+				remove(self, lst, item, removed.append(lst.pop()), amount)
+
+
+
+
+
+
+
