@@ -26,6 +26,7 @@ class Simulation:
         percepts = dict()
 
         for agent in self.world.agents.values():
+
             percepts[agent.id] = self.world.percepts(agent)
 
         return percepts
