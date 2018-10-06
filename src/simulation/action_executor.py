@@ -24,6 +24,8 @@ class ActionExecutor:
         print(agent)
         print(action)
 
+        # PARAMETER = AGENT['PARAMETERS']
+
         action_name = action[0]
         action_parameters = action[1:]
 
