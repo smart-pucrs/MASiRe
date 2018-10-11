@@ -1,5 +1,5 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Entity.java
-
+from src.simulation.exceptions import *
 class Agent:
 
     # constructor with agent's private attributes
@@ -16,13 +16,13 @@ class Agent:
         self.virtual_storage_vector = []
 
     def __repr__(self):
-        return str(self.id) + ' - ' + self.role
+        return self.id + ' - ' + self.role
 
     def discharge(self):
         self.role.actual_battery = 0
 
     def charge(self):
-        self.role.actual_battery = role.total_battery
+        self.role.actual_battery = self.role.total_battery
 
     def add_physical_item(self, item, amount=None):
 
@@ -31,6 +31,7 @@ class Agent:
             if amount is not None:
                 if weight * amount < self.physical_storage:
                     self.physical_storage -= weight * amount
+                    e = 0
                     while e < amount:
                         self.virtual_storage_vector.append(item)
                         e += 1
@@ -48,6 +49,7 @@ class Agent:
             if amount is not None:
                 if size * amount < self.virtual_storage:
                     self.virtual_storage -= size * amount
+                    e = 0
                     while e < amount:
                         self.virtual_storage_vector.append(item)
                         e += 1
@@ -69,11 +71,11 @@ class Agent:
         vector = self.physical_storage_vector
 
         if amount is None:
-            removed = remove(vector, item, vector.size(), [])
+            removed = self.remove(vector, item, vector.size(), [])
             # print(removed)
             self.physical_storage = self.role.physical_capacity
         else:
-            removed = remove(vector, item, amount, [])
+            removed = self.remove(vector, item, amount, [])
             # print(removed)
             for e in removed:
                 self.physical_storage += removed.get_weight()
@@ -89,11 +91,11 @@ class Agent:
         vector = self.virtual_storage_vector
 
         if amount is None:
-            removed = remove(vector, item, vector.size(), [])
+            removed = self.remove(vector, item, vector.size(), [])
             # print(removed)
             self.virtual_storage = self.role.physical_capacity
         else:
-            removed = remove(vector, item, amount, [])
+            removed = self.remove(vector, item, amount, [])
             # print(removed)
             for e in removed:
                 self.virtual_storage += removed.get_size()
@@ -107,4 +109,4 @@ class Agent:
                 lst[e] = lst[lst.size() - 1]
                 lst[lst.size() - 1] = aux_item
                 amount = amount - 1
-                remove(self, lst, item, removed.append(lst.pop()), amount)
+                self.remove(self, lst, item, removed.append(lst.pop()), amount)

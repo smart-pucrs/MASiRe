@@ -1,7 +1,10 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
-
+from src.simulation.exceptions import *
+from src.simulation.data.events.water_sample import WaterSample
+from src.simulation.data.events.photo import Photo
 
 class ActionExecutor:
+
     def __init__(self, config):
         self.config = config
 
@@ -10,9 +13,10 @@ class ActionExecutor:
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
-            agent = world.agents[int(command[0])]
+            agent = world.agents[command[0]]
             action = command[1]
 
+        self.world = world
         self.execute(agent, action)
         action_results[idx] = agent.last_action_result
 
@@ -23,7 +27,7 @@ class ActionExecutor:
         action_name = action[0]
         action_parameters = action[1:]
 
-    def execute(self, agent, command, worldmo):
+    def execute(self, agent, command, world):
 
         # action = ('move', '34', '32')
         print(agent)
@@ -55,7 +59,7 @@ class ActionExecutor:
                     if agent.location is facility.location:
 
                         if agent.route is None:
-                            route = _map.create_route_facility(agent.role.location, facility) #not implemented yet
+                            route = self._map.create_route_facility(agent.role.location, facility) #not implemented yet
                             agent.route = route
                             agent.last_action_result = True
 
@@ -71,25 +75,19 @@ class ActionExecutor:
                     agent.location = [latitude, longitude]
                     agent.last_action_result = True
 
-            except Failed_wrong_param:
+            except Failed_wrong_param as e:
                 agent.last_action_result = False
-                print('Error: failed_wrong_param')
-                raise
+                print(e.message)
 
             except Failed_unknown_facility:
                 agent.last_action_result = False
-                print('Error: failed_unknown_facility')
-                raise
 
             except Failed_no_route:
                 agent.last_action_result = False
-                print('Error: failed_no_route')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'deliver_physical':
 
@@ -103,39 +101,33 @@ class ActionExecutor:
                 if agent.location is world.cdm.location:
 
                     if len(parameters) == 1:
-                        agent_deliver('physical', parameters[0])
+                        self.agent_deliver('physical', parameters[0])
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        agent_deliver('physical', parameters[0], parameters[1])
+                        self.agent_deliver('physical', parameters[0], parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param:
                 agent.last_action_result = False
-                print('Error: failed_wrong_param')
-                raise
 
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except Failed_unknown_item:
                 agent.last_action_result = False
                 print('Error: Failed_unknown_item')
-                raise
 
             except Failed_item_amount:
                 agent.last_action_result = False
                 print('Error: failed_item_amount')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
 
         elif action is 'deliver_virtual':
@@ -150,11 +142,11 @@ class ActionExecutor:
                 if agent.location is world.cdm.location:
 
                     if len(parameters) == 1:
-                        agent_deliver('virtual', parameters[0])
+                        self.agent_deliver('virtual', parameters[0])
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        agent_deliver('virtual', parameters[0], parameters[1])
+                        self.agent_deliver('virtual', parameters[0], parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
@@ -162,27 +154,22 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except Failed_unknown_item:
                 agent.last_action_result = False
                 print('Error: Failed_unknown_item')
-                raise
 
             except Failed_item_amount:
                 agent.last_action_result = False
                 print('Error: failed_item_amount')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'charge':
 
@@ -203,17 +190,14 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'rescue_victim':
 
@@ -241,27 +225,22 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except Failed_unknown_item:
                 agent.last_action_result = False
                 print('Error: Failed_unknown_item')
-                raise
 
             except Failed_capacity:
                 agent.last_action_result = False
                 print('Error: failed_capacity')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'collect_water':
 
@@ -276,8 +255,7 @@ class ActionExecutor:
 
                 if agent.location is world.facility.location:
 
-                    if facility is 'water':
-                        #create sample of water
+                        water = WaterSample()
                         agent.add_physical_item(water)
                         agent.last_action_result = True
 
@@ -287,17 +265,14 @@ class ActionExecutor:
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except Failed_capacity:
                 agent.last_action_result = False
                 print('Error: failed_capacity')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'photograph':
 
@@ -313,7 +288,7 @@ class ActionExecutor:
                 if facility.location is agent.location:
 
                     if facility.id is 'photo':
-                        #create photo
+                        photo = Photo()
                         agent.add_virtual_item(photo)
                         agent.last_action_result = True
 
@@ -326,27 +301,22 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except Failed_location:
                 agent.last_action_result = False
                 print('Error: failed_location')
-                raise
 
             except Failed_capacity:
                 agent.last_action_result = False
                 print('Error: failed_capacity')
-                raise
 
             except Failed_invalid_kind:
                 agent.last_action_result = False
                 print('Error: failed_invalid_kind')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'search_social_asset':
 
@@ -370,12 +340,10 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except:
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
         elif action is 'analyze_photo':
             agent.last_action = 'analyze_photo'
@@ -390,17 +358,14 @@ class ActionExecutor:
             except Failed_wrong_param:
                 agent.last_action_result = False
                 print('Error: failed_wrong_param')
-                raise
 
             except Failed_item_amount:
                 agent.last_action_result = False
                 print('Error: failed_item_amount')
-                raise
 
             except :
                 agent.last_action_result = False
                 print('Error: failed')
-                raise
 
 
         else:
@@ -424,7 +389,7 @@ class ActionExecutor:
             if total_removed == 0:
                 raise Failed_unknown_item('No item by the given name is known.')
 
-            delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
+            delivered = world.cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
             if not delivered:
                 raise Failed_location('The agent is not located in the CDM.')
 
@@ -441,7 +406,7 @@ class ActionExecutor:
             if total_removed == 0:
                 raise Failed_unknown_item('No item by the given name is known.')
 
-            delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
+            delivered = world.cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
             if not delivered:
                 raise Failed_location('The agent is not located at the CDM.')
 
