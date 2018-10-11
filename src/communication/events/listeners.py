@@ -11,70 +11,78 @@ from src.manager import simulation_instance
 
 agent_manager = AgentManager()
 init_general = None
+simulation_manager = None
 
 agents = []
+jobs = []
 count = 1
+aux = True
 
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
-    global count
+    global count, jobs
+
+    response = ['received_jobs_result', {'job_delivered': True}]
 
     message = json.loads(message)
     agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
-    method = agent[1][0]
-    simulation_manager = simulation_instance.get_instance('')
 
     if handle_request(agent):
-        agent = (count, (agent[1][0], agent[1][1], agent[1][2]))
+        jobs.append((count, (agent[1][0], agent[1][1], agent[1][2])))
         count += 1
-        response = simulation_manager.do_step([agent])
-        response = ('received_jobs_result', response)
-
-        call_responses(response, 'receive_jobs', '')
+        call_responses(response, 'receive_jobs')
 
 
 @socketio.on('connect')
-def respond_to_request(message=None):
-    global init_general, agents
+def respond_to_request(message=''):
+    global init_general, agents, aux
 
-    init = time.time()
+    message = json.loads(message)
 
-    response = ('connection_result', {'success': True})
+    print(message)
 
-    call_responses(response, 'connect', '')
+
+    response = ['connection_result', {'agent_connected': True}]
+
     if init_general is None:
         init_general = time.time()
 
-    if time.time() - init_general < 30:
-        response = ['connection_result', '']
-        if len(agents) <= 5:
-            response[1] = 'Success'
-            response = (response[0], response[1])
-            call_responses(response, 'connect', '')
+    if time.time() - init_general < 3600:
+        if len(agents) > 5:
+            response[1]['agent_connected'] = False
 
         else:
-            response[1] = 'Failure'
-            response = (response[0], response[1])
-            call_responses(response, 'connect')
+            if aux:
+                agents.append('')
+                aux = False
+
+            else:
+                aux = True
 
     else:
-        call_responses(['connection_result', 'Time is up! Sorry'], 'connect')
+        simulation_manager.do_step(jobs)
+        response[1]['agent_connected'] = False
+
+    call_responses(response, 'connect')
 
 
 @socketio.on('ready')
 def respond_to_request_ready(message):
+    global simulation_manager
+
     decoded = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
     print('ready  :', decoded)
+
     agent_manager.manage_agents(decoded)
-    from src.manager import simulation_instance
+
     simulation_manager = simulation_instance.get_instance('')
     call_responses(simulation_manager.agents_list(), 'ready', message['data'])
     response = simulation_manager.do_pre_step()
     emit_pre_step(response, message['data'])
 
 
-def call_responses(results, caller, token):
+def call_responses(results, caller, *token):
     if caller == 'ready':
         response_to_action_ready(json.dumps(results), token)
 
