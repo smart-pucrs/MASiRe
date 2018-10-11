@@ -35,13 +35,8 @@ def handle_connection(message):
 
 
 @socketio.on('connect')
-def respond_to_request(message=''):
+def respond_to_request(*message):
     global init_general, agents, aux
-
-    message = json.loads(message)
-
-    print(message)
-
 
     response = ['connection_result', {'agent_connected': True}]
 
@@ -79,7 +74,7 @@ def respond_to_request_ready(message):
     simulation_manager = simulation_instance.get_instance('')
     call_responses(simulation_manager.agents_list(), 'ready', message['data'])
     response = simulation_manager.do_pre_step()
-    emit_pre_step(response, message['data'])
+    call_responses(response, message['data'])
 
 
 def call_responses(results, caller, *token):

@@ -30,4 +30,3 @@ socketIO.emit('connect', json.dumps(agent))
 
 socketIO.on('received_jobs_result', on_response_jobs)
 socketIO.emit('receive_jobs', json.dumps(step_config_agent))
-socketIO.wait(seconds=1)
