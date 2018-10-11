@@ -1,459 +1,447 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 
+
 class ActionExecutor:
-
-
     def __init__(self, config):
         self.config = config
 
+    def execute_actions(self, world, actions):
 
-	def execute_actions(self, world, actions):
-		
-		action_results = [None for x in range(len(actions))]
+        action_results = [None for x in range(len(actions))]
 
-		for idx, command in enumerate(actions):
-			agent = world.agents[int(command[0])]
-			action = command[1]
+        for idx, command in enumerate(actions):
+            agent = world.agents[int(command[0])]
+            action = command[1]
 
-		self.execute(agent, action)
-		action_results[idx] = agent.last_action_result
+        self.execute(agent, action)
+        action_results[idx] = agent.last_action_result
 
-		return action_results
+        return action_results
 
         # PARAMETER = AGENT['PARAMETERS']
 
         action_name = action[0]
         action_parameters = action[1:]
 
-	def execute(self, agent, command, worldmo):
+    def execute(self, agent, command, worldmo):
 
-		# action = ('move', '34', '32')
-		print(agent)
-		print(command)
+        # action = ('move', '34', '32')
+        print(agent)
+        print(command)
 
-		action = command[0]
-		parameters = command[1:]
+        action = command[0]
+        parameters = command[1:]
 
-		if action is None:
+        if action is None:
 
-			agent.last_action = None
-			agent.last_action_result = False
-			
-			print('Error: failed_no_action')
+            agent.last_action = None
+            agent.last_action_result = False
 
+            print('Error: failed_no_action')
 
- 		elif action is 'move':
+        elif action is 'move':
 
- 			agent.last_action = 'move'
+            agent.last_action = 'move'
 
- 			try:
+            try:
 
- 				if parameters.size() < 1 or parameters.size() > 2:
-	 				raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
-	 		
-		 			if len(parameters) == 1:
+                if parameters.size() < 1 or parameters.size() > 2:
+                    raise Failed_wrong_param ('Less than 1 or more than 2 parameters were given.')
 
-		 				facility = world.facilities[parameters[0]]
+                if len(parameters) == 1:
 
-		 				if agent.location is facility.location:
-					
-							if agent.route is None:
-			 					route = _map.create_route_facility(agent.role.location, facility) #not implemented yet
-			 					agent.route = route
-			 					agent.last_action_result = True
-			 			
-			 				else: 
-			 					agent.location = agent.route.next_node() #not implemented yet
-			 					agent.last_action_result = True
+                    facility = world.facilities[parameters[0]]
 
-		 			elif len(parameters) == 2:
-		 				
-		 				latitude = parameters[0]
-		 				longitude = parameters[1]
+                    if agent.location is facility.location:
 
-		 				agent.location = [latitude, longitude]
-		 				agent.last_action_result = True
-		 				
-		 		except Failed_wrong_param:
-		 			agent.last_action_result = False
-		 			print('Error: failed_wrong_param')
-		 			raise
+                        if agent.route is None:
+                            route = _map.create_route_facility(agent.role.location, facility) #not implemented yet
+                            agent.route = route
+                            agent.last_action_result = True
 
-		 		except Failed_unknown_facility:
-		 			agent.last_action_result = False
-		 			print('Error: failed_unknown_facility')
-		 			raise
+                        else:
+                            agent.location = agent.route.next_node() #not implemented yet
+                            agent.last_action_result = True
 
-		 		except Failed_no_route:
-		 			agent.last_action_result = False
-		 			print('Error: failed_no_route')
-		 			raise
+                elif len(parameters) == 2:
 
- 				except:
- 					agent.last_action_result = False
- 					print('Error: failed')
- 					raise
+                    latitude = parameters[0]
+                    longitude = parameters[1]
 
+                    agent.location = [latitude, longitude]
+                    agent.last_action_result = True
 
- 		elif action is 'deliver_physical':
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
- 			agent.last_action = 'deliver_physical'
+            except Failed_unknown_facility:
+                agent.last_action_result = False
+                print('Error: failed_unknown_facility')
+                raise
 
- 			try:
+            except Failed_no_route:
+                agent.last_action_result = False
+                print('Error: failed_no_route')
+                raise
 
- 				if len(parameters) < 1 or len(parameters) > 2:
-		 			raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')	
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
-		 		if agent.location is world.cdm.location:
+        elif action is 'deliver_physical':
 
-					if len(parameters) == 1:
-		 				agent_deliver('physical', parameters[0])
-		 				agent.last_action_result = True
+            agent.last_action = 'deliver_physical'
 
-		 			elif len(parameters) == 2:
-		 				agent_deliver('physical', parameters[0], parameters[1])
-		 				agent.last_action_result = True
-		 		else:
-		 			raise Failed_location('The agent is not located at the CDM.')
+            try:
 
-		 	except Failed_wrong_param:
-		 		agent.last_action_result = False
-		 		print('Error: failed_wrong_param')
-		 		raise
+                if len(parameters) < 1 or len(parameters) > 2:
+                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-		 	except Failed_location:
-		 		agent.last_action_result = False
-		 		print('Error: failed_location')
-		 		raise
+                if agent.location is world.cdm.location:
 
-		 	except Failed_unknown_item:
-		 		agent.last_action_result = False
-		 		print('Error: Failed_unknown_item')
-		 		raise
+                    if len(parameters) == 1:
+                        agent_deliver('physical', parameters[0])
+                        agent.last_action_result = True
 
-		 	except Failed_item_amount:
-		 		agent.last_action_result = False
-		 		print('Error: failed_item_amount')
-		 		raise
+                    elif len(parameters) == 2:
+                        agent_deliver('physical', parameters[0], parameters[1])
+                        agent.last_action_result = True
+                else:
+                    raise Failed_location('The agent is not located at the CDM.')
 
-		 	except:
-		 		agent.last_action_result = False
-	 			print('Error: failed')
-	 			raise
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
- 		elif action is 'deliver_virtual':
+            except Failed_unknown_item:
+                agent.last_action_result = False
+                print('Error: Failed_unknown_item')
+                raise
 
- 			agent.last_action = 'deliver_virtual'
+            except Failed_item_amount:
+                agent.last_action_result = False
+                print('Error: failed_item_amount')
+                raise
 
- 			try:
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 				if len(parameters) < 1 or len(parameters) > 2:
-		 			raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-		 		if agent.location is world.cdm.location:
+        elif action is 'deliver_virtual':
 
-					if len(parameters) == 1:
-		 				agent_deliver('virtual', parameters[0])
-		 				agent.last_action_result = True
+            agent.last_action = 'deliver_virtual'
 
-		 			elif len(parameters) == 2:
-		 				agent_deliver('virtual', parameters[0], parameters[1])
-		 				agent.last_action_result = True
-		 		else:
-		 			raise Failed_location('The agent is not located at the CDM.')
+            try:
 
-		 	except Failed_wrong_param:
-		 		agent.last_action_result = False
-		 		print('Error: failed_wrong_param')
-		 		raise
+                if len(parameters) < 1 or len(parameters) > 2:
+                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-		 	except Failed_location:
-		 		agent.last_action_result = False
-		 		print('Error: failed_location')
-		 		raise
+                if agent.location is world.cdm.location:
 
-		 	except Failed_unknown_item:
-		 		agent.last_action_result = False
-		 		print('Error: Failed_unknown_item')
-		 		raise
+                    if len(parameters) == 1:
+                        agent_deliver('virtual', parameters[0])
+                        agent.last_action_result = True
 
-		 	except Failed_item_amount:
-		 		agent.last_action_result = False
-		 		print('Error: failed_item_amount')
-		 		raise
+                    elif len(parameters) == 2:
+                        agent_deliver('virtual', parameters[0], parameters[1])
+                        agent.last_action_result = True
+                else:
+                    raise Failed_location('The agent is not located at the CDM.')
 
-		 	except:
-		 		agent.last_action_result = False
-	 			print('Error: failed')
-	 			raise
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
- 		elif action is 'charge':
+            except Failed_unknown_item:
+                agent.last_action_result = False
+                print('Error: Failed_unknown_item')
+                raise
 
- 			agent.last_action = 'charge'
+            except Failed_item_amount:
+                agent.last_action_result = False
+                print('Error: failed_item_amount')
+                raise
 
- 			try:
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 				if len(parameters) > 0:
- 					raise Failed_wrong_param('Parameters were given.')
+        elif action is 'charge':
 
- 				if agent.location is world.cdm.location:
- 					agent.charge()
- 					agent.last_action_result = True
+            agent.last_action = 'charge'
 
- 				else:
- 					raise Failed_location('The agent is not located at the CDM.')
+            try:
 
- 			except Failed_wrong_param:
- 				agent.last_action_result = False
- 				print('Error: failed_wrong_param')
- 				raise
+                if len(parameters) > 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
- 			except Failed_location:
- 				agent.last_action_result = False
- 				print('Error: failed_location')
- 				raise
+                if agent.location is world.cdm.location:
+                    agent.charge()
+                    agent.last_action_result = True
 
- 			except:
- 				agent.last_action_result = False
- 				print('Error: failed')
- 				raise
+                else:
+                    raise Failed_location('The agent is not located at the CDM.')
 
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
- 		elif action is 'rescue_victim':
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
- 			agent.last_action = 'rescue_victim'
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 			try:
+        elif action is 'rescue_victim':
 
- 				if len(parameters) > 1:
- 					raise Failed_wrong_param('More or less than 1 parameter was given.')
+            agent.last_action = 'rescue_victim'
 
-				victim = world.victims[parameters[0]]
-				
-				if victim is None:
-					raise Failed_unknown_item('No victim by the given ID is known.')
+            try:
 
- 				if victim.location is agent.location
- 					world.remove_victim(victim) #not implemented yet
- 					weight = victim.get_weight() #not implemented yet
- 					agent.add_physical_item(victim.id, weight)
- 					agent.last_action_result = True
+                if len(parameters) > 1:
+                    raise Failed_wrong_param('More or less than 1 parameter was given.')
 
- 				else:
- 					raise Failed_location('The agent is not at the same location as the victim.')
+                victim = world.victims[parameters[0]]
 
- 				except Failed_wrong_param:
- 					agent.last_action_result = False
- 					print('Error: failed_wrong_param')
- 					raise
+                if victim is None:
+                    raise Failed_unknown_item('No victim by the given ID is known.')
 
- 				except Failed_location:
- 					agent.last_action_result = False
- 					print('Error: failed_location')
- 					raise
+                if victim.location is agent.location:
+                    world.remove_victim(victim) #not implemented yet
+                    weight = victim.get_weight() #not implemented yet
+                    agent.add_physical_item(victim.id, weight)
+                    agent.last_action_result = True
 
- 				except Failed_unknown_item:
- 					agent.last_action_result = False
- 					print('Error: Failed_unknown_item')
- 					raise
+                else:
+                    raise Failed_location('The agent is not at the same location as the victim.')
 
- 				except Failed_capacity:
- 					agent.last_action_result = False
- 					print('Error: failed_capacity')
- 					raise
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
- 				except:
- 					agent.last_action_result = False
- 					print('Error: failed')
- 					raise
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
+            except Failed_unknown_item:
+                agent.last_action_result = False
+                print('Error: Failed_unknown_item')
+                raise
 
- 		elif action is 'collect_water':
+            except Failed_capacity:
+                agent.last_action_result = False
+                print('Error: failed_capacity')
+                raise
 
- 			agent.last_action = 'collect_water'
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 			try:
+        elif action is 'collect_water':
 
-		 		if len(parameters) > 0:
-		 			raise Failed_wrong_param('Parameters were given.')
+            agent.last_action = 'collect_water'
 
-		 		facility = world.facilities[agent.location] 
+            try:
 
-		 		if agent.location is world.facility.location:
-		 		
-			 		if facility is 'water':
-			 			#create sample of water
-			 			agent.add_physical_item(water)
-			 			agent.last_action_result = True
+                if len(parameters) > 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
-			 	else:
-			 		raise Failed_location('The agent is not in a location with a water sample.')
+                facility = world.facilities[agent.location]
 
-		 	except
-		 		agent.last_action_result = False
-		 		print('Error: failed_location')
-		 		raise
+                if agent.location is world.facility.location:
 
-		 	except Failed_capacity:
-		 		agent.last_action_result = False
-		 		print('Error: failed_capacity')
-		 		raise
+                    if facility is 'water':
+                        #create sample of water
+                        agent.add_physical_item(water)
+                        agent.last_action_result = True
 
-		 	except:
-		 		agent.last_action_result False
-		 		print('Error: failed')
-		 		raise
+                else:
+                    raise Failed_location('The agent is not in a location with a water sample.')
 
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
- 		elif action is 'photograph':
+            except Failed_capacity:
+                agent.last_action_result = False
+                print('Error: failed_capacity')
+                raise
 
- 			agent.last_action = 'photograph'
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 			try:
+        elif action is 'photograph':
 
- 				if len(parameters) > 0:
- 					raise Failed_wrong_param('Parameters were given.')
+            agent.last_action = 'photograph'
 
- 				facility = world.facilities[agent.location]
+            try:
 
- 				if facility.location is agent.location:
+                if len(parameters) > 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
-	 				if facility.id is 'photo':
-	 					#create photo
-	 					agent.add_virtual_item(photo)
-	 					agent.last_action_result = True
-	 					
-	 				else:
-	 					raise Failed_invalid_kind('Invalid item to photograph.')
+                facility = world.facilities[agent.location]
 
-	 			else:
-	 				raise Failed_location('The agent is not in a location with a photography event.')
- 					
- 				except Failed_wrong_param:
- 					agent.last_action_result = False
- 					print('Error: failed_wrong_param')
- 					raise
+                if facility.location is agent.location:
 
- 				except Failed_location:
- 					agent.last_action_result = False
- 					print('Error: failed_location')
- 					raise
+                    if facility.id is 'photo':
+                        #create photo
+                        agent.add_virtual_item(photo)
+                        agent.last_action_result = True
 
- 				except Failed_capacity:
- 					agent.last_action_result = False
- 					print('Error: failed_capacity')
- 					raise
+                    else:
+                        raise Failed_invalid_kind('Invalid item to photograph.')
 
- 				except Failed_invalid_kind:
- 					agent.last_action_result = False
- 					print('Error: failed_invalid_kind')
- 					raise
+                else:
+                    raise Failed_location('The agent is not in a location with a photography event.')
 
- 				except:
- 					agent.last_action_result = False
- 					print('Error: failed')
- 					raise
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
+            except Failed_location:
+                agent.last_action_result = False
+                print('Error: failed_location')
+                raise
 
- 		elif action is 'search_social_asset':
+            except Failed_capacity:
+                agent.last_action_result = False
+                print('Error: failed_capacity')
+                raise
 
- 			agent.last_action = 'search_social_asset'
+            except Failed_invalid_kind:
+                agent.last_action_result = False
+                print('Error: failed_invalid_kind')
+                raise
 
- 			try:
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 				if len(parameters) != 1 or len(parameters) != 3:
- 					raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
+        elif action is 'search_social_asset':
 
- 				if len(parameters) == 1:
- 					assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
- 					#show assets to agent
- 					agent.last_action_result = True
+            agent.last_action = 'search_social_asset'
 
- 				else:
- 					assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
- 					#show assets to agent
- 					agent.last_action_result = True
+            try:
 
- 			except Failed_wrong_param:
- 				agent.last_action_result = False
- 				print('Error: failed_wrong_param')
- 				raise
+                if len(parameters) != 1 or len(parameters) != 3:
+                    raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
- 			except:
- 				agent.last_action_result = False
- 				print('Error: failed')
- 				raise
+                if len(parameters) == 1:
+                    assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
+                    #show assets to agent
+                    agent.last_action_result = True
 
+                else:
+                    assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
+                    #show assets to agent
+                    agent.last_action_result = True
 
- 		elif action is 'analyze_photo':
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
- 				agent.last_action = 'analyze_photo'
- 			try:
+            except:
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
- 				if len(parameters) > 0:
- 					raise Failed_wrong_param('Parameters were given.')
+        elif action is 'analyze_photo':
+            agent.last_action = 'analyze_photo'
 
- 				agent.remove_virtual_item('photo')
- 				agent.last_action_result = True
- 				
- 			except Failed_wrong_param:
- 				agent.last_action_result = False
- 				print('Error: failed_wrong_param')
- 				raise
+            try:
+                if len(parameters) > 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
- 			except Failed_item_amount:
- 				agent.last_action_result = False
- 				print('Error: failed_item_amount')
- 				raise
+                agent.remove_virtual_item('photo')
+                agent.last_action_result = True
 
- 			except :
- 				agent.last_action_result = False
- 				print('Error: failed')
- 				raise
+            except Failed_wrong_param:
+                agent.last_action_result = False
+                print('Error: failed_wrong_param')
+                raise
 
+            except Failed_item_amount:
+                agent.last_action_result = False
+                print('Error: failed_item_amount')
+                raise
 
- 		else:
- 			agent.last_action_result = False
- 			print('Error: failed')
+            except :
+                agent.last_action_result = False
+                print('Error: failed')
+                raise
 
 
-	def agent_deliver(self, agent, kind, amount = None):
-		
-		total_removed = 0
+        else:
+            agent.last_action_result = False
+            print('Error: failed')
 
-	 	if amount is None:
-	 		if kind is 'physical':
-	 			total_removed = agent.remove_physical_item('physical')
+    def agent_deliver(self, agent, kind, amount = None):
 
-	 		elif kind is 'virtual':
-	 			total_removed = agent.remove_virtual_item('virtual')
+        total_removed = 0
 
-	 		else:
-	 			raise Failed_invalid_kind('Invalid item to deliver')
+        if amount is None:
+            if kind is 'physical':
+                total_removed = agent.remove_physical_item('physical')
 
-	 		if total_removed == 0:
-	 			raise Failed_unknown_item('No item by the given name is known.')
+            elif kind is 'virtual':
+                total_removed = agent.remove_virtual_item('virtual')
 
-	 		delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
-	 		if !delivered:
-	 			raise Failed_location('The agent is not located in the CDM.')
+            else:
+                raise Failed_invalid_kind('Invalid item to deliver')
 
-	 	elif amount is not None:
-	 		if !verify(amount): #not implemented yet (boolean)
-	 			raise Failed_item_amount('The given amount is not an integer, less than 1 or greater than what the agent is carrying.')
-	 		
-	 		if kind is 'physical':
-	 			total_removed = agent.remove_physical_item('physical', amount)
+            if total_removed == 0:
+                raise Failed_unknown_item('No item by the given name is known.')
 
-	 		elif kind is 'virtual':
-	 			total_removed = agent.remove_virtual_item('virtual', amount)
+            delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
+            if not delivered:
+                raise Failed_location('The agent is not located in the CDM.')
 
-	 		if total_removed == 0:
-	 			raise Failed_unknown_item('No item by the given name is known.')
+        elif amount is not None:
+            if not verify(amount): #not implemented yet (boolean)
+                raise Failed_item_amount('The given amount is not an integer, less than 1 or greater than what the agent is carrying.')
 
-	 		delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
-	 		if !delivered:
-	 			raise Failed_location('The agent is not located at the CDM.')
+            if kind is 'physical':
+                total_removed = agent.remove_physical_item('physical', amount)
+
+            elif kind is 'virtual':
+                total_removed = agent.remove_virtual_item('virtual', amount)
+
+            if total_removed == 0:
+                raise Failed_unknown_item('No item by the given name is known.')
+
+            delivered = cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
+            if not delivered:
+                raise Failed_location('The agent is not located at the CDM.')
 
