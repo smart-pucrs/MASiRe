@@ -7,6 +7,7 @@ class ActionExecutor:
 
     def __init__(self, config):
         self.config = config
+        self.world = None
 
     def execute_actions(self, world, actions):
 
