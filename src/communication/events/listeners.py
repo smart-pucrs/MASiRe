@@ -17,7 +17,7 @@ agents = []
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
-
+    token = message['token']
     agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
     method = agent[1][0]
 
@@ -25,8 +25,9 @@ def handle_connection(message):
     simulation_manager = SimulationInstance.get_instance('')
     response = simulation_manager.do_step([agent])
     response = ('received_jobs_result', response)
-    call_responses(response, 'receive_jobs','')
-
+    call_responses(response, 'receive_jobs', '')
+    response = simulation_manager.do_pre_step()
+    emit_pre_step(response, token)
 
 
 @socketio.on('connect')
