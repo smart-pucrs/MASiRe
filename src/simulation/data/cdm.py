@@ -2,14 +2,13 @@
 
 
 class cdm:
-
     location = None
     storedVolume = 0
     virtualItems = 0
     physicalItems = 0
 
     def __init__(self, location=None):
-        self.location = location #not implemented yet
+        self.location = location  # not implemented yet
 
     def charge(self, agent):
         agent.charge()
@@ -20,10 +19,10 @@ class cdm:
         elif kind == 'physical':
             self.setPhysicalItems(total)
 
-    def setVirtualItems(self, total):
+    def set_virtual_items(self, total):
         self.virtualItems += total
         self.storedVolume += total
 
-    def setPhysicalItems(self, total):
+    def set_physical_items(self, total):
         self.physicalItems += total
         self.storedVolume += total

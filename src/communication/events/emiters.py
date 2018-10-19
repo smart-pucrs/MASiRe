@@ -26,5 +26,6 @@ def emit_pre_step(pre_step, token):
 def response_to_action_ready(response, token):
     emit(token + '/connecting_agents', response, callback=ack())
 
+
 def ack():
     print('message was received!')

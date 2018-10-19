@@ -2,75 +2,82 @@ import time
 import jwt
 import json
 
-from src.communication.ActionResult import ActionResult
 from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action_connect, response_to_action_deliver, \
-    response_to_action_ready, emit_pre_step
+    response_to_action_ready
+from src.communication.agent_manager import AgentManager
 from src.communication.events.prepare_action import handle_request
-from src.communication.AgentManager import AgentManager
+from src.manager import simulation_instance
 
 agent_manager = AgentManager()
 init_general = None
+simulation_manager = None
 
 agents = []
+jobs = []
+count = 1
+aux = True
 
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
-    token = message['token']
-    agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
-    method = agent[1][0]
+    global count, jobs
 
-    from src.manager import SimulationInstance
-    simulation_manager = SimulationInstance.get_instance('')
-    response = simulation_manager.do_step([agent])
-    response = ('received_jobs_result', response)
-    call_responses(response, 'receive_jobs', '')
-    response = simulation_manager.do_pre_step()
-    emit_pre_step(response, token)
+    response = ['received_jobs_result', {'job_delivered': True}]
+
+    message = json.loads(message)
+    agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
+
+    if handle_request(agent):
+        jobs.append((count, (agent[1][0], agent[1][1], agent[1][2])))
+        count += 1
+        call_responses(response, 'receive_jobs')
 
 
 @socketio.on('connect')
-def respond_to_request(message=None):
-    global init_general, agents
+def respond_to_request(*message):
+    global init_general, agents, aux
 
-    init = time.time()
+    response = ['connection_result', {'agent_connected': True}]
 
-    response = ('connection_result', {'success': True})
-
-    call_responses(response, 'connect', '')
     if init_general is None:
         init_general = time.time()
 
-    if time.time() - init_general < 320:
-        response = ['connection_result', '']
-        if len(agents) <= 5:
-            response[1] = 'Success'
-            response = (response[0], response[1])
-            call_responses(response, 'connect','')
+    if time.time() - init_general < 3600:
+        if len(agents) > 5:
+            response[1]['agent_connected'] = False
 
         else:
-            response[1] = 'Failure'
-            response = (response[0], response[1])
-            call_responses(response, 'connect')
+            if aux:
+                agents.append('')
+                aux = False
+
+            else:
+                aux = True
 
     else:
-        call_responses(['connection_result', 'Time is up! Sorry'], 'connect')
+        simulation_manager.do_step(jobs)
+        response[1]['agent_connected'] = False
+
+    call_responses(response, 'connect')
 
 
 @socketio.on('ready')
 def respond_to_request_ready(message):
+    global simulation_manager
+
     decoded = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
     print('ready  :', decoded)
+
     agent_manager.manage_agents(decoded)
-    from src.manager import SimulationInstance
-    simulation_manager = SimulationInstance.get_instance('')
+
+    simulation_manager = simulation_instance.get_instance('')
     call_responses(simulation_manager.agents_list(), 'ready', message['data'])
     response = simulation_manager.do_pre_step()
-    emit_pre_step(response, message['data'])
+    call_responses(response, message['data'])
 
 
-def call_responses(results, caller, token):
+def call_responses(results, caller, *token):
     if caller == 'ready':
         response_to_action_ready(json.dumps(results), token)
 

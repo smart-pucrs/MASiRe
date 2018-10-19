@@ -61,7 +61,6 @@ class Generator:
                                self.config['generate']['flood']['rectangle']['maxLength'])
             )
 
-
         photos = self.generate_photos()
         water_samples = self.generate_water_samples()
 

@@ -2,9 +2,15 @@ import sys
 from subprocess import run
 import os
 
-# Defini a instancia da simulação com o arquivo inicial dela
-from src.manager import SimulationInstance
+from src.manager import simulation_instance
+
+
+# Define a instancia da simulação com o arquivo inicial dela
+# simulation_instance.start_manager(sys.argv[0])
+
 
 # Roda o servidor flask-socketIO
-run(["/home/mazzardo/code/ages/desastre/venv3/bin/python", "-m", "flask", "run"],
+project_path = os.path.dirname(os.path.realpath(__file__))
+run([str(project_path) + "/venv/Scripts/python", "-m", "flask", "run"],
     env=dict(FLASK_APP='src/app.py', FLASK_ENV='development', FLASK_DEBUG='1', **os.environ))
+

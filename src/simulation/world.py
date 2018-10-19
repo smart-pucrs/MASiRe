@@ -54,5 +54,4 @@ class World:
         self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])
 
     def execute_actions(self, actions):
-
         return self.action_executor.execute_actions(self, actions)

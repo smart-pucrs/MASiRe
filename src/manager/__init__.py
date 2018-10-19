@@ -1,3 +1,3 @@
-from . import SimulationInstance
+from . import simulation_instance
 
 
