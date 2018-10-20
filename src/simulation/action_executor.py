@@ -8,6 +8,7 @@ class ActionExecutor:
 
     def __init__(self, config):
         self.config = config
+        self.world = None
 
     #Method that parses all the actions recovered from the communication core
     #Those actions represents the 'desire' of each agent

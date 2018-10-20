@@ -4,7 +4,7 @@ import json
 
 from src.__init__ import socketio
 from src.communication.events.emiters import response_to_action_connect, response_to_action_deliver, \
-    response_to_action_ready, emit_pre_step
+    response_to_action_ready
 from src.communication.agent_manager import AgentManager
 from src.communication.events.prepare_action import handle_request
 from src.manager import simulation_instance
