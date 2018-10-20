@@ -3,21 +3,24 @@ from src.simulation.exceptions import *
 from src.simulation.data.events.water_sample import WaterSample
 from src.simulation.data.events.photo import Photo
 
+#Class responsible for executing every agents desired action
 class ActionExecutor:
 
     def __init__(self, config):
         self.config = config
 
+    #Method that parses all the actions recovered from the communication core
+    #Those actions represents the 'desire' of each agent
     def execute_actions(self, world, actions):
 
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
-            agent = world.agents[command[0]]
+            agent = world.agents[int(command[0])]
             action = command[1]
 
         self.world = world
-        self.execute(agent, action)
+        self.execute(agent, action, world)
         action_results[idx] = agent.last_action_result
 
         return action_results
@@ -27,6 +30,9 @@ class ActionExecutor:
         action_name = action[0]
         action_parameters = action[1:]
 
+
+    #Method that tries to execute any possible action passed as a command line
+    #Also responsible for managing the current agent's private attributes
     def execute(self, agent, command, world):
 
         # action = ('move', '34', '32')
@@ -49,8 +55,8 @@ class ActionExecutor:
 
             try:
 
-                if parameters.size() < 1 or parameters.size() > 2:
-                    raise Failed_wrong_param ('Less than 1 or more than 2 parameters were given.')
+                if len(parameters) < 1 or len(parameters) > 2:
+                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if len(parameters) == 1:
 
@@ -75,9 +81,9 @@ class ActionExecutor:
                     agent.location = [latitude, longitude]
                     agent.last_action_result = True
 
-            except Failed_wrong_param as e:
+            except Failed_wrong_param as e: #pode ser tratado assim
                 agent.last_action_result = False
-                print(e.message)
+                print(e.message)#print ou mensagem ao agente? comunicação?
 
             except Failed_unknown_facility:
                 agent.last_action_result = False
@@ -101,11 +107,11 @@ class ActionExecutor:
                 if agent.location is world.cdm.location:
 
                     if len(parameters) == 1:
-                        self.agent_deliver('physical', parameters[0])
+                        self.agent_deliver('physical', parameters[0], world)
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        self.agent_deliver('physical', parameters[0], parameters[1])
+                        self.agent_deliver('physical', parameters[0], world, parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
@@ -142,11 +148,11 @@ class ActionExecutor:
                 if agent.location is world.cdm.location:
 
                     if len(parameters) == 1:
-                        self.agent_deliver('virtual', parameters[0])
+                        self.agent_deliver('virtual', parameters[0], world)
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        self.agent_deliver('virtual', parameters[0], parameters[1])
+                        self.agent_deliver('virtual', parameters[0], world, parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
@@ -253,10 +259,10 @@ class ActionExecutor:
 
                 facility = world.facilities[agent.location]
 
-                if agent.location is world.facility.location:
+                if agent.location is facility.location:
 
                         water = WaterSample()
-                        agent.add_physical_item(water)
+                        agent.add_physical_item(water)#(water, water.size)
                         agent.last_action_result = True
 
                 else:
@@ -289,7 +295,7 @@ class ActionExecutor:
 
                     if facility.id is 'photo':
                         photo = Photo()
-                        agent.add_virtual_item(photo)
+                        agent.add_virtual_item(photo)#(photo, photo.size)
                         agent.last_action_result = True
 
                     else:
@@ -328,12 +334,12 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
+                    #assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 
                 else:
-                    assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
+                    #assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 
@@ -372,7 +378,9 @@ class ActionExecutor:
             agent.last_action_result = False
             print('Error: failed')
 
-    def agent_deliver(self, agent, kind, amount = None):
+
+    #Method that ensures the correct removal of the current agent's items
+    def agent_deliver(self, agent, kind, world, amount = None):
 
         total_removed = 0
 
@@ -394,7 +402,7 @@ class ActionExecutor:
                 raise Failed_location('The agent is not located in the CDM.')
 
         elif amount is not None:
-            if not verify(amount): #not implemented yet (boolean)
+            if not self.verify(amount): #not implemented yet (boolean)
                 raise Failed_item_amount('The given amount is not an integer, less than 1 or greater than what the agent is carrying.')
 
             if kind is 'physical':
@@ -410,3 +418,7 @@ class ActionExecutor:
             if not delivered:
                 raise Failed_location('The agent is not located at the CDM.')
 
+    #Method that guarantees that the amount value is correct
+    def verify(self, amount):
+        #checker for the amount value
+        pass

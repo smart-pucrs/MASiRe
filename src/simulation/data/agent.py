@@ -16,7 +16,7 @@ class Agent:
         self.virtual_storage_vector = []
 
     def __repr__(self):
-        return self.id + ' - ' + self.role
+        return str(self.identifier) + ' - ' +  str(self.role)
 
     def discharge(self):
         self.role.actual_battery = 0
@@ -26,7 +26,7 @@ class Agent:
 
     def add_physical_item(self, item, amount=None):
 
-        weight = item.get_weight()
+        weight = item.size
         if weight < self.physical_storage:
             if amount is not None:
                 if weight * amount < self.physical_storage:
@@ -44,7 +44,7 @@ class Agent:
 
     def add_virtual_item(self, item, amount=None):
 
-        size = item.get_size()
+        size = item.size
         if size < self.virtual_storage:
             if amount is not None:
                 if size * amount < self.virtual_storage:
@@ -72,13 +72,13 @@ class Agent:
 
         if amount is None:
             removed = self.remove(vector, item, vector.size(), [])
-            # print(removed)
+            print(removed)
             self.physical_storage = self.role.physical_capacity
         else:
             removed = self.remove(vector, item, amount, [])
-            # print(removed)
+            print(removed)
             for e in removed:
-                self.physical_storage += removed.get_weight()
+                self.physical_storage += e.size()
 
     def remove_virtual_item(self, item, amount=None):
 
@@ -92,13 +92,13 @@ class Agent:
 
         if amount is None:
             removed = self.remove(vector, item, vector.size(), [])
-            # print(removed)
+            print(removed)
             self.virtual_storage = self.role.physical_capacity
         else:
             removed = self.remove(vector, item, amount, [])
-            # print(removed)
+            print(removed)
             for e in removed:
-                self.virtual_storage += removed.get_size()
+                self.virtual_storage += e.size()
 
     def remove(self, lst, item, removed, amount=None):
         if amount == 0:
