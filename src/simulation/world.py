@@ -5,7 +5,6 @@ from src.simulation.data.agent import Agent
 from src.simulation.data.role import Role
 from src.simulation.generator import Generator
 
-
 class World:
 
     def __init__(self, config):
