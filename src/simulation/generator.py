@@ -50,6 +50,7 @@ class Generator:
                                self.config['generate']['flood']['circle']['maxRadius'])
             )
 
+
         else:
 
             dimensions['height'] = (
@@ -66,12 +67,24 @@ class Generator:
         flood_lon = random.uniform(self.config['map']['minLon'], self.config['map']['maxLon'])
         dimensions['coord'] = flood_lat, flood_lon
 
-        photos = self.generate_photos()
-        water_samples = self.generate_water_samples()
+        # generate the list of nodes that are in the flood
+        if dimensions['shape'] == 'circle':
+            list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
 
-        return Flood(period, dimensions, photos, water_samples)
+        else:
 
-    def generate_photos(self):
+            if dimensions.get('height')<dimensions.get('length'):
+                list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
+            else:
+                list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('length'))
+
+        photos = self.generate_photos(random.choice(list_of_nodes))
+        water_samples = self.generate_water_samples(random.choice(list_of_nodes))
+        victims = self.generate_victims(random.choice(list_of_nodes))
+
+        return Flood(period, dimensions, photos, water_samples, victims)
+
+    def generate_photos(self, node):
 
         photos = [None for x in range(random.randint(
             self.config['generate']['photo']['minAmount'],
@@ -90,7 +103,7 @@ class Generator:
 
         return photos
 
-    def generate_victims(self):
+    def generate_victims(self, node):
 
         photo_victims = [None for x in range(random.randint(
                     self.config['generate']['victim']['minAmount'],
@@ -113,7 +126,7 @@ class Generator:
 
         return photo_victims
 
-    def generate_water_samples(self):
+    def generate_water_samples(self, node):
 
         water_samples = [None for x in range(random.randint(
             self.config['generate']['waterSample']['minAmount'],
