@@ -19,25 +19,32 @@ class World:
         self.action_executor = ActionExecutor(config)
 
     def initial_percepts(self):
-
         return []
 
     def percepts(self, agent):
-
         return []
 
     def generate_events(self):
-
         self.events = self.generator.generate_events()
 
-    def create_roles(self):
+        '''for flood in events: 
+            self.floods.append(flood)
 
+            for water_sample in flood.water_samples:
+                self.water_samples.append(water_sample)
+
+            for photo in flood.photos:
+                self.photos.append(photo)
+
+                for victim in photo.victims:
+                    self.victims.append(victim)'''
+
+    def create_roles(self):
         for role in self.config['roles']:
             
             self.roles[role] = Role(role, self.config)
 
     def create_agents(self):
-
         for role in self.config['agents']:
             agents_number = self.config['agents'][role]
 
@@ -47,7 +54,6 @@ class World:
         return list(self.agents.values())
 
     def create_agent(self, role):
-
         # in the future this method should also generate info about the agents location (i think)
         self.agent_counter += 1
         self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])

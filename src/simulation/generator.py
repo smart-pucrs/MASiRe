@@ -24,7 +24,7 @@ class Generator:
 
             # generate floods (index 0) and photo events (index 1)
 
-            if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
+            if random.randint(0, 100) <= self.config['generate']['floodProbability']:
                 events[step] = self.generate_flood()
 
         return events

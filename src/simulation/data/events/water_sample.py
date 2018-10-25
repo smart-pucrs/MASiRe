@@ -4,6 +4,6 @@ class WaterSample:
   # is it necessary to have a location attribute? how to declare it?
   #chemical compositions?
 
-  def __init__(self, size):
-    self.label = 'water'
+  def __init__(self, size, location):
     self.size = size
+    self.location = location

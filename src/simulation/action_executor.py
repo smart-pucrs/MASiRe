@@ -249,23 +249,25 @@ class ActionExecutor:
                 agent.last_action_result = False
                 print('Error: failed')
 
+        # bolivar
         elif action is 'collect_water':
 
             agent.last_action = 'collect_water'
 
             try:
-
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                facility = world.facilities[agent.location]
+                for flood in world.active_events:
+                    for water_sample in flood.water_samples:
+                        if water_sample.active and water_sample.location == agent.location:
+                            if water_sample.size > agent.physical_storage:
+                                raise Failed_capacity('')
 
-                if agent.location is facility.location:
-
-                        water = WaterSample()
-                        agent.add_physical_item(water)#(water, water.size)
-                        agent.last_action_result = True
-
+                            water_sample.active = False
+                            agent.physical_storage -= water_sample.size
+                            agent.physical_storage_vector.append(water_sample)
+                            agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not in a location with a water sample.')
 
