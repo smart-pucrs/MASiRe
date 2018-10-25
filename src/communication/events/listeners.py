@@ -3,8 +3,7 @@ import jwt
 import json
 
 from src.__init__ import socketio
-from src.communication.events.emiters import response_to_action_connect, response_to_action_deliver, \
-    response_to_action_ready
+from src.communication.events import emiters
 from src.communication.agent_manager import AgentManager
 from src.communication.events.prepare_action import handle_request
 from src.manager import simulation_instance
@@ -16,6 +15,7 @@ simulation_manager = None
 agents = []
 jobs = []
 count = 1
+jobs_done = []
 aux = True
 
 
@@ -43,7 +43,7 @@ def respond_to_request(*message):
     if init_general is None:
         init_general = time.time()
 
-    if time.time() - init_general < 3600:
+    if time.time() - init_general < 5:
         if len(agents) > 5:
             response[1]['agent_connected'] = False
 
@@ -56,7 +56,8 @@ def respond_to_request(*message):
                 aux = True
 
     else:
-        simulation_manager.do_step(jobs)
+        jobs_done.append(simulation_instance.get_instance().do_step(jobs))
+        call_responses(['jobs_result', jobs_done], 'results_from_actions')
         response[1]['agent_connected'] = False
 
     call_responses(response, 'connect')
@@ -71,7 +72,7 @@ def respond_to_request_ready(message):
 
     agent_manager.manage_agents(decoded)
 
-    simulation_manager = simulation_instance.get_instance('')
+    simulation_manager = simulation_instance.get_instance()
     call_responses(simulation_manager.agents_list(), 'ready', message['data'])
     response = simulation_manager.do_pre_step()
     call_responses(response, message['data'])
@@ -79,10 +80,14 @@ def respond_to_request_ready(message):
 
 def call_responses(results, caller, *token):
     if caller == 'ready':
-        response_to_action_ready(json.dumps(results), token)
+        emiters.response_to_action_ready(json.dumps(results), token)
 
     elif caller == 'connect':
-        response_to_action_connect(results[0], results[1])
+        emiters.response_to_action_connect(results[0], results[1])
 
     elif caller == 'receive_jobs':
-        response_to_action_deliver(results[0], results[1])
+        emiters.response_to_action_deliver(results[0], results[1])
+
+    elif caller == 'results_from_actions':
+        emiters.response_jobs_result(results[0], results[1])
+
