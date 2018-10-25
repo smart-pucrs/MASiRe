@@ -52,7 +52,7 @@ class ActionExecutor:
             print('Error: failed_no_action')
 
         elif action == 'move':
-            # ===========REMOVER ESTE RETORNO PARA CONTINUAR A SIMULACAO==========
+            # REMOVE THIS RETURN STATEMENT TO PROPERLY RUN THE SIMULATION
             return True
 
             agent.last_action = 'move'
