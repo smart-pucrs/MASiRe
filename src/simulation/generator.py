@@ -102,6 +102,7 @@ class Generator:
             victim_size = random.randint(
                 self.config['generate']['victim']['minSize'],
                 self.config['generate']['victim']['maxSize']
+                #
             )
 
             victim_lifetime = random.randint(
