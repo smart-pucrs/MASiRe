@@ -6,9 +6,9 @@ from src.simulation.data.events.photo import Photo
 #Class responsible for executing every agents desired action
 class ActionExecutor:
 
-    def __init__(self, config):
+    def __init__(self, config, World):
         self.config = config
-        self.world = None
+        self.world = World
 
     #Method that parses all the actions recovered from the communication core
     #Those actions represent the 'desire' of each agent
@@ -17,12 +17,13 @@ class ActionExecutor:
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
-            agent = world.agents[int(command[0])]
+            agent = self.world.agents[int(command[0])]
             action = command[1]
 
-        self.world = world
-        self.execute(agent, action, world)
-        action_results[idx] = agent.last_action_result
+            self.execute(agent, action)
+            # REMOVE THIS RETURN STATEMENT TO PROPERLY RUN THE SIMULATION
+            return True
+            action_results[idx] = agent.last_action_result
 
         return action_results
 
@@ -30,7 +31,7 @@ class ActionExecutor:
 
     #Method that tries to execute any possible action passed as a command line
     #Also responsible for managing the current agent's private attributes
-    def execute(self, agent, command, world):
+    def execute(self, agent, command):
 
         # action = ('move', '34', '32')
         print(agent)
@@ -57,7 +58,7 @@ class ActionExecutor:
 
                 if len(parameters) == 1:
 
-                    facility = world.facilities[parameters[0]]
+                    facility = self.world.facilities[parameters[0]]
 
                     if agent.location == facility.location:
 
@@ -317,12 +318,12 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    #assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
+                    #assets = self.world.map.search_social_asset(radius, agent.location) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 
                 else:
-                    #assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
+                    #assets = self.world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 
