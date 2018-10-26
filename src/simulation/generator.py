@@ -25,7 +25,7 @@ class Generator:
 
             # generate floods (index 0) and photo events (index 1)
 
-            if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
+            if random.randint(0, 100) <= self.config['generate']['floodProbability']:
                 events[step] = self.generate_flood()
 
         return events
@@ -152,4 +152,3 @@ class Generator:
     def coords_to_radian(self, coords):
         """Maps a coordinate from degrees to radians"""
         return list(map(math.radians, coords))
-
