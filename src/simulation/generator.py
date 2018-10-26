@@ -72,7 +72,6 @@ class Generator:
             list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
 
         else:
-
             if dimensions.get('height')<dimensions.get('length'):
                 list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
             else:
