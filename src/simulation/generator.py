@@ -89,16 +89,15 @@ class Generator:
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
         ))]
-
         for x in range(len(photos)):
 
             photo_size = self.config['generate']['photo']['size']
 
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability'] * 100:
 
-                photo_victims = self.generate_victims()
+                photo_victims = self.generate_victims(node)
 
-            photos[x] = Photo(photo_size, photo_victims)
+            photos[x] = Photo(photo_size, photo_victims, node)
 
         return photos
 
@@ -122,7 +121,7 @@ class Generator:
                 self.config['generate']['victim']['maxLifetime']
             )
 
-            photo_victims[y] = Victim(victim_size, victim_lifetime)
+            photo_victims[y] = Victim(victim_size, victim_lifetime, node)
 
         return photo_victims
 
@@ -134,7 +133,7 @@ class Generator:
         ))]
 
         for x in range(len(water_samples)):
-            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'])
+            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], node)
 
         return water_samples
 
