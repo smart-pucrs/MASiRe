@@ -5,19 +5,18 @@ from src.simulation.data.agent import Agent
 from src.simulation.data.role import Role
 from src.simulation.generator import Generator
 
-
 class World:
 
     def __init__(self, config):
 
         self.config = config
         self.events = None
-        self.roles = dict()
-        self.agents = dict()
-        self.agent_counter = 0
+        self.roles = config['roles']
+        self.agents = [{idx+1: ag} for idx, ag in enumerate(config['agents'])]
+        self.agent_counter = sum(config['agents'].values())
         self.active_events = []
         self.generator = Generator(config)
-        self.action_executor = ActionExecutor(config)
+        self.action_executor = ActionExecutor(config, self)
 
     def initial_percepts(self):
 
@@ -54,4 +53,4 @@ class World:
         self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])
 
     def execute_actions(self, actions):
-        return self.action_executor.execute_actions(self, actions)
+        return self.action_executor.execute_actions(actions)
