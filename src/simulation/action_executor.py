@@ -62,12 +62,12 @@ class ActionExecutor:
                     if agent.location == facility.location:
 
                         if agent.route == None:
-                            route = self._map.create_route_facility(agent.role.location, facility) #not implemented yet
-                            agent.route = route
+                            #route = self.world.create_route_facility(agent.role.location, facility) #not implemented yet
+                            #agent.route = route
                             agent.last_action_result = True
 
                         else:
-                            agent.location = agent.route.next_node() #not implemented yet
+                            #agent.location = agent.route.next_node() #not implemented yet
                             agent.last_action_result = True
 
                 elif len(parameters) == 2:
@@ -103,17 +103,21 @@ class ActionExecutor:
                 if agent.location == world.cdm.location:
 
                     if len(parameters) == 1:
-                        self.agent_deliver('physical', parameters[0], world)
+                        self.agent_deliver(agent, 'physical', parameters[0])
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        self.agent_deliver('physical', parameters[0], world, parameters[1])
+                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
+                print(e.message)
+
+            except Failed_invalid_kind as e:
+                print('Error: failed_invalid_kind')
                 print(e.message)
 
             except Failed_location as e:
@@ -142,17 +146,21 @@ class ActionExecutor:
                 if agent.location == world.cdm.location:
 
                     if len(parameters) == 1:
-                        self.agent_deliver('virtual', parameters[0], world)
+                        self.agent_deliver(agent, 'virtual', parameters[0])
                         agent.last_action_result = True
 
                     elif len(parameters) == 2:
-                        self.agent_deliver('virtual', parameters[0], world, parameters[1])
+                        self.agent_deliver(agent, 'virtual', parameters[0], parameters[1])
                         agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
+                print(e.message)
+
+            except Failed_invalid_kind as e:
+                print('Error: failed_invalid_kind')
                 print(e.message)
 
             except Failed_location as e:
@@ -199,19 +207,16 @@ class ActionExecutor:
 
             try:
 
-                if len(parameters) > 1:
+                if len(parameters) > 1 or len(parameters) == 0:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                victim = world.victims[parameters[0]]
+                associated_victim = agent.victims_to_rescue.contains(parameters[0])
 
-                if victim == None:
-                    raise Failed_unknown_item('No victim by the given ID is known.')
-
-                if victim.location == agent.location:
-                    world.remove_victim(victim) #not implemented yet
-                    weight = victim.get_weight() #not implemented yet
-                    agent.add_physical_item(victim.id, weight)
-                    agent.last_action_result = True
+                if(associated_victim):
+                    victim = agent.victims_to_rescue.remove(parameters[0])
+                    if victim.location == agent.location:
+                        agent.add_physical_item(victim.id, victim.size)
+                        agent.last_action_result = True
 
                 else:
                     raise Failed_location('The agent is not at the same location as the victim.')
@@ -219,6 +224,10 @@ class ActionExecutor:
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
                 print(e.message)
+
+            except ValueError:
+                print('Error: failed_unknown_item')
+                print('No victim by the given ID is known.')
 
             except Failed_location as e:
                 print('Error: failed_location')
@@ -245,6 +254,7 @@ class ActionExecutor:
                 for flood in world.active_events:
                     for water_sample in flood.water_samples:
                         if water_sample.active and water_sample.location == agent.location:
+                            flood.water_samples.remove(water_sample.id)
                             agent.add_physical_item(water_sample, 1)
                             water_sample.active = False
                             agent.last_action_result = True
@@ -275,8 +285,9 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for flood in world.active_events:
-                    for photo in flood.photo:
+                    for photo in flood.photos:
                         if photo.active and photo.location == agent.location:
+                            flood.photos.remove(photo.id)
                             agent.add_virtual_item(photo,1)
                             agent.last_action_result = True
                             return
@@ -328,8 +339,11 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                agent.remove_virtual_item('photo')
-                agent.last_action_result = True
+                for e in agent.virtual_storage_vector:
+                    if e.id == 'photo':
+                        agent.victims_to_rescue = e.victims
+                        agent.remove_virtual_item(e)
+                        agent.last_action_result = True
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
@@ -348,16 +362,17 @@ class ActionExecutor:
 
 
     #Method that ensures the correct removal of the current agent's items
-    def agent_deliver(self, agent, kind, amount=None):
+    def agent_deliver(self, agent, kind, item, amount=None):
 
         total_removed = 0
 
         if amount == None:
+
             if kind == 'physical':
-                total_removed = agent.remove_physical_item('physical')
+                total_removed = agent.remove_physical_item(item)
 
             elif kind == 'virtual':
-                total_removed = agent.remove_virtual_item('virtual')
+                total_removed = agent.remove_virtual_item(item)
 
             else:
                 raise Failed_invalid_kind('Invalid item to deliver')
@@ -366,20 +381,28 @@ class ActionExecutor:
                 raise Failed_unknown_item('No item by the given name is known.')
 
             delivered = self.world.cdm.deliver(agent, kind, total_removed) #not implemented yet (boolean)
+
             if not delivered:
                 raise Failed_location('The agent is not located in the CDM.')
 
         elif amount != None:
 
             if kind == 'physical':
+
                 if amount < 1 or amount > agent.physical_storage:
-                    raise Failed_item_amount('The given amount is not an integer, less than 1 or greater than what the agent is carrying.')
-                total_removed = agent.remove_physical_item('physical', amount)
+                    raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
+                                             'than what the agent is carrying.')
+
+                total_removed = agent.remove_physical_item(item)
 
             elif kind == 'virtual':
+
                 if amount < 1 or amount > agent.virtual_storage:
-                    raise Failed_item_amount('The given amount is not an integer, less than 1 or greater than what the agent is carrying.')
-                total_removed = agent.remove_virtual_item('virtual', amount)
+                    raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
+                                             'than what the agent is carrying.')
+
+                total_removed = agent.remove_virtual_item(item)
+
 
             if total_removed == 0:
                 raise Failed_unknown_item('No item by the given name is known.')

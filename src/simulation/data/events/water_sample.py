@@ -5,5 +5,6 @@ class WaterSample:
   #chemical compositions?
 
   def __init__(self, size, location):
+    self.id = 'water_sample'
     self.size = size
     self.location = location
