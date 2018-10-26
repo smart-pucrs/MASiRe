@@ -116,6 +116,6 @@ class Generator:
         ))]
 
         for x in range(len(water_samples)):
-            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'])
+            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'],1)
 
         return water_samples

@@ -7,7 +7,7 @@ class Agent:
         self.role = role
         self.identifier = identifier
         self.last_action = None
-        self.last_action_result = True
+        self.last_action_result = False
         self.location = [0, 0]
         self.route = None
         self.physical_storage = role.physical_capacity
