@@ -11,9 +11,7 @@ class SimulationManager:
         self.agents, initial_percepts = self.simulation.start()
 
     def do_step(self, actions_list):
-        step_response = self.simulation.do_step(actions_list)
-        for action_response in step_response:
-            response_to_action_connect(action_response.response, action_response.token)
+        return self.simulation.do_step(actions_list)
 
     def do_pre_step(self):
         pre_step_response = self.simulation.do_pre_step()
