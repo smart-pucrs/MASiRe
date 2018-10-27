@@ -21,9 +21,11 @@ class Generator:
     def generate_events(self):
 
         events = [None for x in range(self.config['map']['steps'])]
+        
         for step in range(len(events)):
 
-            # generate floods (index 0) and photo events (index 1)
+            if step == 0: 
+                events[step] = self.generate_flood()
 
             if random.randint(0, 100) <= self.config['generate']['floodProbability']:
                 events[step] = self.generate_flood()
