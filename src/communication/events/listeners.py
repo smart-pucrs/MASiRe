@@ -8,6 +8,7 @@ from src.communication.events.emiters import response_to_action_connect, respons
 from src.communication.agent_manager import AgentManager
 from src.communication.events.prepare_action import handle_request
 from src.manager import simulation_instance
+from src.communication.events.controller import Controller
 
 agent_manager = AgentManager()
 init_general = None
@@ -17,6 +18,7 @@ agents = []
 jobs = []
 count = 1
 aux = True
+controller = Controller()
 
 
 @socketio.on('receive_jobs')
@@ -40,16 +42,13 @@ def respond_to_request(*message):
 
     response = ['connection_result', {'agent_connected': True}]
 
-    if init_general is None:
-        init_general = time.time()
-
-    if time.time() - init_general < 3600:
-        if len(agents) > 5:
+    if controller.check_timer():
+        if controller.check_population():
             response[1]['agent_connected'] = False
 
         else:
             if aux:
-                agents.append('')
+                controller.agents.append('')
                 aux = False
 
             else:
