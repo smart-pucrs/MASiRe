@@ -5,4 +5,5 @@ class Victim:
         self.size = size
         self.lifetime = lifetime
         self.location = location
+        self.active = False
 

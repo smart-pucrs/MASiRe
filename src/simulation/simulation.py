@@ -23,6 +23,15 @@ class Simulation:
         if event_step:
             self.world.active_events.append((self.step, event_step))
 
+            for water_sample in event_step:
+                water_sample.active = True
+
+            for photo in flood.photos:
+                photo.active = True
+
+                for victim in photo.victims:
+                    victim.active = True
+
         percepts = dict()
 
         for agent in self.world.agents.values():

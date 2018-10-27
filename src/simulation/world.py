@@ -20,15 +20,30 @@ class World:
         self.action_executor = ActionExecutor(config, self)
 
     def initial_percepts(self):
+        # what should be sent to the agents on the initial percepts?
         return []
 
     def percepts(self, agent):
-        return []
+        floods, water_samples, photos, victims = [], [], [], []
+
+        for _, flood in self.world.active_events:
+            floods.append(flood)
+
+            for water_sample in flood.water_samples:
+                if water_sample.active: water_samples.append(water_sample)
+
+            for photo in flood.photos:
+                if photo.active: photos.append(photo)
+
+                for victim in photo.victims:
+                    if victim.active: victims.append(victim)
+
+        return floods, water_samples, photos, victims
 
     def generate_events(self):
         self.events = self.generator.generate_events()
 
-        '''for flood in events: 
+        for flood in events: 
             self.floods.append(flood)
 
             for water_sample in flood.water_samples:
@@ -38,11 +53,10 @@ class World:
                 self.photos.append(photo)
 
                 for victim in photo.victims:
-                    self.victims.append(victim)'''
+                    self.victims.append(victim)
 
     def create_roles(self):
         for role in self.config['roles']:
-            
             self.roles[role] = Role(role, self.config)
 
     def create_agents(self):

@@ -33,7 +33,6 @@ class ActionExecutor:
         print(agent)
         print(command)
 
-
         if not isinstance(command, str):
             action = command[0]
             parameters = command[1:]

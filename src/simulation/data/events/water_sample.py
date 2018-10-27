@@ -4,3 +4,4 @@ class WaterSample:
 
         self.size = size
         self.node = node
+        self.active = False

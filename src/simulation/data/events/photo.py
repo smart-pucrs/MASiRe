@@ -5,3 +5,4 @@ class Photo:
         self.size = size
         self.victims = victims
         self.node = node
+        self.active = False
