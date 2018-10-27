@@ -208,10 +208,11 @@ class ActionExecutor:
 
             try:
 
-                if len(parameters) > 1 or len(parameters) == 0:
+                if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                associated_victim = agent.victims_to_rescue.contains(parameters[0])
+                associated_victim = True #implementation required
+                    #contains(parameters[0])
 
                 if(associated_victim):
                     victim = agent.victims_to_rescue.remove(parameters[0])
@@ -309,8 +310,7 @@ class ActionExecutor:
                 print(e.message)
 
             except:
-                pass
-                #print('Error: failed')
+                print('Error: failed')
 
         elif action == 'search_social_asset':
 
@@ -320,7 +320,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    #assets = self.world.map.search_social_asset(radius, agent.location) #not implemented yet
+                    #assets = self.world.search_social_asset(radius, agent.location) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 

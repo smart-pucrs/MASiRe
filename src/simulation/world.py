@@ -11,7 +11,7 @@ class World:
 
         self.config = config
         self.events = None
-        self.cdm = cdm
+        self.cdm = None
         self.roles = dict()
         self.agents = dict()
         self.agent_counter = 0

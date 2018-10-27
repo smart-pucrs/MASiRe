@@ -14,7 +14,6 @@ class Agent:
         self.virtual_storage = role.virtual_capacity
         self.physical_storage_vector = []
         self.virtual_storage_vector = []
-        self.victims_to_rescue = []
 
     def __repr__(self):
         return str(self.identifier) + ' - ' +  str(self.role)

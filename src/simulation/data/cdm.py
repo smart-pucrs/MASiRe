@@ -9,4 +9,4 @@ class Cdm:
         self.physicalItems = []
         self.location = location  
 
-    def add_virtual(self, item, )
+    #def add_virtual(self, item, )
