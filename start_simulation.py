@@ -6,7 +6,7 @@ from src.manager import simulation_instance
 
 
 # Define a instancia da simulação com o arquivo inicial dela
-# simulation_instance.start_manager(sys.argv[0])
+simulation_instance.get_instance('config.json')
 
 
 # Roda o servidor flask-socketIO

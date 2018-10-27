@@ -1,28 +1,12 @@
 # based on https://github.com/agentcontest/massim/tree/master/server/src/main/java/massim/scenario/city/data/facilities
 
 
-class cdm:
-    location = None
-    storedVolume = 0
-    virtualItems = 0
-    physicalItems = 0
+class Cdm:
 
-    def __init__(self, location=None):
-        self.location = location  # not implemented yet
+    def __init__(self, location):
+        self.storedVolume = 0
+        self.virtualItems = []
+        self.physicalItems = []
+        self.location = location  
 
-    def charge(self, agent):
-        agent.charge()
-
-    def deliver(self, kind, total):
-        if kind == 'virtual':
-            self.setVirtualItems(total)
-        elif kind == 'physical':
-            self.setPhysicalItems(total)
-
-    def set_virtual_items(self, total):
-        self.virtualItems += total
-        self.storedVolume += total
-
-    def set_physical_items(self, total):
-        self.physicalItems += total
-        self.storedVolume += total
+    def add_virtual(self, item, )

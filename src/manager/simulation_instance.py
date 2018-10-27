@@ -4,7 +4,7 @@ import json
 simulation_manager = None
 
 
-def get_instance(path):
+def get_instance(path=''):
     global simulation_manager
     if simulation_manager is None:
         f = open(path, 'r').read()

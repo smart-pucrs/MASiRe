@@ -19,6 +19,7 @@ class ActionExecutor:
         for idx, command in enumerate(actions):
             agent = self.world.agents[int(command[0])]
             action = command[1]
+
             self.execute(agent, action)
             action_results[idx] = agent.last_action_result
 
@@ -31,6 +32,7 @@ class ActionExecutor:
         # action = ('move', '34', '32')
         print(agent)
         print(command)
+
 
         if not isinstance(command, str):
             action = command[0]
@@ -48,8 +50,6 @@ class ActionExecutor:
             print('Error: failed_no_action')
 
         elif action == 'move':
-
-            agent.last_action = 'move'
 
             try:
 
@@ -320,12 +320,12 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    #assets = world.map.search_social_asset(radius, agent.location) #not implemented yet
+                    #assets = self.world.map.search_social_asset(radius, agent.location) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 
                 else:
-                    #assets = world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
+                    #assets = self.world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
                     #show assets to agent
                     agent.last_action_result = True
 

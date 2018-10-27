@@ -11,9 +11,8 @@ simulation = Simulation(config)
 
 print(simulation.start())
 
-
-
 simulation.do_step([('1', ('move', '34', '32')), ('2', ('photograph')),('2',('analyze_photo')), ('2',('rescue_victim','victim'))])
+
 
 print(simulation.world.events)
 
