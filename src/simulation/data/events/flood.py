@@ -9,7 +9,7 @@ class Flood:
         self.water_samples = water_samples
 
     def __str__(self):
-        return 'FLOOOOOOOD'
+        return 'A FLOOD IS COMING'
 
     def __repr__(self):
         return 'FLOOOOOOOD'

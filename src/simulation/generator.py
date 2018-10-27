@@ -72,6 +72,7 @@ class Generator:
         # generate the list of nodes that are in the flood
         if dimensions['shape'] == 'circle':
             list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
+            pass
 
         else:
             if dimensions.get('height')<dimensions.get('length'):

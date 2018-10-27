@@ -1,9 +1,9 @@
 class Victim:
 
-    def __init__(self, size, lifetime, location):
+    def __init__(self, size, lifetime, node):
         self.id = 'victim'
         self.size = size
         self.lifetime = lifetime
-        self.location = location
         self.active = False
+        self.node = node
 
