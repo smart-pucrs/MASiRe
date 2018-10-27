@@ -6,9 +6,9 @@ from src.simulation.data.events.photo import Photo
 #Class responsible for executing every agents desired action
 class ActionExecutor:
 
-    def __init__(self, config):
+    def __init__(self, config, world):
         self.config = config
-        self.world = None
+        self.world = world
 
     #Method that parses all the actions recovered from the communication core
     #Those actions represents the 'desire' of each agent
@@ -26,22 +26,15 @@ class ActionExecutor:
 
         return action_results
 
-        # PARAMETER = AGENT['PARAMETERS']
-
-        action_name = action[0]
-        action_parameters = action[1:]
-
-
     #Method that tries to execute any possible action passed as a command line
     #Also responsible for managing the current agent's private attributes
     def execute(self, agent, command, world):
 
-        # action = ('move', '34', '32')
-        print(agent)
-        print(command)
-
         action = command[0]
         parameters = command[1:]
+
+        agent.last_action = action
+        agent.last_action_result = False
 
         if action is None:
 
@@ -51,8 +44,6 @@ class ActionExecutor:
             print('Error: failed_no_action')
 
         elif action is 'move':
-
-            agent.last_action = 'move'
 
             try:
 
@@ -98,8 +89,6 @@ class ActionExecutor:
 
         elif action is 'deliver_physical':
 
-            agent.last_action = 'deliver_physical'
-
             try:
 
                 if len(parameters) < 1 or len(parameters) > 2:
@@ -138,8 +127,6 @@ class ActionExecutor:
 
 
         elif action is 'deliver_virtual':
-
-            agent.last_action = 'deliver_virtual'
 
             try:
 
@@ -180,8 +167,6 @@ class ActionExecutor:
 
         elif action is 'charge':
 
-            agent.last_action = 'charge'
-
             try:
 
                 if len(parameters) > 0:
@@ -207,8 +192,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action is 'rescue_victim':
-
-            agent.last_action = 'rescue_victim'
 
             try:
 
@@ -252,8 +235,6 @@ class ActionExecutor:
         # bolivar
         elif action is 'collect_water':
 
-            agent.last_action = 'collect_water'
-
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
@@ -284,8 +265,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action is 'photograph':
-
-            agent.last_action = 'photograph'
 
             try:
 
@@ -329,8 +308,6 @@ class ActionExecutor:
 
         elif action is 'search_social_asset':
 
-            agent.last_action = 'search_social_asset'
-
             try:
 
                 if len(parameters) != 1 or len(parameters) != 3:
@@ -355,7 +332,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action is 'analyze_photo':
-            agent.last_action = 'analyze_photo'
 
             try:
                 if len(parameters) > 0:
