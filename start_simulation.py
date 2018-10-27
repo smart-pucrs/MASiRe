@@ -11,6 +11,6 @@ simulation_instance.get_instance('config.json')
 
 # Roda o servidor flask-socketIO
 project_path = os.path.dirname(os.path.realpath(__file__))
-run([str(project_path) + "/venv/Scripts/python", "-m", "flask", "run"],
+run([str(project_path) + "/venv/Scripts/python", "-m", "flask", "run", "--host=0.0.0.0"],
     env=dict(FLASK_APP='src/app.py', FLASK_ENV='development', FLASK_DEBUG='1', **os.environ))
 
