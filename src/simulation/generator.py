@@ -104,7 +104,7 @@ class Generator:
                 self.config['generate']['victim']['maxLifetime']
             )
 
-            photo_victims[y] = Victim(victim_size, victim_lifetime)
+            photo_victims[y] = Victim(victim_size, victim_lifetime, 0)
 
         return photo_victims
 

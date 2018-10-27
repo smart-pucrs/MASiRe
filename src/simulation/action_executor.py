@@ -6,38 +6,39 @@ from src.simulation.data.events.photo import Photo
 #Class responsible for executing every agents desired action
 class ActionExecutor:
 
-    def __init__(self, config):
+    def __init__(self, config, world):
         self.config = config
-        self.world = None
+        self.world = world
 
     #Method that parses all the actions recovered from the communication core
     #Those actions represent the 'desire' of each agent
-    def execute_actions(self, world, actions):
+    def execute_actions(self, actions):
 
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
-            agent = world.agents[int(command[0])]
+            agent = self.world.agents[int(command[0])]
             action = command[1]
-
-        self.world = world
-        self.execute(agent, action, world)
-        action_results[idx] = agent.last_action_result
+            self.execute(agent, action)
+            action_results[idx] = agent.last_action_result
 
         return action_results
 
-        # PARAMETER = AGENT['PARAMETERS']
-
     #Method that tries to execute any possible action passed as a command line
     #Also responsible for managing the current agent's private attributes
-    def execute(self, agent, command, world):
+    def execute(self, agent, command):
 
         # action = ('move', '34', '32')
         print(agent)
         print(command)
 
-        action = command[0]
-        parameters = command[1:]
+        if not isinstance(command, str):
+            action = command[0]
+            parameters = command[1:]
+
+        else:
+            action = command
+            parameters = []
 
         agent.last_action = action
         agent.last_action_result = False
@@ -57,7 +58,7 @@ class ActionExecutor:
 
                 if len(parameters) == 1:
 
-                    facility = world.facilities[parameters[0]]
+                    facility = self.world.facilities[parameters[0]]
 
                     if agent.location == facility.location:
 
@@ -100,7 +101,7 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == world.cdm.location:
+                if agent.location == self.world.cdm.location:
 
                     if len(parameters) == 1:
                         self.agent_deliver(agent, 'physical', parameters[0])
@@ -143,7 +144,7 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == world.cdm.location:
+                if agent.location == self.world.cdm.location:
 
                     if len(parameters) == 1:
                         self.agent_deliver(agent, 'virtual', parameters[0])
@@ -185,7 +186,7 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                if agent.location == world.cdm.location:
+                if agent.location == self.world.cdm.location:
                     agent.charge()
                     agent.last_action_result = True
 
@@ -217,17 +218,18 @@ class ActionExecutor:
                     if victim.location == agent.location:
                         agent.add_physical_item(victim.id, victim.size)
                         agent.last_action_result = True
+                    else:
+                        raise Failed_location('The agent is not in the same location as the victim.')
 
-                else:
-                    raise Failed_location('The agent is not at the same location as the victim.')
+                raise Failed_unknown_item('No victim by the given ID is known.')
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
                 print(e.message)
 
-            except ValueError:
+            except Failed_unknown_item as e:
                 print('Error: failed_unknown_item')
-                print('No victim by the given ID is known.')
+                print(e.message)
 
             except Failed_location as e:
                 print('Error: failed_location')
@@ -251,7 +253,7 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in world.active_events:
+                for flood in self.world.active_events:
                     for water_sample in flood.water_samples:
                         if water_sample.active and water_sample.location == agent.location:
                             flood.water_samples.remove(water_sample.id)
@@ -284,15 +286,15 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in world.active_events:
+                for flood in self.world.active_events:
                     for photo in flood.photos:
                         if photo.active and photo.location == agent.location:
                             flood.photos.remove(photo.id)
                             agent.add_virtual_item(photo,1)
                             agent.last_action_result = True
                             return
-                else:
-                    raise Failed_location('The agent is not in a location with a photography event.')
+
+                raise Failed_location('The agent is not in a location with a photography event.')
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
@@ -307,7 +309,8 @@ class ActionExecutor:
                 print(e.message)
 
             except:
-                print('Error: failed')
+                pass
+                #print('Error: failed')
 
         elif action == 'search_social_asset':
 

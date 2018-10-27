@@ -16,7 +16,7 @@ class World:
         self.agent_counter = 0
         self.active_events = []
         self.generator = Generator(config)
-        self.action_executor = ActionExecutor(config)
+        self.action_executor = ActionExecutor(config, self)
 
     def initial_percepts(self):
         return []
@@ -59,4 +59,4 @@ class World:
         self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])
 
     def execute_actions(self, actions):
-        return self.action_executor.execute_actions(self, actions)
+        return self.action_executor.execute_actions(actions)
