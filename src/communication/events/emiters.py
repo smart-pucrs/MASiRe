@@ -1,10 +1,6 @@
 from flask_socketio import emit
 
 
-def response_to_action(response, token):
-    emit(token + '/action_respone', response, callback=ack)
-
-
 def response_to_action_ready(response, token):
     emit(token+'/action_response', response, callback=ack)
 
