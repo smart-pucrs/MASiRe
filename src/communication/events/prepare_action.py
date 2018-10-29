@@ -4,6 +4,13 @@ agents = []
 
 
 def handle_request(agent):
+    """
+    Verify if there are still space to the new agent and if the agent was properly sent
+    with all its parameters
+
+    :param agent: object from JSON file
+    :return: boolean
+    """
     global agents
 
     if len(agents) < 5:
@@ -14,11 +21,11 @@ def handle_request(agent):
     return False
 
 
-# def verify_json(agent):
-#
-#     f = open('agents.json', 'r').read()
-#     json_string = f.rstrip()
-#     available_agents = json.loads(json_string)
+def contain_parameters(agent):
+    """
+    Verify if the agent has any empty field in the request
+    False if there are any empty field
+    True if not
 #
 #     if not contain_parameters(agent):
 #         return False
@@ -28,6 +35,9 @@ def handle_request(agent):
 #
 #     return True
 
+    :param agent
+    :return boolean
+    """
 
 def contain_parameters(agent):
     if agent[1][1] == '' or agent[1][1] is None:
