@@ -5,17 +5,16 @@ import os
 from src.manager import simulation_instance
 
 
-# Define a instancia da simulação com o arquivo inicial dela
+# Define the instance of the simulation with its startup file
 simulation_instance.get_instance('config.json')
 
 
 '''
-    O complemento APOS o USERPROFILE eh o caminho para o virtualenv da maquina que o criou, caso haja problemas
-    O caminho até o .virtualenvs eh padrao para todas as maquinas, verificar o nome da pasta contendo 'desastres'
-    no nome e substituir o nome visto pelo nome 'desastres-8vkced-v'
+    The path after USERPROFILE depends on each computer
+    To properly use the simulation configure the path to the correct for your computer 
 '''
 
-# Roda o servidor flask-socketIO
+# Run the flask socketIO server
 project_path = os.environ['USERPROFILE'] + "/.virtualenvs/Desastres-HGKtG0u9/scripts/python"
 run([str(project_path), "-m", "flask", "run", "--host=0.0.0.0"],
     env=dict(FLASK_APP='src/app.py', FLASK_ENV='development', FLASK_DEBUG='1', **os.environ))
