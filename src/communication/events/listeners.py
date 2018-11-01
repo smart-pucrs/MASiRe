@@ -53,8 +53,8 @@ def handle_connection(message):
     call_responses(response, 'receive_jobs')
 
 
-@socketio.on('connect')
-def respond_to_request(*message):
+@socketio.on('connect_agent')
+def respond_to_request(message=''):
     """"
     Handle all the connections
 
@@ -79,7 +79,11 @@ def respond_to_request(*message):
 
     global general_time, agents, aux
 
-    response = ['connection_result', {'agent_connected': True}]
+    agent = json.loads(message)
+
+    encoded = jwt.encode(agent, 'secret', algorithm='HS256')
+
+    response = ['connection_result', {'agent_connected': True, 'token': encoded.decode('utf-8')}]
 
     if general_time is None:
         general_time = time.time()
@@ -90,7 +94,7 @@ def respond_to_request(*message):
 
         else:
             if aux:
-                agents.append('')
+                agents.append(agent)
                 aux = False
 
             else:
