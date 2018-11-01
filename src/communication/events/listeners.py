@@ -9,7 +9,7 @@ from src.communication.events.prepare_action import handle_request
 from src.manager import simulation_instance
 
 agent_manager = AgentManager()
-init_general = None
+general_time = None
 simulation_manager = None
 
 agents = []
@@ -21,6 +21,21 @@ aux = True
 
 @socketio.on('receive_jobs')
 def handle_connection(message):
+    """
+    Receive all the jobs from the agents
+
+    Instantiate the response considering that the result will be True
+    Collect the JSON message and fit it on the agent variable
+    If the handle_connection returns True
+    Add the job to the jobs done list
+    Emit response to the agent
+
+    Else
+    Emit response containing False to the agents
+
+    :param message: the JSON agent
+    """
+
     global count, jobs
 
     response = ['received_jobs_result', {'job_delivered': True}]
@@ -31,25 +46,55 @@ def handle_connection(message):
     if handle_request(agent):
         jobs.append((count, (agent[1][0], agent[1][1], agent[1][2])))
         count += 1
-        call_responses(response, 'receive_jobs')
+
+    else:
+        response[1]['job_delivered'] = False
+
+    call_responses(response, 'receive_jobs')
 
 
-@socketio.on('connect')
-def respond_to_request(*message):
-    global init_general, agents, aux
+@socketio.on('connect_agent')
+def respond_to_request(message=''):
+    """"
+    Handle all the connections
 
-    response = ['connection_result', {'agent_connected': True}]
+    Instantiate the response considering that the result will be True
+    Verify if the passed time get over the expected time
+    Verify if the number of agents connected get over the expected limit
+    If passes the time limit
+        If passes the agents limit
+            Add agent to the agents list and do a trick due to the implementation of flask
+            The trick is that the method will not add the same agent twice because the method is called
+             twice by the flask module
+        Else
+            Reponse receive False
+    Else
+        Send to the agents the jobs that were finished
+        Response receive False
 
-    if init_general is None:
-        init_general = time.time()
+    Send to the agents the response from the method
 
-    if time.time() - init_general < 5:
+    :param message: the JSON agent
+    """
+
+    global general_time, agents, aux
+
+    agent = json.loads(message)
+
+    encoded = jwt.encode(agent, 'secret', algorithm='HS256')
+
+    response = ['connection_result', {'agent_connected': True, 'token': encoded.decode('utf-8')}]
+
+    if general_time is None:
+        general_time = time.time()
+
+    if time.time() - general_time < 5:
         if len(agents) > 5:
             response[1]['agent_connected'] = False
 
         else:
             if aux:
-                agents.append('')
+                agents.append(agent)
                 aux = False
 
             else:
@@ -65,6 +110,17 @@ def respond_to_request(*message):
 
 @socketio.on('ready')
 def respond_to_request_ready(message):
+    """
+    Receive the agent information encoded and decode it
+    Add the decoded agent to a list insed the agent_manager
+    Use the singleton to get the simulation instance and prevent from instantiating the class multiple times
+    Call two responsed:
+        First containing the agents_list
+        Second containg the simulation pre step
+
+    :param message: the JSON agent
+    """
+
     global simulation_manager
 
     decoded = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
@@ -79,6 +135,14 @@ def respond_to_request_ready(message):
 
 
 def call_responses(results, caller, *token):
+    """
+    Call the properly emiters from the 'emiters.py' file
+
+    :param results: response to the agent
+    :param caller: the function that called the method and the name of the event
+    :param token: can be None depending on the caller of the method
+    """
+
     if caller == 'ready':
         emiters.response_to_action_ready(json.dumps(results), token)
 
