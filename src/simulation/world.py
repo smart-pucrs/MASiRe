@@ -8,7 +8,6 @@ from src.simulation.generator import Generator
 class World:
 
     def __init__(self, config):
-
         self.config = config
         self.events = None
         self.cdm = None
@@ -75,3 +74,11 @@ class World:
 
     def execute_actions(self, actions):
         return self.action_executor.execute_actions(actions)
+    
+    def create_route_facility(start, facility):
+        # maybe change to only cdm?
+        # create route between location START and facility.LOCATION
+        return
+
+    def create_route_coordinate(start, lat, long):
+        # create route between location START and [lat, long]
