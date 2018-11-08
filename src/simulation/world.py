@@ -36,14 +36,16 @@ class World:
                 if photo.active: photos.append(photo)
 
                 for victim in photo.victims:
-                    if victim.active: victims.append(victim)
+                    if victim.active:
+                        victims.append(victim)
 
         return floods, water_samples, photos, victims
 
     def generate_events(self):
+
         self.events = self.generator.generate_events()
 
-        for flood in events: 
+        for flood in self.events:
             self.floods.append(flood)
 
             for water_sample in flood.water_samples:

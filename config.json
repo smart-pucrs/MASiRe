@@ -2,7 +2,7 @@
   "map": {
     "id": "2018-SampleSimulation",
     "steps": 1000,
-    "map": "Porto Alegre",
+    "map": "test.osm",
     "minLon": 2.26,
     "maxLon": 2.41,
     "minLat": 48.82,
