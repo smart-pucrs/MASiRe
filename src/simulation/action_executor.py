@@ -29,7 +29,6 @@ class ActionExecutor:
     #Also responsible for managing the current agent's private attributes
     def execute(self, agent, command):
 
-        # action = ('move', '34', '32')
         print(agent)
         print(command)
 
@@ -45,38 +44,38 @@ class ActionExecutor:
         agent.last_action_result = False
 
         if action == None:
-
             print('Error: failed_no_action')
 
         elif action == 'move':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if len(parameters) == 1:
-
+                    # change to cdm only?
                     facility = self.world.facilities[parameters[0]]
 
                     if agent.location == facility.location:
+                        # already arrived. raise error?
 
-                        if agent.route == None:
-                            #route = self.world.create_route_facility(agent.role.location, facility) #not implemented yet
-                            #agent.route = route
-                            agent.last_action_result = True
+                    if agent.route == None:
+                        agent.route, err = self.world.create_route_facility(agent.location, facility)
 
-                        else:
-                            #agent.location = agent.route.next_node() #not implemented yet
-                            agent.last_action_result = True
+                        if err: 
+                            raise Failed_no_route()
 
-                elif len(parameters) == 2:
+                else:
+                    if agent.location == [parameters[0], parameters[1]]:
+                        # already arrived. raise error?
 
-                    latitude = parameters[0]
-                    longitude = parameters[1]
+                    if agent.route == None:
+                        agent.route, err = self.world.create_route_coordinate(agent.location, parameters[0], parameters[1])
 
-                    agent.location = [latitude, longitude]
-                    agent.last_action_result = True
+                        if err: 
+                            raise Failed_no_route()
+                    
+                agent.last_action_result = True
+                agent.location = agent.route.next_node()
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
@@ -94,21 +93,18 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'deliver_physical':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if agent.location == self.world.cdm.location:
-
                     if len(parameters) == 1:
-                        self.agent_deliver(agent, 'physical', parameters[0])
                         agent.last_action_result = True
+                        self.agent_deliver(agent, 'physical', parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
                         agent.last_action_result = True
+                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -137,14 +133,11 @@ class ActionExecutor:
 
 
         elif action == 'deliver_virtual':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if agent.location == self.world.cdm.location:
-
                     if len(parameters) == 1:
                         self.agent_deliver(agent, 'virtual', parameters[0])
                         agent.last_action_result = True
@@ -179,9 +172,7 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'charge':
-
             try:
-
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -204,9 +195,7 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'rescue_victim':
-
             try:
-
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
