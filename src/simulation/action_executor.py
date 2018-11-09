@@ -220,12 +220,11 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                for flood in self.world.active_events:
-                    for photo in flood.photos:
-                        if photo.active and photo.location == agent.location:
-                            flood.water_samples.remove(photo.id)
+                    for victim in self.world.victims:
+                        if victim.active and parameters[0] == victim.id \
+                        and victim.location == agent.location:
                             agent.add_physical_item(photo, 1)
-                            photo.active = False
+                            victim.active = False
                             agent.last_action_result = True
                             return
 
@@ -261,7 +260,6 @@ class ActionExecutor:
 
                 for water_sample in self.world.water_samples:
                     if water_sample.active and water_sample.location == agent.location:
-                        water_sample.water_samples.remove(water_sample.id)
                         agent.add_physical_item(water_sample, 1)
                         water_sample.active = False
                         agent.last_action_result = True
@@ -286,19 +284,16 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'photograph':
-
             try:
-
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in self.world.active_events:
-                    for photo in flood.photos:
-                        if photo.active and photo.location == agent.location:
-                            flood.photos.remove(photo.id)
-                            agent.add_virtual_item(photo,1)
-                            agent.last_action_result = True
-                            return
+                for photo in self.world.photos:
+                    if photo.active and photo.location == agent.location:
+                        agent.add_virtual_item(photo, 1)
+                        photo.active = False
+                        agent.last_action_result = True
+                        return
 
                 raise Failed_location('The agent is not in a location with a photography event.')
 
@@ -318,7 +313,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'search_social_asset':
-
             try:
 
                 if len(parameters) != 1 or len(parameters) != 3:
@@ -342,7 +336,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'analyze_photo':
-
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
