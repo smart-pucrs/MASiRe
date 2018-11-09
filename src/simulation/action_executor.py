@@ -56,7 +56,8 @@ class ActionExecutor:
                     facility = self.world.facilities[parameters[0]]
 
                     if agent.location == facility.location:
-                        # already arrived. raise error?
+                        #already arrived. raise error?
+                        pass
 
                     if agent.route == None:
                         agent.route, err = self.world.create_route_facility(agent.location, facility)
@@ -66,7 +67,8 @@ class ActionExecutor:
 
                 else:
                     if agent.location == [parameters[0], parameters[1]]:
-                        # already arrived. raise error?
+                        #already arrived. raise error?
+                        pass
 
                     if agent.route == None:
                         agent.route, err = self.world.create_route_coordinate(agent.location, parameters[0], parameters[1])

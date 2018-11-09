@@ -8,6 +8,12 @@ from src.simulation.generator import Generator
 class World:
 
     def __init__(self, config):
+        """
+        [Object that represents the simulation universe.]
+
+        :param config: The configuration archive received by the
+        communication core.
+        """
         self.config = config
         self.events = None
         self.cdm = None
@@ -19,6 +25,11 @@ class World:
         self.action_executor = ActionExecutor(config, self)
 
     def initial_percepts(self):
+        """
+        [Defines the initial percepts of the simulation to all agents.]
+
+        :return: ?
+        """
         # what should be sent to the agents on the initial percepts?
         return []
 
@@ -84,3 +95,4 @@ class World:
 
     def create_route_coordinate(start, lat, long):
         # create route between location START and [lat, long]
+        pass
