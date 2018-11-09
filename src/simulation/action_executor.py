@@ -52,30 +52,24 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if len(parameters) == 1:
-                    # change to cdm only?
                     if parameters[0] != cdm:
                         raise Failed_wrong_param('Unknown facility')
-
-                    if agent.location == self.world.cdm.location:
-                        # already arrived. raise error?
-                        pass
-
-                    if agent.route == None:
-                        agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
-
-                        agent.route == None: 
-                            raise Failed_no_route()
+                    
+                    location = self.world.cdm.location
 
                 else:
-                    if agent.location == [parameters[0], parameters[1]]:
-                        # already arrived. raise error?
+                    location = [parameters[0], parameters[1]]
 
-                    if agent.route == None:
-                        agent.route = self.world.create_route_coordinate(agent.location, [parameters[0], parameters[1])
+                if agent.location == location:
+                    # already arrived. raise error?
+                    pass
 
-                        if agent.route == None: 
-                            raise Failed_no_route()
-                    
+                if agent.route == None:
+                    agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
+
+                    if agent.route == None: 
+                        raise Failed_no_route()
+
                 agent.last_action_result = True
                 agent.location = agent.route.next_node()
 
