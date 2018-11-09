@@ -44,9 +44,10 @@ class World:
         return floods, water_samples, photos, victims
 
     def generate_events(self):
+
         self.events = self.generator.generate_events()
 
-        for flood in events: 
+        for flood in self.events:
             self.floods.append(flood)
 
             for water_sample in flood.water_samples:
