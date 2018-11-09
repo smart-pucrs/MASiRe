@@ -20,6 +20,7 @@ class Flood:
         self.dimensions = dimensions
         self.photos = photos
         self.water_samples = water_samples
+        self.active = False
 
     def __str__(self):
         return 'A FLOOD IS COMING'
