@@ -53,15 +53,17 @@ class ActionExecutor:
 
                 if len(parameters) == 1:
                     # change to cdm only?
-                    facility = self.world.facilities[parameters[0]]
+                    if parameters[0] != cdm:
+                        raise Failed_wrong_param('Unknown facility')
 
-                    if agent.location == facility.location:
+                    if agent.location == self.world.cdm.location:
                         # already arrived. raise error?
+                        pass
 
                     if agent.route == None:
-                        agent.route, err = self.world.create_route_facility(agent.location, facility)
+                        agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
 
-                        if err: 
+                        agent.route == None: 
                             raise Failed_no_route()
 
                 else:
@@ -69,9 +71,9 @@ class ActionExecutor:
                         # already arrived. raise error?
 
                     if agent.route == None:
-                        agent.route, err = self.world.create_route_coordinate(agent.location, parameters[0], parameters[1])
+                        agent.route = self.world.create_route_coordinate(agent.location, [parameters[0], parameters[1])
 
-                        if err: 
+                        if agent.route == None: 
                             raise Failed_no_route()
                     
                 agent.last_action_result = True
@@ -130,7 +132,6 @@ class ActionExecutor:
 
             except:
                 print('Error: failed')
-
 
         elif action == 'deliver_virtual':
             try:
@@ -199,16 +200,15 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                associated_victim = True #implementation required
-                    #contains(parameters[0])
-
-                if(associated_victim):
-                    victim = agent.victims_to_rescue.remove(parameters[0])
-                    if victim.location == agent.location:
-                        agent.add_physical_item(victim.id, victim.size)
-                        agent.last_action_result = True
-                    else:
-                        raise Failed_location('The agent is not in the same location as the victim.')
+                for flood in self.world.active_events:
+                    for photo in flood.photos:
+        
+                        if water_sample.active and water_sample.location == agent.location:
+                            flood.water_samples.remove(water_sample.id)
+                            agent.add_physical_item(water_sample, 1)
+                            water_sample.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_unknown_item('No victim by the given ID is known.')
 
@@ -237,19 +237,19 @@ class ActionExecutor:
 
 
         elif action == 'collect_water':
-
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in self.world.active_events:
-                    for water_sample in flood.water_samples:
-                        if water_sample.active and water_sample.location == agent.location:
-                            flood.water_samples.remove(water_sample.id)
+                for water_sample in self.world.water_samples:
+                    if flood.active and flood.location == agent.location:
+                        flood.water_samples.remove(water_sample.id)
                             agent.add_physical_item(water_sample, 1)
                             water_sample.active = False
                             agent.last_action_result = True
                             return
+
+                
                 if not agent.last_action_result:
                     raise Failed_location('The agent is not in a location with a water sample.')
 

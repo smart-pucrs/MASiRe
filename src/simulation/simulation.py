@@ -25,12 +25,15 @@ class Simulation:
 
             for water_sample in event_step:
                 water_sample.active = True
+                self.world.water_samples.append(water_sample)
 
             for photo in flood.photos:
                 photo.active = True
+                self.world.photos.append(photo)
 
                 for victim in photo.victims:
                     victim.active = True
+                    self.world.victims.append(victim)
 
         percepts = dict()
 
