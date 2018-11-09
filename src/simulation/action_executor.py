@@ -363,18 +363,16 @@ class ActionExecutor:
 
         return agent.last_action_result
 
-
-    #Method that ensures the correct removal of the current agent's items
     def agent_deliver(self, agent, kind, item, amount=None):
         """
         [Method that ensures the correct delivery of the current agent's items
         to the CDM.]
 
-        :param agent:
-        :param kind:
-        :param item:
-        :param amount:
-        :return:
+        :param agent: The agent which will have its items removed.
+        :param kind: The type of the items to be removed (tagged by physical or virtual).
+        :param item: The item to be removed.
+        :param amount: The amount of items that shares the same characteristics of the
+        parametrized item to be removed.
         """
 
         total_removed = 0
