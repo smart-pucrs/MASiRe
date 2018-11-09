@@ -1,8 +1,9 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Entity.java
 from src.simulation.exceptions import *
+
+
 class Agent:
 
-    # constructor with agent's private attributes
     def __init__(self, identifier, role):
         """
         [Object that represents an instance of an agents 'controller',
@@ -93,13 +94,10 @@ class Agent:
             self.virtual_storage_vector.append(item)
             self.virtual_storage -= size
 
-
-
     def remove_physical_item(self, item, amount=None):
-
         """
-        [Removes a certain parametrized item from the agent's physical storage.
-        The agent's current 'free space' is increased by the item's size.
+        [Removes a certain parametrized physical item from the agent's physical storage.
+        The agent's current 'free physical space' is increased by the item's size.
         In case the agent's physical storage does not contains the specified item,
         an error is thrown.]
 
@@ -109,7 +107,6 @@ class Agent:
         in the agent's physical storage is removed.
         :return: A list containing all the removed items.
         """
-
 
         if self.virtual_storage == self.role.virual_capacity:
             raise Failed_item_amount('The agents has no victims or water samples to deliver.')
@@ -132,8 +129,18 @@ class Agent:
         return len(removed)
 
     def remove_virtual_item(self, item, amount=None):
+        """
+        [Removes a certain parametrized virtual item from the agent's virtual storage.
+        The agent's current 'free virtual space' is increased by the item's size.
+        In case the agent's virtual storage does not contains the specified item,
+        an error is thrown.]
 
-        removed = []
+        :param item: The virtual item to be removed.
+        :param amount: The amount of the specified item to be removed.
+        In case it is not specified, every instance of the item contained
+        in the agent's virtual storage is removed.
+        :return: A list containing all the removed items.
+        """
 
         if self.virtual_storage == self.role.virual_capacity:
             raise Failed_item_amount('The agents has no photos to deliver.')
@@ -156,6 +163,17 @@ class Agent:
         return len(removed)
 
     def remove(self, lst, item, removed, amount=None):
+        """
+        [Agent's auxiliary method for generic type item removal.]
+
+        :param lst: A list containing all the current items
+        of the agent's specified kind storage (physical or virtual).
+        :param item: The type of the item to be removed.
+        :param removed: A list that will aggregate all removed instances
+        of the specified item.
+        :param amount: The amount of the parametrized item to be removed.
+        :return: Returns a list containing all the removed items.
+        """
         for e in range(0,len(lst)):
             if amount == 0:
                 return removed

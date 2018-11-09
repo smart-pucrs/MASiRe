@@ -1,18 +1,34 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 from src.simulation.exceptions import *
-from src.simulation.data.events.water_sample import WaterSample
-from src.simulation.data.events.photo import Photo
 
-#Class responsible for executing every agents desired action
+
 class ActionExecutor:
 
     def __init__(self, config, world):
+        """
+        [Constructor of the agent executor, which is responsible for
+        executing every agent's desired action.]
+
+        :param config: The configuration file which contains all the
+        necessary information for the simulation.
+        :param world: The world class, which is responsible for manipulating
+        the simulation universe, including all the events and facilities.
+        """
+
         self.config = config
         self.world = world
 
-    #Method that parses all the actions recovered from the communication core
-    #Those actions represent the 'desire' of each agent
     def execute_actions(self, actions):
+        """
+        [Method that parses all the actions recovered from the communication core
+        and calls its execution during a step.]
+        
+        :param actions: A json file sent by the communication core
+        containing all the actions, including the necessary parameters,
+        and its respective agents.
+        :return: A list containing every agent's action result,
+        marking it with a success or failure flag.
+        """
 
         action_results = [None for x in range(len(actions))]
 
@@ -25,12 +41,22 @@ class ActionExecutor:
 
         return action_results
 
-    #Method that tries to execute any possible action passed as a command line
-    #Also responsible for managing the current agent's private attributes
     def execute(self, agent, command):
+        """
+        [Method that tries to execute a single action for a parametrized agent.
+        The action may contain necessary parameters.
+        This method is also responsible for calling the manager of the parametrized
+        agent, so than it can modify its private attributes.]
 
-        print(agent)
-        print(command)
+        :param agent: Agent responsible for calling a specific command (per step).
+        :param command: The agent's desired action to be executed, including its
+        necessary parameters.
+        :return: A list containing every agent's action result,
+        marking it with a success or failure flag.
+        """
+
+        #print(agent)
+        #print(command)
 
         if not isinstance(command, str):
             action = command[0]
@@ -228,7 +254,6 @@ class ActionExecutor:
             except:
                 print('Error: failed')
 
-
         elif action == 'collect_water':
             try:
                 if len(parameters) > 0:
@@ -343,9 +368,21 @@ class ActionExecutor:
         else:
             print('Error: failed')
 
+        return agent.last_action_result
+
 
     #Method that ensures the correct removal of the current agent's items
     def agent_deliver(self, agent, kind, item, amount=None):
+        """
+        [Method that ensures the correct delivery of the current agent's items
+        to the CDM.]
+
+        :param agent:
+        :param kind:
+        :param item:
+        :param amount:
+        :return:
+        """
 
         total_removed = 0
 
