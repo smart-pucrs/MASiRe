@@ -3,6 +3,13 @@
 
 class Role:
     def __init__(self, id, config):
+        """
+        [Sets the simulation role for an identified agent by the id tag.]
+
+        :param id: The identifier that references a certain agent.
+        :param config: The configuration file sent by the communication core
+        to be manipulated.
+        """
         self.id = id
         self.roads = config['roles'][id]['kind']
         self.speed = config['roles'][id]['speed']

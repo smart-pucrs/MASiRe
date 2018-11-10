@@ -8,7 +8,12 @@ from src.simulation.generator import Generator
 class World:
 
     def __init__(self, config):
+        """
+        [Object that represents the simulation universe.]
 
+        :param config: The configuration archive received by the
+        communication core.
+        """
         self.config = config
         self.events = None
         self.cdm = None
@@ -16,6 +21,10 @@ class World:
         self.agents = dict()
         self.agent_counter = 0
         self.active_events = []
+        self.floods = []
+        self.water_samples = []
+        self.photos = []
+        self.victims = []
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
         self.router = None
@@ -23,23 +32,28 @@ class World:
         self.generate_events()
 
     def initial_percepts(self):
+        """
+        [Defines the initial percepts of the simulation to all agents.]
+
+        :return: ?
+        """
         # what should be sent to the agents on the initial percepts?
         return []
 
     def percepts(self, agent):
         floods, water_samples, photos, victims = [], [], [], []
 
-        for _, flood in self.world.active_events:
-            floods.append(flood)
+        for flood in self.floods:
+            if flood.active: floods.append(flood)
 
-            for water_sample in flood.water_samples:
-                if water_sample.active: water_samples.append(water_sample)
+        for water_sample in self.water_samples:
+            if water_sample.active: water_samples.append(water_sample)
 
-            for photo in flood.photos:
-                if photo.active: photos.append(photo)
+        for photo in self.photos:
+            if photo.active: photos.append(photo)
 
-                for victim in photo.victims:
-                    if victim.active: victims.append(victim)
+        for victim in self.victims:
+            if victim.active: victims.append(victim)
 
         return floods, water_samples, photos, victims
 
@@ -81,3 +95,9 @@ class World:
 
     def execute_actions(self, actions):
         return self.action_executor.execute_actions(actions)
+
+
+    def create_route_coordinate(start, location):
+        # create route between location START and LOCATION
+        # both are a list -> [lat, long]
+        return

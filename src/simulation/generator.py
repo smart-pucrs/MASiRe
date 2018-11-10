@@ -98,11 +98,12 @@ class Generator:
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
         ))]
+        
         for x in range(len(photos)):
 
             photo_size = self.config['generate']['photo']['size']
 
-            if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability'] * 100:
+            if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
 
                 photo_victims = self.generate_victims(node)
 

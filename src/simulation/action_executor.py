@@ -1,18 +1,34 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 from src.simulation.exceptions import *
-from src.simulation.data.events.water_sample import WaterSample
-from src.simulation.data.events.photo import Photo
 
-#Class responsible for executing every agents desired action
+
 class ActionExecutor:
 
     def __init__(self, config, world):
+        """
+        [Constructor of the agent executor, which is responsible for
+        executing every agent's desired action.]
+
+        :param config: The configuration file which contains all the
+        necessary information for the simulation.
+        :param world: The world class, which is responsible for manipulating
+        the simulation universe, including all the events and facilities.
+        """
+
         self.config = config
         self.world = world
 
-    #Method that parses all the actions recovered from the communication core
-    #Those actions represent the 'desire' of each agent
     def execute_actions(self, actions):
+        """
+        [Method that parses all the actions recovered from the communication core
+        and calls its execution during a step.]
+        
+        :param actions: A json file sent by the communication core
+        containing all the actions, including the necessary parameters,
+        and its respective agents.
+        :return: A list containing every agent's action result,
+        marking it with a success or failure flag.
+        """
 
         action_results = [None for x in range(len(actions))]
 
@@ -25,13 +41,22 @@ class ActionExecutor:
 
         return action_results
 
-    #Method that tries to execute any possible action passed as a command line
-    #Also responsible for managing the current agent's private attributes
     def execute(self, agent, command):
+        """
+        [Method that tries to execute a single action for a parametrized agent.
+        The action may contain necessary parameters.
+        This method is also responsible for calling the manager of the parametrized
+        agent, so than it can modify its private attributes.]
 
-        # action = ('move', '34', '32')
-        print(agent)
-        print(command)
+        :param agent: Agent responsible for calling a specific command (per step).
+        :param command: The agent's desired action to be executed, including its
+        necessary parameters.
+        :return: A list containing every agent's action result,
+        marking it with a success or failure flag.
+        """
+
+        #print(agent)
+        #print(command)
 
         if not isinstance(command, str):
             action = command[0]
@@ -45,38 +70,34 @@ class ActionExecutor:
         agent.last_action_result = False
 
         if action == None:
-
             print('Error: failed_no_action')
 
         elif action == 'move':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if len(parameters) == 1:
+                    if parameters[0] != 'cdm':
+                        raise Failed_wrong_param('Unknown facility')
+                    
+                    location = self.world.cdm.location
 
-                    facility = self.world.facilities[parameters[0]]
+                else:
+                    location = [parameters[0], parameters[1]]
 
-                    if agent.location == facility.location:
+                if agent.location == location:
+                    # already arrived. raise error?
+                    pass
 
-                        if agent.route == None:
-                            #route = self.world.create_route_facility(agent.role.location, facility) #not implemented yet
-                            #agent.route = route
-                            agent.last_action_result = True
+                if agent.route == None:
+                    agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
 
-                        else:
-                            #agent.location = agent.route.next_node() #not implemented yet
-                            agent.last_action_result = True
+                    if agent.route == None: 
+                        raise Failed_no_route()
 
-                elif len(parameters) == 2:
-
-                    latitude = parameters[0]
-                    longitude = parameters[1]
-
-                    agent.location = [latitude, longitude]
-                    agent.last_action_result = True
+                agent.last_action_result = True
+                agent.location = agent.route.next_node()
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
@@ -94,21 +115,18 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'deliver_physical':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if agent.location == self.world.cdm.location:
-
                     if len(parameters) == 1:
-                        self.agent_deliver(agent, 'physical', parameters[0])
                         agent.last_action_result = True
+                        self.agent_deliver(agent, 'physical', parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
                         agent.last_action_result = True
+                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -135,16 +153,12 @@ class ActionExecutor:
             except:
                 print('Error: failed')
 
-
         elif action == 'deliver_virtual':
-
             try:
-
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if agent.location == self.world.cdm.location:
-
                     if len(parameters) == 1:
                         self.agent_deliver(agent, 'virtual', parameters[0])
                         agent.last_action_result = True
@@ -179,9 +193,7 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'charge':
-
             try:
-
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -204,22 +216,17 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'rescue_victim':
-
             try:
-
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                associated_victim = True #implementation required
-                    #contains(parameters[0])
-
-                if(associated_victim):
-                    victim = agent.victims_to_rescue.remove(parameters[0])
-                    if victim.location == agent.location:
-                        agent.add_physical_item(victim.id, victim.size)
-                        agent.last_action_result = True
-                    else:
-                        raise Failed_location('The agent is not in the same location as the victim.')
+                    for victim in self.world.victims:
+                        if victim.active and parameters[0] == victim.id \
+                        and victim.location == agent.location:
+                            agent.add_physical_item(photo, 1)
+                            victim.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_unknown_item('No victim by the given ID is known.')
 
@@ -246,21 +253,18 @@ class ActionExecutor:
             except:
                 print('Error: failed')
 
-
         elif action == 'collect_water':
-
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in self.world.active_events:
-                    for water_sample in flood.water_samples:
-                        if water_sample.active and water_sample.location == agent.location:
-                            flood.water_samples.remove(water_sample.id)
-                            agent.add_physical_item(water_sample, 1)
-                            water_sample.active = False
-                            agent.last_action_result = True
-                            return
+                for water_sample in self.world.water_samples:
+                    if water_sample.active and water_sample.location == agent.location:
+                        agent.add_physical_item(water_sample, 1)
+                        water_sample.active = False
+                        agent.last_action_result = True
+                        return
+
                 if not agent.last_action_result:
                     raise Failed_location('The agent is not in a location with a water sample.')
 
@@ -280,19 +284,16 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'photograph':
-
             try:
-
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for flood in self.world.active_events:
-                    for photo in flood.photos:
-                        if photo.active and photo.location == agent.location:
-                            flood.photos.remove(photo.id)
-                            agent.add_virtual_item(photo,1)
-                            agent.last_action_result = True
-                            return
+                for photo in self.world.photos:
+                    if photo.active and photo.location == agent.location:
+                        agent.add_virtual_item(photo, 1)
+                        photo.active = False
+                        agent.last_action_result = True
+                        return
 
                 raise Failed_location('The agent is not in a location with a photography event.')
 
@@ -312,7 +313,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'search_social_asset':
-
             try:
 
                 if len(parameters) != 1 or len(parameters) != 3:
@@ -336,7 +336,6 @@ class ActionExecutor:
                 print('Error: failed')
 
         elif action == 'analyze_photo':
-
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
@@ -362,9 +361,19 @@ class ActionExecutor:
         else:
             print('Error: failed')
 
+        return agent.last_action_result
 
-    #Method that ensures the correct removal of the current agent's items
     def agent_deliver(self, agent, kind, item, amount=None):
+        """
+        [Method that ensures the correct delivery of the current agent's items
+        to the CDM.]
+
+        :param agent: The agent which will have its items removed.
+        :param kind: The type of the items to be removed (tagged by physical or virtual).
+        :param item: The item to be removed.
+        :param amount: The amount of items that shares the same characteristics of the
+        parametrized item to be removed.
+        """
 
         total_removed = 0
 
