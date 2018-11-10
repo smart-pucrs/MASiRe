@@ -36,27 +36,16 @@ def handle_connection(message):
         call_responses(response, 'receive_jobs')
 
 
-@socketio.on('connect')
+@socketio.on('connect_agent')
 def respond_to_request(*message):
     global init_general, agents, aux
 
-    response = ['connection_result', {'agent_connected': True}]
+    response = ['connection_result', {'agent_connected': False}]
 
-    if controller.check_timer():
-        if controller.check_population():
-            response[1]['agent_connected'] = False
-
-        else:
-            if aux:
-                controller.agents.append('')
-                aux = False
-
-            else:
-                aux = True
-
-    else:
-        simulation_manager.do_step(jobs)
-        response[1]['agent_connected'] = False
+    if controller.check_population():
+        if controller.check_timer():
+            response[1]['agent_connected'] = True
+            controller.agents.append(message)
 
     call_responses(response, 'connect')
 
