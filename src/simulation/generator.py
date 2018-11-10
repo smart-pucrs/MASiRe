@@ -7,6 +7,7 @@ from src.simulation.data.events.photo import Photo
 from src.simulation.data.events.victim import Victim
 from src.simulation.data.events.water_sample import WaterSample
 from pyroutelib3 import Router  # Import the router
+from src.simulation.data.route import Route
 import math
 
 
@@ -16,10 +17,11 @@ class Generator:
 
         self.config = config
         random.seed(config['map']['randomSeed'])
-        self.router = Router("car", config['map']['map'])  # Initialise router object from pyroutelib3
+        #self.router = Router("car", config['map']['map'])  # Initialise router object from pyroutelib3
+        self.router = Route(config['map']['map'])
 
     def generate_events(self):
-
+        print("---------------------------------------------------------")
         events = [None for x in range(self.config['map']['steps'])]
         
         for step in range(len(events)):
@@ -30,7 +32,9 @@ class Generator:
             if random.randint(0, 100) <= self.config['generate']['floodProbability']:
                 events[step] = self.generate_flood()
 
-        return events
+        print(events)
+        self.router.generate_routing_tables(events)
+        return events, self.router
 
     def generate_flood(self):
 
@@ -43,12 +47,13 @@ class Generator:
 
         dimensions = dict()
 
-        dimensions['shape'] = 'circle' if random.randint(0, 1) == 0 else 'rectangle'
+        dimensions['shape'] = 'circle'
+        # dimensions['shape'] = 'circle' if random.randint(0, 1) == 0 else 'rectangle'
 
         if dimensions['shape'] == 'circle':
 
             dimensions['radius'] = (
-                random.randint(self.config['generate']['flood']['circle']['minRadius'],
+                random.uniform(self.config['generate']['flood']['circle']['minRadius'],
                                self.config['generate']['flood']['circle']['maxRadius'])
             )
 
@@ -67,18 +72,19 @@ class Generator:
 
         flood_lat = random.uniform(self.config['map']['minLat'], self.config['map']['maxLat'])
         flood_lon = random.uniform(self.config['map']['minLon'], self.config['map']['maxLon'])
-        dimensions['coord'] = flood_lat, flood_lon
+
+        dimensions['coord'] = self.router.align_coords(flood_lat, flood_lon)
 
         # generate the list of nodes that are in the flood
         if dimensions['shape'] == 'circle':
-            list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
+            list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
             pass
 
         else:
             if dimensions.get('height')<dimensions.get('length'):
-                list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
+                list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
             else:
-                list_of_nodes = self.nodes_in_radius(dimensions.get('coord'), dimensions.get('length'))
+                list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('length'))
 
         photos = self.generate_photos(random.choice(list_of_nodes))
         water_samples = self.generate_water_samples(random.choice(list_of_nodes))
@@ -140,19 +146,3 @@ class Generator:
             water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], node)
 
         return water_samples
-
-    def nodes_in_radius(self, coord, radius):
-        # radius in kilometers
-        result = []
-        for node in self.router.rnodes:
-            if self.router.distance(self.node_to_radian(node), self.coords_to_radian(coord)) <= radius:
-                result.append(node)
-        return result
-
-    def node_to_radian(self, node):
-        """Returns the radian coordinates of a given OSM node"""
-        return self.coords_to_radian(self.router.nodeLatLon(node))
-
-    def coords_to_radian(self, coords):
-        """Maps a coordinate from degrees to radians"""
-        return list(map(math.radians, coords))

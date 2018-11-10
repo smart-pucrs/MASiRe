@@ -18,6 +18,9 @@ class World:
         self.active_events = []
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
+        self.router = None
+
+        self.generate_events()
 
     def initial_percepts(self):
         # what should be sent to the agents on the initial percepts?
@@ -41,9 +44,12 @@ class World:
         return floods, water_samples, photos, victims
 
     def generate_events(self):
-        self.events = self.generator.generate_events()
+        print("----")
+        self.events, self.router = self.generator.generate_events()
+        # temp = self.router.routing_states
+        # temp1 = self.router.original_state
 
-        for flood in events: 
+        for flood in self.events:
             self.floods.append(flood)
 
             for water_sample in flood.water_samples:
