@@ -8,10 +8,13 @@ from src.simulation.data.events.victim import Victim
 from src.simulation.data.events.water_sample import WaterSample
 from pyroutelib3 import Router  # Import the router
 import math
-
+import json
 
 class Generator:
 
+    total_photos = 0
+    total_water_samples = 0
+    total_victims = 0
     def __init__(self, config):
 
         self.config = config
@@ -28,6 +31,24 @@ class Generator:
 
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step + 1] = self.generate_flood()
+
+        data = {}
+        global total_photos, total_water_samples, total_victims
+        data['photos'] = [{
+            'total': total_photos,
+            'done': 0
+        }]
+        data['victims'] = [{
+            'total': total_victims,
+            'done': 0
+        }]
+        data['water_sample'] = [{
+            'total': total_water_samples,
+            'done': 0
+        }]
+
+        with open('results.txt', 'w') as outfile:
+            json.dump(data, outfile)
 
         return events
 
@@ -90,6 +111,8 @@ class Generator:
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
         ))]
+        global total_photos
+        total_photos += len(photos)
         for x in range(len(photos)):
             node = random.choice(nodes)
             photo_size = self.config['generate']['photo']['size']
@@ -108,7 +131,8 @@ class Generator:
                     self.config['generate']['victim']['minAmount'],
                     self.config['generate']['victim']['maxAmount']
         ))]
-
+        global total_victims
+        total_victims += len(photo_victims)
         for y in range(len(photo_victims)):
             node = random.choice(nodes)
             victim_size = random.randint(
@@ -132,7 +156,8 @@ class Generator:
             self.config['generate']['waterSample']['minAmount'],
             self.config['generate']['waterSample']['maxAmount']
         ))]
-
+        global total_water_samples
+        total_water_samples += len(water_samples)
         for x in range(len(water_samples)):
             node = random.choice(nodes)
             water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], node)
