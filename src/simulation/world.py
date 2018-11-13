@@ -96,7 +96,6 @@ class World:
     def execute_actions(self, actions):
         return self.action_executor.execute_actions(actions)
 
-
     def create_route_coordinate(start, location):
         # create route between location START and LOCATION
         # both are a list -> [lat, long]

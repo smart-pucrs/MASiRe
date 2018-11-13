@@ -381,6 +381,8 @@ class ActionExecutor:
         parametrized item to be removed.
         """
 
+        removed_items = []
+
         if amount == None:
             if kind == 'physical':
                 removed_items = agent.remove_physical_item(item)
@@ -389,10 +391,7 @@ class ActionExecutor:
                 removed_items = agent.remove_virtual_item(item)
 
             else:
-                raise Failed_invalid_kind('Invalid item to deliver')
-
-            if len(removed_items) == 0:
-                raise Failed_unknown_item('No item by the given name is known.')
+                raise Failed_invalid_kind('Invalid item to deliver'))
 
         elif amount != None:
             if kind == 'physical':
@@ -409,5 +408,11 @@ class ActionExecutor:
 
                 removed_items = agent.remove_virtual_item(item, amount)
 
-            if len(removed_items) == 0:
-                raise Failed_unknown_item('No item by the given name is known.')
+        if len(removed_items) == 0:
+            raise Failed_unknown_item('No item by the given name is known.')
+
+        if kind == 'physical':
+            self.world.cdm.add_physical_items(removed_items)
+
+        else:
+            self.world.cdm.add_virtual_items(removed_items)
