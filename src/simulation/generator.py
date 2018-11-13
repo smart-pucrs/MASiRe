@@ -15,9 +15,10 @@ class Generator:
     def __init__(self, config):
 
         self.config = config
-        random.seed(config['map']['randomSeed'])
         #self.router = Router("car", config['map']['map'])  # Initialise router object from pyroutelib3
         self.router = Route(config['map']['map'])
+        self.victim_counter = 0
+        random.seed(config['map']['randomSeed'])
 
     def generate_events(self):
         events = [None for x in range(self.config['map']['steps'])]
@@ -115,6 +116,8 @@ class Generator:
         ))]
 
         for y in range(len(photo_victims)):
+            
+            self.victim_counter += 1
 
             victim_size = random.randint(
                 self.config['generate']['victim']['minSize'],
@@ -128,7 +131,7 @@ class Generator:
 
             victim_location = random.choice(nodes)
 
-            photo_victims[y] = Victim(id, victim_size, victim_lifetime, victim_location)
+            photo_victims[y] = Victim(self.victim_counter, victim_size, victim_lifetime, victim_location)
 
         return photo_victims
 
