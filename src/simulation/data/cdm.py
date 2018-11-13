@@ -12,7 +12,6 @@ class Cdm:
         :param location: The location of the CDM at the simulation map.
         This variable will restrict the agent's actions in case of location inequality.
         """
-        self.storedVolume = 0
         self.virtualItems = []
         self.physicalItems = []
         self.location = location  

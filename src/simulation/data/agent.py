@@ -1,21 +1,23 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Entity.java
 from src.simulation.exceptions import *
-
+from src.simulation.data.events.flood import *
+from src.simulation.data.events.victim import *
+from src.simulation.data.events.photo import *
 
 class Agent:
 
-    def __init__(self, identifier, role):
+    def __init__(self, id, role):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
 
-        :param identifier: 'Manipulated' agent's identifier.
+        :param id: 'Manipulated' agent's id.
         :param role: The agent's main function over the simulation,
         which covers its skills and limitations.
         """
 
+        self.id = id
         self.role = role
-        self.identifier = identifier
         self.last_action = None
         self.last_action_result = False
         self.location = [0, 0]
@@ -26,7 +28,7 @@ class Agent:
         self.virtual_storage_vector = []
 
     def __repr__(self):
-        return str(self.identifier) + ' - ' +  str(self.role)
+        return str(self.id) + ' - ' +  str(self.role)
 
     def discharge(self):
         """
@@ -54,18 +56,21 @@ class Agent:
 
         size = item.size
 
-        if amount != None:
-            if size * amount < self.physical_storage:
-                self.physical_storage -= size * amount
-                e = 0
-                while e < amount:
-                    self.physical_storage_vector.append(item)
-                    e += 1
-            else:
-                raise Failed_capacity('The agent does not have enough physical storage.')
-        else:
-            self.virtual_storage_vector.append(item)
-            self.virtual_storage -= size
+        # if amount != None:
+        #     if size * amount < self.physical_storage:
+        #         self.physical_storage -= size * amount
+        #         e = 0
+        #         while e < amount:
+        #             self.physical_storage_vector.append(item)
+        #             e += 1
+        #     else:
+        #         raise Failed_capacity('The agent does not have enough physical storage.')
+        # else:
+        if size > self.virtual_storage:
+            raise Failed_capacity('The agent does not have enough physical storage.')
+
+        self.physical_storage -= size
+        self.physical_storage_vector.append(item)
 
     def add_virtual_item(self, item, amount=None):
         """
@@ -81,18 +86,21 @@ class Agent:
 
         size = item.size
 
-        if amount != None:
-            if size * amount < self.virtual_storage:
-                self.virtual_storage -= size * amount
-                e = 0
-                while e < amount:
-                    self.virtual_storage_vector.append(item)
-                    e += 1
-            else:
-                raise Failed_capacity('The agent does not have enough virtual storage.')
-        else:
-            self.virtual_storage_vector.append(item)
-            self.virtual_storage -= size
+        # if amount != None:
+        #     if size * amount < self.virtual_storage:
+        #         self.virtual_storage -= size * amount
+        #         e = 0
+        #         while e < amount:
+        #             self.virtual_storage_vector.append(item)
+        #             e += 1
+        #     else:
+        #         raise Failed_capacity('The agent does not have enough virtual storage.')
+        # else:
+        if size > self.virtual_storage:
+            raise Failed_capacity('The agent does not have enough physical storage.')
+
+        self.virtual_storage -= size
+        self.virtual_storage_vector.append(item)
 
     def remove_physical_item(self, item, amount=None):
         """
@@ -114,19 +122,17 @@ class Agent:
         if not self.virtual_storage_vector.contains(item):
             raise Failed_unknown_item('No physical item with this ID is storaged.')
 
-        vector = self.physical_storage_vector
+        removed = []
 
         if amount == None:
-            removed = self.remove(vector, item, vector.size()-1, [])
-            print(removed)
-            self.physical_storage = self.role.physical_capacity
+            removed = self.remove(self.physical_storage_vector, item)
         else:
-            removed = self.remove(vector, item, amount, [])
-            print(removed)
-            for e in removed:
-                self.physical_storage += e.size()
+            removed = self.remove(self.physical_storage_vector, item, amount)
+            
+        for e in removed:
+            self.physical_storage += e.size
 
-        return len(removed)
+        return removed
 
     def remove_virtual_item(self, item, amount=None):
         """
@@ -148,21 +154,19 @@ class Agent:
         if not self.virtual_storage_vector.contains(item):
             raise Failed_unknown_item('No virtual item with this ID is storaged.')
 
-        vector = self.virtual_storage_vector
+        removed = []
 
         if amount == None:
-            removed = self.remove(vector, item, vector.size()-1, [])
-            print(removed)
-            self.virtual_storage = self.role.physical_capacity
+            removed = self.remove(self.virtual_storage_vector, item)
         else:
-            removed = self.remove(vector, item, amount, [])
-            print(removed)
-            for e in removed:
-                self.virtual_storage += e.size()
+            removed = self.remove(self.virtual_storage_vector, item, amount)
 
-        return len(removed)
+        for e in removed:
+            self.virtual_storage += e.size
 
-    def remove(self, lst, item, removed, amount=None):
+        return removed
+
+    def remove(self, lst, item, amount=None):
         """
         [Agent's auxiliary method for generic type item removal.]
 
@@ -174,12 +178,23 @@ class Agent:
         :param amount: The amount of the parametrized item to be removed.
         :return: Returns a list containing all the removed items.
         """
-        for e in range(0,len(lst)):
+
+        if amount == None:
+            amount = len(lst)
+
+        removed = []
+
+        for e in range(len(lst)):
             if amount == 0:
-                return removed
-            if lst[e].id == item:
-                aux_item = lst[e]
-                lst[e] = lst[lst.size() - 1]
-                lst[lst.size() - 1] = aux_item
-                removed.append(lst.pop())
-                amount = amount - 1
+                break
+            
+            if lst[e].type == item:
+                removed.append(lst[e])
+                lst[e] = None
+                amount -= 1
+
+        lst = [e for e in lst if e != None]
+
+        return removed
+
+        

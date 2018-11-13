@@ -72,6 +72,9 @@ class Route:
     def do_route(self):
         pass
 
+    def get_route(self, start, end):
+        self.router.
+
     def nodes_in_radius(self, coord, radius):
         # radius in kilometers
         result = []
