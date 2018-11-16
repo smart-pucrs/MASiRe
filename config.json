@@ -2,7 +2,7 @@
   "map": {
     "id": "2018-SampleSimulation",
     "steps": 1000,
-    "map": "Porto Alegre",
+    "map": "pucrs.osm",
     "minLon": 2.26,
     "maxLon": 2.41,
     "minLat": 48.82,
@@ -17,7 +17,8 @@
   "agents": {
     "car": 2,
     "drone": 4,
-    "boat": 1
+    "boat": 1,
+    "variable_agents": 10
   },
   "roles": {
     "drone": {
@@ -40,7 +41,7 @@
           0
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "air"
     },
 
@@ -64,7 +65,7 @@
           0
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "earth"
     },
 
@@ -88,8 +89,19 @@
           10
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "water"
+    },
+    "variable_agents": {
+      "speed": 10,
+      "energy": 20,
+      "dexterity":5,
+      "resources": [
+        [
+          "cooking",
+          2
+        ]
+      ]
     }
   },
   "generate": {

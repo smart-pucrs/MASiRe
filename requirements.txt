@@ -1,5 +1,0 @@
-flask_socketio
-flask
-flask_cors
-jwt
-eventlet

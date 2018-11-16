@@ -20,6 +20,7 @@ recharge_rate = data["map"]["rechargeRate"]
 num_car = data["agents"]["car"]
 num_drone = data["agents"]["drone"]
 num_boat = data["agents"]["boat"]
+num_variable_agents = data["agents"]["variable_agents"]
 
 speed_drone = data["roles"]["drone"]["speed"]
 cap_physical_drone = data["roles"]["drone"]["capacity_physical"]
@@ -28,7 +29,7 @@ battery_drone = data["roles"]["drone"]["battery"]
 photo_ab_drone = data["roles"]["drone"]["abilities"][0]
 victim_ab_drone = data["roles"]["drone"]["abilities"][1]
 water_ab_drone = data["roles"]["drone"]["abilities"][2]
-percieve_drone = data["roles"]["drone"]["percieve"]
+perceive_drone = data["roles"]["drone"]["perceive"]
 kind_drone = data["roles"]["drone"]["kind"]
 
 
@@ -39,7 +40,7 @@ battery_car = data["roles"]["car"]["battery"]
 photo_ab_car = data["roles"]["car"]["abilities"][0]
 victim_ab_car = data["roles"]["car"]["abilities"][1]
 water_ab_car = data["roles"]["car"]["abilities"][2]
-percieve_car = data["roles"]["car"]["percieve"]
+perceive_car = data["roles"]["car"]["perceive"]
 kind_car = data["roles"]["car"]["kind"]
 
 
@@ -50,8 +51,13 @@ battery_boat = data["roles"]["boat"]["battery"]
 photo_ab_boat = data["roles"]["boat"]["abilities"][0]
 victim_ab_boat = data["roles"]["boat"]["abilities"][1]
 water_ab_boat = data["roles"]["boat"]["abilities"][2]
-percieve_boat = data["roles"]["boat"]["percieve"]
+perceive_boat = data["roles"]["boat"]["perceive"]
 kind_boat = data["roles"]["boat"]["kind"]
+
+speed_variable_agents = data["roles"]["variable_agents"]["speed"]
+energy_variable_agents = data["roles"]["variable_agents"]["energy"]
+dexterity_variable_agents = data["roles"]["variable_agents"]["dexterity"]
+cooking_ab_variable_agents = data["roles"]["variable_agents"]["resources"][0]
 
 
 quad_size = data["generate"]["quadSize"]
@@ -84,4 +90,4 @@ water_sample_size = data["generate"]["waterSample"]["size"]
 water_sample_min = data["generate"]["waterSample"]["minAmount"]
 water_sample_max = data["generate"]["waterSample"]["maxAmount"]
 
-#print(quad_size)
+#print(dexterity_variable_agents)

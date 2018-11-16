@@ -80,7 +80,7 @@ fabric.properties
 .idea/inspectionProfiles/
 .idea/vcs.xml
 modules.xml
-# .idea/misc.xml
+.idea/misc.xml
 *.ipr
 
 ### macOS ###
