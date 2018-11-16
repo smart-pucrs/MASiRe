@@ -1,5 +1,7 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 from src.simulation.exceptions import *
+from src.simulation.data.route import Route
+import random
 
 
 class ActionExecutor:
@@ -14,9 +16,9 @@ class ActionExecutor:
         :param world: The world class, which is responsible for manipulating
         the simulation universe, including all the events and facilities.
         """
-
         self.config = config
         self.world = world
+        self.route = Route()
 
     def execute_actions(self, actions):
         """
@@ -220,13 +222,13 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
-                    for victim in self.world.victims:
-                        if victim.active and parameters[0] == victim.id \
-                        and victim.location == agent.location:
-                            agent.add_physical_item(victim)
-                            victim.active = False
-                            agent.last_action_result = True
-                            break
+                for victim in self.world.victims:
+                    if victim.active and parameters[0] == victim.id \
+                    and victim.location == agent.location:
+                        agent.add_physical_item(victim)
+                        victim.active = False
+                        agent.last_action_result = True
+                        break
 
                 raise Failed_unknown_item('No victim by the given ID is known.')
 
@@ -320,14 +322,19 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    #assets = self.world.search_social_asset(radius, agent.location) #not implemented yet
-                    #show assets to agent
-                    agent.last_action_result = True
+                    amount_nodes = len(self.route.nodes_in_radius(agent.location, parameters[0]))
+                    # change this later (plot social assets at the map and execute the code line above)
+                    amount_sa = random.randint(0, amount_nodes)
+                    if amount_sa > 5: #simulating social assets which fulfills the agent needs
+                        agent.last_action_result = True
 
                 else:
-                    #assets = self.world.map.search_social_asset(radius, latitude, longitude) #not implemented yet
-                    #show assets to agent
-                    agent.last_action_result = True
+                    location = [parameters[1], parameters[2]]
+                    amount_nodes = len(self.route.nodes_in_radius(location, parameters[0]))
+                    # change this later (plot social assets at the map and execute the code line above)
+                    amount_sa = random.randint(0, amount_nodes)
+                    if amount_sa > 5:  # simulating social assets which fulfills the agent needs
+                        agent.last_action_result = True
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
@@ -391,9 +398,9 @@ class ActionExecutor:
                 removed_items = agent.remove_virtual_item(item)
 
             else:
-                raise Failed_invalid_kind('Invalid item to deliver'))
+                raise Failed_invalid_kind('Invalid item to deliver')
 
-        elif amount != None:
+        else:
             if kind == 'physical':
                 if amount < 1 or amount > agent.physical_storage:
                     raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '

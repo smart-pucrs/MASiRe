@@ -196,5 +196,3 @@ class Agent:
         lst = [e for e in lst if e != None]
 
         return removed
-
-        

@@ -4,6 +4,11 @@ from src.simulation.world import World
 class Simulation:
 
     def __init__(self, config):
+        """
+        []
+
+        :param config:
+        """
         self.step = 0
         self.config = config
         self.world = World(config)
