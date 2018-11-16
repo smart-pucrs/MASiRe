@@ -15,6 +15,13 @@ simulation_instance.get_instance('config.json')
 '''
 
 # Run the flask socketIO server
-project_path = os.environ['USERPROFILE'] + "/.virtualenvs/Desastres-HGKtG0u9/scripts/python"
+
+project_path = os.getcwd()\
+
+if os.name == 'nt':
+    project_path += '\\venv\\Scripts\\python.exe'
+else:
+    project_path += "/venv/bin/python"
+
 run([str(project_path), "-m", "flask", "run", "--host=0.0.0.0"],
     env=dict(FLASK_APP='src/app.py', FLASK_ENV='development', FLASK_DEBUG='1', **os.environ))
