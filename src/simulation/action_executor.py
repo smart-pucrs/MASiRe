@@ -37,7 +37,7 @@ class ActionExecutor:
             action = command[1]
 
             self.execute(agent, action)
-            action_results[idx] = agent.last_action_result
+            action_results[idx] = (int(command[0]), agent.last_action_result)
 
         return action_results
 
