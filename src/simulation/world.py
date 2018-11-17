@@ -4,6 +4,7 @@ from src.simulation.action_executor import ActionExecutor
 from src.simulation.data.agent import Agent
 from src.simulation.data.role import Role
 from src.simulation.generator import Generator
+from src.simulation.generator import Router
 
 class World:
 
@@ -27,7 +28,7 @@ class World:
         self.victims = []
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
-        self.router = None
+        self.router = Router()
 
         self.generate_events()
 
@@ -97,7 +98,9 @@ class World:
         return self.action_executor.execute_actions(actions)
 
 
-    def create_route_coordinate(start, location):
+    def create_route_coordinate(self, start, location):
         # create route between location START and LOCATION
         # both are a list -> [lat, long]
+
+        self.router.
         return
