@@ -57,8 +57,6 @@ class World:
         return floods, water_samples, photos, victims
 
     def generate_events(self):
-        print("----")
-
         self.events, self.router = self.generator.generate_events()
         # temp = self.router.routing_states
         # temp1 = self.router.original_state
