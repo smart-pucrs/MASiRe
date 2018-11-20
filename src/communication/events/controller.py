@@ -1,25 +1,48 @@
 import time
 
+
 class Controller:
 
     def __init__(self):
-        self.agents=[]
-        self.timer = time.time()
-        self.init_general = None
+        self.agents = {}
+        self.jobs = {}
+        self.timer = None
 
-    #initializes the timer if it has not been initialized
-    #check if the total agents exceeded
+    # initializes the timer if it has not been initialized
+    # check if the total agents exceeded
     def check_population(self):
-        if self.init_general is None:
-            self.init_general = time.time()
+        if len(self.agents.keys()) <= 5:
+            return True
+        else:
+            return False
 
-        if len(self.agents) < 5:
-            return True
-        else:
-            return False
-    #check if connection period for new agents is open
+    # check if connection period for new agents is open
     def check_timer(self):
-        if time.time() - self.init_general < 3600:
+        if self.timer is None:
+            self.timer = time.time()
+
+        if time.time() - self.timer < 3600:
             return True
         else:
             return False
+
+    def check_request(self, agent):
+        if len(self.agents) < 5:
+            if self.contain_parameters(agent):
+                return True
+        return False
+
+    def contain_parameters(self, agent):
+        if agent[1][1] == '' or agent[1][1] is None:
+            if agent[1][2] == '' or agent[1][2] is None:
+                return False
+            return False
+
+        return True
+
+    def check_agent(self, agent):
+        for ag in self.agents.keys():
+            if self.agents[ag] == agent['token']:
+                return True
+
+        return False
