@@ -3,7 +3,7 @@ import json
 
 
 agent = {
-    "name": "Toyota",
+    "name": "ubuntu",
     "version": "1.3",
     "type": "Car",
     "owner": "87462"
@@ -16,7 +16,7 @@ response_job = False
 
 
 def on_response_job_result(args):
-    response_job = True
+    print('Respondeu pra mim')
     print(args)
 
 
@@ -66,11 +66,14 @@ step_config_agent = {
 }
 
 event = 'job_result'
-
-socketIO.on('received_jobs_result', on_response_jobs)
 socketIO.on(event, on_response_job_result)
+socketIO.on('received_jobs_result', on_response_jobs)
 socketIO.emit('receive_jobs', json.dumps(step_config_agent))
 
 socketIO.wait(60)
 
-print(token)
+print(str(token))
+
+
+
+
