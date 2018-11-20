@@ -1,5 +1,5 @@
 """
-[All the exceptions constructors which are initiated by a desired error message.]
+[All the exceptions constructors, which are initiated by a desired error message.]
 """
 
 class Failed_wrong_param(Exception):

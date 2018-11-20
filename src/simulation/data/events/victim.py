@@ -14,6 +14,7 @@ class Victim:
          """
 
         self.id = id
+        self.type = 'victim'
         self.size = size
         self.lifetime = lifetime
         self.active = False

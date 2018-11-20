@@ -5,6 +5,7 @@ from src.simulation.data.agent import Agent
 from src.simulation.data.role import Role
 from src.simulation.generator import Generator
 from src.simulation.generator import Router
+from src.simulation.data.cdm import Cdm
 
 class World:
 
@@ -17,7 +18,6 @@ class World:
         """
         self.config = config
         self.events = None
-        self.cdm = None
         self.roles = dict()
         self.agents = dict()
         self.agent_counter = 0
@@ -26,11 +26,10 @@ class World:
         self.water_samples = []
         self.photos = []
         self.victims = []
+        self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
         self.router = Router()
-
-        self.generate_events()
 
     def initial_percepts(self):
         """
@@ -60,6 +59,7 @@ class World:
 
     def generate_events(self):
         print("----")
+
         self.events, self.router = self.generator.generate_events()
         # temp = self.router.routing_states
         # temp1 = self.router.original_state
@@ -102,5 +102,5 @@ class World:
         # create route between location START and LOCATION
         # both are a list -> [lat, long]
 
-        self.router.
+        # self.router.
         return

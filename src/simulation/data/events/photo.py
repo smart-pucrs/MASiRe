@@ -12,6 +12,7 @@ class Photo:
         instance was taken.
         """
 
+        self.type = 'photo'
         self.size = size
         self.victims = victims
         self.node = node

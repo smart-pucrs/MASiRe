@@ -137,6 +137,10 @@ class Route:
 
         print("Total: %.2fm" % (math.fsum(distances) * 1000))
 
+    def get_route(self, start, end):
+        #self.router.
+        pass
+
     def nodes_in_radius(self, coord, radius):
         """
         [Finds the nodes within a certain radius of the given coordinate]

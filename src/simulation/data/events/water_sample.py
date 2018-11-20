@@ -11,6 +11,7 @@ class WaterSample:
         instance was collected.
         """
 
+        self.type = 'water_sample'
         self.size = size
         self.node = node
         self.active = False
