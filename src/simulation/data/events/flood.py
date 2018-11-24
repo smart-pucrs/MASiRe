@@ -2,7 +2,7 @@ class Flood:
 
     # still missing location attribute
 
-    def __init__(self, period, dimensions, photos, water_samples):
+    def __init__(self, period, dimensions, photos, water_samples, victims):
         """
         [Object that represents a flood.]
 
@@ -21,6 +21,7 @@ class Flood:
         self.photos = photos
         self.water_samples = water_samples
         self.active = False
+        self.victims = victims
 
     def __str__(self):
         return 'A FLOOD IS COMING'

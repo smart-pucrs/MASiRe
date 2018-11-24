@@ -58,18 +58,12 @@ class Route:
                 # Adds this step's flood to curr_floods, repeating it until it's disappearance
                 for i in range(curr_step, curr_step + curr_flood.period):
                     if len(floods_during) > i:
-                        print("---------------------------i: ", i, " -------------------------------------")
                         floods_during[i].append(curr_flood)
 
                 # Register change events on flood's appearance and disappearance steps
                 recalculate_at[curr_step] = True
                 if curr_step + curr_flood.period < len(events):
                     recalculate_at[curr_step + curr_flood.period] = True
-
-            print('----------------------------')
-            print(curr_flood)
-            print(recalculate_at)
-            print('----------------------------')
 
             # Were there changes in flood locations in this step?
             if recalculate_at[curr_step]:
@@ -85,9 +79,6 @@ class Route:
                 routing_states[curr_step] = removed_map         # Record new state and at which step it occurred
 
         self.routing_states = routing_states
-
-        print('End of routing tables creation')
-        print(routing_states)
 
     def update_routing(self, step):
         """

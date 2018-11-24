@@ -28,8 +28,8 @@ class World:
         self.victims = []
         self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
         self.generator = Generator(config)
+        self.generate_events()
         self.action_executor = ActionExecutor(config, self)
-        self.router = Router()
 
     def initial_percepts(self):
         """
@@ -77,16 +77,21 @@ class World:
         # temp1 = self.router.original_state
 
         for flood in self.events:
+            if flood is None:
+                continue
+
             self.floods.append(flood)
 
             for water_sample in flood.water_samples:
                 self.water_samples.append(water_sample)
 
             for photo in flood.photos:
-                self.photos.append(photo)
+                if photo is not None:
 
-                for victim in photo.victims:
-                    self.victims.append(victim)
+                    self.photos.append(photo)
+
+                    for victim in photo.victims:
+                        self.victims.append(victim)
 
     def create_roles(self):
         """

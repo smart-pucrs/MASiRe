@@ -98,16 +98,42 @@ def finish_conection():
     '''
     Due to limitations with Threads, this method is called when an external agent
     calculate the time and calls it
-
     '''
 
     from src.manager.simulation_instance import get_instance
 
+    token_id = {}
+    count = 1
+    for token in controller.jobs.keys():
+        token_id[token] = count
+        count += 1
+
     jobs = []
     for token in controller.jobs.keys():
-        jobs.append((token, controller.jobs[token]))
+        jobs.append((token_id[token], controller.jobs[token]))
 
     aux = get_instance('').do_step(jobs)
 
-    for token, result in aux:
-        on_response('job_result', json.dumps(result))
+    for id, result in aux:
+        token_outside = ''
+
+        for token in token_id:
+            if token_id[token] == id:
+                token_outside = token
+                break
+
+        final_json = {'result': result, 'token': token_outside}
+
+        on_response('connection_result', json.dumps(final_json))
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,10 +13,11 @@ import json
 
 class Generator:
 
-    total_photos = 0
-    total_water_samples = 0
-    total_victims = 0
     def __init__(self, config):
+
+        self.total_photos = 0
+        self.total_water_samples = 0
+        self.total_victims = 0
 
         self.config = config
         #self.router = Router("car", config['map']['map'])  # Initialise router object from pyroutelib3
@@ -26,7 +27,6 @@ class Generator:
 
     def generate_events(self):
 
-        global total_photos, total_water_samples, total_victims
         events = [None for x in range(self.config['map']['steps'])]
         events[0] = self.generate_flood()
         for step in range(len(events) - 1):
@@ -38,15 +38,15 @@ class Generator:
 
         data = {}
         data['photos'] = [{
-            'total': total_photos,
+            'total': self.total_photos,
             'done': 0
         }]
         data['victims'] = [{
-            'total': total_victims,
+            'total': self.total_victims,
             'done': 0
         }]
         data['water_sample'] = [{
-            'total': total_water_samples,
+            'total': self.total_water_samples,
             'done': 0
         }]
 
@@ -120,14 +120,12 @@ class Generator:
         return Flood(period, dimensions, photos, water_samples, victims)
 
     def generate_photos(self, nodes):
-
-        global total_photos
         photos = [None for x in range(random.randint(
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
         ))]
 
-        total_photos += len(photos)
+        self.total_photos += len(photos)
         for x in range(len(photos)):
             node = random.choice(nodes)
             photo_size = self.config['generate']['photo']['size']
@@ -136,20 +134,17 @@ class Generator:
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
 
                 photo_victims = self.generate_victims(nodes)
-
-            photos[x] = Photo(photo_size, photo_victims, photo_location)
+                photos[x] = Photo(photo_size, photo_victims, photo_location)
 
         return photos
 
     def generate_victims(self, nodes):
-
-        global total_victims
         photo_victims = [None for x in range(random.randint(
                     self.config['generate']['victim']['minAmount'],
                     self.config['generate']['victim']['maxAmount']
         ))]
 
-        total_victims += len(photo_victims)
+        self.total_victims += len(photo_victims)
         for y in range(len(photo_victims)):
             node = random.choice(nodes)
 
@@ -172,14 +167,12 @@ class Generator:
         return photo_victims
 
     def generate_water_samples(self, nodes):
-
-        global total_water_samples
         water_samples = [None for x in range(random.randint(
             self.config['generate']['waterSample']['minAmount'],
             self.config['generate']['waterSample']['maxAmount']
         ))]
 
-        total_water_samples += len(water_samples)
+        self.total_water_samples += len(water_samples)
         for x in range(len(water_samples)):
             node = random.choice(nodes)
             water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], node)

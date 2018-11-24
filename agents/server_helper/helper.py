@@ -3,7 +3,7 @@ import time
 
 socketIO = SocketIO('localhost', 5000, LoggingNamespace)
 
-time.sleep(5)
+# time.sleep(5)
 
 
 socketIO.emit('time_ended')

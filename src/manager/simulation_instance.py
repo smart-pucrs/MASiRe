@@ -10,4 +10,6 @@ def get_instance(path=''):
         f = open(path, 'r').read()
         config = json.loads(f)
         simulation_manager = SimulationManager(config)
+        simulation_manager.start_simulation()
+
     return simulation_manager

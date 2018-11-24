@@ -18,7 +18,7 @@ class ActionExecutor:
         """
         self.config = config
         self.world = world
-        self.route = Route()
+        self.route = world.router
 
     def execute_actions(self, actions):
         """
@@ -35,6 +35,7 @@ class ActionExecutor:
         action_results = [None for x in range(len(actions))]
 
         for idx, command in enumerate(actions):
+
             agent = self.world.agents[int(command[0])]
             action = command[1]
 
