@@ -21,3 +21,4 @@ else:
 
 run([str(project_path), "-m", "flask", "run", "--host=0.0.0.0"],
     env=dict(FLASK_APP='src/app.py', FLASK_ENV='development', FLASK_DEBUG='1', **os.environ))
+
