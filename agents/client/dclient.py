@@ -1,8 +1,9 @@
 from socketIO_client import SocketIO, LoggingNamespace
 import json
 
+
 agent = {
-    "name": "Toyota",
+    "name": "ubuntu",
     "version": "1.3",
     "type": "Car",
     "owner": "87462"
@@ -15,7 +16,7 @@ response_job = False
 
 
 def on_response_job_result(args):
-    print("to be or not to be")
+    print('Respondeu pra mim')
     print(args)
 
 
@@ -25,9 +26,6 @@ def on_response_jobs(args):
 
 def on_response_connection(args):
     global response_connect
-
-    if 'token' in args:
-        socketIO.emit('receive_jobs', json.dumps(step_config_agent))
 
     response_connect = True
     print('Response: ', json.loads(args))
@@ -68,11 +66,14 @@ step_config_agent = {
 }
 
 event = 'job_result'
-
+socketIO.on(event, on_response_job_result)
 socketIO.on('received_jobs_result', on_response_jobs)
-socketIO.on('jobs_result', on_response_job_result)
 socketIO.emit('receive_jobs', json.dumps(step_config_agent))
 
 socketIO.wait(60)
 
-print(token)
+print(str(token))
+
+
+
+

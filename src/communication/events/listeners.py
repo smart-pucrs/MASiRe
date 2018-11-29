@@ -1,22 +1,66 @@
-import time
 import jwt
 import json
 
 from src.__init__ import socketio
-from src.communication.events import emiters
-from src.communication.agent_manager import AgentManager
-from src.communication.events.prepare_action import handle_request
-from src.manager import simulation_instance
+from src.communication.events.emiters import on_response
+from src.communication.events.controller import Controller
 
-agent_manager = AgentManager()
-general_time = None
-simulation_manager = None
 
-agents = []
-jobs = []
-count = 1
-jobs_done = []
-aux = True
+controller = Controller()
+
+
+@socketio.on('first_message')
+def respond_to_request_ready(message):
+    """
+        Receive the agent information encoded and decode it
+        Add the decoded agent to a list insed the agent_manager
+        Use the singleton to get the simulation instance and prevent from instantiating the class multiple times
+        Call two responsed:
+            First containing the agents_list
+            Second containg the simulation pre step
+    """
+    
+    response = ['ready', [{'can_connect': False}, {'data': None}]]
+
+    agent = json.loads(message)
+
+    if controller.check_population():
+        agent_encoded = jwt.encode(agent, 'secret', algorithm='HS256').decode('utf-8')
+        controller.agents[len(controller.agents)+1] = agent_encoded
+        response[1][0]['can_connect'] = True
+        response[1][1]['data'] = controller.agents[len(controller.agents)]
+
+    on_response(response[0], json.dumps(response[1]))
+
+
+@socketio.on('connect_agent')
+def respond_to_request(message=''):
+    """"
+        Handle all the connections
+
+        Instantiate the response considering that the result will be True
+        Verify if the passed time get over the expected time
+        Verify if the number of agents connected get over the expected limit
+        If passes the time limit
+            If passes the agents limit
+                Add agent to the agents list and do a trick due to the implementation of flask
+                The trick is that the method will not add the same agent twice because the method is called
+                 twice by the flask module
+            Else
+                Reponse receive False
+
+        Send to the agents the response from the method
+
+        :param message: the JSON agent
+        """
+
+    response = ['connection_result', {'agent_connected': False}]
+
+    if controller.check_agent(json.loads(message)):
+        if controller.check_timer():
+            response[1]['agent_connected'] = True
+
+    on_response(response[0], json.dumps(response[1]))
 
 
 @socketio.on('receive_jobs')
@@ -36,122 +80,60 @@ def handle_connection(message):
     :param message: the JSON agent
     """
 
-    global count, jobs
-
-    response = ['received_jobs_result', {'job_delivered': True}]
+    response = ['received_jobs_result', {'job_delivered': False}]
 
     message = json.loads(message)
-    agent = (message['id'], (message['method'], message['parameters'][0], message['parameters'][1]))
+    agent_method = (message['token'], (message['method'], message['parameters'][0], message['parameters'][1]))
 
-    if handle_request(agent):
-        jobs.append((count, (agent[1][0], agent[1][1], agent[1][2])))
+    if controller.check_request(agent_method):
+        controller.jobs[agent_method[0]] = (agent_method[1][0], agent_method[1][1], agent_method[1][2])
+        response[1]['job_delivered'] = True
+
+    on_response(response[0], json.dumps(response[1]))
+
+
+@socketio.on('time_ended')
+def finish_conection():
+
+    '''
+    Due to limitations with Threads, this method is called when an external agent
+    calculate the time and calls it
+    '''
+
+    from src.manager.simulation_instance import get_instance
+
+    token_id = {}
+    count = 1
+    for token in controller.jobs.keys():
+        token_id[token] = count
         count += 1
 
-    else:
-        response[1]['job_delivered'] = False
+    jobs = []
+    for token in controller.jobs.keys():
+        jobs.append((token_id[token], controller.jobs[token]))
 
-    call_responses(response, 'receive_jobs')
+    aux = get_instance('').do_step(jobs)
 
+    for id, result in aux:
+        token_outside = ''
 
-@socketio.on('connect_agent')
-def respond_to_request(message=''):
-    """"
-    Handle all the connections
+        for token in token_id:
+            if token_id[token] == id:
+                token_outside = token
+                break
 
-    Instantiate the response considering that the result will be True
-    Verify if the passed time get over the expected time
-    Verify if the number of agents connected get over the expected limit
-    If passes the time limit
-        If passes the agents limit
-            Add agent to the agents list and do a trick due to the implementation of flask
-            The trick is that the method will not add the same agent twice because the method is called
-             twice by the flask module
-        Else
-            Reponse receive False
-    Else
-        Send to the agents the jobs that were finished
-        Response receive False
+        final_json = {'result': result, 'token': token_outside}
 
-    Send to the agents the response from the method
-
-    :param message: the JSON agent
-    """
-
-    global general_time, agents, aux
-
-    agent = json.loads(message)
-
-    encoded = jwt.encode(agent, 'secret', algorithm='HS256')
-
-    response = ['connection_result', {'agent_connected': True, 'token': encoded.decode('utf-8')}]
-
-    if general_time is None:
-        general_time = time.time()
-
-    if time.time() - general_time < 5:
-        if len(agents) > 5:
-            response[1]['agent_connected'] = False
-
-        else:
-            if aux:
-                agents.append(agent)
-                aux = False
-
-            else:
-                aux = True
-
-    else:
-        jobs_done.append(simulation_instance.get_instance().do_step(jobs))
-        call_responses(['jobs_result', jobs_done], 'results_from_actions')
-        response[1]['agent_connected'] = False
-
-    call_responses(response, 'connect')
+        on_response('connection_result', json.dumps(final_json))
 
 
-@socketio.on('ready')
-def respond_to_request_ready(message):
-    """
-    Receive the agent information encoded and decode it
-    Add the decoded agent to a list insed the agent_manager
-    Use the singleton to get the simulation instance and prevent from instantiating the class multiple times
-    Call two responsed:
-        First containing the agents_list
-        Second containg the simulation pre step
-
-    :param message: the JSON agent
-    """
-
-    global simulation_manager
-
-    decoded = jwt.decode(message['data'], 'secret', algorithms=['HS256'])
-    print('ready  :', decoded)
-
-    agent_manager.manage_agents(decoded)
-
-    simulation_manager = simulation_instance.get_instance()
-    call_responses(simulation_manager.agents_list(), 'ready', message['data'])
-    response = simulation_manager.do_pre_step()
-    call_responses(response, message['data'])
 
 
-def call_responses(results, caller, *token):
-    """
-    Call the properly emiters from the 'emiters.py' file
 
-    :param results: response to the agent
-    :param caller: the function that called the method and the name of the event
-    :param token: can be None depending on the caller of the method
-    """
 
-    if caller == 'ready':
-        emiters.response_to_action_ready(json.dumps(results), token)
 
-    elif caller == 'connect':
-        emiters.response_to_action_connect(results[0], results[1])
 
-    elif caller == 'receive_jobs':
-        emiters.response_to_action_deliver(results[0], results[1])
 
-    elif caller == 'results_from_actions':
-        emiters.response_jobs_result(results[0], results[1])
+
+
 

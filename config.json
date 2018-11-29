@@ -2,13 +2,13 @@
   "map": {
     "id": "2018-SampleSimulation",
     "steps": 1000,
-    "map": "pucrs.osm",
-    "minLon": 2.26,
-    "maxLon": 2.41,
-    "minLat": 48.82,
-    "maxLat": 48.9,
-    "centerLat": 48.8424,
-    "centerLon": 2.3209,
+    "map": "map.osm",
+    "minLon": -51.2163800,
+    "maxLon": -51.2076000,
+    "minLat": -30.1130100,
+    "maxLat": -30.1086200,
+    "centerLat": -30.110815,
+    "centerLon": -51.21199,
     "proximity": 5,
     "randomSeed": 2018,
     "gotoCost": 2,
@@ -17,8 +17,7 @@
   "agents": {
     "car": 2,
     "drone": 4,
-    "boat": 1,
-    "variable_agents": 10
+    "boat": 1
   },
   "roles": {
     "drone": {
@@ -41,7 +40,7 @@
           0
         ]
       ],
-      "perceive": 5,
+      "percieve": 5,
       "kind": "air"
     },
 
@@ -65,7 +64,7 @@
           0
         ]
       ],
-      "perceive": 5,
+      "percieve": 5,
       "kind": "earth"
     },
 
@@ -89,19 +88,8 @@
           10
         ]
       ],
-      "perceive": 5,
+      "percieve": 5,
       "kind": "water"
-    },
-    "variable_agents": {
-      "speed": 10,
-      "energy": 20,
-      "dexterity":5,
-      "resources": [
-        [
-          "cooking",
-          2
-        ]
-      ]
     }
   },
   "generate": {
@@ -111,8 +99,8 @@
       "minPeriod": 40,
       "maxPeriod": 80,
       "circle": {
-        "minRadius": 34,
-        "maxRadius": 90
+        "minRadius": 0.05,
+        "maxRadius": 0.5
       },
       "rectangle": {
         "minHeight": 30,
