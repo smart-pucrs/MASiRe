@@ -1,12 +1,13 @@
 import jwt
 import json
 
-from src.__init__ import socketio
+from src.communication.api_variables_holder import variables
 from src.communication.events.emiters import on_response
 from src.communication.events.controller import Controller
 
 
 controller = Controller()
+socketio = variables['socketio']
 
 
 @socketio.on('first_message')
@@ -100,7 +101,7 @@ def finish_conection():
     calculate the time and calls it
     '''
 
-    from src.manager.simulation_instance import get_instance
+    from src.manager.simulation_instance import SimulationSingleton
 
     token_id = {}
     count = 1

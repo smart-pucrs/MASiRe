@@ -1,6 +1,9 @@
 import jwt
 from flask import request, jsonify, json
-from src.communication import main
+from src.communication.api_variables_holder import variables
+
+
+main = variables['main']
 
 
 @main.route('/list')

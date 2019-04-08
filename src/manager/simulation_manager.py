@@ -1,4 +1,4 @@
-from src.communication.events.emiters import response_to_action_connect, emit_pre_step
+from src.communication.events.emiters import emit_pre_step
 from src.simulation.simulation import Simulation
 
 
