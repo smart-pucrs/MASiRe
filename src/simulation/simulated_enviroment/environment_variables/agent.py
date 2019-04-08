@@ -1,22 +1,21 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Entity.java
-from src.simulation.exceptions import *
-from src.simulation.data.events.flood import *
-from src.simulation.data.events.victim import *
-from src.simulation.data.events.photo import *
+
+from src.simulation.exceptions.exceptions import *
+
 
 class Agent:
 
-    def __init__(self, id, role):
+    def __init__(self, agent_id, role):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
 
-        :param id: 'Manipulated' agent's id.
+        :param agent_id: 'Manipulated' agent's id.
         :param role: The agent's main function over the simulation,
         which covers its skills and limitations.
         """
 
-        self.id = id
+        self.agent_id = agent_id
         self.role = role
         self.last_action = None
         self.last_action_result = False
@@ -28,7 +27,7 @@ class Agent:
         self.virtual_storage_vector = []
 
     def __repr__(self):
-        return str(self.id) + ' - ' +  str(self.role)
+        return str(self.agent_id) + ' - ' + str(self.role)
 
     def discharge(self):
         """
@@ -119,12 +118,10 @@ class Agent:
         if self.virtual_storage == self.role.virual_capacity:
             raise Failed_item_amount('The agents has no victims or water samples to deliver.')
 
-        if not self.virtual_storage_vector.contains(item):
+        if not self.virtual_storage_vector.__contains__(item):
             raise Failed_unknown_item('No physical item with this ID is storaged.')
 
-        removed = []
-
-        if amount == None:
+        if amount is None:
             removed = self.remove(self.physical_storage_vector, item)
         else:
             removed = self.remove(self.physical_storage_vector, item, amount)
@@ -151,12 +148,10 @@ class Agent:
         if self.virtual_storage == self.role.virual_capacity:
             raise Failed_item_amount('The agents has no photos to deliver.')
 
-        if not self.virtual_storage_vector.contains(item):
+        if not self.virtual_storage_vector.__contains__(item):
             raise Failed_unknown_item('No virtual item with this ID is storaged.')
 
-        removed = []
-
-        if amount == None:
+        if amount is None:
             removed = self.remove(self.virtual_storage_vector, item)
         else:
             removed = self.remove(self.virtual_storage_vector, item, amount)
@@ -166,33 +161,29 @@ class Agent:
 
         return removed
 
-    def remove(self, lst, item, amount=None):
+    def remove(self, current_items_list, item_type, amount=None):
         """
         [Agent's auxiliary method for generic type item removal.]
 
-        :param lst: A list containing all the current items
+        :param current_items_list: A list containing all the current items
         of the agent's specified kind storage (physical or virtual).
-        :param item: The type of the item to be removed.
-        :param removed: A list that will aggregate all removed instances
-        of the specified item.
+        :param item_type: The type of the item to be removed.
         :param amount: The amount of the parametrized item to be removed.
         :return: Returns a list containing all the removed items.
         """
 
-        if amount == None:
-            amount = len(lst)
+        if amount is None:
+            amount = len(current_items_list)
 
         removed = []
 
-        for e in range(len(lst)):
+        for item in range(len(current_items_list)):
             if amount == 0:
                 break
             
-            if lst[e].type == item:
-                removed.append(lst[e])
-                lst[e] = None
+            if current_items_list[item].type == item_type:
+                removed.append(current_items_list[item])
+                current_items_list.remove(item)
                 amount -= 1
-
-        lst = [e for e in lst if e != None]
 
         return removed
