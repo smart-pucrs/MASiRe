@@ -1,15 +1,18 @@
 from src.manager.simulation_manager import SimulationManager
 import json
 
-simulation_manager = None
 
+class SimulationSingleton:
+    __shared_state = {}
 
-def get_instance(path=''):
-    global simulation_manager
-    if simulation_manager is None:
-        f = open(path, 'r').read()
-        config = json.loads(f)
-        simulation_manager = SimulationManager(config)
-        simulation_manager.start_simulation()
+    def __init__(self, path=''):
+        if path:
+            self.__shared_state['simulation_manager'] = self.get_instance(path)
+        self.__dict__ = self.__shared_state
 
-    return simulation_manager
+    def get_instance(self, path):
+        with open(path, 'r') as simulation_config:
+            json_config = json.loads(simulation_config.read())
+            simulation_manager = SimulationManager(json_config)
+            return simulation_manager
+
