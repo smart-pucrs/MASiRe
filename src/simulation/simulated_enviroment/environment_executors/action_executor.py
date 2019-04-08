@@ -1,7 +1,7 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
-from src.simulation.exceptions import *
-from src.simulation.data.route import Route
+
 import random
+from src.simulation.exceptions.exceptions import *
 
 
 class ActionExecutor:
@@ -32,7 +32,7 @@ class ActionExecutor:
         marking it with a success or failure flag.
         """
 
-        action_results = [None for x in range(len(actions))]
+        action_results = [None] * len(actions)
 
         for idx, command in enumerate(actions):
 
@@ -245,10 +245,6 @@ class ActionExecutor:
                 print('Error: failed_location')
                 print(e.message)
 
-            except Failed_unknown_item as e:
-                print('Error: Failed_unknown_item')
-                print(e.message)
-
             except Failed_capacity as e:
                 print('Error: failed_capacity')
                 print(e.message)
@@ -391,7 +387,7 @@ class ActionExecutor:
 
         removed_items = []
 
-        if amount == None:
+        if amount is None:
             if kind == 'physical':
                 removed_items = agent.remove_physical_item(item)
 

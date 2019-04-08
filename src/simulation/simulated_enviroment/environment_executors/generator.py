@@ -2,14 +2,15 @@
 # /Generator.java
 
 import random
-from src.simulation.data.events.flood import Flood
-from src.simulation.data.events.photo import Photo
-from src.simulation.data.events.victim import Victim
-from src.simulation.data.events.water_sample import WaterSample
-from pyroutelib3 import Router  # Import the router
-from src.simulation.data.route import Route
 import math
 import json
+from pyroutelib3 import Router
+from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
+from src.simulation.simulated_enviroment.environment_variables.events.photo import Photo
+from src.simulation.simulated_enviroment.environment_variables.events.victim import Victim
+from src.simulation.simulated_enviroment.environment_variables.events.water_sample import WaterSample
+from src.simulation.simulated_enviroment.environment_variables.route import Route
+
 
 class Generator:
 
@@ -20,7 +21,7 @@ class Generator:
         self.total_victims = 0
 
         self.config = config
-        #self.router = Router("car", config['map']['map'])  # Initialise router object from pyroutelib3
+        self.router = Router("car", config['map']['map'])
         self.router = Route(config['map']['map'])
         self.victim_counter = 0
         random.seed(config['map']['randomSeed'])
@@ -36,19 +37,23 @@ class Generator:
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
 
-        data = {}
-        data['photos'] = [{
-            'total': self.total_photos,
-            'done': 0
-        }]
-        data['victims'] = [{
-            'total': self.total_victims,
-            'done': 0
-        }]
-        data['water_sample'] = [{
-            'total': self.total_water_samples,
-            'done': 0
-        }]
+        data = {
+            'photos': [
+                {
+                    'total': self.total_photos,
+                    'done': 0
+                }
+            ], 'victims': [
+                {
+                    'total': self.total_victims,
+                    'done': 0
+                }
+            ], 'water_sample': [
+                {
+                    'total': self.total_water_samples,
+                    'done': 0
+                }
+            ]}
 
         with open('results.txt', 'w') as outfile:
             json.dump(data, outfile)
@@ -108,7 +113,7 @@ class Generator:
             pass
 
         else:
-            if dimensions.get('height')<dimensions.get('length'):
+            if dimensions.get('height') < dimensions.get('length'):
                 list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
             else:
                 list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('length'))
@@ -127,12 +132,10 @@ class Generator:
 
         self.total_photos += len(photos)
         for x in range(len(photos)):
-            node = random.choice(nodes)
             photo_size = self.config['generate']['photo']['size']
             photo_location = random.choice(nodes)
 
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
-
                 photo_victims = self.generate_victims(nodes)
                 photos[x] = Photo(photo_size, photo_victims, photo_location)
 
@@ -140,14 +143,13 @@ class Generator:
 
     def generate_victims(self, nodes):
         photo_victims = [None for x in range(random.randint(
-                    self.config['generate']['victim']['minAmount'],
-                    self.config['generate']['victim']['maxAmount']
+            self.config['generate']['victim']['minAmount'],
+            self.config['generate']['victim']['maxAmount']
         ))]
 
         self.total_victims += len(photo_victims)
-        for y in range(len(photo_victims)):
-            node = random.choice(nodes)
 
+        for y in range(len(photo_victims)):
             self.victim_counter += 1
 
             victim_size = random.randint(

@@ -1,12 +1,13 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Route.java
 import math
-from pyroutelib3 import Router as py_router # Import the router
-from src.simulation.data.events.flood import Flood
+from pyroutelib3 import Router
+from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
+
 
 class Route:
 
     def __init__(self, map):
-        self.router = py_router("car", map)                 # Initialise router object from pyroutelib3
+        self.router = Router("car", map)                    # Initialise router object from pyroutelib3
         self.original_state = self.router.routing.copy()    # Copies the baseline routing table that pyroutelib3 created
         self.routing_states = [self.original_state.copy()]  # Initializes list of state changes with original state only
 
