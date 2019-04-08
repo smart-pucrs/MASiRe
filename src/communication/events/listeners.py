@@ -113,7 +113,7 @@ def finish_conection():
     for token in controller.jobs.keys():
         jobs.append((token_id[token], controller.jobs[token]))
 
-    aux = get_instance('').do_step(jobs)
+    aux = SimulationSingleton().simulation_manager.do_step(jobs)
 
     for id, result in aux:
         token_outside = ''
