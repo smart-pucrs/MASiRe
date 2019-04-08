@@ -6,7 +6,8 @@ from src.manager import simulation_instance
 
 
 # Define the instance of the simulation with its startup file
-simulation_instance.get_instance('config.json')
+def start_instance():
+    SimulationSingleton('files/config.json').simulation_manager
 
 # Run the flask socketIO server
 
