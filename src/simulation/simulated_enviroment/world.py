@@ -114,8 +114,6 @@ class World:
             for _ in range(agents_number):
                 self.create_agent(role)
 
-        return list(self.agents.values())
-
     def create_agent(self, role):
         """
         [Method that creates an agent with a specific role.]
