@@ -36,7 +36,6 @@ class World:
 
         :return: ?
         """
-        # what should be sent to the agents on the initial percepts?
         return []
 
     def percepts(self, agent):
@@ -124,7 +123,7 @@ class World:
         """
 
         self.agent_counter += 1
-        self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])
+        self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role], role)
 
     def execute_actions(self, actions):
         """

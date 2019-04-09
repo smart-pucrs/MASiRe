@@ -5,7 +5,7 @@ from src.simulation.exceptions.exceptions import *
 
 class Agent:
 
-    def __init__(self, agent_id, role):
+    def __init__(self, agent_id, role, role_name):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
@@ -16,11 +16,11 @@ class Agent:
         """
 
         self.agent_id = agent_id
-        self.role = role
         self.last_action = None
         self.last_action_result = False
         self.location = [0, 0]
         self.route = None
+        self.role = role_name
         self.physical_storage = role.physical_capacity
         self.virtual_storage = role.virtual_capacity
         self.physical_storage_vector = []
