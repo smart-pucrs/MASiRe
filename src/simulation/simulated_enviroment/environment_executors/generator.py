@@ -53,7 +53,7 @@ class Generator:
                 events[step] = self.generate_flood()
 
         self.router.generate_routing_tables(events)
-        return events, self.router
+        return events
 
     def generate_flood(self):
         # flood period

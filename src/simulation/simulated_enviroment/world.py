@@ -75,7 +75,7 @@ class World:
         adds them to their respective category.]
         """
         
-        self.events, self.router = self.generator.generate_events()
+        self.events = self.generator.generate_events()
 
         for flood in self.events:
             if flood is None:
