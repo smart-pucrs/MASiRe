@@ -15,11 +15,9 @@ from src.simulation.simulated_enviroment.environment_variables.route import Rout
 class Generator:
 
     def __init__(self, config):
-
         self.total_photos = 0
         self.total_water_samples = 0
         self.total_victims = 0
-
         self.config = config
         self.router = Router("car", config['map']['map'])
         self.router = Route(config['map']['map'])
@@ -27,33 +25,24 @@ class Generator:
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self):
-
-        events = [None for x in range(self.config['map']['steps'])]
+        events = [None] * self.config['map']['steps']
         events[0] = self.generate_flood()
+
         for step in range(len(events) - 1):
-
             # generate floods (index 0) and photo events (index 1)
-
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
 
-        data = {
-            'photos': [
-                {
-                    'total': self.total_photos,
-                    'done': 0
-                }
-            ], 'victims': [
-                {
-                    'total': self.total_victims,
-                    'done': 0
-                }
-            ], 'water_sample': [
-                {
-                    'total': self.total_water_samples,
-                    'done': 0
-                }
-            ]}
+        data = {'photos': [{
+            'total': self.total_photos,
+            'done': 0
+        }], 'victims': [{
+            'total': self.total_victims,
+            'done': 0
+        }], 'water_sample': [{
+            'total': self.total_water_samples,
+            'done': 0
+        }]}
 
         with open('results.txt', 'w') as outfile:
             json.dump(data, outfile)
@@ -69,29 +58,23 @@ class Generator:
         return events, self.router
 
     def generate_flood(self):
-
         # flood period
-
         period = random.randint(self.config['generate']['flood']['minPeriod'],
                                 self.config['generate']['flood']['maxPeriod'])
 
         # flood dimensions
-
         dimensions = dict()
 
         dimensions['shape'] = 'circle'
         # dimensions['shape'] = 'circle' if random.randint(0, 1) == 0 else 'rectangle'
 
         if dimensions['shape'] == 'circle':
-
             dimensions['radius'] = (
                 random.uniform(self.config['generate']['flood']['circle']['minRadius'],
                                self.config['generate']['flood']['circle']['maxRadius'])
             )
 
-
         else:
-
             dimensions['height'] = (
                 random.randint(self.config['generate']['flood']['rectangle']['minHeight'],
                                self.config['generate']['flood']['rectangle']['maxHeight'])
@@ -125,31 +108,31 @@ class Generator:
         return Flood(period, dimensions, photos, water_samples, victims)
 
     def generate_photos(self, nodes):
-        photos = [None for x in range(random.randint(
+        photos = [None for _ in range(random.randint(
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
         ))]
 
         self.total_photos += len(photos)
-        for x in range(len(photos)):
+        for i in range(len(photos)):
             photo_size = self.config['generate']['photo']['size']
             photo_location = random.choice(nodes)
 
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
                 photo_victims = self.generate_victims(nodes)
-                photos[x] = Photo(photo_size, photo_victims, photo_location)
+                photos[i] = Photo(photo_size, photo_victims, photo_location)
 
         return photos
 
     def generate_victims(self, nodes):
-        photo_victims = [None for x in range(random.randint(
+        photo_victims = [None for _ in range(random.randint(
             self.config['generate']['victim']['minAmount'],
             self.config['generate']['victim']['maxAmount']
         ))]
 
         self.total_victims += len(photo_victims)
 
-        for y in range(len(photo_victims)):
+        for i in range(len(photo_victims)):
             self.victim_counter += 1
 
             victim_size = random.randint(
@@ -164,24 +147,24 @@ class Generator:
 
             victim_location = random.choice(nodes)
 
-            photo_victims[y] = Victim(self.victim_counter, victim_size, victim_lifetime, victim_location)
+            photo_victims[i] = Victim(self.victim_counter, victim_size, victim_lifetime, victim_location)
 
         return photo_victims
 
     def generate_water_samples(self, nodes):
-        water_samples = [None for x in range(random.randint(
+        water_samples = [None for _ in range(random.randint(
             self.config['generate']['waterSample']['minAmount'],
             self.config['generate']['waterSample']['maxAmount']
         ))]
 
         self.total_water_samples += len(water_samples)
-        for x in range(len(water_samples)):
+        for i in range(len(water_samples)):
             node = random.choice(nodes)
-            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], node)
+            water_samples[i] = WaterSample(self.config['generate']['waterSample']['size'], node)
 
             water_sample_location = random.choice(nodes)
 
-            water_samples[x] = WaterSample(self.config['generate']['waterSample']['size'], water_sample_location)
+            water_samples[i] = WaterSample(self.config['generate']['waterSample']['size'], water_sample_location)
 
         return water_samples
 

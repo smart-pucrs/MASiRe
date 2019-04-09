@@ -35,7 +35,6 @@ class ActionExecutor:
         action_results = [None] * len(actions)
 
         for idx, command in enumerate(actions):
-
             agent = self.world.agents[int(command[0])]
             action = command[1]
 
@@ -69,7 +68,7 @@ class ActionExecutor:
         agent.last_action = action
         agent.last_action_result = False
 
-        if action == None:
+        if action is None:
             print('Error: failed_no_action')
 
         elif action == 'pass':
@@ -83,7 +82,7 @@ class ActionExecutor:
                 if len(parameters) == 1:
                     if parameters[0] != 'cdm':
                         raise Failed_wrong_param('Unknown facility')
-                    
+
                     location = self.world.cdm.location
 
                 else:
@@ -93,10 +92,10 @@ class ActionExecutor:
                     # already arrived. raise error?
                     return
 
-                if agent.route == None:
+                if agent.route is None:
                     agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
 
-                    if agent.route == None: 
+                    if agent.route is None:
                         raise Failed_no_route()
 
                 agent.last_action_result = True
@@ -224,8 +223,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
                 for victim in self.world.victims:
-                    if victim.active and parameters[0] == victim.id \
-                    and victim.location == agent.location:
+                    if victim.active and parameters[0] == victim.id and victim.location == agent.location:
                         agent.add_physical_item(victim)
                         victim.active = False
                         agent.last_action_result = True
@@ -322,7 +320,7 @@ class ActionExecutor:
                     amount_nodes = len(self.route.nodes_in_radius(agent.location, parameters[0]))
                     # change this later (plot social assets at the map and execute the code line above)
                     amount_sa = random.randint(0, amount_nodes)
-                    if amount_sa > 5: #simulating social assets which fulfills the agent needs
+                    if amount_sa > 5:  # simulating social assets which fulfills the agent needs
                         agent.last_action_result = True
 
                 else:

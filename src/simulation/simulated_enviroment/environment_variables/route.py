@@ -45,25 +45,27 @@ class Route:
         changes are detected
         """
         # Resulting list of routing state changes on each step
-        routing_states = [None for _ in range(len(events))]
+        routing_states = [None] * len(events)
 
         # In which steps should the routing table be recalculated
-        recalculate_at = [False for _ in range(len(events))]
+        recalculate_at = [False] * len(events)
 
         # Floods existing at the specified step
-        floods_during = [[] for _ in range(len(events))]
+        floods_during = [[]] * len(events)
 
         for curr_step, curr_flood in enumerate(events):
-            if type(curr_flood) is Flood:
-                # Adds this step's flood to curr_floods, repeating it until it's disappearance
-                for i in range(curr_step, curr_step + curr_flood.period):
-                    if len(floods_during) > i:
-                        floods_during[i].append(curr_flood)
+            if curr_flood is None:
+                continue
 
-                # Register change events on flood's appearance and disappearance steps
-                recalculate_at[curr_step] = True
-                if curr_step + curr_flood.period < len(events):
-                    recalculate_at[curr_step + curr_flood.period] = True
+            # Adds this step's flood to curr_floods, repeating it until it's disappearance
+            for i in range(curr_step, curr_step + curr_flood.period):
+                if len(floods_during) > i:
+                    floods_during[i].append(curr_flood)
+
+            # Register change events on flood's appearance and disappearance steps
+            recalculate_at[curr_step] = True
+            if curr_step + curr_flood.period < len(events):
+                recalculate_at[curr_step + curr_flood.period] = True
 
             # Were there changes in flood locations in this step?
             if recalculate_at[curr_step]:
@@ -86,7 +88,7 @@ class Route:
         :param step: Which simulation step should be considered for routing
         :return: Sets up the router.routing class variable that will be used for routing
         """
-        if type(self.routing_states[step]) is not None:
+        if self.routing_states[step] is not None:
             self.router.routing = self.routing_states[step].copy()
 
     def do_route(self, route, distance):
@@ -139,7 +141,6 @@ class Route:
         :param radius: The radius of the circle, in kilometers
         :return: A list of node ids that are inside the circle area
         """
-        # radius in kilometers
         result = []
         for node in self.router.rnodes:
             if self.router.distance(self.node_to_radian(node), self.coords_to_radian(coord)) <= radius:

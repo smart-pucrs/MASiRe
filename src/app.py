@@ -1,4 +1,3 @@
-#!/bin/env python
 from flask import Flask
 from flask_cors import CORS
 from src.communication import api_variables_holder

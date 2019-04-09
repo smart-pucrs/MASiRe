@@ -1,5 +1,5 @@
-from src.manager.simulation_manager import SimulationManager
 import json
+from src.simulation.manager.simulation_manager import SimulationManager
 
 
 class SimulationSingleton:

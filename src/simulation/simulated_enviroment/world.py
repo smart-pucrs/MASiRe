@@ -17,7 +17,7 @@ class World:
         communication core.
         """
         self.config = config
-        self.events = None
+        self.events = []
         self.roles = dict()
         self.agents = dict()
         self.agent_counter = 0
@@ -53,16 +53,20 @@ class World:
         floods, water_samples, photos, victims = [], [], [], []
 
         for flood in self.floods:
-            if flood.active: floods.append(flood)
+            if flood.active:
+                floods.append(flood)
 
         for water_sample in self.water_samples:
-            if water_sample.active: water_samples.append(water_sample)
+            if water_sample.active:
+                water_samples.append(water_sample)
 
         for photo in self.photos:
-            if photo.active: photos.append(photo)
+            if photo.active:
+                photos.append(photo)
 
         for victim in self.victims:
-            if victim.active: victims.append(victim)
+            if victim.active:
+                victims.append(victim)
 
         return floods, water_samples, photos, victims, agent
 
@@ -73,8 +77,6 @@ class World:
         """
         
         self.events, self.router = self.generator.generate_events()
-        # temp = self.router.routing_states
-        # temp1 = self.router.original_state
 
         for flood in self.events:
             if flood is None:
@@ -97,7 +99,6 @@ class World:
         """
         [Method that generates the agent's roles.]
         """
-
         for role in self.config['roles']:
             self.roles[role] = Role(role, self.config)
 
@@ -108,11 +109,10 @@ class World:
 
         :return: A list containing each agent's IDs
         """
-
         for role in self.config['agents']:
             agents_number = self.config['agents'][role]
 
-            for x in range(agents_number):
+            for _ in range(agents_number):
                 self.create_agent(role)
 
         return list(self.agents.values())
@@ -126,7 +126,6 @@ class World:
         :return: A list containing each agent's IDs.
         """
 
-        # in the future this method should also generate info about the agents location (i think)
         self.agent_counter += 1
         self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role])
 
@@ -143,7 +142,6 @@ class World:
         """
 
         return self.action_executor.execute_actions(actions)
-
 
     def create_route_coordinate(self, start, location):
         # create route between location START and LOCATION

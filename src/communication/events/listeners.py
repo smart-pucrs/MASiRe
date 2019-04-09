@@ -95,11 +95,10 @@ def handle_connection(message):
 
 @socketio.on('time_ended')
 def finish_conection():
-
-    '''
+    """
     Due to limitations with Threads, this method is called when an external agent
     calculate the time and calls it
-    '''
+    """
 
     from src.simulation.manager.simulation_instance import SimulationSingleton
 
