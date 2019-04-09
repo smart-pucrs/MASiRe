@@ -22,7 +22,6 @@ class Simulation:
         :return: A list containing the simulation's agents, and a list
         containing the agent's initial percepts.
         """
-
         self.world.generate_events()
         self.world.create_roles()
         self.world.create_agents()
