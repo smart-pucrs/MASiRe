@@ -12,7 +12,6 @@ class Simulation:
         """
 
         self.step = 0
-        self.config = config
         self.world = World(config)
 
     def start(self):
@@ -26,8 +25,8 @@ class Simulation:
 
         self.world.generate_events()
         self.world.create_roles()
-
-        return self.world.create_agents(), self.world.initial_percepts()
+        self.world.create_agents()
+        self.world.initial_percepts()
 
     def do_pre_step(self):
         """
