@@ -10,7 +10,6 @@ class Simulation:
         :param config: A json file sent by the communication core
         containing all configuration information about the simulation.
         """
-
         self.step = 0
         self.world = World(config)
 

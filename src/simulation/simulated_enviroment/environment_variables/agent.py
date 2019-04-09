@@ -14,7 +14,6 @@ class Agent:
         :param role: The agent's main function over the simulation,
         which covers its skills and limitations.
         """
-
         self.agent_id = agent_id
         self.last_action = None
         self.last_action_result = False

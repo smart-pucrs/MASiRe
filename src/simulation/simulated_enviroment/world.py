@@ -73,7 +73,6 @@ class World:
         [Method that generates the world's random events and 
         adds them to their respective category.]
         """
-        
         self.events = self.generator.generate_events()
 
         for flood in self.events:
@@ -81,15 +80,12 @@ class World:
                 continue
 
             self.floods.append(flood)
-
             for water_sample in flood.water_samples:
                 self.water_samples.append(water_sample)
 
             for photo in flood.photos:
                 if photo is not None:
-
                     self.photos.append(photo)
-
                     for victim in photo.victims:
                         self.victims.append(victim)
 
@@ -109,7 +105,6 @@ class World:
         """
         for role in self.config['agents']:
             agents_number = self.config['agents'][role]
-
             for _ in range(agents_number):
                 self.create_agent(role)
 
