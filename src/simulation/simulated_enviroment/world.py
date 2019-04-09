@@ -99,7 +99,7 @@ class World:
         [Method that generates the agent's roles.]
         """
         for role in self.config['roles']:
-            self.roles[role] = Role(role, self.config)
+            self.roles[role] = Role(role, self.config['roles'])
 
     def create_agents(self):
         """

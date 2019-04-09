@@ -11,10 +11,10 @@ class Role:
         to be manipulated.
         """
         self.id = id
-        self.roads = config['roles'][id]['kind']
-        self.speed = config['roles'][id]['speed']
-        self.battery = config['roles'][id]['battery']
-        self.percieve = config['roles'][id]['percieve']
-        self.abilities = config['roles'][id]['abilities']
-        self.virtual_capacity = config['roles'][id]['capacity_virtual']
-        self.physical_capacity = config['roles'][id]['capacity_physical']
+        self.roads = config[id]['kind']
+        self.speed = config[id]['speed']
+        self.battery = config[id]['battery']
+        self.percieve = config[id]['percieve']
+        self.abilities = config[id]['abilities']
+        self.virtual_capacity = config[id]['capacity_virtual']
+        self.physical_capacity = config[id]['capacity_physical']
