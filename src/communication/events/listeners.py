@@ -101,7 +101,7 @@ def finish_conection():
     calculate the time and calls it
     '''
 
-    from src.manager.simulation_instance import SimulationSingleton
+    from src.simulation.manager.simulation_instance import SimulationSingleton
 
     token_id = {}
     count = 1

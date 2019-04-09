@@ -1,7 +1,7 @@
 import os
 import pathlib
 from subprocess import run
-from src.manager.simulation_instance import SimulationSingleton
+from src.simulation.manager.simulation_instance import SimulationSingleton
 
 
 # Define the instance of the simulation with its startup file

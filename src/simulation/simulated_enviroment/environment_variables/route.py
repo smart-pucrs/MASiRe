@@ -1,7 +1,6 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Route.java
 import math
 from pyroutelib3 import Router
-from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
 
 
 class Route:
