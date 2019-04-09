@@ -24,7 +24,7 @@ class Simulation:
         self.world.generate_events()
         self.world.create_roles()
         self.world.create_agents()
-        self.world.initial_percepts()
+        return self.world.percepts(self.step)
 
     def do_pre_step(self):
         """

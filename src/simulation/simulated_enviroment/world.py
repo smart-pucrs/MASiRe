@@ -30,43 +30,23 @@ class World:
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
 
-    def initial_percepts(self):
-        """
-        [Defines the initial percepts of the simulation to all agents.]
-
-        :return: ?
-        """
-        return []
-
-    def percepts(self, agent):
+    def percepts(self, step):
         """
         [Method that generates each step's percepts.]
         
-        :param agent: An object representing the agent to which
-        the percepts should be generated to.
-        :return: Four lists, each one containing information about
-        the active events of the simulation
+        :param step: The step number the simulation is in
+        :return: Three lists, each one containing information about
+        the active events of the simulation and one Flood object
         """
-        
-        floods, water_samples, photos, victims = [], [], [], []
+        if self.events[step] is None:
+            return []
 
-        for flood in self.floods:
-            if flood.active:
-                floods.append(flood)
-
-        for water_sample in self.water_samples:
-            if water_sample.active:
-                water_samples.append(water_sample)
-
-        for photo in self.photos:
-            if photo.active:
-                photos.append(photo)
-
-        for victim in self.victims:
-            if victim.active:
-                victims.append(victim)
-
-        return floods, water_samples, photos, victims, agent
+        else:
+            flood = self.events[step]
+            water_samples = [water_sample for water_sample in self.events[step].water_samples if water_sample.active]
+            photos = [photo for photo in self.events[step].photos if photo.active]
+            victims = [victim for victim in self.events[step].victims if victim.active]
+            return flood, water_samples, photos, victims
 
     def generate_events(self):
         """
