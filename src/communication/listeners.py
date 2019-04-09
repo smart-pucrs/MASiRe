@@ -1,26 +1,25 @@
 import jwt
 import json
+from src.communication.emiters import on_response
+from src.communication.controller import Controller
+from flask_socketio import SocketIO
 
-from src.communication.api_variables_holder import variables
-from src.communication.events.emiters import on_response
-from src.communication.events.controller import Controller
 
-
+socketio = SocketIO()
 controller = Controller()
-socketio = variables['socketio']
 
 
 @socketio.on('first_message')
 def respond_to_request_ready(message):
     """
         Receive the agent information encoded and decode it
-        Add the decoded agent to a list insed the agent_manager
+        Add the decoded agent to a list inside the agent_manager
         Use the singleton to get the simulation instance and prevent from instantiating the class multiple times
-        Call two responsed:
+        Call two responses:
             First containing the agents_list
-            Second containg the simulation pre step
+            Second containing the simulation pre step
     """
-    
+
     response = ['ready', [{'can_connect': False}, {'data': None}]]
 
     agent = json.loads(message)
