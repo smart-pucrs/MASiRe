@@ -12,15 +12,20 @@ class Cdm:
         :param location: The location of the CDM at the simulation map.
         This variable will restrict the agent's actions in case of location inequality.
         """
-        self.virtual_items = []
-        self.physical_items = []
+        self.virtual_items = {}
+        self.physical_items = {}
         self.location = location  
 
-    def add_physical_items(self, items):
-        for item in items:
-            self.physical_items.append(item)
+    def add_physical_items(self, items, agent_id):
+        if agent_id not in self.physical_items.keys():
+            self.physical_items[agent_id] = []
 
-    def add_virtual_items(self, items):
         for item in items:
-            self.virtual_items.append(item)
-        
+            self.physical_items[agent_id].append(item)
+
+    def add_virtual_items(self, items, agent_id):
+        if agent_id not in self.virtual_items.keys():
+            self.virtual_items[agent_id] = []
+
+        for item in items:
+            self.virtual_items[agent_id].append(item)
