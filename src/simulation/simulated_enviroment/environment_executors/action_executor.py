@@ -18,7 +18,7 @@ class ActionExecutor:
         """
         self.config = config
         self.world = world
-        self.route = world.router
+        self.route = world.generator.router
 
     def execute_actions(self, actions):
         """
@@ -317,7 +317,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    amount_nodes = len(self.route.nodes_in_radius(agent.location, parameters[0]))
+                    amount_nodes = len(self.world.route.nodes_in_radius(agent.location, parameters[0]))
                     # change this later (plot social assets at the map and execute the code line above)
                     amount_sa = random.randint(0, amount_nodes)
                     if amount_sa > 5:  # simulating social assets which fulfills the agent needs
@@ -363,7 +363,7 @@ class ActionExecutor:
                 print('Error: failed_item_amount')
                 print(e.message)
 
-            except :
+            except:
                 print('Error: failed')
 
         else:

@@ -4,7 +4,6 @@
 import random
 import math
 import json
-from pyroutelib3 import Router
 from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
 from src.simulation.simulated_enviroment.environment_variables.events.photo import Photo
 from src.simulation.simulated_enviroment.environment_variables.events.victim import Victim
@@ -19,7 +18,6 @@ class Generator:
         self.total_water_samples = 0
         self.total_victims = 0
         self.config = config
-        self.router = Router("car", config['map']['map'])
         self.router = Route(config['map']['map'])
         self.victim_counter = 0
         random.seed(config['map']['randomSeed'])
