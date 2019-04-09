@@ -20,11 +20,16 @@ class Agent:
         self.last_action_result = False
         self.location = [0, 0]
         self.route = None
+        self.physical_storage_vector = []
+        self.virtual_storage_vector = []
+        self.is_active = True
         self.role = role_name
         self.physical_storage = role.physical_capacity
         self.virtual_storage = role.virtual_capacity
-        self.physical_storage_vector = []
-        self.virtual_storage_vector = []
+        self.virtual_capacity = role.virtual_capacity
+        self.physical_capacity = role.physical_capacity
+        self.actual_battery = role.battery
+        self.abilities = role.abilities
 
     def __repr__(self):
         return str(self.agent_id) + ' - ' + str(self.role)
@@ -34,14 +39,14 @@ class Agent:
         [Changes the agent's battery to zero.]
         """
 
-        self.role.actual_battery = 0
+        self.actual_battery = 0
 
     def charge(self):
         """
         [Changes the agent's battery to its full charge capacity.]
         """
 
-        self.role.actual_battery = self.role.total_battery
+        self.actual_battery = self.role.total_battery
 
     def add_physical_item(self, item, amount=None):
         """
@@ -115,7 +120,7 @@ class Agent:
         :return: A list containing all the removed items.
         """
 
-        if self.virtual_storage == self.role.virual_capacity:
+        if self.virtual_storage == self.virtual_capacity:
             raise Failed_item_amount('The agents has no victims or water samples to deliver.')
 
         if not self.virtual_storage_vector.__contains__(item):
