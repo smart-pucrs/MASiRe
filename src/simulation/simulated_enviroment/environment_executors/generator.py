@@ -3,7 +3,7 @@
 
 import random
 import math
-import json
+# import json
 from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
 from src.simulation.simulated_enviroment.environment_variables.events.photo import Photo
 from src.simulation.simulated_enviroment.environment_variables.events.victim import Victim
@@ -26,8 +26,7 @@ class Generator:
         events = [None] * self.config['map']['steps']
         events[0] = self.generate_flood()
 
-        for step in range(len(events) - 1):
-            # generate floods (index 0) and photo events (index 1)
+        for step in range(len(events)):
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
 
@@ -42,15 +41,8 @@ class Generator:
             'done': 0
         }]}
 
-        with open('results.txt', 'w') as outfile:
-            json.dump(data, outfile)
-
-        for step in range(len(events)):
-            if step == 0:
-                events[step] = self.generate_flood()
-
-            elif random.randint(0, 100) <= self.config['generate']['floodProbability']:
-                events[step] = self.generate_flood()
+        # with open('results.txt', 'w') as outfile:
+        #     json.dump(data, outfile)
 
         self.router.generate_routing_tables(events)
         return events
