@@ -28,7 +28,6 @@ class World:
         self.victims = []
         self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
         self.generator = Generator(config)
-        self.generate_events()
         self.action_executor = ActionExecutor(config, self)
 
     def initial_percepts(self):
