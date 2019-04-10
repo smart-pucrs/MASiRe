@@ -1,12 +1,20 @@
 import jwt
 import json
-from src.communication.emiters import on_response
-from src.communication.controller import Controller
+import requests
+from flask import Flask
+from flask_cors import CORS
 from flask_socketio import SocketIO
+from flask_socketio import emit
+from src.communication.controller import Controller
+from src.communication.temporary_agent import Agent
 
 
 socketio = SocketIO()
-controller = Controller()
+app = Flask(__name__)
+app.debug = False
+CORS(app)
+app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
+socketio.init_app(app)
 
 
 @socketio.on('first_message')
@@ -20,17 +28,23 @@ def respond_to_request_ready(message):
             Second containing the simulation pre step
     """
 
-    response = ['ready', [{'can_connect': False}, {'data': None}]]
+    agent_response = {'can_connect': False}
 
-    agent = json.loads(message)
+    agent_info = json.loads(message)
 
     if controller.check_population():
-        agent_encoded = jwt.encode(agent, 'secret', algorithm='HS256').decode('utf-8')
-        controller.agents[len(controller.agents)+1] = agent_encoded
-        response[1][0]['can_connect'] = True
-        response[1][1]['data'] = controller.agents[len(controller.agents)]
+        token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
+        agent = Agent(token, len(controller.agents), None)
+        controller.agents.append({token: agent})
 
-    on_response(response[0], json.dumps(response[1]))
+        agent_response['can_connect'] = True
+        agent_response['data'] = token
+        event = f'received/{str(token)}'
+
+    else:
+        event = f'received/{agent_info.name}'
+
+    emit(event, agent_response)
 
 
 @socketio.on('connect_agent')
@@ -53,14 +67,18 @@ def respond_to_request(message=''):
 
         :param message: the JSON agent
         """
+    token = json.loads(message)
+    simulation_response = requests.post('http://localhost:5000/register_agent', json=token).json()
 
-    response = ['connection_result', {'agent_connected': False}]
+    agent_response = {'agent_connected': False}
 
-    if controller.check_agent(json.loads(message)):
+    if controller.check_agent(token):
         if controller.check_timer():
-            response[1]['agent_connected'] = True
+            controller.agents[token].connected = simulation_response.is_active
+            agent_response['agent_connected'] = simulation_response.is_active
+            agent_response['agent_info'] = simulation_response
 
-    on_response(response[0], json.dumps(response[1]))
+    emit(f'connection_result/{token}', json.dumps(agent_response))
 
 
 @socketio.on('receive_jobs')
@@ -79,52 +97,45 @@ def handle_connection(message):
 
     :param message: the JSON agent
     """
-
-    response = ['received_jobs_result', {'job_delivered': False}]
+    agent_response = {'job_received': False}
 
     message = json.loads(message)
-    agent_method = (message['token'], (message['method'], message['parameters'][0], message['parameters'][1]))
+    token = message['token']
+    action = message['action']
 
-    if controller.check_request(agent_method):
-        controller.jobs[agent_method[0]] = (agent_method[1][0], agent_method[1][1], agent_method[1][2])
-        response[1]['job_delivered'] = True
+    if action == 'move':
+        location = (message['lat'], message['lon'])
+        controller.agents[token].action = (action, location)
+        agent_response['job_delivered'] = True
 
-    on_response(response[0], json.dumps(response[1]))
+    emit(f'job_received/{token}', json.dumps(agent_response))
 
 
 @socketio.on('time_ended')
 def finish_conection():
-    """
-    Due to limitations with Threads, this method is called when an external agent
-    calculate the time and calls it
-    """
-
-    from src.simulation.manager.simulation_instance import SimulationSingleton
-
-    token_id = {}
-    count = 1
-    for token in controller.jobs.keys():
-        token_id[token] = count
-        count += 1
+    # Migrate the responsabilty to the controller module from the server helper
 
     jobs = []
-    for token in controller.jobs.keys():
-        jobs.append((token_id[token], controller.jobs[token]))
 
-    aux = SimulationSingleton().simulation_manager.do_step(jobs)
+    for token in controller.agents:
+        internal_id = controller.agents[token]
+        action_name = controller.agents[token].action[0]
 
-    for id, result in aux:
-        token_outside = ''
+        action_params = []
+        for param in controller.agents[token].action[1]:
+            action_params.append(param)
 
-        for token in token_id:
-            if token_id[token] == id:
-                token_outside = token
-                break
+        jobs.append((internal_id, (action_name, action_params)))
 
-        final_json = {'result': result, 'token': token_outside}
+    actions = json.dumps(jobs)
+    simulation_response = requests.post('http://localhost/5000', json=actions)
 
-        on_response('connection_result', json.dumps(final_json))
+    emit('job_done', simulation_response)
 
+
+if __name__ == '__main__':
+    controller = Controller()
+    socketio.run(app, port=12345)
 
 
 
