@@ -5,16 +5,16 @@ from src.simulation.exceptions.exceptions import *
 
 class Agent:
 
-    def __init__(self, agent_id, role, role_name):
+    def __init__(self, agent_token, role, role_name):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
 
-        :param agent_id: 'Manipulated' agent's id.
+        :param agent_token: 'Manipulated' agent's id.
         :param role: The agent's main function over the simulation,
         which covers its skills and limitations.
         """
-        self.agent_id = agent_id
+        self.agent_token = agent_token
         self.last_action = None
         self.last_action_result = False
         self.location = [0, 0]
@@ -31,7 +31,7 @@ class Agent:
         self.abilities = role.abilities
 
     def __repr__(self):
-        return str(self.agent_id) + ' - ' + str(self.role)
+        return str(self.agent_token) + ' - ' + str(self.role)
 
     def discharge(self):
         """

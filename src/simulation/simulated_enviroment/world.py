@@ -18,8 +18,8 @@ class World:
         """
         self.config = config
         self.events = []
-        self.roles = dict()
-        self.agents = dict()
+        self.roles = {}
+        self.agents = {}
         self.agent_counter = 0
         self.active_events = []
         self.floods = []

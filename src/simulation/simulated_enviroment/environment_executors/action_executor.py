@@ -32,14 +32,14 @@ class ActionExecutor:
         marking it with a success or failure flag.
         """
 
-        action_results = [None] * len(actions)
+        action_results = []
 
-        for idx, command in enumerate(actions):
+        for command in actions:
             agent = self.world.agents[int(command[0])]
             action = command[1]
 
             self.execute(agent, action)
-            action_results[idx] = (int(command[0]), agent.last_action_result)
+            action_results.append(int(command[0]), agent.last_action_result)
 
         return action_results
 
