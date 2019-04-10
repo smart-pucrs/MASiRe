@@ -23,8 +23,15 @@ class Simulation:
         """
         self.world.generate_events()
         self.world.create_roles()
-        self.world.create_agents()
         return self.world.percepts(self.step)
+
+    def create_agent(self, token):
+        """
+        [Method that generate the agent when it tries to connect to the simulation.]
+
+        :return: A agent containing all the the information recovered from the role.
+        """
+        return self.world.create_agent(token)
 
     def do_pre_step(self):
         """

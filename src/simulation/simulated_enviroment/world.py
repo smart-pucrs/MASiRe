@@ -1,5 +1,6 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data
 # /WorldState.java
+import random
 from src.simulation.simulated_enviroment.environment_executors.action_executor import ActionExecutor
 from src.simulation.simulated_enviroment.environment_variables.agent import Agent
 from src.simulation.simulated_enviroment.environment_variables.role import Role
@@ -20,7 +21,6 @@ class World:
         self.events = []
         self.roles = {}
         self.agents = {}
-        self.agent_counter = 0
         self.active_events = []
         self.floods = []
         self.water_samples = []
@@ -76,29 +76,22 @@ class World:
         for role in self.config['roles']:
             self.roles[role] = Role(role, self.config['roles'])
 
-    def create_agents(self):
+    def create_agent(self, token):
         """
-        [Method that generates the world's random events and 
-        adds them to their respective category.]
+        [Method creates list containing each role times the amount of agents
+        it should have and assign one randomly chosen role to the given token]
 
-        :return: A list containing each agent's IDs
+        :return: A agent containing all the information recovered from the role
         """
+        roles = []
         for role in self.config['agents']:
-            agents_number = self.config['agents'][role]
-            for _ in range(agents_number):
-                self.create_agent(role)
+            role = [role] * self.config['agents'][role]
+            roles.extend(role)
 
-    def create_agent(self, role):
-        """
-        [Method that creates an agent with a specific role.]
-
-        :param role: A string indicating the role of the agent
-        to be created.
-        :return: A list containing each agent's IDs.
-        """
-
-        self.agent_counter += 1
-        self.agents[self.agent_counter] = Agent(self.agent_counter, self.roles[role], role)
+        role = random.choice(roles)
+        agent = Agent(token, self.roles[role], role)
+        self.agents[token] = agent
+        return agent
 
     def execute_actions(self, actions):
         """
@@ -111,7 +104,6 @@ class World:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
-
         return self.action_executor.execute_actions(actions)
 
     def create_route_coordinate(self, start, location):
