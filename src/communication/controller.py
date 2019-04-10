@@ -25,22 +25,8 @@ class Controller:
         else:
             return False
 
-    def check_request(self, agent):
-        if len(self.agents) < 5:
-            if self.contain_parameters(agent):
-                return True
-        return False
-
-    def contain_parameters(self, agent):
-        if agent[1][1] == '' or agent[1][1] is None:
-            if agent[1][2] == '' or agent[1][2] is None:
-                return False
-            return False
-
-        return True
-
     def check_agent(self, agent):
-        for ag in self.agents.keys():
+        for ag in self.agents:
             if self.agents[ag] == agent['token']:
                 return True
 
