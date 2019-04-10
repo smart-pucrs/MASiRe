@@ -4,14 +4,13 @@ import time
 class Controller:
 
     def __init__(self):
-        self.agents = {}
-        self.jobs = {}
+        self.agents = []
         self.timer = None
 
     # initializes the timer if it has not been initialized
     # check if the total agents exceeded
     def check_population(self):
-        if len(self.agents.keys()) <= 5:
+        if len(self.agents) <= 5:
             return True
         else:
             return False
