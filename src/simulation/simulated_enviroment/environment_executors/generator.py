@@ -98,19 +98,21 @@ class Generator:
         return Flood(period, dimensions, photos, water_samples, victims)
 
     def generate_photos(self, nodes):
-        photos = [None for _ in range(random.randint(
+        photos = [None] * random.randint(
             self.config['generate']['photo']['minAmount'],
             self.config['generate']['photo']['maxAmount']
-        ))]
+        )
 
         self.total_photos += len(photos)
         for i in range(len(photos)):
             photo_size = self.config['generate']['photo']['size']
             photo_location = random.choice(nodes)
 
+            photo_victims = []
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
                 photo_victims = self.generate_victims(nodes)
-                photos[i] = Photo(photo_size, photo_victims, photo_location)
+
+            photos[i] = Photo(photo_size, photo_victims, photo_location)
 
         return photos
 
