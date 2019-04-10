@@ -33,7 +33,7 @@ def on_response_connection(args):
     print('Response: ', json.loads(args))
 
 
-def on_response_ready(args):
+def on_response_received(args):
     global token, response_ready
 
     response_ready = True
@@ -44,8 +44,8 @@ def on_response_ready(args):
 
 
 socketIO = SocketIO('localhost', 5000, LoggingNamespace)
-socketIO.on('ready', on_response_ready)
-socketIO.emit('first_message', json.dumps(agent))
+socketIO.on('received', on_response_received)
+socketIO.emit('time_ended')
 
 socketIO.wait(2)
 

@@ -14,17 +14,6 @@ agent = {
 
 token = None
 response_ready = False
-response_connect = False
-response_job = False
-
-
-def on_response_job_result(args):
-    print("to be or not to be")
-    print(args)
-
-
-def on_response_jobs(args):
-    print('Response: ', json.loads(args))
 
 
 def on_response_connection(args):
@@ -71,10 +60,6 @@ step_config_agent = {
     'parameters': ['24', '32']
 }
 
-event = 'job_result'
-
-socketIO.on('received_jobs_result', on_response_jobs)
-socketIO.on('jobs_result', on_response_job_result)
 socketIO.emit('receive_jobs', json.dumps(step_config_agent))
 
 socketIO.wait(60)
