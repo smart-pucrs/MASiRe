@@ -1,6 +1,8 @@
 from socketIO_client import SocketIO, LoggingNamespace
 import json
 
+# ==================== ATENTION, ALL THE LISTEN EVENTS WERE CHANGED ===========================
+
 
 agent = {
     "name": "ubuntu",
@@ -61,7 +63,7 @@ socketIO.wait(2)
 
 step_config_agent = {
     'token': token,
-    'method': 'move',
+    'action': 'move',
     'parameters': ['24', '32']
 }
 
