@@ -1,5 +1,4 @@
-# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
-
+# based https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 import random
 from src.simulation.exceptions.exceptions import *
 
@@ -20,11 +19,12 @@ class ActionExecutor:
         self.world = world
         self.route = world.generator.router
 
-    def execute_actions(self, actions):
+    def execute_actions(self, actions, cdm_location):
         """
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
-        
+
+        :param cdm_location: Location of the cdm specified in the config file
         :param actions: A json file sent by the communication core
         containing all the actions, including the necessary parameters,
         and its respective agents.
@@ -34,35 +34,37 @@ class ActionExecutor:
 
         action_results = []
 
-        for command in actions:
-            agent = self.world.agents[int(command[0])]
-            action = command[1]
+        for obj in actions:
+            token = obj['token']
+            action = (obj['action'], *obj['parameters'])
 
-            self.execute(agent, action)
-            action_results.append(int(command[0]), agent.last_action_result)
+            self.world.agents[token] = self.execute(self.world.agents[token], action, cdm_location)
+
+            action_results.append((obj['token'], self.world.agents[obj['token']].last_action_result))
 
         return action_results
 
-    def execute(self, agent, command):
+    def execute(self, agent, action, cdm_location):
         """
         [Method that tries to execute a single action for a parametrized agent.
         The action may contain necessary parameters.
         This method is also responsible for calling the manager of the parametrized
         agent, so than it can modify its private attributes.]
 
+        :param cdm_location: Location of the cdm specified in the config file
         :param agent: Agent responsible for calling a specific command (per step).
-        :param command: The agent's desired action to be executed, including its
+        :param action: The agent's desired action to be executed, including its
         necessary parameters.
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
 
-        if not isinstance(command, str):
-            action = command[0]
-            parameters = command[1:]
+        if not isinstance(action, str):
+            action = action[0]
+            parameters = action[1:]
 
         else:
-            action = command
+            action = action
             parameters = []
 
         agent.last_action = action
@@ -83,7 +85,7 @@ class ActionExecutor:
                     if parameters[0] != 'cdm':
                         raise Failed_wrong_param('Unknown facility')
 
-                    location = self.world.cdm.location
+                    location = cdm_location
 
                 else:
                     location = [parameters[0], parameters[1]]
@@ -118,14 +120,14 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == self.world.cdm.location:
+                if agent.location == cdm_location:
                     agent.last_action_result = True
 
                     if len(parameters) == 1:
-                        self.agent_deliver(agent, 'physical', parameters[0])
+                        self.agent_delivery(agent, 'physical', parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_deliver(agent, 'physical', parameters[0], parameters[1])
+                        self.agent_delivery(agent, 'physical', parameters[0], parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -152,14 +154,14 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == self.world.cdm.location:
+                if agent.location == cdm_location:
                     agent.last_action_result = True
 
                     if len(parameters) == 1:
-                        self.agent_deliver(agent, 'virtual', parameters[0])
+                        self.agent_delivery(agent, 'virtual', parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_deliver(agent, 'virtual', parameters[0], parameters[1])
+                        self.agent_delivery(agent, 'virtual', parameters[0], parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -186,7 +188,7 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                if agent.location == self.world.cdm.location:
+                if agent.location == cdm_location:
                     agent.charge()
                     agent.last_action_result = True
 
@@ -335,7 +337,6 @@ class ActionExecutor:
                 agent.virtual_storage_vector = []
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_item_amount as e:
@@ -347,9 +348,9 @@ class ActionExecutor:
         else:
             print('Error: failed')
 
-        return agent.last_action_result
+        return agent
 
-    def agent_deliver(self, agent, kind, item, amount=None):
+    def agent_delivery(self, agent, kind, item, amount=None):
         """
         [Method that ensures the correct delivery of the current agent's items
         to the CDM.]
@@ -391,3 +392,5 @@ class ActionExecutor:
 
         else:
             self.world.cdm.add_virtual_items(removed_items)
+
+        return agent

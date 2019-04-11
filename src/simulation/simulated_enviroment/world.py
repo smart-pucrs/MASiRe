@@ -20,7 +20,6 @@ class World:
         self.events = []
         self.roles = {}
         self.agents = {}
-        self.active_events = []
         self.floods = []
         self.water_samples = []
         self.photos = []
