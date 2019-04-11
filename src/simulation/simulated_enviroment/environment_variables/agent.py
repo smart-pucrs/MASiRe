@@ -47,7 +47,7 @@ class Agent:
 
         self.actual_battery = self.role.total_battery
 
-    def add_physical_item(self, item, amount=None):
+    def add_physical_item(self, item):
         """
         [Add a certain physical item to the agent's physical storage.
         The agent's current 'free space' is reduced by the item's size.]
@@ -58,24 +58,13 @@ class Agent:
         """
 
         size = item.size
-
-        # if amount != None:
-        #     if size * amount < self.physical_storage:
-        #         self.physical_storage -= size * amount
-        #         e = 0
-        #         while e < amount:
-        #             self.physical_storage_vector.append(item)
-        #             e += 1
-        #     else:
-        #         raise Failed_capacity('The agent does not have enough physical storage.')
-        # else:
         if size > self.virtual_storage:
             raise Failed_capacity('The agent does not have enough physical storage.')
 
         self.physical_storage -= size
         self.physical_storage_vector.append(item)
 
-    def add_virtual_item(self, item, amount=None):
+    def add_virtual_item(self, item):
         """
         [Add a certain parametrized virtual item to the agent's virtual storage.
         The agent's current 'free space' is reduced by the item's size.
@@ -88,17 +77,6 @@ class Agent:
         """
 
         size = item.size
-
-        # if amount != None:
-        #     if size * amount < self.virtual_storage:
-        #         self.virtual_storage -= size * amount
-        #         e = 0
-        #         while e < amount:
-        #             self.virtual_storage_vector.append(item)
-        #             e += 1
-        #     else:
-        #         raise Failed_capacity('The agent does not have enough virtual storage.')
-        # else:
         if size > self.virtual_storage:
             raise Failed_capacity('The agent does not have enough physical storage.')
 

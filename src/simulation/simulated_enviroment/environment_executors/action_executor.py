@@ -102,19 +102,16 @@ class ActionExecutor:
                 agent.location = agent.route.next_node()
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_unknown_facility as e:
-                print('Error: failed_unknown_facility')
                 print(e.message)
 
             except Failed_no_route as e:
-                print('Error: failed_no_route')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'deliver_physical':
             try:
@@ -133,27 +130,22 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_invalid_kind as e:
-                print('Error: failed_invalid_kind')
                 print(e.message)
 
             except Failed_location as e:
-                print('Error: failed_location')
                 print(e.message)
 
             except Failed_unknown_item as e:
-                print('Error: Failed_unknown_item')
                 print(e.message)
 
             except Failed_item_amount as e:
-                print('Error: failed_item_amount')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'deliver_virtual':
             try:
@@ -172,27 +164,22 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_invalid_kind as e:
-                print('Error: failed_invalid_kind')
                 print(e.message)
 
             except Failed_location as e:
-                print('Error: failed_location')
                 print(e.message)
 
             except Failed_unknown_item as e:
-                print('Error: Failed_unknown_item')
                 print(e.message)
 
             except Failed_item_amount as e:
-                print('Error: failed_item_amount')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'charge':
             try:
@@ -207,15 +194,13 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_location as e:
-                print('Error: failed_location')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'rescue_victim':
             try:
@@ -247,8 +232,8 @@ class ActionExecutor:
                 print('Error: failed_capacity')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'collect_water':
             try:
@@ -266,19 +251,16 @@ class ActionExecutor:
                     raise Failed_location('The agent is not in a location with a water sample.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_location as e:
-                print('Error: failed_location')
                 print(e.message)
 
             except Failed_capacity as e:
-                print('Error: failed_capacity')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         elif action == 'photograph':
             try:
@@ -295,19 +277,16 @@ class ActionExecutor:
                 raise Failed_location('The agent is not in a location with a photography event.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
                 print(e.message)
 
             except Failed_location as e:
-                print('Error: failed_location')
                 print(e.message)
 
             except Failed_capacity as e:
-                print('Error: failed_capacity')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         # not working
         elif action == 'search_social_asset':
@@ -360,11 +339,10 @@ class ActionExecutor:
                 print(e.message)
 
             except Failed_item_amount as e:
-                print('Error: failed_item_amount')
                 print(e.message)
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                print(e)
 
         else:
             print('Error: failed')
