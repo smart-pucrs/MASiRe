@@ -9,12 +9,11 @@ from src.communication.controller import Controller
 from src.communication.temporary_agent import Agent
 
 
-socketio = SocketIO()
 app = Flask(__name__)
+socketio = SocketIO(app)
 app.debug = False
 CORS(app)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
-socketio.init_app(app)
 
 
 @socketio.on('first_message')
@@ -134,4 +133,4 @@ def finish_step():
 
 
 controller = Controller()
-socketio.run(app, port=12345)
+socketio.run(app, port=12345, debug=True)

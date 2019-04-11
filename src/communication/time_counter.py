@@ -13,4 +13,4 @@ def start_timer():
 
 
 if __name__ == '__main__':
-    app.run(5678)
+    app.run(port=5678)
