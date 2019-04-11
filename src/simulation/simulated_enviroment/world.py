@@ -1,6 +1,5 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data
 # /WorldState.java
-import random
 from src.simulation.simulated_enviroment.environment_executors.action_executor import ActionExecutor
 from src.simulation.simulated_enviroment.environment_variables.agent import Agent
 from src.simulation.simulated_enviroment.environment_variables.role import Role
@@ -26,6 +25,8 @@ class World:
         self.water_samples = []
         self.photos = []
         self.victims = []
+        self.agent_counter = 0
+        self.free_roles = []
         self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
         self.generator = Generator(config)
         self.action_executor = ActionExecutor(config, self)
@@ -111,6 +112,10 @@ class World:
         for role in self.config['roles']:
             self.roles[role] = Role(role, self.config['roles'])
 
+        for role in self.config['agents']:
+            role = [role] * self.config['agents'][role]
+            self.free_roles.extend(role)
+
     def create_agent(self, token):
         """
         [Method creates list containing each role times the amount of agents
@@ -118,14 +123,10 @@ class World:
 
         :return: A agent containing all the information recovered from the role
         """
-        roles = []
-        for role in self.config['agents']:
-            role = [role] * self.config['agents'][role]
-            roles.extend(role)
-
-        role = random.choice(roles)
+        role = self.free_roles[self.agent_counter]
         agent = Agent(token, self.roles[role], role)
         self.agents[token] = agent
+        self.agent_counter += 1
         return agent
 
     def execute_actions(self, actions):
