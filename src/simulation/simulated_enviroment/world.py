@@ -31,6 +31,41 @@ class World:
         self.action_executor = ActionExecutor(config, self)
 
     def percepts(self, step):
+        # Get all active floods
+        floods = []
+        for idx, flood in enumerate(self.events):
+            if idx == step - 1:
+                break
+            if flood and flood.active:
+                floods.append(flood)
+
+        # Get all pending water_sample
+        water_samples = []
+        for idx, water_sample in enumerate(self.water_samples):
+            if idx == step - 1:
+                break
+            if water_sample.active:
+                water_samples.append(water_sample)
+
+        # Get all pending photo
+        photos = []
+        for idx, photo in enumerate(self.photos):
+            if idx == step - 1:
+                break
+            if photo.active:
+                photos.append(photo)
+
+        # Get all pending victims
+        victims = []
+        for idx, victim in enumerate(self.victims):
+            if idx == step - 1:
+                break
+            if victim.active:
+                victims.append(victim)
+
+        return floods, water_samples, photos, victims
+
+    def percepts_by_step(self, step):
         """
         [Method that generates each step's percepts.]
         
@@ -43,9 +78,9 @@ class World:
 
         else:
             flood = self.events[step]
-            water_samples = [water_sample for water_sample in self.events[step].water_samples if water_sample.active]
-            photos = [photo for photo in self.events[step].photos if photo.active]
-            victims = [victim for victim in self.events[step].victims if victim.active]
+            water_samples = [water_sample for water_sample in flood.water_samples if water_sample.active]
+            photos = [photo for photo in flood.photos if photo.active]
+            victims = [victim for victim in flood.victims if victim.active]
             return flood, water_samples, photos, victims
 
     def generate_events(self):

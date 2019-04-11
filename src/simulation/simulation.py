@@ -23,7 +23,7 @@ class Simulation:
         """
         self.world.generate_events()
         self.world.create_roles()
-        return self.world.percepts(self.step)
+        self.do_pre_step()
 
     def create_agent(self, token):
         """
@@ -42,31 +42,22 @@ class Simulation:
         :return: A dict containing every agent's step percepts.
         """
 
-        self.world.active_events = [event for event in self.world.active_events if
-                                    event[0] + event[1].period >= self.step]
+        event = self.world.events[self.step]
 
-        event_step = self.world.events[self.step]
-
-        if event_step:
-            self.world.active_events.append((self.step, event_step))
-
-            for water_sample in event_step:
+        if event:
+            for water_sample in event.water_samples:
                 water_sample.active = True
                 self.world.water_samples.append(water_sample)
 
-            for photo in flood.photos:
+            for photo in event.photos:
                 photo.active = True
                 self.world.photos.append(photo)
 
-                for victim in photo.victims:
-                    victim.active = True
-                    self.world.victims.append(victim)
+            for victim in event.victims:
+                victim.active = True
+                self.world.victims.append(victim)
 
-        percepts = dict()
-
-        for agent in self.world.agents.values():
-            percepts[agent.id] = self.world.percepts(agent)
-
+        percepts = self.world.percepts(self.step)
         return percepts
 
     def do_step(self, actions):
@@ -78,5 +69,4 @@ class Simulation:
         """
         action_results = self.world.execute_actions(actions)
         self.step += 1
-
-        return action_results
+        return action_results, self.do_pre_step()
