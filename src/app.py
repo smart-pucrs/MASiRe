@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
 from src.simulation.simulation import Simulation
+import directory_path as root
 
 
 def start_instance(path):
@@ -12,7 +13,8 @@ def start_instance(path):
 
 
 app = Flask(__name__)
-simulation = start_instance('files/config.json')
+config_path = root.dir + '/files/config.json'
+simulation = start_instance(config_path)
 simulation.start()
 
 
@@ -25,7 +27,7 @@ def register_agent():
     return 'NoneType'
 
 
-@app.route('/do_action', methods=['POST'])
+@app.route('/do_actions', methods=['POST'])
 def do_actions():
     actions = request.get_json()
     if actions is not None:
@@ -38,4 +40,4 @@ if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    app.run(port='50000')
+    app.run(port=8910)
