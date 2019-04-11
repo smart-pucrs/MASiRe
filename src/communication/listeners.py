@@ -78,6 +78,7 @@ def respond_to_request(message=''):
             agent_response['agent_connected'] = simulation_response.is_active
             agent_response['agent_info'] = simulation_response
 
+    requests.get('http://localhost:5678/start')
     emit(f'connection_result/{token}', json.dumps(agent_response))
 
 
@@ -111,10 +112,8 @@ def handle_connection(message):
     emit(f'job_received/{token}', json.dumps(agent_response))
 
 
-@socketio.on('time_ended')
-def finish_conection():
-    # Migrate the responsabilty to the controller module from the server helper
-
+@app.route('time_ended', methods=['POST', 'GET'])
+def finish_step():
     jobs = []
 
     for token in controller.agents:
@@ -131,19 +130,8 @@ def finish_conection():
     simulation_response = requests.post('http://localhost/5000', json=actions)
 
     emit('job_done', simulation_response)
+    requests.get('http://localhost:5678/start')
 
 
-if __name__ == '__main__':
-    controller = Controller()
-    socketio.run(app, port=12345)
-
-
-
-
-
-
-
-
-
-
-
+controller = Controller()
+socketio.run(app, port=12345)
