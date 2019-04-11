@@ -141,10 +141,3 @@ class World:
         marking it with a success or failure flag.
         """
         return self.action_executor.execute_actions(actions)
-
-    def create_route_coordinate(self, start, location):
-        # create route between location START and LOCATION
-        # both are a list -> [lat, long]
-
-        # self.router.
-        return

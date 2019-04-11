@@ -133,8 +133,9 @@ class Route:
         print("Total: %.2fm" % (math.fsum(distances) * 1000))
 
     def get_route(self, start, end):
-        #self.router.
-        pass
+        start_node = self.router.findNode(*start)
+        end_node = self.router.findNode(*end)
+        return self.router.doRoute(start_node, end_node)
 
     def nodes_in_radius(self, coord, radius):
         """

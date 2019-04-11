@@ -93,7 +93,7 @@ class ActionExecutor:
                     return
 
                 if agent.route is None:
-                    agent.route = self.world.create_route_coordinate(agent.location, self.world.cdm.location)
+                    agent.route = self.route.get_route(tuple(agent.location), cdm_location)
 
                     if agent.route is None:
                         raise Failed_no_route()
@@ -317,7 +317,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
 
                 if len(parameters) == 1:
-                    amount_nodes = len(self.world.route.nodes_in_radius(agent.location, parameters[0]))
+                    amount_nodes = len(self.route.nodes_in_radius(agent.location, parameters[0]))
                     # change this later (plot social assets at the map and execute the code line above)
                     amount_sa = random.randint(0, amount_nodes)
                     if amount_sa > 5:  # simulating social assets which fulfills the agent needs
