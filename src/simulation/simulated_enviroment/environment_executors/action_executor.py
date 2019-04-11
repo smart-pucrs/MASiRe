@@ -335,6 +335,7 @@ class ActionExecutor:
 
                 # clears virtual storage
                 agent.virtual_storage_vector = []
+                agent.virtual_storage = agent.virtual_capacity
 
             except Failed_wrong_param as e:
                 print(e.message)
