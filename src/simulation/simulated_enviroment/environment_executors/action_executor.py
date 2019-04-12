@@ -271,13 +271,15 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for photo in self.world.photos:
-                    if photo.active and photo.location == agent.location:
+                    photo_location = self.route.get_node_coord(photo.node)
+                    if photo.active and photo_location == agent.location:
                         agent.add_virtual_item(photo)
                         photo.active = False
                         agent.last_action_result = True
                         break
 
-                raise Failed_location('The agent is not in a location with a photography event.')
+                if not agent.last_action_result:
+                    raise Failed_location('The agent is not in a location with a photograph event.')
 
             except Failed_wrong_param as e:
                 print(e.message)
