@@ -208,13 +208,15 @@ class ActionExecutor:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
                 for victim in self.world.victims:
-                    if victim.active and parameters[0] == victim.id and victim.location == agent.location:
+                    victim_location = self.route.get_node_coord(victim.node)
+                    if victim.active and parameters[0] == victim.id and victim_location == agent.location:
                         agent.add_physical_item(victim)
                         victim.active = False
                         agent.last_action_result = True
                         break
 
-                raise Failed_unknown_item('No victim by the given ID is known.')
+                if not agent.last_action_result:
+                    raise Failed_unknown_item('No victim by the given ID is known.')
 
             except Failed_wrong_param as e:
                 print('Error: failed_wrong_param')
