@@ -23,7 +23,14 @@ class Simulation:
         """
         self.world.generate_events()
         self.world.create_roles()
-        self.do_pre_step()
+        return self.initial_percepts()
+
+    def initial_percepts(self):
+        events = self.do_pre_step()
+        map_config = self.world.config['map']
+        for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
+            del map_config[key]
+        return {'events': events, 'map_config': map_config}
 
     def create_agent(self, token):
         """
