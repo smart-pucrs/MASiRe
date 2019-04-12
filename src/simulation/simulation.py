@@ -50,8 +50,10 @@ class Simulation:
         """
 
         event = self.world.events[self.step]
+        pending_events = self.world.percepts(self.step)
 
         if event:
+            self.world.events[self.step].active = True
             for water_sample in event.water_samples:
                 water_sample.active = True
                 self.world.water_samples.append(water_sample)
@@ -64,8 +66,7 @@ class Simulation:
                 victim.active = True
                 self.world.victims.append(victim)
 
-        percepts = self.world.percepts(self.step)
-        return percepts
+        return {'current_events': str(event)}, {'pending_events': pending_events}
 
     def do_step(self, actions):
         """
@@ -76,4 +77,4 @@ class Simulation:
         """
         action_results = self.world.execute_actions(actions)
         self.step += 1
-        return action_results, self.do_pre_step()
+        return {'action_results': action_results, 'events': self.do_pre_step()}
