@@ -28,6 +28,7 @@ class Agent:
         self.virtual_capacity = role.virtual_capacity
         self.physical_capacity = role.physical_capacity
         self.actual_battery = role.battery
+        self.max_charge = role.battery
         self.abilities = role.abilities
 
     def __repr__(self):
@@ -45,7 +46,7 @@ class Agent:
         [Changes the agent's battery to its full charge capacity.]
         """
 
-        self.actual_battery = self.role.total_battery
+        self.actual_battery = self.max_charge
 
     def add_physical_item(self, item):
         """
