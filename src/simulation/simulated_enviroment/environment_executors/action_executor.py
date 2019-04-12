@@ -334,9 +334,9 @@ class ActionExecutor:
                 for photo in agent.virtual_storage_vector:
                     for victim in photo.victims:
                         victim.active = True
-                        agent.last_action_result = True
 
                 # clears virtual storage
+                agent.last_action_result = True
                 agent.virtual_storage_vector = []
                 agent.virtual_storage = agent.virtual_capacity
 
