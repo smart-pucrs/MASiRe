@@ -390,7 +390,7 @@ class ActionExecutor:
             raise Failed_unknown_item('No item by the given name is known.')
 
         if kind == 'physical':
-            self.world.cdm.add_physical_items(removed_items)
+            self.world.cdm.add_physical_items(removed_items, agent.agent_token)
 
         else:
-            self.world.cdm.add_virtual_items(removed_items)
+            self.world.cdm.add_virtual_items(removed_items, agent.agent_token)
