@@ -1,2 +1,2 @@
 import pathlib
-dir = str(pathlib.Path(__file__).parent.absolute())
+dir = pathlib.Path(__file__).parent.absolute()

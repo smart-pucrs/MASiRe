@@ -7,8 +7,8 @@ from pyroutelib3 import Router
 class Route:
 
     def __init__(self, map):
-        map_file_location = root.dir + '/' + map
-        self.router = Router("car", map_file_location)      # Initialise router object from pyroutelib3
+        map_file_location = root.dir / map
+        self.router = Router("car", str(map_file_location)) # Initialise router object from pyroutelib3
         self.original_state = self.router.routing.copy()    # Copies the baseline routing table that pyroutelib3 created
         self.routing_states = [self.original_state.copy()]  # Initializes list of state changes with original state only
 
