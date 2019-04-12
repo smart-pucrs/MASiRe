@@ -84,7 +84,7 @@ class Agent:
         self.virtual_storage -= size
         self.virtual_storage_vector.append(item)
 
-    def remove_physical_item(self, item, amount=None):
+    def remove_physical_item(self, item, amount=1):
         """
         [Removes a certain parametrized physical item from the agent's physical storage.
         The agent's current 'free physical space' is increased by the item's size.
@@ -98,23 +98,30 @@ class Agent:
         :return: A list containing all the removed items.
         """
 
-        if self.virtual_storage == self.virtual_capacity:
+        if self.physical_storage == self.physical_capacity:
             raise Failed_item_amount('The agents has no victims or water samples to deliver.')
 
-        if not self.virtual_storage_vector.__contains__(item):
-            raise Failed_unknown_item('No physical item with this ID is storaged.')
+        found_item = False
+        removed = []
+        for stored_item in self.physical_storage_vector:
+            if item['type'] == stored_item.type and amount:
+                found_item = True
+                removed.append(stored_item)
+                amount -= 1
 
-        if amount is None:
-            removed = self.remove(self.physical_storage_vector, item)
-        else:
-            removed = self.remove(self.physical_storage_vector, item, amount)
-            
-        for e in removed:
-            self.physical_storage += e.size
+            elif not amount:
+                break
+
+        if not found_item:
+            raise Failed_unknown_item('No physical item with this ID is stored.')
+
+        for removed_item in removed:
+            self.physical_storage_vector.remove(removed_item)
+            self.physical_storage += removed_item.size
 
         return removed
 
-    def remove_virtual_item(self, item, amount=None):
+    def remove_virtual_item(self, item, amount=1):
         """
         [Removes a certain parametrized virtual item from the agent's virtual storage.
         The agent's current 'free virtual space' is increased by the item's size.
@@ -131,42 +138,23 @@ class Agent:
         if self.virtual_storage == self.role.virual_capacity:
             raise Failed_item_amount('The agents has no photos to deliver.')
 
-        if not self.virtual_storage_vector.__contains__(item):
-            raise Failed_unknown_item('No virtual item with this ID is storaged.')
-
-        if amount is None:
-            removed = self.remove(self.virtual_storage_vector, item)
-        else:
-            removed = self.remove(self.virtual_storage_vector, item, amount)
-
-        for e in removed:
-            self.virtual_storage += e.size
-
-        return removed
-
-    def remove(self, current_items_list, item_type, amount=None):
-        """
-        [Agent's auxiliary method for generic type item removal.]
-
-        :param current_items_list: A list containing all the current items
-        of the agent's specified kind storage (physical or virtual).
-        :param item_type: The type of the item to be removed.
-        :param amount: The amount of the parametrized item to be removed.
-        :return: Returns a list containing all the removed items.
-        """
-
-        if amount is None:
-            amount = len(current_items_list)
-
+        found_item = False
         removed = []
+        for stored_item in self.virtual_storage_vector:
 
-        for item in range(len(current_items_list)):
-            if amount == 0:
-                break
-            
-            if current_items_list[item].type == item_type:
-                removed.append(current_items_list[item])
-                current_items_list.remove(item)
+            if item['type'] == stored_item.type and amount:
+                found_item = True
+                removed.append(stored_item)
                 amount -= 1
+
+            elif not amount:
+                break
+
+        if not found_item:
+            raise Failed_unknown_item('No virtual item with this ID is stored.')
+
+        for removed_item in removed:
+            self.virtual_storage_vector.remove(removed_item)
+            self.virtual_storage += removed_item.size
 
         return removed
