@@ -243,7 +243,8 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for water_sample in self.world.water_samples:
-                    if water_sample.active and water_sample.location == agent.location:
+                    water_sample_location = self.route.get_node_coord(water_sample.node)
+                    if water_sample.active and water_sample_location == agent.location:
                         agent.add_physical_item(water_sample)
                         water_sample.active = False
                         agent.last_action_result = True
