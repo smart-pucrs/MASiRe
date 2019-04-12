@@ -31,6 +31,9 @@ class World:
         self.action_executor = ActionExecutor(config, self)
 
     def percepts(self, step):
+        if step <= 0:
+            return [], [], [], [], []
+
         # Get all active floods
         floods = []
         for idx, flood in enumerate(self.events):
