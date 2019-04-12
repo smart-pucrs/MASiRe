@@ -40,7 +40,7 @@ class ActionExecutor:
 
             self.execute(self.world.agents[token], action, cdm_location)
 
-            action_results.append((obj['token'], self.world.agents[obj['token']].last_action_result))
+            action_results.append((obj['token'], self.world.agents[obj['token']].__dict__))
 
         return action_results
 
