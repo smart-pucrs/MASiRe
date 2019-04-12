@@ -4,7 +4,7 @@ from src.simulation.simulated_enviroment.environment_executors.action_executor i
 from src.simulation.simulated_enviroment.environment_variables.agent import Agent
 from src.simulation.simulated_enviroment.environment_variables.role import Role
 from src.simulation.simulated_enviroment.environment_executors.generator import Generator
-from src.simulation.simulated_enviroment.environment_executors.cdm import Cdm
+from src.simulation.simulated_enviroment.environment_variables.cdm import Cdm
 
 
 class World:
@@ -142,4 +142,4 @@ class World:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
-        return self.action_executor.execute_actions(actions)
+        return self.action_executor.execute_actions(actions, self.cdm.location)
