@@ -38,13 +38,13 @@ class ActionExecutor:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
 
-            self.world.agents[token] = self.execute(self.world.agents[token], action, cdm_location)
+            self.execute(self.world.agents[token], action, cdm_location)
 
             action_results.append((obj['token'], self.world.agents[obj['token']].last_action_result))
 
         return action_results
 
-    def execute(self, agent, action, cdm_location):
+    def execute(self, agent, action_obj, cdm_location):
         """
         [Method that tries to execute a single action for a parametrized agent.
         The action may contain necessary parameters.
@@ -53,19 +53,18 @@ class ActionExecutor:
 
         :param cdm_location: Location of the cdm specified in the config file
         :param agent: Agent responsible for calling a specific command (per step).
-        :param action: The agent's desired action to be executed, including its
+        :param action_obj: The agent's desired action to be executed, including its
         necessary parameters.
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
 
-        if not isinstance(action, str):
-            action = action[0]
-            parameters = action[1:]
-
-        else:
-            action = action
+        if isinstance(action_obj, str):
+            action = action_obj
             parameters = []
+        else:
+            action = action_obj[0]
+            parameters = action_obj[1:]
 
         agent.last_action = action
         agent.last_action_result = False
@@ -91,7 +90,6 @@ class ActionExecutor:
                     location = [parameters[0], parameters[1]]
 
                 if agent.location == location:
-                    # already arrived. raise error?
                     return
 
                 if agent.route is None:
@@ -158,10 +156,10 @@ class ActionExecutor:
                     agent.last_action_result = True
 
                     if len(parameters) == 1:
-                        self.agent_delivery(agent, 'virtual', parameters[0])
+                        self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_delivery(agent, 'virtual', parameters[0], parameters[1])
+                        self.agent_delivery(agent=agent, kind='virtual', item=parameters[0], amount=parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -349,8 +347,6 @@ class ActionExecutor:
         else:
             print('Error: failed')
 
-        return agent
-
     def agent_delivery(self, agent, kind, item, amount=None):
         """
         [Method that ensures the correct delivery of the current agent's items
@@ -378,7 +374,7 @@ class ActionExecutor:
         else:
             if amount < 1 or amount > agent.virtual_storage:
                 raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
-                                         'than what the agent is carrying.')
+                                         'than what the agent is capable of carrying.')
             if kind == 'physical':
                 removed_items = agent.remove_physical_item(item, amount)
 
@@ -393,5 +389,3 @@ class ActionExecutor:
 
         else:
             self.world.cdm.add_virtual_items(removed_items)
-
-        return agent
