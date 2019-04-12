@@ -33,7 +33,7 @@ def respond_to_request_ready(message):
 
     if controller.check_population():
         token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
-        agent = Agent(token, len(controller.agents), None)
+        agent = Agent(token, None)
         controller.agents.append({token: agent})
 
         agent_response['can_connect'] = True
@@ -77,7 +77,7 @@ def respond_to_request(message=''):
             agent_response['agent_connected'] = simulation_response.is_active
             agent_response['agent_info'] = simulation_response
 
-    requests.get('http://localhost:5678/start')
+    requests.get('http://localhost:6789/start')
     emit(f'connection_result/{token}', json.dumps(agent_response))
 
 
@@ -111,7 +111,7 @@ def handle_connection(message):
     emit(f'job_received/{token}', json.dumps(agent_response))
 
 
-@app.route('time_ended', methods=['POST', 'GET'])
+@app.route('/time_ended')
 def finish_step():
     jobs = []
 

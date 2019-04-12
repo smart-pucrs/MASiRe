@@ -1,3 +1,13 @@
+"""
+
+This module was made to replace the singleton used previously,
+creating another layer of communication, this one between the API and the simulation.
+
+To go back to the previous version, one must import the listeners and the simulation singleton in this file
+making the appropriate changes to the file to create a socket server
+Also, one file to start the app is needed, check previous versions of the repo looking after the file
+"start_simulation.py"
+"""
 import json
 from flask import request, jsonify
 from flask import Flask
@@ -13,9 +23,9 @@ def start_instance(path):
 
 
 app = Flask(__name__)
-config_path = root.dir + '/files/config.json'
-simulation = start_instance(config_path)
-simulation.start()
+config_path = root.dir / 'files' / 'config.json'
+simulation = start_instance(str(config_path))
+initial_percepts = json.dumps(str(simulation.start()))
 
 
 @app.route('/register_agent', methods=['POST'])
@@ -23,7 +33,7 @@ def register_agent():
     token = request.get_json()
     if token is not None:
         result = simulation.create_agent(token)
-        return jsonify(result.__dict__)
+        return jsonify({'results': result.__dict__, 'initial_precepts': initial_percepts})
     return 'NoneType'
 
 
@@ -31,7 +41,7 @@ def register_agent():
 def do_actions():
     actions = request.get_json()
     if actions is not None:
-        result = simulation.do_step(actions)
+        result = str(simulation.do_step(actions))
         return jsonify(result)
     return 'NoneType'
 
