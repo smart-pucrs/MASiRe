@@ -19,3 +19,6 @@ class Victim:
         self.lifetime = lifetime
         self.active = False
         self.node = node
+
+    def __repr__(self):
+        return str({'victim': self.__dict__})

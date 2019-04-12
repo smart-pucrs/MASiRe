@@ -24,7 +24,7 @@ class Flood:
         self.victims = victims
 
     def __str__(self):
-        return 'FLOOD COMING'
+        return str({'flood': self.__dict__})
 
     def __repr__(self):
-        return 'FLOOD'
+        return str({'flood': self.__dict__})

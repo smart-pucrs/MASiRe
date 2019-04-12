@@ -15,3 +15,6 @@ class WaterSample:
         self.size = size
         self.node = node
         self.active = False
+
+    def __repr__(self):
+        return str({'water_sample': self.__dict__})

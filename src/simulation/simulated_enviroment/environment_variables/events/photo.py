@@ -17,3 +17,6 @@ class Photo:
         self.victims = victims
         self.node = node
         self.active = False
+
+    def __repr__(self):
+        return str({'photo': self.__dict__})
