@@ -37,8 +37,10 @@ class ActionExecutor:
         for obj in actions:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
+            result = self.execute(self.world.agents[token], action, cdm_location)
 
-            self.execute(self.world.agents[token], action, cdm_location)
+            if result:
+                print(result)
 
             action_results.append((obj['token'], self.world.agents[obj['token']].__dict__))
 
@@ -70,7 +72,7 @@ class ActionExecutor:
         agent.last_action_result = False
 
         if action is None:
-            print('Error: failed_no_action')
+            return 'Error: failed_no_action'
 
         elif action == 'pass':
             agent.last_action_result = True
@@ -102,16 +104,16 @@ class ActionExecutor:
                 agent.location = agent.route.next_node()
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_unknown_facility as e:
-                print(e.message)
+                return e.message
 
             except Failed_no_route as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'deliver_physical':
             try:
@@ -130,22 +132,22 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_invalid_kind as e:
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print(e.message)
+                return e.message
 
             except Failed_unknown_item as e:
-                print(e.message)
+                return e.message
 
             except Failed_item_amount as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'deliver_virtual':
             try:
@@ -164,22 +166,22 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_invalid_kind as e:
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print(e.message)
+                return e.message
 
             except Failed_unknown_item as e:
-                print(e.message)
+                return e.message
 
             except Failed_item_amount as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'charge':
             try:
@@ -194,13 +196,13 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'rescue_victim':
             try:
@@ -219,23 +221,19 @@ class ActionExecutor:
                     raise Failed_unknown_item('No victim by the given ID is known.')
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
-                print(e.message)
+                return e.message
 
             except Failed_unknown_item as e:
-                print('Error: failed_unknown_item')
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print('Error: failed_location')
-                print(e.message)
+                return e.message
 
             except Failed_capacity as e:
-                print('Error: failed_capacity')
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'collect_water':
             try:
@@ -254,16 +252,16 @@ class ActionExecutor:
                     raise Failed_location('The agent is not in a location with a water sample.')
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print(e.message)
+                return e.message
 
             except Failed_capacity as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         elif action == 'photograph':
             try:
@@ -282,16 +280,16 @@ class ActionExecutor:
                     raise Failed_location('The agent is not in a location with a photograph event.')
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_location as e:
-                print(e.message)
+                return e.message
 
             except Failed_capacity as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         # not working
         elif action == 'search_social_asset':
@@ -316,11 +314,10 @@ class ActionExecutor:
                         agent.last_action_result = True
 
             except Failed_wrong_param as e:
-                print('Error: failed_wrong_param')
-                print(e.message)
+                return e.message
 
-            except:
-                print('Error: failed')
+            except Exception as e:
+                return e
 
         # assumes the only virtual items in the simulation are photos
         elif action == 'analyze_photo':
@@ -341,16 +338,16 @@ class ActionExecutor:
                 agent.virtual_storage = agent.virtual_capacity
 
             except Failed_wrong_param as e:
-                print(e.message)
+                return e.message
 
             except Failed_item_amount as e:
-                print(e.message)
+                return e.message
 
             except Exception as e:
-                print(e)
+                return e
 
         else:
-            print('Error: failed')
+            return 'Error: failed'
 
     def agent_delivery(self, agent, kind, item, amount=None):
         """
