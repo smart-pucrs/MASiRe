@@ -2,6 +2,7 @@
 import math
 import directory_path as root
 from pyroutelib3 import Router
+from itertools import zip_longest
 
 
 class Route:
@@ -105,11 +106,11 @@ class Route:
         for i in range(len(route) - 1):
             curr_distance = self.node_distance(route[i], route[i + 1])
 
-            if acc + curr_distance > distance:  # if trying to walk more than the maximum defined value
+            if acc + curr_distance > distance:                                      # if trying to walk more than the maximum defined value
                 return final_location, self.router.nodeLatLon(final_location), acc  # then stop at current node
-            acc += curr_distance  # was able to walk further along
-            final_location = route[i + 1]  # new location
-        return final_location, self.router.nodeLatLon(final_location), acc  # reached the end of the route
+            acc += curr_distance                                                    # was able to walk further along
+            final_location = route[i + 1]                                           # new location
+        return final_location, self.router.nodeLatLon(final_location), acc          # reached the end of the route
 
     def total_route_length(self, route):
         """
@@ -132,10 +133,10 @@ class Route:
 
         print("Total: %.2fm" % (math.fsum(distances) * 1000))
 
-    def get_route(self, start, end):
-        start_node = self.router.findNode(*start)
-        end_node = self.router.findNode(*end)
-        return self.router.doRoute(start_node, end_node)
+    def get_route(self, start, end, drone=False, speed=4):
+        if drone:
+            return self.generate_coordinates_for_drones(start, end, speed)
+        return self.router.doRoute(start, end)
 
     def nodes_in_radius(self, coord, radius):
         """
@@ -193,5 +194,52 @@ class Route:
 
         return routing
 
+    def generate_coordinates_for_drones(self, start, end, speed):
+        actual_x, actual_y = start
 
+        if actual_x > end[0]:
+            x_axis = self.decrease_until_reached(actual_x, end[0], speed) or [end[0]]
+        else:
+            x_axis = self.increase_until_reached(actual_x, end[0], speed) or [end[0]]
 
+        if actual_y > end[1]:
+            y_axis = self.decrease_until_reached(actual_y, end[1], speed) or [end[1]]
+        else:
+            y_axis = self.increase_until_reached(actual_y, end[1], speed) or [end[1]]
+
+        longest = y_axis[-1] if len(x_axis) > len(y_axis) else x_axis[-1]
+        distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
+
+        return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
+
+    def decrease_until_reached(self, start, end, speed):
+        if start == end:
+            return [end]
+
+        points = []
+        while True:
+            if start - .0001 * speed < end:
+                points.append(end)
+                break
+            else:
+                start -= .0001 * speed
+
+            points.append(start)
+
+        return points
+
+    def increase_until_reached(self, start, end, speed):
+        if start == end:
+            return [end]
+
+        points = []
+        while True:
+            if start + .0001 * speed > end:
+                points.append(end)
+                break
+            else:
+                start += .0001 * speed
+
+            points.append(start)
+
+        return points

@@ -95,13 +95,20 @@ class ActionExecutor:
                     return
 
                 if agent.route is None:
-                    agent.route = self.route.get_route(tuple(agent.location), cdm_location)
+                    if agent.role == 'drone':
+                        agent.route, distance = self.route.get_route(agent.location, location, True, int(agent.speed)/2)
+                        agent.destination_distance = distance
+
+                    else:
+                        # creates route for other kind of agents
+                        pass
 
                     if agent.route is None:
                         raise Failed_no_route()
 
                 agent.last_action_result = True
-                agent.location = agent.route.next_node()
+                agent.discharge()
+                agent.location = agent.route.pop(0)
 
             except Failed_wrong_param as e:
                 return e.message

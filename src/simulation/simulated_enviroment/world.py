@@ -126,7 +126,7 @@ class World:
         :return: A agent containing all the information recovered from the role
         """
         role = self.free_roles[self.agent_counter]
-        agent = Agent(token, self.roles[role], role)
+        agent = Agent(token, self.roles[role], role, self.cdm.location)
         self.agents[token] = agent
         self.agent_counter += 1
         return agent

@@ -5,7 +5,7 @@ from src.simulation.exceptions.exceptions import *
 
 class Agent:
 
-    def __init__(self, agent_token, role, role_name):
+    def __init__(self, agent_token, role, role_name, cdm_location):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
@@ -17,7 +17,7 @@ class Agent:
         self.agent_token = agent_token
         self.last_action = None
         self.last_action_result = False
-        self.location = [0, 0]
+        self.location = cdm_location
         self.route = None
         self.physical_storage_vector = []
         self.virtual_storage_vector = []
@@ -29,6 +29,8 @@ class Agent:
         self.physical_capacity = role.physical_capacity
         self.actual_battery = role.battery
         self.max_charge = role.battery
+        self.speed = role.speed
+        self.destination_distance = 0
         self.abilities = role.abilities
 
     def __repr__(self):
@@ -38,8 +40,10 @@ class Agent:
         """
         [Changes the agent's battery to zero.]
         """
-
-        self.actual_battery = 0
+        if self.destination_distance:
+            self.actual_battery = self.actual_battery - int(self.speed/5) \
+                if self.actual_battery - self.speed/5 \
+                else 0
 
     def charge(self):
         """
