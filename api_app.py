@@ -1,23 +1,22 @@
 import jwt
 import json
 import requests
-from flask import Flask
+import time
+import multiprocessing
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_socketio import SocketIO
-from flask_socketio import emit
 from src.communication.controller import Controller
 from src.communication.temporary_agent import Agent
 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 app.debug = False
-CORS(app)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
+CORS(app)
 
 
-@socketio.on('first_message')
-def respond_to_request_ready(message):
+@app.route('/connect_agent', methods=['POST'])
+def respond_to_request_ready():
     """
         Receive the agent information encoded and decode it
         Add the decoded agent to a list inside the agent_manager
@@ -26,28 +25,29 @@ def respond_to_request_ready(message):
             First containing the agents_list
             Second containing the simulation pre step
     """
-
     agent_response = {'can_connect': False}
-
-    agent_info = json.loads(message)
+    agent_info = request.get_json(force=True)
 
     if controller.check_population():
         token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
-        agent = Agent(token, None)
+
+        agent = Agent(token, None, agent_info['url'])
+
         controller.agents.append({token: agent})
 
         agent_response['can_connect'] = True
         agent_response['data'] = token
-        event = f'received/{str(token)}'
 
-    else:
-        event = f'received/{agent_info.name}'
+    try:
+        requests.post(agent_info['url'], json=agent_response)
+    except requests.exceptions.ConnectionError:
+        message = 'Agent is not online'
+        print(message)
+        return jsonify(message)
 
-    emit(event, agent_response)
 
-
-@socketio.on('connect_agent')
-def respond_to_request(message=''):
+@app.route('/validate_agent', methods=['POST'])
+def respond_to_request():
     """"
         Handle all the connections
 
@@ -63,11 +63,14 @@ def respond_to_request(message=''):
                 Reponse receive False
 
         Send to the agents the response from the method
-
-        :param message: the JSON agent
         """
-    token = json.loads(message)
-    simulation_response = requests.post('http://localhost:5000/register_agent', json=token).json()
+    token = json.loads(request.get_json(force=True))
+    try:
+        simulation_response = requests.post('http://localhost:5000/register_agent', json=token).json()
+    except requests.exceptions.ConnectionError:
+        message = 'Simulation is not online'
+        print(message)
+        return jsonify(message)
 
     agent_response = {'agent_connected': False}
 
@@ -77,12 +80,16 @@ def respond_to_request(message=''):
             agent_response['agent_connected'] = simulation_response.is_active
             agent_response['agent_info'] = simulation_response
 
-    requests.get('http://localhost:6789/start')
-    emit(f'connection_result/{token}', json.dumps(agent_response))
+    try:
+        requests.post(controller.agents[token].url, json=agent_response)
+    except requests.exceptions.ConnectionError:
+        message = 'Agent is not online'
+        print(message)
+        return jsonify(message)
 
 
-@socketio.on('receive_jobs')
-def handle_connection(message):
+@app.route('/job', methods=['POST'])
+def handle_connection():
     """
     Receive all the jobs from the agents
 
@@ -93,13 +100,11 @@ def handle_connection(message):
     Emit response to the agent
 
     Else
-    Emit response containing False to the agents
-
-    :param message: the JSON agent
+    Emit response containing False to the agent
     """
     agent_response = {'job_received': False}
 
-    message = json.loads(message)
+    message = json.loads(request.get_json(force=True))
     token = message['token']
     action = message['action']
 
@@ -108,29 +113,52 @@ def handle_connection(message):
         controller.agents[token].action = (action, location)
         agent_response['job_delivered'] = True
 
-    emit(f'job_received/{token}', json.dumps(agent_response))
+    try:
+        requests.post(controller.agents[token].url, json=agent_response)
+    except requests.exceptions.ConnectionError:
+        message = 'Simulation is not online'
+        print(message)
+        return jsonify(message)
 
 
-@app.route('/time_ended')
+@app.route('/time_ended', methods=['GET'])
 def finish_step():
+
+    if request.remote_addr != '127.0.0.1':
+        return jsonify(message='This endpoint can not be accessed.')
+
     jobs = []
 
     for token in controller.agents:
-        internal_id = controller.agents[token]
         action_name = controller.agents[token].action[0]
 
         action_params = []
         for param in controller.agents[token].action[1]:
             action_params.append(param)
 
-        jobs.append((internal_id, (action_name, action_params)))
+        jobs.append((token, (action_name, action_params)))
 
     actions = json.dumps(jobs)
-    simulation_response = requests.post('http://localhost/5000', json=actions)
+    try:
+        simulation_response = requests.post('http://localhost/8910/do_actions', json=actions).json()
+    except requests.exceptions.ConnectionError:
+        message = 'Simulation is not online'
+        print(message)
+        return jsonify(message)
 
-    emit('job_done', simulation_response)
-    requests.get('http://localhost:5678/start')
+    for token in simulation_response:
+        requests.get(controller.agents[token].url, json=simulation_response[token])
+
+    multiprocessing.Process(target=counter, args=(10,)).start()
 
 
-controller = Controller()
-socketio.run(app, port=12345, debug=True)
+def counter(*args):
+    time.sleep(args[0])
+    print('Time ended!')
+    requests.get('http://localhost:12345/time_ended')
+
+
+if __name__ == '__main__':
+    controller = Controller()
+    multiprocessing.Process(target=counter, args=(50,)).start()
+    app.run(port=12345)

@@ -1,5 +1,4 @@
 """
-
 This module was made to replace the singleton used previously,
 creating another layer of communication, this one between the API and the simulation.
 
@@ -30,6 +29,9 @@ initial_percepts = json.dumps(str(simulation.start()))
 
 @app.route('/register_agent', methods=['POST'])
 def register_agent():
+    if request.remote_addr != '127.0.0.1':
+        return jsonify(message='This endpoint can not be accessed.')
+
     token = request.get_json()
     if token is not None:
         result = simulation.create_agent(token)
@@ -39,6 +41,9 @@ def register_agent():
 
 @app.route('/do_actions', methods=['POST'])
 def do_actions():
+    if request.remote_addr != '127.0.0.1':
+        return jsonify(message='This endpoint can not be accessed.')
+
     actions = request.get_json()
     if actions is not None:
         result = str(simulation.do_step(actions))
