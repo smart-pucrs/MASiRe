@@ -45,6 +45,9 @@ class Agent:
                 if self.actual_battery - self.speed/5 \
                 else 0
 
+    def check_battery(self):
+        return self.actual_battery - int(self.speed/5) if self.actual_battery - self.speed/5 else 0
+
     def charge(self):
         """
         [Changes the agent's battery to its full charge capacity.]

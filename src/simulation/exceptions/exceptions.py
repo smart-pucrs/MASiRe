@@ -48,3 +48,9 @@ class Failed_invalid_kind(Exception):
 
     def __init__(self, message):
         self.message = message
+
+
+class Failed_insufficient_battery(Exception):
+
+    def __init__(self, message):
+        self.message = message
