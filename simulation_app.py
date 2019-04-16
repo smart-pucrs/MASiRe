@@ -32,7 +32,7 @@ def register_agent():
     if request.remote_addr != '127.0.0.1':
         return jsonify(message='This endpoint can not be accessed.')
 
-    token = request.get_json()
+    token = request.get_json(force=True)
     if token is not None:
         result = simulation.create_agent(token)
         return jsonify({'results': result.__dict__, 'initial_precepts': initial_percepts})
@@ -44,7 +44,7 @@ def do_actions():
     if request.remote_addr != '127.0.0.1':
         return jsonify(message='This endpoint can not be accessed.')
 
-    actions = request.get_json()
+    actions = request.get_json(force=True)
     if actions is not None:
         result = str(simulation.do_step(actions))
         return jsonify(result)
