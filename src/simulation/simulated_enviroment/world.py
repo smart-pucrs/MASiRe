@@ -32,7 +32,7 @@ class World:
 
     def percepts(self, step):
         if step <= 0:
-            return [], [], [], [], []
+            return [[], [], [], [], []]
 
         # Get all active floods
         floods = []
@@ -66,7 +66,7 @@ class World:
             if victim.active:
                 victims.append(victim)
 
-        return floods, water_samples, photos, victims
+        return [floods, water_samples, photos, victims]
 
     def percepts_by_step(self, step):
         """
