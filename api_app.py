@@ -107,10 +107,9 @@ def handle_connection():
     token = message['token']
     action = message['action']
 
-    if action == 'move':
-        location = [*message['parameters']]
-        controller.agents[token].action = (action, location)
-        agent_response['job_delivered'] = True
+    params = [*message['parameters']]
+    controller.agents[token].action = (action, params)
+    agent_response['job_delivered'] = True
 
     try:
         return requests.post(controller.agents[token].url, json=agent_response).text
