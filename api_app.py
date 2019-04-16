@@ -31,7 +31,7 @@ def respond_to_request_ready():
     if controller.check_population():
         token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
-        agent = Agent(token, None, agent_info['url'])
+        agent = Agent(token, agent_info['url'])
 
         controller.agents.append({token: agent})
 
