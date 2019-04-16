@@ -33,7 +33,7 @@ def respond_to_request_ready():
 
         agent = Agent(token, agent_info['url'])
 
-        controller.agents.append({token: agent})
+        controller.agents[token] = agent
 
         agent_response['can_connect'] = True
         agent_response['data'] = token
@@ -76,8 +76,8 @@ def respond_to_request():
 
     if controller.check_agent(token):
         if controller.check_timer():
-            controller.agents[token].connected = simulation_response.is_active
-            agent_response['agent_connected'] = simulation_response.is_active
+            controller.agents[token].connected = True
+            agent_response['agent_connected'] = True
             agent_response['agent_info'] = simulation_response
 
     try:

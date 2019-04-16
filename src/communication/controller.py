@@ -4,7 +4,7 @@ import time
 class Controller:
 
     def __init__(self):
-        self.agents = []
+        self.agents = {}
         self.timer = None
 
     def check_population(self):
@@ -22,9 +22,9 @@ class Controller:
         else:
             return False
 
-    def check_agent(self, agent):
-        for ag in self.agents:
-            if self.agents[ag] == agent['token']:
+    def check_agent(self, agent_token):
+        for token in self.agents:
+            if token == agent_token:
                 return True
 
         return False
