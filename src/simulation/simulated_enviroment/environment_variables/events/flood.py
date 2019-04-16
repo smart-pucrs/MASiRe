@@ -15,16 +15,21 @@ class Flood:
         :param water_samples: All 'collectible water samples' that were randomly generated
         over a certain flood instance.
         """
-
+        self.type = 'flood'
+        self.active = False
         self.period = period
         self.dimensions = dimensions
         self.photos = photos
         self.water_samples = water_samples
-        self.active = False
         self.victims = victims
 
-    def __str__(self):
-        return str({'flood': self.__dict__})
-
-    def __repr__(self):
-        return str({'flood': self.__dict__})
+    def json(self):
+        """Return a json like representation of the object"""
+        photos = [photo.json() for photo in self.photos]
+        victims = [victim.json() for victim in self.victims]
+        water_samples = [water_sample.json() for water_sample in self.water_samples]
+        copy = self.__dict__.copy()
+        copy['photos'] = photos
+        copy['victims'] = victims
+        copy['water_samples'] = water_samples
+        return copy

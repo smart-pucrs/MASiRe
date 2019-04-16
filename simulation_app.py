@@ -35,7 +35,7 @@ def register_agent():
     token = request.get_json(force=True)
     if token is not None:
         result = simulation.create_agent(token)
-        return jsonify({'results': result.__dict__, 'initial_precepts': initial_percepts})
+        return jsonify({'results': result.__dict__, 'initial_percepts': initial_percepts})
     return 'NoneType'
 
 
@@ -46,7 +46,20 @@ def do_actions():
 
     actions = request.get_json(force=True)
     if actions is not None:
-        result = str(simulation.do_step(actions))
+        result = simulation.do_step(actions)
+
+        current = result['events']['current_event']
+        json_events = {'current_event': None, 'pending_events': []}
+        if current is not None:
+            json_events['current_event'] = current.json()
+
+        for idx, event_list in enumerate(result['events']['pending_events']):
+            json_events['pending_events'].append([])
+            for event in event_list:
+                json_events['pending_events'][idx].append(event.json())
+
+        result['events'] = json_events
+
         return jsonify(result)
     return 'NoneType'
 

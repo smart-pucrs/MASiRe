@@ -20,5 +20,5 @@ class Victim:
         self.active = False
         self.node = node
 
-    def __repr__(self):
-        return str({'victim': self.__dict__})
+    def json(self):
+        return self.__dict__

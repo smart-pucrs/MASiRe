@@ -16,5 +16,5 @@ class WaterSample:
         self.node = node
         self.active = False
 
-    def __repr__(self):
-        return str({'water_sample': self.__dict__})
+    def json(self):
+        return self.__dict__

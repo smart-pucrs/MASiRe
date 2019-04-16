@@ -18,5 +18,9 @@ class Photo:
         self.node = node
         self.active = False
 
-    def __repr__(self):
-        return str({'photo': self.__dict__})
+    def json(self):
+        # victims = [victim.json() for victim in self.victims if victim.active]
+        copy = self.__dict__.copy()
+        del copy['victims']
+        return copy
+
