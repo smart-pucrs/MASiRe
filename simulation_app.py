@@ -24,7 +24,7 @@ def start_instance(path):
 app = Flask(__name__)
 config_path = root.dir / 'files' / 'config.json'
 simulation = start_instance(str(config_path))
-initial_percepts = json.dumps(str(simulation.start()))
+initial_percepts = simulation.start()
 
 
 @app.route('/register_agent', methods=['POST'])

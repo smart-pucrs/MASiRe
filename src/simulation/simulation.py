@@ -12,6 +12,7 @@ class Simulation:
         """
         self.step = 0
         self.world = World(config)
+        self.pre_events = None
 
     def start(self):
         """
@@ -26,11 +27,11 @@ class Simulation:
         return self.initial_percepts()
 
     def initial_percepts(self):
-        events = self.do_pre_step()
+        self.pre_events = self.do_pre_step()
         map_config = self.world.config['map']
         for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
             del map_config[key]
-        return {'events': events, 'map_config': map_config}
+        return {'map_config': map_config}
 
     def create_agent(self, token):
         """
@@ -66,7 +67,7 @@ class Simulation:
                 victim.active = True
                 self.world.victims.append(victim)
 
-        return {'current_events': str(event)}, {'pending_events': pending_events}
+        return {'current_event': event, 'pending_events': pending_events}
 
     def do_step(self, actions):
         """
@@ -76,5 +77,7 @@ class Simulation:
         marking it with a success or failure flag.
         """
         action_results = self.world.execute_actions(actions)
+        results = {'action_results': action_results, 'events': self.pre_events.copy()}
         self.step += 1
-        return {'action_results': action_results, 'events': self.do_pre_step()}
+        self.pre_events = self.do_pre_step()
+        return results
