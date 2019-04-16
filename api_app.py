@@ -64,16 +64,15 @@ def respond_to_request():
 
         Send to the agents the response from the method
         """
-    token = json.loads(request.get_json(force=True))
+    token = request.get_json(force=True)
     try:
-        simulation_response = requests.post('http://localhost:5000/register_agent', json=token).json()
+        simulation_response = requests.post('http://localhost:8910/register_agent', json=token).json()
     except requests.exceptions.ConnectionError:
         message = 'Simulation is not online'
         print(message)
         return jsonify(message)
 
     agent_response = {'agent_connected': False}
-
     if controller.check_agent(token):
         if controller.check_timer():
             controller.agents[token].connected = True
@@ -109,7 +108,7 @@ def handle_connection():
     action = message['action']
 
     if action == 'move':
-        location = (message['lat'], message['lon'])
+        location = [*message['parameters']]
         controller.agents[token].action = (action, location)
         agent_response['job_delivered'] = True
 
@@ -140,7 +139,7 @@ def finish_step():
 
     actions = json.dumps(jobs)
     try:
-        simulation_response = requests.post('http://localhost/8910/do_actions', json=actions).json()
+        simulation_response = requests.post('http://localhost:8910/do_actions', json=actions).json()
     except requests.exceptions.ConnectionError:
         message = 'Simulation is not online'
         print(message)
@@ -154,11 +153,10 @@ def finish_step():
 
 def counter(*args):
     time.sleep(args[0])
-    print('Time ended!')
     requests.get('http://localhost:12345/time_ended')
 
 
 if __name__ == '__main__':
     controller = Controller()
-    multiprocessing.Process(target=counter, args=(50,)).start()
+    multiprocessing.Process(target=counter, args=(3600,)).start()
     app.run(port=12345)
