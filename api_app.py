@@ -39,7 +39,7 @@ def respond_to_request_ready():
         agent_response['data'] = token
 
     try:
-        requests.post(agent_info['url'], json=agent_response)
+        return jsonify(agent_response)
     except requests.exceptions.ConnectionError:
         message = 'Agent is not online'
         print(message)
@@ -81,7 +81,7 @@ def respond_to_request():
             agent_response['agent_info'] = simulation_response
 
     try:
-        requests.post(controller.agents[token].url, json=agent_response)
+        return jsonify(agent_response)
     except requests.exceptions.ConnectionError:
         message = 'Agent is not online'
         print(message)
@@ -114,7 +114,7 @@ def handle_connection():
         agent_response['job_delivered'] = True
 
     try:
-        requests.post(controller.agents[token].url, json=agent_response)
+        return requests.post(controller.agents[token].url, json=agent_response).text
     except requests.exceptions.ConnectionError:
         message = 'Simulation is not online'
         print(message)
