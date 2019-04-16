@@ -133,10 +133,15 @@ class Route:
 
         print("Total: %.2fm" % (math.fsum(distances) * 1000))
 
-    def get_route(self, start, end, drone=False, speed=4):
+    def get_route(self, start, end, drone, speed=4):
         if drone:
             return self.generate_coordinates_for_drones(start, end, speed)
-        return self.router.doRoute(start, end)
+        coords = []
+        result, nodes = self.router.doRoute(start, end)
+        for node in nodes:
+            coords.append(list(self.get_node_coord(node)))
+
+        return result, coords
 
     def nodes_in_radius(self, coord, radius):
         """
