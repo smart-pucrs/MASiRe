@@ -1,6 +1,6 @@
-flask_socketio
 flask
 flask_cors
 pyjwt
 eventlet
-pyroutelib3
+pyroutelib3==1.1
+requests
