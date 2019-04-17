@@ -110,7 +110,7 @@ def get_job():
 
 @app.route('/time_ended', methods=['GET'])
 def finish_step():
-    """S"""
+    """Send all the jobs to the simulation and save the results."""
     if request.remote_addr != base_url:
         return jsonify("Error")
 
@@ -125,15 +125,14 @@ def finish_step():
 
         jobs.append((token, (action_name, action_params)))
 
-    actions = json.dumps(jobs)
     try:
         controller.simulation_response = \
-            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=actions).json()
+            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
-        multiprocessing.Process(target=counter, args=(step_time,)).start()
 
+    multiprocessing.Process(target=counter, args=(step_time,)).start()
     return jsonify("")
 
 
