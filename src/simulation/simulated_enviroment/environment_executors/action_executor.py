@@ -97,7 +97,7 @@ class ActionExecutor:
                 if not agent.check_battery():
                     raise Failed_insufficient_battery('Not enough battery to complete this step')
 
-                if agent.route is None:
+                if not agent.route:
                     if agent.role == 'drone':
                         agent.route, distance = self.route.get_route(agent.location, location, True, int(agent.speed)/2)
                         agent.destination_distance = distance

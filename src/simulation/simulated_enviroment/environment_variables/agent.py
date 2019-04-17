@@ -18,7 +18,7 @@ class Agent:
         self.last_action = None
         self.last_action_result = False
         self.location = cdm_location
-        self.route = None
+        self.route = []
         self.physical_storage_vector = []
         self.virtual_storage_vector = []
         self.is_active = True
