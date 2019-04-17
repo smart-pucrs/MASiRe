@@ -6,6 +6,7 @@ class Controller:
     def __init__(self):
         self.agents = {}
         self.timer = None
+        self.simulation_response = None
 
     def check_population(self):
         if len(self.agents) <= 5:
