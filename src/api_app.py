@@ -10,7 +10,7 @@ from src.communication.controller import Controller
 from src.communication.temporary_agent import Agent
 
 
-print(sys.argv[1:])
+base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]
 
 app = Flask(__name__)
 app.debug = False
@@ -69,7 +69,9 @@ def respond_to_request():
         """
     token = request.get_json(force=True)
     try:
-        simulation_response = requests.post('http://localhost:8910/register_agent', json=token).json()
+        simulation_response = \
+            requests.post(f'http://{base_url}:{simulation_port}/register_agent', json=token).json()
+
     except requests.exceptions.ConnectionError:
         message = 'Simulation is not online'
         print(message)
@@ -80,6 +82,7 @@ def respond_to_request():
         if controller.check_timer():
             controller.agents[token].connected = True
             agent_response['agent_connected'] = True
+            agent_response['step_time'] = step_time
             agent_response['agent_info'] = simulation_response
 
     try:
@@ -125,8 +128,8 @@ def handle_connection():
 @app.route('/time_ended', methods=['GET'])
 def finish_step():
 
-    if request.remote_addr != '127.0.0.1':
-        return jsonify(message='This endpoint can not be accessed.')
+    if request.remote_addr != base_url:
+        return jsonify("Error")
 
     jobs = []
 
@@ -141,21 +144,24 @@ def finish_step():
 
     actions = json.dumps(jobs)
     try:
-        controller.simulation_response = requests.post('http://localhost:8910/do_actions', json=actions).json()
+        controller.simulation_response = \
+            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=actions).json()
+
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
-        multiprocessing.Process(target=counter, args=(3600,)).start()
+        multiprocessing.Process(target=counter, args=(step_time,)).start()
 
 
 def counter(sec):
+    sec = int(sec)
     time.sleep(sec)
     try:
-        requests.post('http://localhost:12345/time_ended')
+        requests.get(f'http://{base_url}:{port}/time_ended')
     except Exception as e:
         print(e)
 
 
 if __name__ == '__main__':
     controller = Controller()
-    multiprocessing.Process(target=counter, args=(3600,)).start()
+    multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
     app.run(port=port)
