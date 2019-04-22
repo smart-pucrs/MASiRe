@@ -49,6 +49,9 @@ def do_actions():
     if actions is not None:
         result = simulation.do_step(actions)
 
+        if isinstance(result, str):
+            return jsonify(result)
+
         current = result['events']['current_event']
         json_events = {'current_event': None, 'pending_events': []}
         if current is not None:

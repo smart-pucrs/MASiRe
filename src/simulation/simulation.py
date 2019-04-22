@@ -50,7 +50,10 @@ class Simulation:
         :return: A dict containing every agent's step percepts.
         """
 
-        event = self.world.events[self.step]
+        try:
+            event = self.world.events[self.step]
+        except IndexError:
+            return None
         pending_events = self.world.percepts(self.step)
 
         if event:
@@ -76,6 +79,9 @@ class Simulation:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
+        if self.pre_events is None:
+            return 'Simulation Ended'
+
         action_results = self.world.execute_actions(actions)
         results = {'action_results': action_results, 'events': self.pre_events.copy()}
         self.step += 1
