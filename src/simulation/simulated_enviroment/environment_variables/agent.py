@@ -1,6 +1,6 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Entity.java
 
-from src.simulation.exceptions.exceptions import *
+from simulation.exceptions.exceptions import *
 
 
 class Agent:

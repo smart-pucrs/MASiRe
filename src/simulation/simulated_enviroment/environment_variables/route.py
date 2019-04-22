@@ -1,14 +1,14 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data/Route.java
 import math
-import directory_path as root
 from pyroutelib3 import Router
 from itertools import zip_longest
+from directory_path import dir as root
 
 
 class Route:
 
     def __init__(self, map):
-        map_file_location = root.dir / map
+        map_file_location = root / map
         self.router = Router("car", str(map_file_location)) # Initialise router object from pyroutelib3
         self.original_state = self.router.routing.copy()    # Copies the baseline routing table that pyroutelib3 created
         self.routing_states = [self.original_state.copy()]  # Initializes list of state changes with original state only

@@ -4,11 +4,11 @@
 import random
 import math
 # import json
-from src.simulation.simulated_enviroment.environment_variables.events.flood import Flood
-from src.simulation.simulated_enviroment.environment_variables.events.photo import Photo
-from src.simulation.simulated_enviroment.environment_variables.events.victim import Victim
-from src.simulation.simulated_enviroment.environment_variables.events.water_sample import WaterSample
-from src.simulation.simulated_enviroment.environment_variables.route import Route
+from simulation.simulated_enviroment.environment_variables.events.flood import Flood
+from simulation.simulated_enviroment.environment_variables.events.photo import Photo
+from simulation.simulated_enviroment.environment_variables.events.victim import Victim
+from simulation.simulated_enviroment.environment_variables.events.water_sample import WaterSample
+from simulation.simulated_enviroment.environment_variables.route import Route
 
 
 class Generator:

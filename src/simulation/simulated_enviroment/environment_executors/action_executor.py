@@ -1,6 +1,6 @@
 # based https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 import random
-from src.simulation.exceptions.exceptions import *
+from simulation.exceptions.exceptions import *
 
 
 class ActionExecutor:

@@ -6,8 +6,8 @@ import sys
 import multiprocessing
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from src.communication.controller import Controller
-from src.communication.temporary_agent import Agent
+from communication.controller import Controller
+from communication.temporary_agent import Agent
 
 
 base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]

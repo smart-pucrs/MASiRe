@@ -1,8 +1,11 @@
 import os
+import pathlib
 import argparse
 import multiprocessing
 import subprocess
-from directory_path import dir as root
+
+
+root = pathlib.Path(__file__).parent.absolute()
 
 
 def start_simulation(s_args, python_version, path):
