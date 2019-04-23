@@ -1,5 +1,4 @@
 import jwt
-import json
 import requests
 import time
 import sys
@@ -27,7 +26,7 @@ def get_agent_token():
     if controller.check_population():
         token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
-        agent = Agent(token, agent_info['url'])
+        agent = Agent(token, agent_info)
 
         controller.agents[token] = agent
 
@@ -53,7 +52,8 @@ def validate_agent_token():
             requests.post(f'http://{base_url}:{simulation_port}/register_agent', json=token).json()
 
     except requests.exceptions.ConnectionError:
-        return jsonify(agent_response, message='Simulation is not online')
+        agent_response['message'] = 'Simulation is not online'
+        return jsonify(agent_response)
 
     if controller.check_agent(token):
         if controller.check_timer():
@@ -117,11 +117,8 @@ def finish_step():
     jobs = []
 
     for token in controller.agents:
-        action_name = controller.agents[token].action[0]
-
-        action_params = []
-        for param in controller.agents[token].action[1]:
-            action_params.append(param)
+        action_name = controller.agents[token].action_name
+        action_params = controller.agents[token].action_param
 
         jobs.append((token, (action_name, action_params)))
 
