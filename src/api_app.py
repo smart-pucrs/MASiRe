@@ -7,6 +7,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from communication.controller import Controller
 from communication.temporary_agent import Agent
+from waitress import serve
 
 
 base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]
@@ -145,4 +146,4 @@ def counter(sec):
 if __name__ == '__main__':
     controller = Controller()
     multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
-    app.run(port=port)
+    serve(app, host=base_url, port=port)

@@ -13,6 +13,7 @@ from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
 from simulation.simulation import Simulation
+from waitress import serve
 
 config_path, base_url, port = sys.argv[1:]
 
@@ -72,4 +73,4 @@ if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    app.run(port=port)
+    serve(app, host=base_url, port=port)
