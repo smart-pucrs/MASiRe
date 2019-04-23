@@ -232,6 +232,7 @@ class ActionExecutor:
                     if victim.active and parameters[0] == victim.id and victim_location == agent.location:
                         agent.add_physical_item(victim)
                         victim.active = False
+                        victim.in_photo = False
                         agent.last_action_result = True
                         break
 

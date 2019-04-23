@@ -68,23 +68,11 @@ class World:
 
         return [floods, water_samples, photos, victims]
 
-    def percepts_by_step(self, step):
-        """
-        [Method that generates each step's percepts.]
-        
-        :param step: The step number the simulation is in
-        :return: Three lists, each one containing information about
-        the active events of the simulation and one Flood object
-        """
-        if self.events[step] is None:
-            return []
-
-        else:
-            flood = self.events[step]
-            water_samples = [water_sample for water_sample in flood.water_samples if water_sample.active]
-            photos = [photo for photo in flood.photos if photo.active]
-            victims = [victim for victim in flood.victims if victim.active]
-            return flood, water_samples, photos, victims
+    def events_completed(self):
+        victims = [victim for victim in self.victims if not victim.active and not victim.in_photo]
+        photos = [photo for photo in self.photos if not photo.active]
+        water_samples = [water_sample for water_sample in self.water_samples if not water_sample.active]
+        return [victims, photos, water_samples]
 
     def generate_events(self):
         """
@@ -117,6 +105,8 @@ class World:
         for role in self.config['agents']:
             role = [role] * self.config['agents'][role]
             self.free_roles.extend(role)
+
+        return set(self.free_roles)
 
     def create_agent(self, token):
         """

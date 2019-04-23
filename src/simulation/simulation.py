@@ -1,4 +1,5 @@
 from simulation.simulated_enviroment.world import World
+from simulation.log_recorder import Logger
 
 
 class Simulation:
@@ -13,6 +14,7 @@ class Simulation:
         self.step = 0
         self.world = World(config)
         self.pre_events = None
+        self.logger = Logger(config['map']['id'])
 
     def start(self):
         """
@@ -23,15 +25,20 @@ class Simulation:
         containing the agent's initial percepts.
         """
         self.world.generate_events()
-        self.world.create_roles()
-        return self.initial_percepts()
+        roles = self.world.create_roles()
+        agent_percepts, full_percepts = self.initial_percepts()
+
+        self.logger.register_perceptions(percepts=full_percepts, roles=roles,
+                                         agent_percepts=agent_percepts, seed=full_percepts['randomSeed'])
+        return agent_percepts
 
     def initial_percepts(self):
         self.pre_events = self.do_pre_step()
         map_config = self.world.config['map']
+        map_config_agents = map_config.copy()
         for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
-            del map_config[key]
-        return {'map_config': map_config}
+            del map_config_agents[key]
+        return map_config_agents, map_config
 
     def create_agent(self, token):
         """
@@ -80,6 +87,21 @@ class Simulation:
         marking it with a success or failure flag.
         """
         if self.pre_events is None:
+            total_floods = self.world.generator.total_floods
+            total_victims = self.world.generator.total_victims
+            total_photos = self.world.generator.total_photos
+            total_water_samples = self.world.generator.total_water_samples
+            completed_tasks = self.world.events_completed()
+
+            self.logger.register_end_of_simulation(
+                total_floods,
+                total_victims,
+                total_photos,
+                total_water_samples,
+                self.step-1,
+                completed_tasks
+            )
+
             return 'Simulation Ended'
 
         action_results = self.world.execute_actions(actions)
