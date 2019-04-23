@@ -31,19 +31,6 @@ class Generator:
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
                 self.total_floods += 1
-        data = {'photos': [{
-            'total': self.total_photos,
-            'done': 0
-        }], 'victims': [{
-            'total': self.total_victims,
-            'done': 0
-        }], 'water_sample': [{
-            'total': self.total_water_samples,
-            'done': 0
-        }]}
-
-        # with open('results.txt', 'w') as outfile:
-        #     json.dump(data, outfile)
 
         self.router.generate_routing_tables(events)
         return events
