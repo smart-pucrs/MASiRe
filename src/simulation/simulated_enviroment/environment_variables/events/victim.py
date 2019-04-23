@@ -18,7 +18,11 @@ class Victim:
         self.size = size
         self.lifetime = lifetime
         self.active = False
+        self.in_photo = photo
         self.node = node
 
     def json(self):
-        return self.__dict__
+        copy = self.__dict__.copy()
+        del copy['active']
+        del copy['in_photo']
+        return copy
