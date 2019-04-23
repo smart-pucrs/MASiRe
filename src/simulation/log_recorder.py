@@ -11,13 +11,13 @@ class Logger:
         day = str(datetime.today().strftime("%d"))
         month = str(datetime.today().strftime("%B"))
         year = str(datetime.today().strftime("%Y"))
-        self.log_file = root / 'files' / simulation_id / year / month / day / time_of_date
-        self.percepts_file = root / 'files' / simulation_id / year / month / day / time_of_date
+        self.log_file = root / 'files' / simulation_id / year / month / day
+        self.percepts_file = root / 'files' / simulation_id / year / month / day
         self.timer = time.time()
 
         os.makedirs(self.log_file, exist_ok=True)
-        self.log_file = str(self.log_file / 'log.txt')
-        self.percepts_file = str(self.percepts_file / 'percepts.txt')
+        self.log_file = str(self.log_file / f'{time_of_date}_logs.txt')
+        self.percepts_file = str(self.percepts_file / f'{time_of_date}_percepts.txt')
 
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
         with open(self.percepts_file, 'w') as file:
