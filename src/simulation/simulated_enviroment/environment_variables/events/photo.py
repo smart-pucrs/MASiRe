@@ -19,9 +19,9 @@ class Photo:
         self.active = False
 
     def json(self):
-        # victims = [victim.json() for victim in self.victims if victim.active]
+        victims = [victim.json() for victim in self.victims if victim.active]
         copy = self.__dict__.copy()
-        del copy['victims']
+        copy['victims'] = victims
         del copy['active']
         return copy
 

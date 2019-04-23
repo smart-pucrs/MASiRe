@@ -12,7 +12,7 @@ import sys
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
-from src.simulation.simulation import Simulation
+from simulation.simulation import Simulation
 
 print(sys.argv[1:])
 config_path, base_url, port = sys.argv[1:]
@@ -81,7 +81,7 @@ def do_actions():
         result['events'] = json_events
 
         return jsonify(result)
-    return 'NoneType'
+    return jsonify('NoneType')
 
 
 if __name__ == '__main__':
