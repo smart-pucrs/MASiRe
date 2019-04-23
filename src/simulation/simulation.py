@@ -1,4 +1,4 @@
-from simulation.simulated_enviroment.world import World
+from src.simulation.simulated_enviroment.world import World
 
 
 class Simulation:

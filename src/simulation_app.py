@@ -12,8 +12,9 @@ import sys
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
-from simulation.simulation import Simulation
+from src.simulation.simulation import Simulation
 
+print(sys.argv[1:])
 config_path, base_url, port = sys.argv[1:]
 
 
@@ -51,6 +52,21 @@ def do_actions():
 
         if isinstance(result, str):
             return jsonify(result)
+
+        photo_list = []
+        for photo in result['action_results'][0][1]['virtual_storage_vector']:
+            if isinstance(photo, dict):
+                photo_list.append(photo)
+            else:
+                photo_list.append(photo.json())
+        result['action_results'][0][1]['virtual_storage_vector'] = photo_list
+        object_list = []
+        for physical_object in result['action_results'][0][1]['physical_storage_vector']:
+            if isinstance(physical_object, dict):
+                object_list.append(physical_object)
+            else:
+                object_list.append(physical_object.json())
+        result['action_results'][0][1]['physical_storage_vector'] = object_list
 
         current = result['events']['current_event']
         json_events = {'current_event': None, 'pending_events': []}

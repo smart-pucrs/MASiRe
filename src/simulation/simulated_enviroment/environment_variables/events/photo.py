@@ -22,5 +22,6 @@ class Photo:
         # victims = [victim.json() for victim in self.victims if victim.active]
         copy = self.__dict__.copy()
         del copy['victims']
+        del copy['active']
         return copy
 
