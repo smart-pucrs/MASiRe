@@ -15,7 +15,7 @@ from flask_cors import CORS
 from simulation.simulation import Simulation
 from waitress import serve
 
-print(sys.argv[1:])
+
 config_path, base_url, port = sys.argv[1:]
 
 
