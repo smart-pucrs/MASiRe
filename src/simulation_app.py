@@ -54,10 +54,10 @@ def do_actions():
         return jsonify(result)
 
     result['action_results'][0][1]['virtual_storage_vector'] = \
-        [virt.json() for virt in result['action_results'][0][1]['virtual_storage_vector']]
+        [virtual.json() for virtual in result['action_results'][0][1]['virtual_storage_vector']]
 
     result['action_results'][0][1]['physical_storage_vector'] = \
-        [phys.json() for phys in result['action_results'][0][1]['physical_storage_vector']]
+        [physical.json() for physical in result['action_results'][0][1]['physical_storage_vector']]
 
     result['action_results'][0][1]['social_assets'] = \
         [asset.json() for asset in result['action_results'][0][1]['social_assets']]
