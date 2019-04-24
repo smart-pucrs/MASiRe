@@ -58,22 +58,22 @@ class Simulation:
         """
 
         try:
-            event = self.world.events[self.step]
+            event = self.world.floods[self.step]
         except IndexError:
             return None
         pending_events = self.world.percepts(self.step)
 
         if event:
-            self.world.events[self.step].active = True
-            for water_sample in event.water_samples:
+            self.world.floods[self.step].active = True
+            for water_sample in self.world.floods[self.step].water_samples:
                 water_sample.active = True
                 self.world.water_samples.append(water_sample)
 
-            for photo in event.photos:
+            for photo in self.world.floods[self.step].photos:
                 photo.active = True
                 self.world.photos.append(photo)
 
-            for victim in event.victims:
+            for victim in self.world.floods[self.step].victims:
                 victim.active = True
                 self.world.victims.append(victim)
 

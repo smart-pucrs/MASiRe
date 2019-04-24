@@ -17,7 +17,6 @@ class World:
         communication core.
         """
         self.config = config
-        self.events = []
         self.roles = {}
         self.agents = {}
         self.floods = []
@@ -36,7 +35,7 @@ class World:
 
         # Get all active floods
         floods = []
-        for idx, flood in enumerate(self.events):
+        for idx, flood in enumerate(self.floods):
             if idx == step - 1:
                 break
             if flood and flood.active:
@@ -79,21 +78,7 @@ class World:
         [Method that generates the world's random events and 
         adds them to their respective category.]
         """
-        self.events = self.generator.generate_events()
-
-        for flood in self.events:
-            if flood is None:
-                continue
-
-            self.floods.append(flood)
-            for water_sample in flood.water_samples:
-                self.water_samples.append(water_sample)
-
-            for photo in flood.photos:
-                if photo is not None:
-                    self.photos.append(photo)
-                    for victim in photo.victims:
-                        self.victims.append(victim)
+        self.floods = self.generator.generate_events().copy()
 
     def create_roles(self):
         """

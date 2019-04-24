@@ -3,7 +3,6 @@
 
 import random
 import math
-# import json
 from simulation.simulated_enviroment.environment_variables.events.flood import Flood
 from simulation.simulated_enviroment.environment_variables.events.photo import Photo
 from simulation.simulated_enviroment.environment_variables.events.victim import Victim
@@ -27,7 +26,7 @@ class Generator:
         events = [None] * self.config['map']['steps']
         events[0] = self.generate_flood()
 
-        for step in range(len(events)):
+        for step in range(1, self.config['map']['steps'] + 1):
             if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
                 self.total_floods += 1
@@ -70,13 +69,13 @@ class Generator:
 
         # generate the list of nodes that are in the flood
         if dimensions['shape'] == 'circle':
-            list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('radius'))
+            list_of_nodes = self.router.nodes_in_radius(dimensions['coord'], dimensions['radius'])
 
         else:
-            if dimensions.get('height') < dimensions.get('length'):
-                list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('height'))
+            if dimensions['height'] < dimensions['length']:
+                list_of_nodes = self.router.nodes_in_radius(dimensions['coord'], dimensions['height'])
             else:
-                list_of_nodes = self.router.nodes_in_radius(dimensions.get('coord'), dimensions.get('length'))
+                list_of_nodes = self.router.nodes_in_radius(dimensions['coord'], dimensions['length'])
 
         photos = self.generate_photos(list_of_nodes)
         water_samples = self.generate_water_samples(list_of_nodes)

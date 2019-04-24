@@ -1,5 +1,4 @@
 # based https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
-import random
 from simulation.exceptions.exceptions import *
 
 
@@ -46,7 +45,7 @@ class ActionExecutor:
 
         return action_results
 
-    def execute(self, agent, action_obj, cdm_location):
+    def execute(self, agent, action, cdm_location):
         """
         [Method that tries to execute a single action for a parametrized agent.
         The action may contain necessary parameters.
@@ -55,29 +54,25 @@ class ActionExecutor:
 
         :param cdm_location: Location of the cdm specified in the config file
         :param agent: Agent responsible for calling a specific command (per step).
-        :param action_obj: The agent's desired action to be executed, including its
+        :param action: The agent's desired action to be executed, including its
         necessary parameters.
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
 
-        if isinstance(action_obj, str):
-            action = action_obj
-            parameters = []
-        else:
-            action = action_obj[0]
-            parameters = action_obj[1:]
+        action_name = action[0]
+        parameters = action[1:]
 
-        agent.last_action = action
+        agent.last_action = action_name
         agent.last_action_result = False
 
-        if action is None:
-            return 'Error: failed_no_action'
+        if action_name is None:
+            return 'No action given'
 
-        elif action == 'pass':
+        elif action_name == 'pass':
             agent.last_action_result = True
 
-        elif action == 'move':
+        elif action_name == 'move':
             try:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
@@ -130,10 +125,7 @@ class ActionExecutor:
             except Failed_insufficient_battery as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'deliver_physical':
+        elif action_name == 'deliver_physical':
             try:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
@@ -164,10 +156,7 @@ class ActionExecutor:
             except Failed_item_amount as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'deliver_virtual':
+        elif action_name == 'deliver_virtual':
             try:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
@@ -198,10 +187,7 @@ class ActionExecutor:
             except Failed_item_amount as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'charge':
+        elif action_name == 'charge':
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
@@ -219,10 +205,7 @@ class ActionExecutor:
             except Failed_location as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'rescue_victim':
+        elif action_name == 'rescue_victim':
             try:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
@@ -251,10 +234,7 @@ class ActionExecutor:
             except Failed_capacity as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'collect_water':
+        elif action_name == 'collect_water':
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
@@ -279,10 +259,7 @@ class ActionExecutor:
             except Failed_capacity as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        elif action == 'photograph':
+        elif action_name == 'photograph':
             try:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
@@ -307,11 +284,7 @@ class ActionExecutor:
             except Failed_capacity as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
-        # not working
-        elif action == 'search_social_asset':
+        elif action_name == 'search_social_asset':
             try:
 
                 if len(parameters) != 1 or len(parameters) != 3:
@@ -362,11 +335,8 @@ class ActionExecutor:
             except Failed_item_amount as e:
                 return e.message
 
-            except Exception as e:
-                return e
-
         else:
-            return 'Error: failed'
+            return 'Wrong action name'
 
     def agent_delivery(self, agent, kind, item, amount=None):
         """
