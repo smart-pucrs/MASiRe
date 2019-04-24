@@ -17,4 +17,6 @@ class WaterSample:
         self.active = False
 
     def json(self):
-        return self.__dict__
+        copy = self.__dict__.copy()
+        del copy['active']
+        return copy
