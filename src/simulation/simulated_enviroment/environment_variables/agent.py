@@ -111,7 +111,7 @@ class Agent:
         found_item = False
         removed = []
         for stored_item in self.physical_storage_vector:
-            if item['type'] == stored_item.type and amount:
+            if item == stored_item.type and amount:
                 found_item = True
                 removed.append(stored_item)
                 amount -= 1
