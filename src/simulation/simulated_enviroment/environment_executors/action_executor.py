@@ -407,13 +407,24 @@ class ActionExecutor:
                 raise Failed_invalid_kind('Invalid item to deliver')
 
         else:
+            ''' 
             if amount < 1 or amount > agent.virtual_storage:
                 raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
                                          'than what the agent is capable of carrying.')
+            '''
+            if amount < 1:
+                raise Failed_item_amount('The given amount is less than 1')
+
             if kind == 'physical':
+                if amount > len(agent.physical_storage_vector):
+                    raise Failed_item_amount('The given amount is greater than what the agent is carrying')
+
                 removed_items = agent.remove_physical_item(item, amount)
 
             elif kind == 'virtual':
+                if amount > len(agent.virtual_storage_vector):
+                    raise Failed_item_amount('The given amount is greater than what the agent is carrying')
+
                 removed_items = agent.remove_virtual_item(item, amount)
 
         if len(removed_items) == 0:
