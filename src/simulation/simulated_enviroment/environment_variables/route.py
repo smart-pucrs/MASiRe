@@ -122,16 +122,9 @@ class Route:
         distances = []
 
         for i in range(len(route_lat_lons) - 1):
-            print("From: %s" % route[i])
-            print("To: %s" % route[i + 1])
-            distance = self.router.distance(self.coords_to_radian(route_lat_lons[i]), self.coords_to_radian(route_lat_lons[i + 1]))
-
-            print("%.2fm" % (distance * 1000))
-            print('-----------------')
-
+            distance = self.router.distance(self.coords_to_radian(route_lat_lons[i]),
+                                            self.coords_to_radian(route_lat_lons[i + 1]))
             distances.append(distance)
-
-        print("Total: %.2fm" % (math.fsum(distances) * 1000))
 
     def get_route(self, start, end, drone, speed=4):
         if drone:
