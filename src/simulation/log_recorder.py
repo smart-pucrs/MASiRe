@@ -22,9 +22,9 @@ class Logger:
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
         with open(self.percepts_file, 'w') as file:
             file.write(f'Agent perceptions: \n{json.dumps(agent_percepts, indent=4)}'
-                       f'\n\nMap perceptions: \n{json.dumps(percepts, indent=4)}'
-                       f'\n\nRoles: {"; ".join(roles)}'
-                       f'\n\nSeed: {seed}')
+                       f'\nMap perceptions: \n{json.dumps(percepts, indent=4)}'
+                       f'\nRoles: {"; ".join(roles)}'
+                       f'\nSeed: {seed}')
 
     def register_agent_connection(self, token, name, role):
         hour = datetime.today().hour
@@ -33,7 +33,7 @@ class Logger:
 
         with open(self.log_file, 'a+') as file:
             file.write(f'\nAgent of token: {token}, role: {role} and name: {name}; connected to the '
-                       f'simulation at {hour}:{minute}:{second} in {time.time()-self.timer} seconds\n')
+                       f'simulation at {hour}:{minute}:{second} in {round(time.time()-self.timer, 3)} seconds\n')
             file.write('='*100)
 
     def register_agent_action(self, token, name, role, action, parameters, result):
@@ -43,7 +43,7 @@ class Logger:
 
         with open(self.log_file, 'a+') as file:
             file.write(f'\nAgent of token: {token}, role: {role} and name: {name} tried to {action} '
-                       f'passing {parameters} at {hour}:{minute}:{second}. The action result was {result}\n')
+                       f'passing {parameters} at {hour}:{minute}:{second}. The result was {result}\n')
             file.write('=' * 100)
 
     def register_end_of_simulation(self, total_of_floods, total_of_victims, total_of_photos, total_of_water_samples, steps, completed_tasks):
@@ -52,7 +52,7 @@ class Logger:
         second = datetime.today().second
 
         with open(self.log_file, 'w') as file:
-            file.write(f'\nThe simulation ended with {steps} steps in {time.time() - self.timer} '
+            file.write(f'\nThe simulation ended with {steps} steps in {round(time.time() - self.timer, 3)} '
                        f'at {hour}:{minute}:{second}. It had {total_of_floods} floods,'
                        f' {total_of_victims} victims, {total_of_photos} photos,'
                        f' {total_of_water_samples} water_samples\n')
