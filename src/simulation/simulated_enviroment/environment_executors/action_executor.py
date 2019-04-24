@@ -206,8 +206,20 @@ class ActionExecutor:
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
 
-            except Failed_wrong_param as e:
-                return e.message
+            elif action_name == 'get_social_asset':
+                if len(parameters) != 1:
+                    raise Failed_wrong_param('More than 1 or less than 1 parameter given.')
+
+                if agent.role == 'drone':
+                    raise Failed_invalid_kind('Agent role does not support carrying social asset.')
+
+                for social_asset in self.world.social_assets:
+                    if social_asset.location == agent.social_assets[parameters[0]]:
+                        if agent.location == social_asset.location and social_asset.active:
+                            agent.add_physical(social_asset)
+                            agent.last_action_result = True
+                            social_asset.active = False
+                            return
 
                 raise Failed_no_social_asset('Invalid social asset requested.')
 

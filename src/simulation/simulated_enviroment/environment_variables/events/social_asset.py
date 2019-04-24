@@ -14,8 +14,13 @@ class SocialAsset:
         self.type = 'social_asset'
         self.size = size
         self.active = False
-        self.node = node
+        self.location = location
         self.profession = profession
+
+    def __eq__(self, other):
+        self.location =  other.location
+        self.profession = other.profession
+        self.size = other.size
 
     def json(self):
         copy = self.__dict__.copy()
