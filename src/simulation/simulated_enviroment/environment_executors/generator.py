@@ -96,7 +96,7 @@ class Generator:
 
         for i in range(len(photos)):
             photo_size = self.config['generate']['photo']['size']
-            photo_location = random.choice(nodes)
+            photo_location = self.router.get_node_coord(random.choice(nodes))
 
             photo_victims = []
             if random.randint(0, 100) <= self.config['generate']['photo']['victimProbability']:
@@ -127,7 +127,7 @@ class Generator:
                 self.config['generate']['victim']['maxLifetime']
             )
 
-            victim_location = random.choice(nodes)
+            victim_location = self.router.get_node_coord(random.choice(nodes))
 
             photo_victims[i] = Victim(self.victim_counter, victim_size, victim_lifetime, victim_location, photo_call)
 
@@ -142,11 +142,7 @@ class Generator:
         self.total_water_samples += len(water_samples)
 
         for i in range(len(water_samples)):
-            node = random.choice(nodes)
-            water_samples[i] = WaterSample(self.config['generate']['waterSample']['size'], node)
-
-            water_sample_location = random.choice(nodes)
-
+            water_sample_location = self.router.get_node_coord(random.choice(nodes))
             water_samples[i] = WaterSample(self.config['generate']['waterSample']['size'], water_sample_location)
 
         return water_samples

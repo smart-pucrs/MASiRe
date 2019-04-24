@@ -1,6 +1,6 @@
 class WaterSample:
 
-    def __init__(self, size, node):
+    def __init__(self, size, location):
         """
         [Object <Consumable> that represents a water sample
         collected at a flood instance.]
@@ -13,7 +13,7 @@ class WaterSample:
 
         self.type = 'water_sample'
         self.size = size
-        self.node = node
+        self.location = location
         self.active = False
 
     def json(self):

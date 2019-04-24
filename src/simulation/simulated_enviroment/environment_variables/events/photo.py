@@ -1,6 +1,6 @@
 class Photo:
 
-    def __init__(self, size, victims, node):
+    def __init__(self, size, victims, location):
         """
         [Object <Consumable> that represents a photography,
         resultant of a 'photograph' action over a flood instance.]
@@ -15,7 +15,7 @@ class Photo:
         self.type = 'photo'
         self.size = size
         self.victims = victims
-        self.node = node
+        self.location = location
         self.active = False
 
     def json(self):

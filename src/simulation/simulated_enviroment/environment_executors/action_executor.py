@@ -160,8 +160,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
                 for victim in self.world.victims:
-                    victim_location = self.route.get_node_coord(victim.node)
-                    if victim.active and parameters[0] == victim.id and victim_location == agent.location:
+                    if victim.active and parameters[0] == victim.id and victim.location == agent.location:
                         agent.add_physical_item(victim)
                         victim.active = False
                         victim.in_photo = False
@@ -175,8 +174,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for water_sample in self.world.water_samples:
-                    water_sample_location = self.route.get_node_coord(water_sample.node)
-                    if water_sample.active and water_sample_location == agent.location:
+                    if water_sample.active and water_sample.location == agent.location:
                         agent.add_physical_item(water_sample)
                         water_sample.active = False
                         agent.last_action_result = True
@@ -189,8 +187,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for photo in self.world.photos:
-                    photo_location = self.route.get_node_coord(photo.node)
-                    if photo.active and photo_location == agent.location:
+                    if photo.active and photo.location == agent.location:
                         agent.add_virtual_item(photo)
                         photo.active = False
                         agent.last_action_result = True
