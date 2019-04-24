@@ -1,6 +1,6 @@
 
 class SocialAsset:
-    def __init__(self, id, size, node, profession):
+    def __init__(self, id, size, location, profession):
         """
              [Object <Consumable> that represents a social asset instance.]
 

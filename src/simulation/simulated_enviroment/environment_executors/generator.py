@@ -156,7 +156,7 @@ class Generator:
         self.total_social_assets += len(social_assets)
 
         for i in range(len(social_assets)):
-            node = random.choice(nodes)
+            asset_location = self.router.get_node_coord(random.choice(nodes))
 
             social_size = random.randint(
                 self.config['generate']['socialAsset']['minSize'],
@@ -164,7 +164,7 @@ class Generator:
             )
 
             profession = random.choice(self.config['generate']['socialAsset']['profession'])
-            social_assets[i] = SocialAsset(i, social_size, node, profession)
+            social_assets[i] = SocialAsset(i, social_size, asset_location, profession)
 
         return social_assets
 

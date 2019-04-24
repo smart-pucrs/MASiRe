@@ -199,17 +199,12 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
-                    social_asset_location = self.route.get_node_coord(social_asset.node)
-
                     if social_asset.active and social_asset.profession == parameters[0]:
-                        agent.add_physical_item(social_asset)
-                        social_asset.active = False
-                        agent.last_action_result = social_asset_location
-                        agent.last_action = social_asset
-                        break
+                        agent.last_action_result = True
+                        agent.social_assets.append(social_asset)
+                        return
 
-                if not agent.last_action_result:
-                    raise Failed_no_social_asset('No social asset found for the needed purposes')
+                raise Failed_no_social_asset('No social asset found for the needed purposes')
 
             except Failed_wrong_param as e:
                 return e.message

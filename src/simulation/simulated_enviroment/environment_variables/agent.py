@@ -22,6 +22,7 @@ class Agent:
         self.physical_storage_vector = []
         self.virtual_storage_vector = []
         self.is_active = True
+        self.social_assets = []
         self.role = role_name
         self.physical_storage = role.physical_capacity
         self.virtual_storage = role.virtual_capacity
