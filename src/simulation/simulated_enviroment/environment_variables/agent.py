@@ -66,7 +66,7 @@ class Agent:
         """
 
         size = item.size
-        if size > self.virtual_storage:
+        if size > self.physical_storage:
             raise Failed_capacity('The agent does not have enough physical storage.')
 
         self.physical_storage -= size
