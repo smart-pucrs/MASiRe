@@ -35,9 +35,10 @@ def register_agent():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
 
-    token = request.get_json(force=True)
-    result = simulation.create_agent(token)
-    return jsonify({'results': result.__dict__, 'initial_percepts': initial_percepts})
+    agent = request.get_json(force=True)
+    result = simulation.create_agent(agent['token'], agent['agent_info']).__dict__.copy()
+    del result['agent_info']
+    return jsonify({'results': result, 'initial_percepts': initial_percepts})
 
 
 @app.route('/do_actions', methods=['POST'])

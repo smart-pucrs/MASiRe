@@ -40,7 +40,10 @@ class ActionExecutor:
             if result:
                 print(result)
 
-            action_results.append((obj['token'], self.world.agents[obj['token']].__dict__.copy()))
+            agent = self.world.agents[obj['token']].__dict__.copy()
+            agent_copy = self.world.agents[obj['token']].__dict__.copy()
+            del agent_copy['agent_info']
+            action_results.append((obj['token'], agent_copy))
 
         return action_results
 

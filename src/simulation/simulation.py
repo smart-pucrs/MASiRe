@@ -40,13 +40,13 @@ class Simulation:
             del map_config_agents[key]
         return map_config_agents, map_config
 
-    def create_agent(self, token):
+    def create_agent(self, token, agent_info):
         """
         [Method that generate the agent when it tries to connect to the simulation.]
 
         :return: A agent containing all the the information recovered from the role.
         """
-        return self.world.create_agent(token)
+        return self.world.create_agent(token, agent_info)
 
     def do_pre_step(self):
         """

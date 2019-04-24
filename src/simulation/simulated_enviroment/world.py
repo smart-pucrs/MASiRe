@@ -94,7 +94,7 @@ class World:
 
         return set(self.free_roles)
 
-    def create_agent(self, token):
+    def create_agent(self, token, agent_info):
         """
         [Method creates list containing each role times the amount of agents
         it should have and assign one randomly chosen role to the given token]
@@ -102,7 +102,7 @@ class World:
         :return: A agent containing all the information recovered from the role
         """
         role = self.free_roles[self.agent_counter]
-        agent = Agent(token, self.roles[role], role, self.cdm.location)
+        agent = Agent(token, self.roles[role], role, self.cdm.location, agent_info)
         self.agents[token] = agent
         self.agent_counter += 1
         return agent

@@ -5,7 +5,7 @@ from simulation.exceptions.exceptions import *
 
 class Agent:
 
-    def __init__(self, agent_token, role, role_name, cdm_location):
+    def __init__(self, agent_token, role, role_name, cdm_location, agent_info):
         """
         [Object that represents an instance of an agents 'controller',
         responsible for the manipulation of all its perceptions]
@@ -14,7 +14,7 @@ class Agent:
         :param role: The agent's main function over the simulation,
         which covers its skills and limitations.
         """
-        self.agent_token = agent_token
+        self.token = agent_token
         self.last_action = None
         self.last_action_result = False
         self.location = cdm_location
@@ -33,9 +33,7 @@ class Agent:
         self.speed = role.speed
         self.destination_distance = 0
         self.abilities = role.abilities
-
-    def __repr__(self):
-        return str(self.agent_token) + ' - ' + str(self.role)
+        self.agent_info = agent_info
 
     def discharge(self):
         """
