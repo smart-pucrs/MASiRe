@@ -111,22 +111,31 @@
     },
     "photo": {
       "size": 3,
-      "minAmount": 5,
-      "maxAmount": 10,
-      "victimProbability": 60
+      "minAmount": 1,
+      "maxAmount": 6,
+      "victimProbability": 20
     },
     "victim": {
       "minSize": 5,
       "maxSize": 10,
-      "minAmount": 5,
-      "maxAmount": 10,
-      "minLifetime": 30,
-      "maxLifetime": 40 
+      "minAmount": 0,
+      "maxAmount": 5,
+      "minLifetime": 10,
+      "maxLifetime": 30
+    },
+    "socialAsset": {
+      "minAmount": 2,
+      "maxAmount": 8,
+      "minSize": 5,
+      "maxSize": 10,
+      "profession": [
+        "doctor"
+      ]
     },
     "waterSample": {
       "size": 4,
-      "minAmount": 5,
-      "maxAmount": 10
+      "minAmount": 1,
+      "maxAmount": 4
     }
   }
 }
