@@ -36,10 +36,8 @@ def register_agent():
         return jsonify(message='This endpoint can not be accessed.')
 
     token = request.get_json(force=True)
-    if token is not None:
-        result = simulation.create_agent(token)
-        return jsonify({'results': result.__dict__, 'initial_percepts': initial_percepts})
-    return 'NoneType'
+    result = simulation.create_agent(token)
+    return jsonify({'results': result.__dict__, 'initial_percepts': initial_percepts})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -48,41 +46,34 @@ def do_actions():
         return jsonify(message='This endpoint can not be accessed.')
 
     actions = request.get_json(force=True)
-    if actions is not None:
-        result = simulation.do_step(actions)
 
-        if isinstance(result, str):
-            return jsonify(result)
+    result = simulation.do_step(actions)
 
-        photo_list = []
-        for photo in result['action_results'][0][1]['virtual_storage_vector']:
-            if isinstance(photo, dict):
-                photo_list.append(photo)
-            else:
-                photo_list.append(photo.json())
-        result['action_results'][0][1]['virtual_storage_vector'] = photo_list
-        object_list = []
-        for physical_object in result['action_results'][0][1]['physical_storage_vector']:
-            if isinstance(physical_object, dict):
-                object_list.append(physical_object)
-            else:
-                object_list.append(physical_object.json())
-        result['action_results'][0][1]['physical_storage_vector'] = object_list
-
-        current = result['events']['current_event']
-        json_events = {'current_event': None, 'pending_events': []}
-        if current is not None:
-            json_events['current_event'] = current.json()
-
-        for idx, event_list in enumerate(result['events']['pending_events']):
-            json_events['pending_events'].append([])
-            for event in event_list:
-                json_events['pending_events'][idx].append(event.json())
-
-        result['events'] = json_events
-
+    if isinstance(result, str):
         return jsonify(result)
-    return jsonify('NoneType')
+
+    result['action_results'][0][1]['virtual_storage_vector'] = \
+        [virt.json() for virt in result['action_results'][0][1]['virtual_storage_vector']]
+
+    result['action_results'][0][1]['physical_storage_vector'] = \
+        [phys.json() for phys in result['action_results'][0][1]['physical_storage_vector']]
+
+    result['action_results'][0][1]['social_assets'] = \
+        [asset.json() for asset in result['action_results'][0][1]['social_assets']]
+
+    current = result['events']['current_event']
+    json_events = {'current_event': None, 'pending_events': []}
+    if current is not None:
+        json_events['current_event'] = current.json()
+
+    for idx, event_list in enumerate(result['events']['pending_events']):
+        json_events['pending_events'].append([])
+        for event in event_list:
+            json_events['pending_events'][idx].append(event.json())
+
+    result['events'] = json_events
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':
