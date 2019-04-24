@@ -199,8 +199,9 @@ class ActionExecutor:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
                     if social_asset.active and social_asset.profession == parameters[0]:
-                        agent.last_action_result = True
-                        agent.social_assets.append(social_asset)
+                        agent.last_action_result = False
+                        if social_asset not in agent.social_assets:
+                            agent.social_assets.append(social_asset)
                         return
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
@@ -222,7 +223,6 @@ class ActionExecutor:
 
                 raise Failed_no_social_asset('Invalid social asset requested.')
 
-            # assumes the only virtual items in the simulation are photos
             elif action == 'analyze_photo':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
