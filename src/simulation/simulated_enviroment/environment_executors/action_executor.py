@@ -71,9 +71,9 @@ class ActionExecutor:
 
         elif action_name == 'pass':
             agent.last_action_result = True
-
-        elif action_name == 'move':
-            try:
+            return
+        try:
+            if action_name == 'move':
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
@@ -87,6 +87,7 @@ class ActionExecutor:
                     location = [parameters[0], parameters[1]]
 
                 if agent.location == location:
+                    agent.route, distance = [agent.location], 0
                     return
 
                 if not agent.check_battery():
@@ -113,20 +114,7 @@ class ActionExecutor:
                 agent.discharge()
                 agent.location = agent.route.pop(0)
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_unknown_facility as e:
-                return e.message
-
-            except Failed_no_route as e:
-                return e.message
-
-            except Failed_insufficient_battery as e:
-                return e.message
-
-        elif action_name == 'deliver_physical':
-            try:
+            elif action_name == 'deliver_physical':
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
@@ -134,30 +122,14 @@ class ActionExecutor:
                     agent.last_action_result = True
 
                     if len(parameters) == 1:
-                        self.agent_delivery(agent, 'physical', parameters[0])
+                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_delivery(agent, 'physical', parameters[0], parameters[1])
+                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=parameters[1])
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_invalid_kind as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-            except Failed_unknown_item as e:
-                return e.message
-
-            except Failed_item_amount as e:
-                return e.message
-
-        elif action_name == 'deliver_virtual':
-            try:
+            elif action_name == 'deliver_virtual':
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
@@ -172,23 +144,7 @@ class ActionExecutor:
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_invalid_kind as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-            except Failed_unknown_item as e:
-                return e.message
-
-            except Failed_item_amount as e:
-                return e.message
-
-        elif action_name == 'charge':
-            try:
+            elif action_name == 'charge':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -199,14 +155,7 @@ class ActionExecutor:
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-        elif action_name == 'rescue_victim':
-            try:
+            elif action_name == 'rescue_victim':
                 if len(parameters) != 1:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
@@ -217,25 +166,11 @@ class ActionExecutor:
                         victim.active = False
                         victim.in_photo = False
                         agent.last_action_result = True
-                        break
+                        return
 
-                if not agent.last_action_result:
-                    raise Failed_unknown_item('No victim by the given ID is known.')
+                raise Failed_unknown_item('No victim by the given ID is known.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_unknown_item as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-            except Failed_capacity as e:
-                return e.message
-
-        elif action_name == 'collect_water':
-            try:
+            elif action_name == 'collect_water':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -245,22 +180,11 @@ class ActionExecutor:
                         agent.add_physical_item(water_sample)
                         water_sample.active = False
                         agent.last_action_result = True
-                        break
+                        return
 
-                if not agent.last_action_result:
-                    raise Failed_location('The agent is not in a location with a water sample.')
+                raise Failed_location('The agent is not in a location with a water sample.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-            except Failed_capacity as e:
-                return e.message
-
-        elif action_name == 'photograph':
-            try:
+            elif action_name == 'photograph':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -270,22 +194,11 @@ class ActionExecutor:
                         agent.add_virtual_item(photo)
                         photo.active = False
                         agent.last_action_result = True
-                        break
+                        return
 
-                if not agent.last_action_result:
-                    raise Failed_location('The agent is not in a location with a photograph event.')
+                raise Failed_location('The agent is not in a location with a photograph event.')
 
-            except Failed_wrong_param as e:
-                return e.message
-
-            except Failed_location as e:
-                return e.message
-
-            except Failed_capacity as e:
-                return e.message
-
-        elif action_name == 'search_social_asset':
-            try:
+            elif action_name == 'search_social_asset':
                 if len(parameters) != 1:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
@@ -304,12 +217,10 @@ class ActionExecutor:
             except Failed_wrong_param as e:
                 return e.message
 
-            except Failed_no_social_asset as e:
-                return e.message
+                raise Failed_no_social_asset('Invalid social asset requested.')
 
-        # assumes the only virtual items in the simulation are photos
-        elif action == 'analyze_photo':
-            try:
+            # assumes the only virtual items in the simulation are photos
+            elif action == 'analyze_photo':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -325,14 +236,38 @@ class ActionExecutor:
                 agent.virtual_storage_vector = []
                 agent.virtual_storage = agent.virtual_capacity
 
-            except Failed_wrong_param as e:
-                return e.message
+            else:
+                return 'Wrong action name'
 
-            except Failed_item_amount as e:
-                return e.message
+        except Failed_no_social_asset as e:
+            return e.message
 
-        else:
-            return 'Wrong action name'
+        except Failed_wrong_param as e:
+            return e.message
+
+        except Failed_no_route as e:
+            return e.message
+
+        except Failed_insufficient_battery as e:
+            return e.message
+
+        except Failed_capacity as e:
+            return e.message
+
+        except Failed_invalid_kind as e:
+            return e.message
+
+        except Failed_item_amount as e:
+            return e.message
+
+        except Failed_location as e:
+            return e.message
+
+        except Failed_unknown_facility as e:
+            return e.message
+
+        except Failed_unknown_item as e:
+            return e.message
 
     def agent_delivery(self, agent, kind, item, amount=None):
         """
