@@ -38,11 +38,10 @@ class ActionExecutor:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location)
-
             if result:
                 print(result)
 
-            action_results.append((obj['token'], self.world.agents[obj['token']].__dict__))
+            action_results.append((obj['token'], self.world.agents[obj['token']].__dict__.copy()))
 
         return action_results
 

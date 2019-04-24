@@ -86,5 +86,4 @@ class Simulation:
         results = {'action_results': action_results, 'events': self.pre_events.copy()}
         self.step += 1
         self.pre_events = self.do_pre_step()
-        print(self.world.agents)
         return results

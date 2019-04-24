@@ -53,20 +53,11 @@ def do_actions():
         if isinstance(result, str):
             return jsonify(result)
 
-        photo_list = []
-        for photo in result['action_results'][0][1]['virtual_storage_vector']:
-            if isinstance(photo, dict):
-                photo_list.append(photo)
-            else:
-                photo_list.append(photo.json())
-        result['action_results'][0][1]['virtual_storage_vector'] = photo_list
-        object_list = []
-        for physical_object in result['action_results'][0][1]['physical_storage_vector']:
-            if isinstance(physical_object, dict):
-                object_list.append(physical_object)
-            else:
-                object_list.append(physical_object.json())
-        result['action_results'][0][1]['physical_storage_vector'] = object_list
+        result['action_results'][0][1]['virtual_storage_vector'] = \
+            [photo.json() for photo in result['action_results'][0][1]['virtual_storage_vector']]
+        result['action_results'][0][1]['physical_storage_vector'] = \
+            [physical_obj.json() for physical_obj in result['action_results'][0][1]['physical_storage_vector']]
+
 
         current = result['events']['current_event']
         json_events = {'current_event': None, 'pending_events': []}
