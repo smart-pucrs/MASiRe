@@ -4,7 +4,7 @@ from simulation.exceptions.exceptions import *
 
 class ActionExecutor:
 
-    def __init__(self, config, world):
+    def __init__(self, config, world, logger):
         """
         [Constructor of the agent executor, which is responsible for
         executing every agent's desired action.]
@@ -17,6 +17,7 @@ class ActionExecutor:
         self.config = config
         self.world = world
         self.route = world.generator.router
+        self.logger = logger
 
     def execute_actions(self, actions, cdm_location):
         """
@@ -37,10 +38,16 @@ class ActionExecutor:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location)
-            if result:
-                print(result)
 
             agent = self.world.agents[obj['token']].__dict__.copy()
+            self.logger.register_agent_action(
+                token=agent['token'],
+                role=agent['role'],
+                result=True if result is None else result,
+                name=agent['agent_info']['name'],
+                action=action[0],
+                parameters=action[1]
+            )
             agent_copy = self.world.agents[obj['token']].__dict__.copy()
             del agent_copy['agent_info']
             action_results.append((obj['token'], agent_copy))

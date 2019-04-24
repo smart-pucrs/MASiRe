@@ -9,7 +9,7 @@ from simulation.simulated_enviroment.environment_variables.cdm import Cdm
 
 class World:
 
-    def __init__(self, config):
+    def __init__(self, config, logger):
         """
         [Object that represents the simulation universe.]
 
@@ -28,7 +28,7 @@ class World:
         self.free_roles = []
         self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
         self.generator = Generator(config)
-        self.action_executor = ActionExecutor(config, self)
+        self.action_executor = ActionExecutor(config, self, logger)
 
     def percepts(self, step):
         if step == 0:

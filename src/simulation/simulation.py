@@ -12,9 +12,9 @@ class Simulation:
         containing all configuration information about the simulation.
         """
         self.step = 0
-        self.world = World(config)
         self.pre_events = None
         self.logger = Logger(config['map']['id'])
+        self.world = World(config, self.logger)
 
     def start(self):
         """
