@@ -6,6 +6,7 @@ import math
 from simulation.simulated_enviroment.environment_variables.events.flood import Flood
 from simulation.simulated_enviroment.environment_variables.events.photo import Photo
 from simulation.simulated_enviroment.environment_variables.events.victim import Victim
+from simulation.simulated_enviroment.environment_variables.events.social_asset import SocialAsset
 from simulation.simulated_enviroment.environment_variables.events.water_sample import WaterSample
 from simulation.simulated_enviroment.environment_variables.route import Route
 
@@ -17,6 +18,7 @@ class Generator:
         self.total_water_samples = 0
         self.total_victims = 0
         self.total_floods = 0
+        self.total_social_assets = 0
         self.config = config
         self.router = Route(config['map']['map'])
         self.victim_counter = 0
@@ -80,8 +82,9 @@ class Generator:
         photos = self.generate_photos(list_of_nodes)
         water_samples = self.generate_water_samples(list_of_nodes)
         victims = self.generate_victims(list_of_nodes, False)
+        social_assets = self.generate_social_assets(list_of_nodes)
 
-        return Flood(period, dimensions, photos, water_samples, victims)
+        return Flood(period, dimensions, photos, water_samples, victims, social_assets)
 
     def generate_photos(self, nodes):
         photos = [None] * random.randint(
@@ -147,6 +150,27 @@ class Generator:
             water_samples[i] = WaterSample(self.config['generate']['waterSample']['size'], water_sample_location)
 
         return water_samples
+
+    def generate_social_assets(self, nodes):
+        social_assets = [None for _ in range(random.randint(
+            self.config['generate']['socialAsset']['minAmount'],
+            self.config['generate']['socialAsset']['maxAmount']
+        ))]
+
+        self.total_social_assets += len(social_assets)
+
+        for i in range(len(social_assets)):
+            node = random.choice(nodes)
+
+            social_size = random.randint(
+                self.config['generate']['socialAsset']['minSize'],
+                self.config['generate']['socialAsset']['maxSize']
+            )
+
+            profession = random.choice(self.config['generate']['socialAsset']['profession'])
+            social_assets[i] = SocialAsset(i, social_size, node, profession)
+
+        return social_assets
 
     def nodes_in_radius(self, coord, radius):
         # radius in kilometers

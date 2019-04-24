@@ -23,6 +23,7 @@ class World:
         self.water_samples = []
         self.photos = []
         self.victims = []
+        self.social_assets = []
         self.agent_counter = 0
         self.free_roles = []
         self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])

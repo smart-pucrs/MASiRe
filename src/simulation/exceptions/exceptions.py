@@ -54,3 +54,9 @@ class Failed_insufficient_battery(Exception):
 
     def __init__(self, message):
         self.message = message
+
+
+class Failed_no_social_asset(Exception):
+
+    def __init__(self, message):
+        self.message = message

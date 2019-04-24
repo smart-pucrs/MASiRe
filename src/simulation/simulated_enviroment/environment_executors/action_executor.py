@@ -286,30 +286,26 @@ class ActionExecutor:
 
         elif action_name == 'search_social_asset':
             try:
+                if len(parameters) != 1:
+                    raise Failed_wrong_param('Wrong amount of parameters given.')
+                for social_asset in self.world.social_assets:
+                    social_asset_location = self.route.get_node_coord(social_asset.node)
 
-                if len(parameters) != 1 or len(parameters) != 3:
-                    raise Failed_wrong_param('More than 3, 2, or 0 parameters were given.')
+                    if social_asset.active and social_asset.profession == parameters[0]:
+                        agent.add_physical_item(social_asset)
+                        social_asset.active = False
+                        agent.last_action_result = social_asset_location
+                        agent.last_action = social_asset
+                        break
 
-                if len(parameters) == 1:
-                    amount_nodes = len(self.route.nodes_in_radius(agent.location, parameters[0]))
-                    # change this later (plot social assets at the map and execute the code line above)
-                    amount_sa = random.randint(0, amount_nodes)
-                    if amount_sa > 5:  # simulating social assets which fulfills the agent needs
-                        agent.last_action_result = True
-
-                else:
-                    location = [parameters[1], parameters[2]]
-                    amount_nodes = len(self.route.nodes_in_radius(location, parameters[0]))
-                    # change this later (plot social assets at the map and execute the code line above)
-                    amount_sa = random.randint(0, amount_nodes)
-                    if amount_sa > 5:  # simulating social assets which fulfills the agent needs
-                        agent.last_action_result = True
+                if not agent.last_action_result:
+                    raise Failed_no_social_asset('No social asset found for the needed purposes')
 
             except Failed_wrong_param as e:
                 return e.message
 
-            except Exception as e:
-                return e
+            except Failed_no_social_asset as e:
+                return e.message
 
         # assumes the only virtual items in the simulation are photos
         elif action == 'analyze_photo':
