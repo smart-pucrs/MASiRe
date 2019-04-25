@@ -110,7 +110,7 @@ class Agent:
         found_item = False
         removed = []
         for stored_item in self.physical_storage_vector:
-            if item['type'] == stored_item.type and amount:
+            if item == stored_item.type and amount:
                 found_item = True
                 removed.append(stored_item)
                 amount -= 1
@@ -141,14 +141,14 @@ class Agent:
         :return: A list containing all the removed items.
         """
 
-        if self.virtual_storage == self.role.virual_capacity:
+        if self.virtual_storage == self.virtual_capacity:
             raise Failed_item_amount('The agents has no photos to deliver.')
 
         found_item = False
         removed = []
         for stored_item in self.virtual_storage_vector:
 
-            if item['type'] == stored_item.type and amount:
+            if item == stored_item.type and amount:
                 found_item = True
                 removed.append(stored_item)
                 amount -= 1
