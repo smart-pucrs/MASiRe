@@ -1,0 +1,3 @@
+
+Agent of token: eyJuYW1lIjoidWJ1bnR1MiIsInZlcnNpb24iOiIxLjMiLCJvd25lciI6Ijg3NDYyIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Uf3mqtU74lPJl6iGU9lgOD8P1cPbyhH5jX2PNr1IIJA, role: drone and name: boat2 tried to search_social_asset passing doctor at 16:47:58. The result was True
+====================================================================================================

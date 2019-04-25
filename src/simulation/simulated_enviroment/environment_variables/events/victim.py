@@ -1,6 +1,6 @@
 class Victim:
 
-    def __init__(self, id, size, lifetime, location, photo):
+    def __init__(self, size, lifetime, location, photo):
         """
              [Object <Consumable> that represents a victim instance revealed
              by a photography instance analysis.]
@@ -13,7 +13,6 @@ class Victim:
              was found.
          """
 
-        self.id = id
         self.type = 'victim'
         self.size = size
         self.lifetime = lifetime

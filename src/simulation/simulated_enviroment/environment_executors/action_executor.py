@@ -240,9 +240,10 @@ class ActionExecutor:
                     if social_asset.active and social_asset.profession == parameters[0]:
                         if social_asset not in agent.social_assets:
                             agent.social_assets.append(social_asset)
+                            agent.last_action_result = True
+                            return
 
-                        agent.last_action_result = True
-                        return
+
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
 
@@ -254,7 +255,7 @@ class ActionExecutor:
                     raise Failed_invalid_kind('Agent role does not support carrying social asset.')
 
                 for social_asset in self.world.social_assets:
-                    if social_asset.location == agent.social_assets[parameters[0]]:
+                    if social_asset.location == agent.social_assets[parameters[0]].location:
                         if agent.location == social_asset.location and social_asset.active:
                             agent.add_physical(social_asset)
                             agent.last_action_result = True

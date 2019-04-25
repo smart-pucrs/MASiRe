@@ -129,7 +129,7 @@ class Generator:
 
             victim_location = self.router.get_node_coord(random.choice(nodes))
 
-            photo_victims[i] = Victim(self.victim_counter, victim_size, victim_lifetime, victim_location, photo_call)
+            photo_victims[i] = Victim(victim_size, victim_lifetime, victim_location, photo_call)
 
         return photo_victims
 
@@ -164,7 +164,7 @@ class Generator:
             )
 
             profession = random.choice(self.config['generate']['socialAsset']['profession'])
-            social_assets[i] = SocialAsset(i, social_size, asset_location, profession)
+            social_assets[i] = SocialAsset(social_size, asset_location, profession)
 
         return social_assets
 
