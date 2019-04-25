@@ -40,13 +40,14 @@ class ActionExecutor:
             result = self.execute(self.world.agents[token], action, cdm_location)
 
             agent = self.world.agents[obj['token']].__dict__.copy()
+            parameters = action[1] if len(action) == 2 else []
             self.logger.register_agent_action(
                 token=agent['token'],
                 role=agent['role'],
                 result=True if result is None else result,
                 name=agent['agent_info']['name'],
                 action=action[0],
-                parameters=action[1]
+                parameters=parameters
             )
             agent_copy = self.world.agents[obj['token']].__dict__.copy()
             del agent_copy['agent_info']
@@ -127,14 +128,18 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == cdm_location:
-                    agent.last_action_result = True
 
+                agent.location = cdm_location
+
+
+                if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
                     elif len(parameters) == 2:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=parameters[1])
+
+                    agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -142,20 +147,28 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == cdm_location:
-                    agent.last_action_result = True
 
+                agent.location = cdm_location
+
+
+                if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
 
                     elif len(parameters) == 2:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0], amount=parameters[1])
+
+                    agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'charge':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
+
+
+                agent.location = cdm_location
+
 
                 if agent.location == cdm_location:
                     agent.charge()
@@ -169,6 +182,12 @@ class ActionExecutor:
                     raise Failed_wrong_param('More or less than 1 parameter was given.')
 
                 for victim in self.world.victims:
+
+
+                    agent.location = victim.location
+                    parameters[0] = victim.id
+
+
                     if victim.active and parameters[0] == victim.id and victim.location == agent.location:
                         agent.add_physical_item(victim)
                         victim.active = False
@@ -183,6 +202,11 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for water_sample in self.world.water_samples:
+
+
+                    agent.location = water_sample.location
+
+
                     if water_sample.active and water_sample.location == agent.location:
                         agent.add_physical_item(water_sample)
                         water_sample.active = False
@@ -196,6 +220,11 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for photo in self.world.photos:
+
+
+                    agent.location = photo.location
+
+
                     if photo.active and photo.location == agent.location:
                         agent.add_virtual_item(photo)
                         photo.active = False
@@ -209,9 +238,10 @@ class ActionExecutor:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
                     if social_asset.active and social_asset.profession == parameters[0]:
-                        agent.last_action_result = False
                         if social_asset not in agent.social_assets:
                             agent.social_assets.append(social_asset)
+
+                        agent.last_action_result = True
                         return
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')

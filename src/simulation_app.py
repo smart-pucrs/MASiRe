@@ -32,8 +32,8 @@ initial_percepts = simulation.start()
 
 @app.route('/register_agent', methods=['POST'])
 def register_agent():
-    if request.remote_addr != base_url:
-        return jsonify(message='This endpoint can not be accessed.')
+    #if request.remote_addr != base_url:
+     #   return jsonify(message='This endpoint can not be accessed.')
 
     agent = request.get_json(force=True)
     result = simulation.create_agent(agent['token'], agent['agent_info']).__dict__.copy()
@@ -53,14 +53,15 @@ def do_actions():
     if isinstance(result, str):
         return jsonify(result)
 
-    result['action_results'][0][1]['virtual_storage_vector'] = \
-        [virtual.json() for virtual in result['action_results'][0][1]['virtual_storage_vector']]
+    if result['action_results']:
+        result['action_results'][0][1]['virtual_storage_vector'] = \
+            [virtual.json() for virtual in result['action_results'][0][1]['virtual_storage_vector']]
 
-    result['action_results'][0][1]['physical_storage_vector'] = \
-        [physical.json() for physical in result['action_results'][0][1]['physical_storage_vector']]
+        result['action_results'][0][1]['physical_storage_vector'] = \
+            [physical.json() for physical in result['action_results'][0][1]['physical_storage_vector']]
 
-    result['action_results'][0][1]['social_assets'] = \
-        [asset.json() for asset in result['action_results'][0][1]['social_assets']]
+        result['action_results'][0][1]['social_assets'] = \
+            [asset.json() for asset in result['action_results'][0][1]['social_assets']]
 
     current = result['events']['current_event']
     json_events = {'current_event': None, 'pending_events': []}
