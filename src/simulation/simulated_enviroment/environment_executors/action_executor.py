@@ -185,7 +185,7 @@ class ActionExecutor:
 
 
                     agent.location = victim.location
-                    parameters[0] = victim.id
+                    parameters = victim.id
 
 
                     if victim.active and parameters[0] == victim.id and victim.location == agent.location:
@@ -263,7 +263,7 @@ class ActionExecutor:
 
                 raise Failed_no_social_asset('Invalid social asset requested.')
 
-            elif action == 'analyze_photo':
+            elif action_name == 'analyze_photo':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
