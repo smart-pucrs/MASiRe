@@ -20,6 +20,9 @@ class Victim:
         self.in_photo = photo
         self.location = location
 
+    def __eq__(self, other):
+        return self.size == other['size'] and self.location == other['location'] and self.lifetime == other['lifetime']
+
     def json(self):
         copy = self.__dict__.copy()
         del copy['active']

@@ -185,10 +185,9 @@ class ActionExecutor:
 
 
                     agent.location = victim.location
-                    parameters = (victim.id,)
 
 
-                    if victim.active and parameters[0] == victim.id and victim.location == agent.location:
+                    if victim.active and victim.location == agent.location and victim == parameters[0]:
                         agent.add_physical_item(victim)
                         victim.active = False
                         victim.in_photo = False
@@ -237,13 +236,13 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
+                    if social_asset in agent.social_assets:
+                        continue
+
                     if social_asset.active and social_asset.profession == parameters[0]:
-                        if social_asset not in agent.social_assets:
-                            agent.social_assets.append(social_asset)
-                            agent.last_action_result = True
-                            return
-
-
+                        agent.social_assets.append(social_asset)
+                        agent.last_action_result = True
+                        return
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
 

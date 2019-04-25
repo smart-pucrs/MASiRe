@@ -17,9 +17,7 @@ class SocialAsset:
         self.profession = profession
 
     def __eq__(self, other):
-        self.location = other.location
-        self.profession = other.profession
-        self.size = other.size
+        return self.location == other.location and self.size == other.size and self.profession == other.profession
 
     def json(self):
         copy = self.__dict__.copy()

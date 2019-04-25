@@ -127,7 +127,7 @@ class Generator:
                 self.config['generate']['victim']['maxLifetime']
             )
 
-            victim_location = self.router.get_node_coord(random.choice(nodes))
+            victim_location = list(self.router.get_node_coord(random.choice(nodes)))
 
             photo_victims[i] = Victim(victim_size, victim_lifetime, victim_location, photo_call)
 
