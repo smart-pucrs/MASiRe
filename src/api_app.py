@@ -43,9 +43,7 @@ def validate_agent_token():
     token = request.get_json(force=True)
     agent_response = {'agent_connected': False}
 
-    try:
-        controller.agents[token]
-    except KeyError:
+    if token not in controller.agents:
         return jsonify({'response': agent_response, 'message': "Token not registered"})
 
     try:
@@ -74,9 +72,8 @@ def register_job():
     try:
         message = request.get_json(force=True)
         token = message['token']
-        try:
-            controller.agents[token]
-        except KeyError:
+
+        if token not in controller.agents:
             return jsonify({'response': agent_response, 'message': "Token not registered"})
 
         action = message['action']
@@ -94,19 +91,17 @@ def register_job():
         return jsonify({'response': agent_response, 'message': k})
 
 
-@app.route('/get_job')
+@app.route('/get_job', methods=['POST'])
 def get_job():
     """Return the agent state and job result."""
     token = request.get_json(force=True)
-    try:
-        controller.agents[token]
-    except KeyError:
+    if token not in controller.agents:
         return jsonify({'response': False, 'message': "Token not registered"})
 
     if controller.simulation_response:
         return controller.simulation_response[token]
     else:
-        jsonify({'response': False, 'message': "No data from simulation"})
+        return jsonify({'response': False, 'message': "No data from simulation"})
 
 
 @app.route('/time_ended', methods=['GET'])
