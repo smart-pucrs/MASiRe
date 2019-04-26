@@ -1,0 +1,4 @@
+
+The simulation ended with 29 steps in 381.589 at 13:5:34. It had 15 floods, 69 victims, 62 photos, 39 water_samples
+The amount of completed events victims: 0, photos: 1 and water samples: 0
+====================================================================================================

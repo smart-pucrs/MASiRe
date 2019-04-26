@@ -28,8 +28,8 @@ class Generator:
         events = [None] * self.config['map']['steps']
         events[0] = self.generate_flood()
 
-        for step in range(1, self.config['map']['steps'] + 1):
-            if random.randint(0, 100) <= self.config['generate']['floodProbability'] * 10:
+        for step in range(1, self.config['map']['steps']):
+            if random.randint(0, 0) <= self.config['generate']['floodProbability'] * 10:
                 events[step] = self.generate_flood()
                 self.total_floods += 1
 

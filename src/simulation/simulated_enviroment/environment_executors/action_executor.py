@@ -194,7 +194,7 @@ class ActionExecutor:
                         agent.last_action_result = True
                         return
 
-                raise Failed_unknown_item('No victim by the given ID is known.')
+                raise Failed_unknown_item('No victim by the given location is known.')
 
             elif action_name == 'collect_water':
                 if len(parameters) > 0:
