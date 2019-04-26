@@ -128,12 +128,12 @@ def finish_step():
 
         jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
 
-    dict_jobs = {'actions': jobs}
+    jobs
 
     try:
         controller.simulation_response = \
-            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=dict_jobs).json()
-
+            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
+        print("time ended")
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
