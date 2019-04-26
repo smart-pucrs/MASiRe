@@ -48,7 +48,7 @@ def do_actions():
 
     actions = request.get_json(force=True)
 
-    result = simulation.do_step(actions)
+    result = simulation.do_step(actions['actions'])
 
     if isinstance(result, str):
         return jsonify(result)

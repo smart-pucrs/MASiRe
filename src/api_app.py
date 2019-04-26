@@ -9,7 +9,6 @@ from communication.controller import Controller
 from communication.temporary_agent import Agent
 from waitress import serve
 
-
 base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]
 
 app = Flask(__name__)
@@ -46,9 +45,12 @@ def validate_agent_token():
     if token not in controller.agents:
         return jsonify({'response': agent_response, 'message': "Token not registered"})
 
+    agent_info = jwt.decode(token, 'secret', algorithms='HS256')
+    agent = {'token': token, 'agent_info': agent_info}
+
     try:
         simulation_response = \
-            requests.post(f'http://{base_url}:{simulation_port}/register_agent', json=token).json()
+            requests.post(f'http://{base_url}:{simulation_port}/register_agent', json=agent).json()
 
     except requests.exceptions.ConnectionError:
         agent_response['message'] = 'Simulation is not online'
@@ -116,11 +118,21 @@ def finish_step():
         action_name = controller.agents[token].action_name
         action_params = controller.agents[token].action_param
 
-        jobs.append((token, (action_name, action_params)))
+        if not action_name:
+            action_name = "pass"
+
+        if not action_params:
+            action_params = []
+
+        #jobs.append((token, (action_name, action_params)))
+
+        jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+
+    dict_jobs = {'actions': jobs}
 
     try:
         controller.simulation_response = \
-            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
+            requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=dict_jobs).json()
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
