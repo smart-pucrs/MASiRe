@@ -82,6 +82,8 @@ def register_job():
         params = [*message['parameters']]
 
         controller.agents[token].action = (action, params)
+        controller.agents[token].action_name = action
+        controller.agents[token].action_param = params
         agent_response['job_delivered'] = True
 
         return jsonify(agent_response)
