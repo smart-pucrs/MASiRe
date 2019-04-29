@@ -32,8 +32,8 @@ initial_percepts = simulation.start()
 
 @app.route('/register_agent', methods=['POST'])
 def register_agent():
-    #if request.remote_addr != base_url:
-     #   return jsonify(message='This endpoint can not be accessed.')
+    if request.remote_addr != base_url:
+       return jsonify(message='This endpoint can not be accessed.')
 
     agent = request.get_json(force=True)
     result = simulation.create_agent(agent['token'], agent['agent_info']).__dict__.copy()

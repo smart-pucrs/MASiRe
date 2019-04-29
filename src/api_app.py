@@ -105,9 +105,11 @@ def get_job():
     if isinstance(controller.simulation_response, str):
         return jsonify(controller.simulation_response)
     elif controller.simulation_response:
-        for agent_token, agent_dict in controller.simulation_response["action_results"]:
-            if token == agent_token:
-                return jsonify(agent_dict)
+        if controller.simulation_response['action_results']:
+            for agent_token, agent_dict in controller.simulation_response["action_results"]:
+                if token == agent_token:
+                    return jsonify(agent_dict)
+        return jsonify({'response': False, 'message': "No action from agent"})
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
 
@@ -124,7 +126,12 @@ def finish_step():
         action_name = controller.agents[token].action_name
         action_params = controller.agents[token].action_param
 
-        jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+        if action_name:
+            jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+
+        controller.agents[token].action = ()
+        controller.agents[token].action_name = ""
+        controller.agents[token].action_param = []
 
     try:
         controller.simulation_response = \
