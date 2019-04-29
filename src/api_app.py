@@ -102,8 +102,12 @@ def get_job():
     if token not in controller.agents:
         return jsonify({'response': False, 'message': "Token not registered"})
 
-    if controller.simulation_response:
-        return controller.simulation_response[token]
+    if isinstance(controller.simulation_response, str):
+        return jsonify(controller.simulation_response)
+    elif controller.simulation_response:
+        for agent_token, agent_dict in controller.simulation_response["action_results"]:
+            if token == agent_token:
+                return jsonify(agent_dict)
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
 
@@ -120,21 +124,14 @@ def finish_step():
         action_name = controller.agents[token].action_name
         action_params = controller.agents[token].action_param
 
-        if not action_name:
-            action_name = "pass"
-
-        if not action_params:
-            action_params = []
-
-        #jobs.append((token, (action_name, action_params)))
-
         jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
-
-    jobs
 
     try:
         controller.simulation_response = \
             requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
+
+        if isinstance(controller.simulation_response, str):
+            return jsonify(1)
         print("time ended")
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
@@ -146,8 +143,11 @@ def finish_step():
 def counter(sec):
     sec = int(sec)
     time.sleep(sec)
+
     try:
-        requests.get(f'http://{base_url}:{port}/time_ended')
+        end_code = requests.get(f'http://{base_url}:{port}/time_ended').json()
+        if isinstance(end_code, int):
+            requests.get(f'http://{base_url}:{simulation_port}/finish')
     except Exception as e:
         print(e)
 

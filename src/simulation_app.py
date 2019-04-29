@@ -78,6 +78,13 @@ def do_actions():
     return jsonify(result)
 
 
+@app.route('/finish', methods=['GET'])
+def finish():
+    if request.remote_addr != base_url:
+        return jsonify(message='This endpoint can not be accessed.')
+    exit()
+
+
 if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
