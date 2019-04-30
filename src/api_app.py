@@ -78,6 +78,9 @@ def register_job():
         if token not in controller.agents:
             return jsonify({'response': agent_response, 'message': "Token not registered"})
 
+        if controller.agents[token].action:
+            return jsonify({'response': agent_response, 'message': "The agent has already sent a job"})
+
         action = message['action']
         params = [*message['parameters']]
 
