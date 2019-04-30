@@ -84,8 +84,8 @@ class ActionExecutor:
             return
         try:
             if action_name == 'move':
-                if len(parameters) < 1 or len(parameters) > 2:
-                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
+                #if len(parameters) < 1 or len(parameters) > 2:
+                #    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 if len(parameters) == 1:
                     if parameters[0] != 'cdm':
@@ -109,6 +109,7 @@ class ActionExecutor:
                         agent.destination_distance = distance
 
                     else:
+                        agent.location = parameters[2]
                         start_node = self.route.get_closest_node(*agent.location)
                         end_node = self.route.get_closest_node(*location)
                         route_result, route = self.route.get_route(start_node, end_node, False)

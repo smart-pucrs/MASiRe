@@ -3,13 +3,14 @@ import time
 
 class Controller:
 
-    def __init__(self):
+    def __init__(self, qtd_agents):
         self.agents = {}
         self.timer = None
         self.simulation_response = None
+        self.qtd_agents = int(qtd_agents)
 
     def check_population(self):
-        if len(self.agents) <= 5:
+        if len(self.agents) < self.qtd_agents:
             return True
         else:
             return False
@@ -18,7 +19,7 @@ class Controller:
         if self.timer is None:
             self.timer = time.time()
 
-        if time.time() - self.timer < 10:
+        if time.time() - self.timer < 40:
             return True
         else:
             return False

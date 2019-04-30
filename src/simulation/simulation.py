@@ -77,10 +77,6 @@ class Simulation:
                 victim.active = True
                 self.world.victims.append(victim)
 
-            for social_asset in self.world.floods[self.step].social_assets:
-                social_asset.active = True
-                self.world.social_assets.append(social_asset)
-
         return {'current_event': event, 'pending_events': pending_events}
 
     def do_step(self, actions):

@@ -9,7 +9,7 @@ from communication.controller import Controller
 from communication.temporary_agent import Agent
 from waitress import serve
 
-base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]
+base_url, port, simulation_port, step_time, first_conn_time, qtd_agents = sys.argv[1:]
 
 app = Flask(__name__)
 app.debug = False
@@ -108,8 +108,9 @@ def get_job():
         if controller.simulation_response['action_results']:
             for agent_token, agent_dict in controller.simulation_response["action_results"]:
                 if token == agent_token:
-                    return jsonify(agent_dict)
-        return jsonify({'response': False, 'message': "No action from agent"})
+                    return jsonify({'response': agent_dict,
+                                    'simulation_state':controller.simulation_response})
+        return jsonify({'response': False, 'message': "No action of agent from the last step"})
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
 
@@ -160,6 +161,6 @@ def counter(sec):
 
 
 if __name__ == '__main__':
-    controller = Controller()
+    controller = Controller(qtd_agents)
     multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
     serve(app, host=base_url, port=port)
