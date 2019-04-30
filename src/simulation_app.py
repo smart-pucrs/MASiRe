@@ -54,14 +54,15 @@ def do_actions():
         return jsonify(result)
 
     if result['action_results']:
-        result['action_results'][0][1]['virtual_storage_vector'] = \
-            [virtual.json() for virtual in result['action_results'][0][1]['virtual_storage_vector']]
+        for agent in result['action_results']:
+            agent[1]['virtual_storage_vector'] = \
+                [virtual.json() for virtual in agent[1]['virtual_storage_vector']]
 
-        result['action_results'][0][1]['physical_storage_vector'] = \
-            [physical.json() for physical in result['action_results'][0][1]['physical_storage_vector']]
+            agent[1]['physical_storage_vector'] = \
+                [physical.json() for physical in agent[1]['physical_storage_vector']]
 
-        result['action_results'][0][1]['social_assets'] = \
-            [asset.json() for asset in result['action_results'][0][1]['social_assets']]
+            agent[1]['social_assets'] = \
+                [asset.json() for asset in agent[1]['social_assets']]
 
     current = result['events']['current_event']
     json_events = {'current_event': None, 'pending_events': []}
