@@ -58,10 +58,12 @@ class Simulation:
         """
 
         try:
-            event = self.world.floods[self.step]
+            event = self.world.get_current_event(self.step)
         except IndexError:
             return None
+
         pending_events = self.world.percepts(self.step)
+        self.world.decrease_period_and_lifetime(self.step)
 
         return {'current_event': event, 'pending_events': pending_events}
 

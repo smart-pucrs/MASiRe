@@ -2,7 +2,7 @@ class Flood:
 
     # still missing location attribute
 
-    def __init__(self, period, dimensions, photos, water_samples, victims, social_assets, list_of_nodes):
+    def __init__(self, period, dimensions, list_of_nodes):
         """
         [Object that represents a flood.]
 
@@ -19,21 +19,10 @@ class Flood:
         self.active = False
         self.period = period
         self.dimensions = dimensions
-        self.photos = photos
-        self.water_samples = water_samples
-        self.victims = victims
-        self.social_assets = social_assets
         self.list_of_nodes = list_of_nodes
 
     def json(self):
         """Return a json like representation of the object"""
-        photos = [photo.json() for photo in self.photos if photo.active]
-        victims = [victim.json() for victim in self.victims if victim.active]
-        water_samples = [water_sample.json() for water_sample in self.water_samples if water_sample.active]
         copy = self.__dict__.copy()
-        copy['photos'] = photos
-        copy['victims'] = victims
-        copy['water_samples'] = water_samples
-        del copy['social_assets']
         del copy['list_of_nodes']
         return copy

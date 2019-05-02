@@ -246,12 +246,13 @@ class ActionExecutor:
                     raise Failed_invalid_kind('Agent role does not support carrying social asset.')
 
                 for social_asset in self.world.social_assets:
-                    if social_asset.location == agent.social_assets[parameters[0]].location:
-                        if agent.location == social_asset.location and social_asset.active:
-                            agent.add_physical(social_asset)
-                            agent.last_action_result = True
-                            social_asset.active = False
-                            return
+                    for social_asset_agent in agent.social_assets:
+                        if social_asset_agent == social_asset:
+                            if agent.location == social_asset.location and social_asset.active:
+                                agent.add_physical(social_asset)
+                                agent.last_action_result = True
+                                social_asset.active = False
+                                return
 
                 raise Failed_no_social_asset('Invalid social asset requested.')
 

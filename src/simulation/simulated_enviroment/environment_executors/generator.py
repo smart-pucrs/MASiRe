@@ -25,15 +25,21 @@ class Generator:
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self):
-        events = [None] * self.config['map']['steps']
-        events[0] = self.generate_flood()
+        events = [{}] * self.config['map']['steps']
+        events[0]['flood'] = self.generate_flood()
 
         for step in range(1, self.config['map']['steps']):
             if random.randint(0, 0) <= self.config['generate']['floodProbability'] * 10:
-                events[step] = self.generate_flood()
+                events[step]['flood'] = self.generate_flood()
+                events[step]['victims'] = self.generate_victims(events[step]['flood'].list_of_nodes, False)
+                events[step]['water_samples'] = self.generate_water_samples(events[step]['flood'].list_of_nodes)
+                events[step]['photos'] = self.generate_photos(events[step]['flood'].list_of_nodes)
+                events[step]['social_assets'] = self.generate_social_assets()
                 self.total_floods += 1
 
-        self.router.generate_routing_tables(events)
+
+
+        self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events
 
     def generate_flood(self):
@@ -79,12 +85,7 @@ class Generator:
             else:
                 list_of_nodes = self.router.nodes_in_radius(dimensions['coord'], dimensions['length'])
 
-        photos = self.generate_photos(list_of_nodes)
-        water_samples = self.generate_water_samples(list_of_nodes)
-        victims = self.generate_victims(list_of_nodes, False)
-        social_assets = self.generate_social_assets(list_of_nodes)
-
-        return Flood(period, dimensions, photos, water_samples, victims, social_assets, list_of_nodes)
+        return Flood(period, dimensions, list_of_nodes)
 
     def generate_photos(self, nodes):
         photos = [None] * random.randint(
@@ -147,7 +148,9 @@ class Generator:
 
         return water_samples
 
-    def generate_social_assets(self, nodes):
+    def generate_social_assets(self):
+        min_lat, max_lat, min_lon, max_lon = self.config['map']['minLat'], self.config['map']['maxLat'], self.config['map']['minLon'], self.config['map']['maxLon']
+
         social_assets = [None for _ in range(random.randint(
             self.config['generate']['socialAsset']['minAmount'],
             self.config['generate']['socialAsset']['maxAmount']
@@ -156,7 +159,7 @@ class Generator:
         self.total_social_assets += len(social_assets)
 
         for i in range(len(social_assets)):
-            asset_location = self.router.get_node_coord(random.choice(nodes))
+            asset_location = self.router.get_closest_node(random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon))
 
             social_size = random.randint(
                 self.config['generate']['socialAsset']['minSize'],
@@ -167,19 +170,3 @@ class Generator:
             social_assets[i] = SocialAsset(social_size, asset_location, profession)
 
         return social_assets
-
-    def nodes_in_radius(self, coord, radius):
-        # radius in kilometers
-        result = []
-        for node in self.router.rnodes:
-            if self.router.distance(self.node_to_radian(node), self.coords_to_radian(coord)) <= radius:
-                result.append(node)
-        return result
-
-    def node_to_radian(self, node):
-        """Returns the radian coordinates of a given OSM node"""
-        return self.coords_to_radian(self.router.nodeLatLon(node))
-
-    def coords_to_radian(self, coords):
-        """Maps a coordinate from degrees to radians"""
-        return list(map(math.radians, coords))
