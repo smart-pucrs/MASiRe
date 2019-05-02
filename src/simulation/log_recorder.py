@@ -33,10 +33,11 @@ class Logger:
 
         with open(self.log_file, 'a+') as file:
             file.write(f'\nAgent of token: {token}, role: {role} and name: {name}; connected to the '
-                       f'simulation at {hour}:{minute}:{second} in {round(time.time()-self.timer, 3)} seconds\n')
-            file.write('='*100)
+                       f'simulation at {hour}:{minute}:{second} in {round(time.time() - self.timer, 3)} seconds\n')
+            file.write(f'\n{"="*100}\n')
 
-    def register_agent_action(self, token, name, role, action, parameters, result):
+    def register_agent_action(self, token=None, name=None, role=None, action=None, parameters=None,
+                              result='No action done'):
         hour = datetime.today().hour
         minute = datetime.today().minute
         second = datetime.today().second
@@ -44,9 +45,10 @@ class Logger:
         with open(self.log_file, 'a+') as file:
             file.write(f'\nAgent of token: {token}, role: {role} and name: {name} tried to {action} '
                        f'passing {parameters} at {hour}:{minute}:{second}. The result was {result}\n')
-            file.write('=' * 100)
+            file.write(f'\n{"="*100}\n')
 
-    def register_end_of_simulation(self, total_of_floods, total_of_victims, total_of_photos, total_of_water_samples, steps, completed_tasks):
+    def register_end_of_simulation(self, total_of_floods, total_of_victims, total_of_photos, total_of_water_samples,
+                                   steps, completed_tasks):
         hour = datetime.today().hour
         minute = datetime.today().minute
         second = datetime.today().second
@@ -60,4 +62,4 @@ class Logger:
             file.write(f'The amount of completed events victims: {len(victims)}, '
                        f'photos: {len(photos)} and water samples: {len(water_samples)}\n')
 
-            file.write('=' * 100)
+            file.write(f'\n{"="*100}\n')
