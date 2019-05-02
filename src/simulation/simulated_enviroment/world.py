@@ -20,9 +20,6 @@ class World:
         self.roles = {}
         self.agents = {}
         self.floods = []
-        self.water_samples = []
-        self.photos = []
-        self.victims = []
         self.social_assets = []
         self.agent_counter = 0
         self.free_roles = []
@@ -39,34 +36,11 @@ class World:
         for idx, flood in enumerate(self.floods):
             if idx == step - 1:
                 break
-            if flood and flood.active:
+            if flood and flood.active and flood.period:
+                flood.period -= 1
                 floods.append(flood)
 
-        # Get all pending water_sample
-        water_samples = []
-        for idx, water_sample in enumerate(self.water_samples):
-            if idx == step - 1:
-                break
-            if water_sample.active:
-                water_samples.append(water_sample)
-
-        # Get all pending photo
-        photos = []
-        for idx, photo in enumerate(self.photos):
-            if idx == step - 1:
-                break
-            if photo.active:
-                photos.append(photo)
-
-        # Get all pending victims
-        victims = []
-        for idx, victim in enumerate(self.victims):
-            if idx == step - 1:
-                break
-            if victim.active:
-                victims.append(victim)
-
-        return [floods, water_samples, photos, victims]
+        return [floods]
 
     def events_completed(self):
         victims = [victim for victim in self.victims if not victim.active and not victim.in_photo]

@@ -63,20 +63,6 @@ class Simulation:
             return None
         pending_events = self.world.percepts(self.step)
 
-        if event:
-            self.world.floods[self.step].active = True
-            for water_sample in self.world.floods[self.step].water_samples:
-                water_sample.active = True
-                self.world.water_samples.append(water_sample)
-
-            for photo in self.world.floods[self.step].photos:
-                photo.active = True
-                self.world.photos.append(photo)
-
-            for victim in self.world.floods[self.step].victims:
-                victim.active = True
-                self.world.victims.append(victim)
-
         return {'current_event': event, 'pending_events': pending_events}
 
     def do_step(self, actions):

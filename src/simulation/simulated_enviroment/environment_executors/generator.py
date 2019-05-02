@@ -84,7 +84,7 @@ class Generator:
         victims = self.generate_victims(list_of_nodes, False)
         social_assets = self.generate_social_assets(list_of_nodes)
 
-        return Flood(period, dimensions, photos, water_samples, victims, social_assets)
+        return Flood(period, dimensions, photos, water_samples, victims, social_assets, list_of_nodes)
 
     def generate_photos(self, nodes):
         photos = [None] * random.randint(
