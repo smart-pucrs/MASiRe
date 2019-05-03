@@ -67,8 +67,7 @@ class World:
         for water_sample in water_samples:
             water_sample.active = True
 
-
-        return {'flood':flood, 'photos':photos, 'victims':victims, 'water_samples':water_samples}
+        return {'flood': flood, 'photos': photos, 'victims': victims, 'water_samples': water_samples}
 
     def decrease_period_and_lifetime(self, step):
         for i in range(step):

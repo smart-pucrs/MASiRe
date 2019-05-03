@@ -177,18 +177,19 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'rescue_victim':
-                if len(parameters) != 1:
-                    raise Failed_wrong_param('More or less than 1 parameter was given.')
+                if len(parameters) != 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
-                for victim in self.world.victims:
+                for event in self.world.events:
+                    for victim in event['victims']:
 
-                    agent.location = victim.location
+                        agent.location = victim.location
 
-                    if victim.active and victim.location == agent.location and victim == parameters[0]:
-                        agent.add_physical_item(victim)
-                        victim.active = False
-                        agent.last_action_result = True
-                        return
+                        if victim.active and victim.location == agent.location:
+                            agent.add_physical_item(victim)
+                            victim.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_unknown_item('No victim by the given location is known.')
 
@@ -196,15 +197,16 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for water_sample in self.world.water_samples:
+                for event in self.world.events:
+                    for water_sample in event['water_samples']:
 
-                    agent.location = water_sample.location
+                        agent.location = water_sample.location
 
-                    if water_sample.active and water_sample.location == agent.location:
-                        agent.add_physical_item(water_sample)
-                        water_sample.active = False
-                        agent.last_action_result = True
-                        return
+                        if water_sample.active and water_sample.location == agent.location:
+                            agent.add_physical_item(water_sample)
+                            water_sample.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_location('The agent is not in a location with a water sample.')
 
@@ -212,15 +214,16 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for photo in self.world.photos:
+                for event in self.world.events:
+                    for photo in event['photos']:
 
-                    agent.location = photo.location
+                        agent.location = photo.location
 
-                    if photo.active and photo.location == agent.location:
-                        agent.add_virtual_item(photo)
-                        photo.active = False
-                        agent.last_action_result = True
-                        return
+                        if photo.active and photo.location == agent.location:
+                            agent.add_virtual_item(photo)
+                            photo.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_location('The agent is not in a location with a photograph event.')
 
