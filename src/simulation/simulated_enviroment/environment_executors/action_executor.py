@@ -127,9 +127,7 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-
                 agent.location = cdm_location
-
 
                 if agent.location == cdm_location:
                     if len(parameters) == 1:
@@ -146,9 +144,7 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-
                 agent.location = cdm_location
-
 
                 if agent.location == cdm_location:
                     if len(parameters) == 1:
@@ -165,9 +161,7 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-
                 agent.location = cdm_location
-
 
                 if agent.location == cdm_location:
                     agent.charge()
@@ -177,7 +171,7 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'rescue_victim':
-                if len(parameters) != 0:
+                if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
                 for event in self.world.events:

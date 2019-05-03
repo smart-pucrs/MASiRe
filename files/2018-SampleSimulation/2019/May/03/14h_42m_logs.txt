@@ -1,0 +1,4 @@
+
+Agent of token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWdlbnQxIn0.OyDxesy_GlKAZxdaGieiUVas-W6BCpVVzNQMwU3cd9s, role: drone and name: agent1 tried to move passing [] at 14:51:26. The result was True
+
+====================================================================================================

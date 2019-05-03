@@ -107,13 +107,18 @@ def get_job():
 
     if isinstance(controller.simulation_response, str):
         return jsonify(controller.simulation_response)
+
     elif controller.simulation_response:
         if controller.simulation_response['action_results']:
             for agent_token, agent_dict in controller.simulation_response["action_results"]:
                 if token == agent_token:
-                    return jsonify({'response': agent_dict,
-                                    'simulation_state':controller.simulation_response})
+                    simulation_state = controller.simulation_response.copy()
+                    simulation_state['action_results'] = agent_dict
+
+                    return jsonify({'simulation_state': simulation_state})
+
         return jsonify({'response': False, 'message': "No action of agent from the last step"})
+
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
 

@@ -37,8 +37,6 @@ class Generator:
                 events[step]['social_assets'] = self.generate_social_assets()
                 self.total_floods += 1
 
-
-
         self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events
 
