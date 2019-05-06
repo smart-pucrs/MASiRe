@@ -39,17 +39,16 @@ class ActionExecutor:
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location)
 
-            agent = self.world.agents[obj['token']].__dict__.copy()
+            agent_copy = self.world.agents[obj['token']].__dict__.copy()
             parameters = action[1] if len(action) == 2 else []
             self.logger.register_agent_action(
-                token=agent['token'],
-                role=agent['role'],
+                token=agent_copy['token'],
+                role=agent_copy['role'],
                 result=True if result is None else result,
-                name=agent['agent_info']['name'],
+                name=agent_copy['agent_info']['name'],
                 action=action[0],
                 parameters=parameters
             )
-            agent_copy = self.world.agents[obj['token']].__dict__.copy()
             del agent_copy['agent_info']
             action_results.append((obj['token'], agent_copy))
 
