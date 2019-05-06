@@ -45,23 +45,25 @@ def validate_agent_token():
     token = request.get_json(force=True)
     agent_response = {'agent_connected': False}
 
-    if token not in controller.agents:
-        return jsonify({'response': agent_response, 'message': "Token not registered"})
-
-    try:
-        simulation_response = \
-            requests.post(f'http://{base_url}:{simulation_port}/register_agent', json=token).json()
-
-    except requests.exceptions.ConnectionError:
-        agent_response['message'] = 'Simulation is not online'
-        return jsonify(agent_response)
-
     if controller.check_agent(token):
         if controller.check_timer():
+            try:
+                agent = {'token': token, 'agent_info': controller.agents[token].agent_info}
+                simulation_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
+                                                    json=agent).json()
+
+            except requests.exceptions.ConnectionError:
+                agent_response['message'] = 'Simulation is not online'
+                return jsonify(agent_response)
+
             controller.agents[token].connected = True
             agent_response['agent_connected'] = True
             agent_response['step_time'] = step_time
             agent_response['agent_info'] = simulation_response
+        else:
+            agent_response['message'] = 'Time is up'
+    else:
+        agent_response['message'] = 'Token not registered'
 
     return jsonify(agent_response)
 
