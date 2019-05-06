@@ -78,7 +78,8 @@ def register_job():
         token = message['token']
 
         if token not in controller.agents:
-            return jsonify({'response': agent_response, 'message': "Token not registered"})
+            agent_response['message'] = 'Token not registered'
+            return jsonify(agent_response)
 
         action = message['action']
         params = [*message['parameters']]
@@ -89,10 +90,12 @@ def register_job():
         return jsonify(agent_response)
 
     except TypeError as t:
-        return jsonify({'response': agent_response, 'message': t})
+        agent_response['message'] = t
+        return jsonify(agent_response)
 
     except KeyError as k:
-        return jsonify({'response': agent_response, 'message': k})
+        agent_response['message'] = k
+        return jsonify(agent_response)
 
 
 @app.route('/get_job', methods=['POST'])
@@ -143,6 +146,6 @@ def counter(sec):
 
 
 if __name__ == '__main__':
-    controller = Controller()
     multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
+    controller = Controller()
     serve(app, host=base_url, port=port)
