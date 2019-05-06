@@ -19,7 +19,7 @@ class ActionExecutor:
         self.route = world.generator.router
         self.logger = logger
 
-    def execute_actions(self, actions, cdm_location):
+    def execute_actions(self, actions, cdm_location, step):
         """
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
@@ -37,7 +37,7 @@ class ActionExecutor:
         for obj in actions:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
-            result = self.execute(self.world.agents[token], action, cdm_location)
+            result = self.execute(self.world.agents[token], action, cdm_location, step)
 
             agent = self.world.agents[obj['token']].__dict__.copy()
             parameters = action[1] if len(action) == 2 else []
@@ -55,7 +55,7 @@ class ActionExecutor:
 
         return action_results
 
-    def execute(self, agent, action, cdm_location):
+    def execute(self, agent, action, cdm_location, step):
         """
         [Method that tries to execute a single action for a parametrized agent.
         The action may contain necessary parameters.
@@ -105,8 +105,11 @@ class ActionExecutor:
 
                 if not agent.route:
                     if agent.role == 'drone' or agent.role == 'boat':
-                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed)/2)
+                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed)/2, self.world.events[step]["flood"].list_of_nodes)
                         agent.destination_distance = distance
+
+                        if not distance:
+                            return
                     else:
                         start_node = self.route.get_closest_node(*agent.location)
                         end_node = self.route.get_closest_node(*location)

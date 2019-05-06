@@ -136,7 +136,7 @@ class World:
         self.agent_counter += 1
         return agent
 
-    def execute_actions(self, actions):
+    def execute_actions(self, actions, step):
         """
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
@@ -147,4 +147,4 @@ class World:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
-        return self.action_executor.execute_actions(actions, self.cdm.location)
+        return self.action_executor.execute_actions(actions, self.cdm.location, step)
