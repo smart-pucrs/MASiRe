@@ -78,13 +78,12 @@ def register_job():
             agent_response['message'] = 'Token not registered'
             return jsonify(agent_response)
 
-        if controller.agents[token].action:
+        if controller.agents[token].action_name:
             return jsonify({'response': agent_response, 'message': "The agent has already sent a job"})
 
         action = message['action']
         params = [*message['parameters']]
 
-        controller.agents[token].action = (action, params)
         controller.agents[token].action_name = action
         controller.agents[token].action_param = params
         agent_response['job_delivered'] = True
@@ -150,7 +149,7 @@ def finish_step():
 
         if isinstance(controller.simulation_response, str):
             return jsonify(1)
-        print("time ended")
+
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
@@ -161,7 +160,6 @@ def finish_step():
 def counter(sec):
     sec = int(sec)
     time.sleep(sec)
-
     try:
         end_code = requests.get(f'http://{base_url}:{port}/time_ended').json()
         if isinstance(end_code, int):
@@ -171,6 +169,6 @@ def counter(sec):
 
 
 if __name__ == '__main__':
-    controller = Controller(qtd_agents)
     multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
+    controller = Controller(qtd_agents, first_conn_time)
     serve(app, host=base_url, port=port)
