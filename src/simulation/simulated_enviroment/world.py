@@ -19,10 +19,8 @@ class World:
         self.config = config
         self.roles = {}
         self.agents = {}
-        self.floods = []
-        self.water_samples = []
-        self.photos = []
-        self.victims = []
+        self.events = []
+        self.active_events = []
         self.social_assets = []
         self.agent_counter = 0
         self.free_roles = []
@@ -35,43 +33,74 @@ class World:
             return [[], [], [], [], []]
 
         # Get all active floods
-        floods = []
-        for idx, flood in enumerate(self.floods):
+        floods, photos, victims, water_samples = [], [], [], []
+
+        for idx, obj in enumerate(self.events):
             if idx == step - 1:
                 break
-            if flood and flood.active:
-                floods.append(flood)
+            if obj['flood'].active:
+                floods.append(obj['flood'])
+                photos.extend([photo for photo in obj['photos'] if photo.active])
+                victims.extend([victim for victim in obj['victims'] if victim.active])
+                water_samples.extend([water_sample for water_sample in obj['water_samples'] if water_sample.active])
 
-        # Get all pending water_sample
-        water_samples = []
-        for idx, water_sample in enumerate(self.water_samples):
-            if idx == step - 1:
-                break
-            if water_sample.active:
-                water_samples.append(water_sample)
+        return [floods, photos, victims, water_samples]
 
-        # Get all pending photo
-        photos = []
-        for idx, photo in enumerate(self.photos):
-            if idx == step - 1:
-                break
-            if photo.active:
-                photos.append(photo)
+    def get_current_event(self, step):
+        flood = self.events[step]['flood']
+        photos = self.events[step]['photos']
+        victims = self.events[step]['victims']
+        water_samples = self.events[step]['water_samples']
 
-        # Get all pending victims
-        victims = []
-        for idx, victim in enumerate(self.victims):
-            if idx == step - 1:
-                break
-            if victim.active:
-                victims.append(victim)
+        for social_asset in self.events[step]['social_assets']:
+            social_asset.active = True
+            self.social_assets.append(social_asset)
 
-        return [floods, water_samples, photos, victims]
+        flood.active = True
+
+        for photo in photos:
+            photo.active = True
+
+        for victim in victims:
+            victim.active = True
+
+        for water_sample in water_samples:
+            water_sample.active = True
+
+        return {'flood': flood, 'photos': photos, 'victims': victims, 'water_samples': water_samples}
+
+    def decrease_period_and_lifetime(self, step):
+        for i in range(step):
+            prev_event = self.events[i]
+            if not prev_event['flood'].period:
+                prev_event['flood'].active = False
+            else:
+                prev_event['flood'].period -= 1
+
+            for victim in prev_event['victims']:
+                if not victim.lifetime:
+                    victim.active = False
+                else:
+                    victim.lifetime -= 1
 
     def events_completed(self):
-        victims = [victim for victim in self.victims if not victim.active and not victim.in_photo]
-        photos = [photo for photo in self.photos if not photo.active]
-        water_samples = [water_sample for water_sample in self.water_samples if not water_sample.active]
+        photos, victims, water_samples = [], [], []
+
+        for obj in self.events:
+            for victim in obj['victims']:
+                if not victim.active and victim.lifetime:
+                    victims.append(victim)
+
+        for obj in self.events:
+            for photo in obj['photos']:
+                if not photo.active:
+                    photos.append(photo)
+
+        for obj in self.events:
+            for water_sample in obj['water_samples']:
+                if not water_sample.active:
+                    water_samples.append(water_sample)
+
         return [victims, photos, water_samples]
 
     def generate_events(self):
@@ -79,7 +108,7 @@ class World:
         [Method that generates the world's random events and 
         adds them to their respective category.]
         """
-        self.floods = self.generator.generate_events().copy()
+        self.events = self.generator.generate_events().copy()
 
     def create_roles(self):
         """

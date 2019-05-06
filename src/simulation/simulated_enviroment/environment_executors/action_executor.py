@@ -39,19 +39,19 @@ class ActionExecutor:
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location)
 
-            agent_copy = self.world.agents[obj['token']].__dict__.copy()
+            agent = self.world.agents[obj['token']].__dict__.copy()
+            parameters = action[1] if len(action) == 2 else []
             self.logger.register_agent_action(
-                token=agent_copy['token'],
-                role=agent_copy['role'],
+                token=agent['token'],
+                role=agent['role'],
                 result=True if result is None else result,
-                name=agent_copy['agent_info']['name'],
+                name=agent['agent_info']['name'],
                 action=action[0],
-                parameters=action[1]
+                parameters=parameters
             )
+            agent_copy = self.world.agents[obj['token']].__dict__.copy()
             del agent_copy['agent_info']
             action_results.append((obj['token'], agent_copy))
-
-        self.logger.register_agent_action()
 
         return action_results
 
@@ -104,10 +104,9 @@ class ActionExecutor:
                     raise Failed_insufficient_battery('Not enough battery to complete this step')
 
                 if not agent.route:
-                    if agent.role == 'drone':
-                        agent.route, distance = self.route.get_route(agent.location, location, True, int(agent.speed)/2)
+                    if agent.role == 'drone' or agent.role == 'boat':
+                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed)/2)
                         agent.destination_distance = distance
-
                     else:
                         start_node = self.route.get_closest_node(*agent.location)
                         end_node = self.route.get_closest_node(*location)
@@ -128,14 +127,16 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == cdm_location:
-                    agent.last_action_result = True
+                agent.location = cdm_location
 
+                if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
                     elif len(parameters) == 2:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=parameters[1])
+
+                    agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
@@ -143,20 +144,24 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                if agent.location == cdm_location:
-                    agent.last_action_result = True
+                agent.location = cdm_location
 
+                if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
 
                     elif len(parameters) == 2:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0], amount=parameters[1])
+
+                    agent.last_action_result = True
                 else:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'charge':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
+
+                agent.location = cdm_location
 
                 if agent.location == cdm_location:
                     agent.charge()
@@ -166,29 +171,36 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'rescue_victim':
-                if len(parameters) != 1:
-                    raise Failed_wrong_param('More or less than 1 parameter was given.')
+                if len(parameters) > 0:
+                    raise Failed_wrong_param('Parameters were given.')
 
-                for victim in self.world.victims:
-                    if victim.active and parameters[0] == victim.id and victim.location == agent.location:
-                        agent.add_physical_item(victim)
-                        victim.active = False
-                        victim.in_photo = False
-                        agent.last_action_result = True
-                        return
+                for event in self.world.events:
+                    for victim in event['victims']:
 
-                raise Failed_unknown_item('No victim by the given ID is known.')
+                        agent.location = victim.location
+
+                        if victim.active and victim.location == agent.location:
+                            agent.add_physical_item(victim)
+                            victim.active = False
+                            agent.last_action_result = True
+                            return
+
+                raise Failed_unknown_item('No victim by the given location is known.')
 
             elif action_name == 'collect_water':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for water_sample in self.world.water_samples:
-                    if water_sample.active and water_sample.location == agent.location:
-                        agent.add_physical_item(water_sample)
-                        water_sample.active = False
-                        agent.last_action_result = True
-                        return
+                for event in self.world.events:
+                    for water_sample in event['water_samples']:
+
+                        agent.location = water_sample.location
+
+                        if water_sample.active and water_sample.location == agent.location:
+                            agent.add_physical_item(water_sample)
+                            water_sample.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_location('The agent is not in a location with a water sample.')
 
@@ -196,12 +208,16 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for photo in self.world.photos:
-                    if photo.active and photo.location == agent.location:
-                        agent.add_virtual_item(photo)
-                        photo.active = False
-                        agent.last_action_result = True
-                        return
+                for event in self.world.events:
+                    for photo in event['photos']:
+
+                        agent.location = photo.location
+
+                        if photo.active and photo.location == agent.location:
+                            agent.add_virtual_item(photo)
+                            photo.active = False
+                            agent.last_action_result = True
+                            return
 
                 raise Failed_location('The agent is not in a location with a photograph event.')
 
@@ -209,10 +225,12 @@ class ActionExecutor:
                 if len(parameters) != 1:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
                 for social_asset in self.world.social_assets:
+                    if social_asset in agent.social_assets:
+                        continue
+
                     if social_asset.active and social_asset.profession == parameters[0]:
-                        agent.last_action_result = False
-                        if social_asset not in agent.social_assets:
-                            agent.social_assets.append(social_asset)
+                        agent.social_assets.append(social_asset)
+                        agent.last_action_result = True
                         return
 
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
@@ -225,16 +243,17 @@ class ActionExecutor:
                     raise Failed_invalid_kind('Agent role does not support carrying social asset.')
 
                 for social_asset in self.world.social_assets:
-                    if social_asset.location == agent.social_assets[parameters[0]]:
-                        if agent.location == social_asset.location and social_asset.active:
-                            agent.add_physical(social_asset)
-                            agent.last_action_result = True
-                            social_asset.active = False
-                            return
+                    for social_asset_agent in agent.social_assets:
+                        if social_asset_agent == social_asset:
+                            if agent.location == social_asset.location and social_asset.active:
+                                agent.add_physical(social_asset)
+                                agent.last_action_result = True
+                                social_asset.active = False
+                                return
 
                 raise Failed_no_social_asset('Invalid social asset requested.')
 
-            elif action == 'analyze_photo':
+            elif action_name == 'analyze_photo':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
@@ -242,8 +261,7 @@ class ActionExecutor:
                     raise Failed_item_amount('The agent has no photos to analyze.')
 
                 for photo in agent.virtual_storage_vector:
-                    for victim in photo.victims:
-                        victim.active = True
+                    pass
 
                 # clears virtual storage
                 agent.last_action_result = True
@@ -332,7 +350,7 @@ class ActionExecutor:
             raise Failed_unknown_item('No item by the given name is known.')
 
         if kind == 'physical':
-            self.world.cdm.add_physical_items(removed_items, agent.agent_token)
+            self.world.cdm.add_physical_items(removed_items, agent.token)
 
         else:
-            self.world.cdm.add_virtual_items(removed_items, agent.agent_token)
+            self.world.cdm.add_virtual_items(removed_items, agent.token)

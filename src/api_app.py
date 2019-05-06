@@ -9,8 +9,7 @@ from communication.controller import Controller
 from communication.temporary_agent import Agent
 from waitress import serve
 
-
-base_url, port, simulation_port, step_time, first_conn_time = sys.argv[1:]
+base_url, port, simulation_port, step_time, first_conn_time, qtd_agents = sys.argv[1:]
 
 app = Flask(__name__)
 app.debug = False
@@ -81,10 +80,15 @@ def register_job():
             agent_response['message'] = 'Token not registered'
             return jsonify(agent_response)
 
+        if controller.agents[token].action:
+            return jsonify({'response': agent_response, 'message': "The agent has already sent a job"})
+
         action = message['action']
         params = [*message['parameters']]
 
         controller.agents[token].action = (action, params)
+        controller.agents[token].action_name = action
+        controller.agents[token].action_param = params
         agent_response['job_delivered'] = True
 
         return jsonify(agent_response)
@@ -105,8 +109,20 @@ def get_job():
     if token not in controller.agents:
         return jsonify({'response': False, 'message': "Token not registered"})
 
-    if controller.simulation_response:
-        return controller.simulation_response[token]
+    if isinstance(controller.simulation_response, str):
+        return jsonify(controller.simulation_response)
+
+    elif controller.simulation_response:
+        if controller.simulation_response['action_results']:
+            for agent_token, agent_dict in controller.simulation_response["action_results"]:
+                if token == agent_token:
+                    simulation_state = controller.simulation_response.copy()
+                    simulation_state['action_results'] = agent_dict
+
+                    return jsonify({'simulation_state': simulation_state})
+
+        return jsonify({'response': False, 'message': "No action of agent from the last step"})
+
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
 
@@ -123,12 +139,20 @@ def finish_step():
         action_name = controller.agents[token].action_name
         action_params = controller.agents[token].action_param
 
-        jobs.append((token, (action_name, action_params)))
+        if action_name:
+            jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+
+        controller.agents[token].action = ()
+        controller.agents[token].action_name = ""
+        controller.agents[token].action_param = []
 
     try:
         controller.simulation_response = \
             requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
+        if isinstance(controller.simulation_response, str):
+            return jsonify(1)
+        print("time ended")
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
@@ -139,13 +163,16 @@ def finish_step():
 def counter(sec):
     sec = int(sec)
     time.sleep(sec)
+
     try:
-        requests.get(f'http://{base_url}:{port}/time_ended')
+        end_code = requests.get(f'http://{base_url}:{port}/time_ended').json()
+        if isinstance(end_code, int):
+            requests.get(f'http://{base_url}:{simulation_port}/finish')
     except Exception as e:
         print(e)
 
 
 if __name__ == '__main__':
+    controller = Controller(qtd_agents)
     multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
-    controller = Controller()
     serve(app, host=base_url, port=port)

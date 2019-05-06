@@ -126,9 +126,12 @@ class Route:
                                             self.coords_to_radian(route_lat_lons[i + 1]))
             distances.append(distance)
 
-    def get_route(self, start, end, drone, speed=4):
-        if drone:
+    def get_route(self, start, end, role, speed=4, list_of_nodes=None):
+        if role == 'drone':
             return self.generate_coordinates_for_drones(start, end, speed)
+        elif role == 'boat':
+            return self.generate_coordinates_for_boats(start, end, speed, list_of_nodes)
+
         coords = []
         result, nodes = self.router.doRoute(start, end)
         for node in nodes:
@@ -209,6 +212,28 @@ class Route:
         distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
 
         return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
+
+    def generate_coordinates_for_boats(self, start, end, speed, list_of_nodes):
+        if end in list(map(lambda x: self.get_node_coord(x), list_of_nodes)):
+            if start in list(map(lambda x: self.get_node_coord(x), list_of_nodes)):
+                actual_x, actual_y = start
+
+                if actual_x > end[0]:
+                    x_axis = self.decrease_until_reached(actual_x, end[0], speed) or [end[0]]
+                else:
+                    x_axis = self.increase_until_reached(actual_x, end[0], speed) or [end[0]]
+
+                if actual_y > end[1]:
+                    y_axis = self.decrease_until_reached(actual_y, end[1], speed) or [end[1]]
+                else:
+                    y_axis = self.increase_until_reached(actual_y, end[1], speed) or [end[1]]
+
+                longest = y_axis[-1] if len(x_axis) > len(y_axis) else x_axis[-1]
+                distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
+
+                return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
+        else:
+            return [], 0
 
     def decrease_until_reached(self, start, end, speed):
         if start == end:

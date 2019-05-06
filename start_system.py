@@ -1,3 +1,4 @@
+import json
 import os
 import pathlib
 import argparse
@@ -16,12 +17,12 @@ def start_simulation(s_args, python_version, path):
         subprocess.call([f"python{python_version}", str(file_path), *map(str, s_args)])
 
 
-def start_api(a_args, python_version, path):
+def start_api(a_args, python_version, path, qtd_agents):
     file_path = root / "src" / "api_app.py"
     if path:
-        subprocess.call([f"{str(path)}/python{python_version}", str(file_path), *map(str, a_args)])
+        subprocess.call([f"{str(path)}/python{python_version}", str(file_path), *map(str, a_args), str(qtd_agents)])
     else:
-        subprocess.call([f"python{python_version}", str(file_path), *map(str, a_args)])
+        subprocess.call([f"python{python_version}", str(file_path), *map(str, a_args), str(qtd_agents)])
 
 
 def handle_enviroment(python_version, globally=False):
@@ -84,8 +85,8 @@ def create_parser():
     parser.add_argument('-ap', required=False, type=str, default='12345')
     parser.add_argument('-pyv', required=False, type=str, default='')
     parser.add_argument('-g', required=False, type=bool, default=False)
-    parser.add_argument('-step_t', required=False, type=int, default=30)
-    parser.add_argument('-first_t', required=False, type=int, default=60)
+    parser.add_argument('-step_t', required=False, type=int, default=10)
+    parser.add_argument('-first_t', required=False, type=int, default=20)
     return parser
 
 
@@ -93,8 +94,14 @@ if __name__ == '__main__':
     simulation_args, api_args, pyv, globally = handle_arguments()
     path = handle_enviroment(pyv, globally)
 
+    qtd_agents = 0
+    with open(simulation_args[0], 'r') as file:
+        json_file = json.loads(file.read())
+        for role in json_file['agents']:
+            qtd_agents += json_file['agents'][role]
+
     simulation = multiprocessing.Process(target=start_simulation, args=(simulation_args, pyv, path))
-    api = multiprocessing.Process(target=start_api, args=(api_args, pyv, path))
+    api = multiprocessing.Process(target=start_api, args=(api_args, pyv, path, qtd_agents))
 
     simulation.daemon = True
     api.daemon = True

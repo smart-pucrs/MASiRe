@@ -33,12 +33,12 @@ initial_percepts = simulation.start()
 @app.route('/register_agent', methods=['POST'])
 def register_agent():
     if request.remote_addr != base_url:
-        return jsonify(message='This endpoint can not be accessed.')
+       return jsonify(message='This endpoint can not be accessed.')
 
-    agent = request.get_json(force=True)
-    result = simulation.create_agent(agent['token'], agent['agent_info']).__dict__.copy()
-    del result['agent_info']
-    return jsonify({'results': result, 'initial_percepts': initial_percepts})
+    agent_info = request.get_json(force=True)
+    agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).__dict__.copy()
+    del agent['agent_info']
+    return jsonify({'agent': agent, 'initial_percepts': initial_percepts})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -54,19 +54,27 @@ def do_actions():
         return jsonify(result)
 
     if result['action_results']:
-        result['action_results'][0][1]['virtual_storage_vector'] = \
-            [virtual.json() for virtual in result['action_results'][0][1]['virtual_storage_vector']]
+        for agent in result['action_results']:
+            agent[1]['virtual_storage_vector'] = \
+                [virtual.json() for virtual in agent[1]['virtual_storage_vector']]
 
-        result['action_results'][0][1]['physical_storage_vector'] = \
-            [physical.json() for physical in result['action_results'][0][1]['physical_storage_vector']]
+            agent[1]['physical_storage_vector'] = \
+                [physical.json() for physical in agent[1]['physical_storage_vector']]
 
-        result['action_results'][0][1]['social_assets'] = \
-            [asset.json() for asset in result['action_results'][0][1]['social_assets']]
+            agent[1]['social_assets'] = \
+                [asset.json() for asset in agent[1]['social_assets']]
 
     current = result['events']['current_event']
-    json_events = {'current_event': None, 'pending_events': []}
+    json_events = {'current_event': {}, 'pending_events': []}
     if current is not None:
-        json_events['current_event'] = current.json()
+
+        for event in current:
+            if isinstance(current[event], list):
+                json_events['current_event'][event] = []
+                for obj_event in current[event]:
+                    json_events['current_event'][event] = obj_event.json()
+            else:
+                json_events['current_event'][event] = current[event].json()
 
     for idx, event_list in enumerate(result['events']['pending_events']):
         json_events['pending_events'].append([])
@@ -76,6 +84,13 @@ def do_actions():
     result['events'] = json_events
 
     return jsonify(result)
+
+
+@app.route('/finish', methods=['GET'])
+def finish():
+    if request.remote_addr != base_url:
+        return jsonify(message='This endpoint can not be accessed.')
+    exit()
 
 
 if __name__ == '__main__':

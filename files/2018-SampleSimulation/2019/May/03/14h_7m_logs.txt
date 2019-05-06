@@ -1,0 +1,8 @@
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQyIn0.1dwCbuLp8TQjThV4wIdq0LqPNq0TjsGFdc6uWmXGk68, role: drone and name: agent2 tried to collect_water passing [] at 14:8:48. The result was True
+
+====================================================================================================
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQxIn0.nC64_8rt6QKRm1JuHGIs1s6l_N3P88uP1LLGRH3uSHs, role: car and name: agent1 tried to photograph passing [] at 14:8:48. The result was True
+
+====================================================================================================

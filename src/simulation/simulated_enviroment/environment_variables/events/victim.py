@@ -1,6 +1,6 @@
 class Victim:
 
-    def __init__(self, id, size, lifetime, location, photo):
+    def __init__(self, size, lifetime, location, photo):
         """
              [Object <Consumable> that represents a victim instance revealed
              by a photography instance analysis.]
@@ -13,13 +13,15 @@ class Victim:
              was found.
          """
 
-        self.id = id
         self.type = 'victim'
         self.size = size
         self.lifetime = lifetime
         self.active = False
         self.in_photo = photo
         self.location = location
+
+    def __eq__(self, other):
+        return self.size == other['size'] and self.location == other['location'] and self.lifetime == other['lifetime']
 
     def json(self):
         copy = self.__dict__.copy()

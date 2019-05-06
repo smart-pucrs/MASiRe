@@ -1,6 +1,6 @@
 
 class SocialAsset:
-    def __init__(self, id, size, location, profession):
+    def __init__(self, size, location, profession):
         """
              [Object <Consumable> that represents a social asset instance.]
 
@@ -10,7 +10,6 @@ class SocialAsset:
              was found.
          """
 
-        self.id = id
         self.type = 'social_asset'
         self.size = size
         self.active = False
@@ -18,9 +17,7 @@ class SocialAsset:
         self.profession = profession
 
     def __eq__(self, other):
-        self.location =  other.location
-        self.profession = other.profession
-        self.size = other.size
+        return self.location == other.location and self.size == other.size and self.profession == other.profession
 
     def json(self):
         copy = self.__dict__.copy()
