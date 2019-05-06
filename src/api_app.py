@@ -25,14 +25,16 @@ def get_agent_token():
     agent_info = request.get_json(force=True)
 
     if controller.check_population():
-        token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
+        if not controller.check_connected(agent_info):
+            token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
-        agent = Agent(token, agent_info)
+            agent = Agent(token, agent_info)
 
-        controller.agents[token] = agent
+            controller.agents[token] = agent
 
-        agent_response['can_connect'] = True
-        agent_response['data'] = token
+            agent_response['can_connect'] = True
+            agent_response['data'] = token
+            agent_response['step_time'] = controller.timer
 
     return jsonify(agent_response)
 
