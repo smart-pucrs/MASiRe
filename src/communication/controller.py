@@ -26,3 +26,10 @@ class Controller:
                 return True
 
         return False
+
+    def check_connected(self, agent_info):
+        for token in self.agents:
+            if self.agents[token].agent_info == agent_info:
+                return True
+
+        return False
