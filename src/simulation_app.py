@@ -38,7 +38,20 @@ def register_agent():
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).__dict__.copy()
     del agent['agent_info']
-    return jsonify({'agent': agent, 'initial_percepts': initial_percepts})
+
+    events = initial_percepts[1].copy()
+    map_percepts = initial_percepts[0].copy()
+
+    for event in events:
+        if event == 'flood':
+            events[event] = events[event].json()
+        else:
+            aux = []
+            for x in events[event]:
+                aux.append(x.json())
+            events[event] = aux
+
+    return jsonify({'agent': agent, 'initial_percepts': [map_percepts, events]})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -66,6 +79,7 @@ def do_actions():
 
     current = result['events']['current_event']
     json_events = {'current_event': {}, 'pending_events': []}
+
     if current is not None:
 
         for event in current:
