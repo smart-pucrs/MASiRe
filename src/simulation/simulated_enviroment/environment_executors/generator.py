@@ -26,9 +26,10 @@ class Generator:
 
     def generate_events(self):
         events = [{}] * self.config['map']['steps']
-        events[0]['flood'] = self.generate_flood()
+        events[0] = dict(flood=self.generate_flood(), victims=[], water_samples=[], photos=[], social_assets=[])
 
         for step in range(1, self.config['map']['steps']):
+            events[step] = {}
             if random.randint(0, 0) <= self.config['generate']['floodProbability'] * 10:
                 events[step]['flood'] = self.generate_flood()
                 events[step]['victims'] = self.generate_victims(events[step]['flood'].list_of_nodes, False)
