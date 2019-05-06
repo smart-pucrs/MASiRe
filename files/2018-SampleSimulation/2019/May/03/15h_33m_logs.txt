@@ -1,4 +1,0 @@
-
-Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQxIn0.nC64_8rt6QKRm1JuHGIs1s6l_N3P88uP1LLGRH3uSHs, role: car and name: agent1 tried to photograph passing [] at 15:34:36. The result was True
-
-====================================================================================================
