@@ -95,7 +95,7 @@ class ActionExecutor:
                 else:
                     location = [parameters[0], parameters[1]]
 
-                if agent.location == location:
+                if self.get_location(agent.location, location):
                     agent.route, distance = [agent.location], 0
                     return
 
@@ -104,12 +104,12 @@ class ActionExecutor:
 
                 if not agent.route:
                     if agent.role == 'drone' or agent.role == 'boat':
-                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed)/2)
+                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, agent.speed)
                         agent.destination_distance = distance
                     else:
                         start_node = self.route.get_closest_node(*agent.location)
                         end_node = self.route.get_closest_node(*location)
-                        route_result, route = self.route.get_route(start_node, end_node, False)
+                        route_result, route = self.route.get_route(start_node, end_node, agent.role, agent.speed)
 
                         if route_result == 'success':
                             agent.route = route
@@ -126,9 +126,10 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
+                # ================= TEST CODE HERE ==================
                 agent.location = cdm_location
 
-                if agent.location == cdm_location:
+                if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
@@ -143,9 +144,10 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
+                # ================= TEST CODE HERE ==================
                 agent.location = cdm_location
 
-                if agent.location == cdm_location:
+                if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
 
@@ -160,9 +162,10 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
+                # ================= TEST CODE HERE ==================
                 agent.location = cdm_location
 
-                if agent.location == cdm_location:
+                if self.get_location(agent.location, cdm_location):
                     agent.charge()
                     agent.last_action_result = True
 
@@ -176,9 +179,10 @@ class ActionExecutor:
                 for event in self.world.events:
                     for victim in event['victims']:
 
+                        # ================= TEST CODE HERE ==================
                         agent.location = victim.location
 
-                        if victim.active and victim.location == agent.location:
+                        if victim.active and self.get_location(victim.location, agent.location):
                             agent.add_physical_item(victim)
                             victim.active = False
                             agent.last_action_result = True
@@ -193,9 +197,10 @@ class ActionExecutor:
                 for event in self.world.events:
                     for water_sample in event['water_samples']:
 
+                        # ================= TEST CODE HERE ==================
                         agent.location = water_sample.location
 
-                        if water_sample.active and water_sample.location == agent.location:
+                        if water_sample.active and self.get_location(water_sample.location, agent.location):
                             agent.add_physical_item(water_sample)
                             water_sample.active = False
                             agent.last_action_result = True
@@ -210,9 +215,10 @@ class ActionExecutor:
                 for event in self.world.events:
                     for photo in event['photos']:
 
+                        # ================= TEST CODE HERE ==================
                         agent.location = photo.location
 
-                        if photo.active and photo.location == agent.location:
+                        if photo.active and self.get_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)
                             photo.active = False
                             agent.last_action_result = True
@@ -223,6 +229,7 @@ class ActionExecutor:
             elif action_name == 'search_social_asset':
                 if len(parameters) != 1:
                     raise Failed_wrong_param('Wrong amount of parameters given.')
+
                 for social_asset in self.world.social_assets:
                     if social_asset in agent.social_assets:
                         continue
@@ -244,7 +251,7 @@ class ActionExecutor:
                 for social_asset in self.world.social_assets:
                     for social_asset_agent in agent.social_assets:
                         if social_asset_agent == social_asset:
-                            if agent.location == social_asset.location and social_asset.active:
+                            if self.get_location(agent.location, social_asset.location) and social_asset.active:
                                 agent.add_physical(social_asset)
                                 agent.last_action_result = True
                                 social_asset.active = False
@@ -353,3 +360,30 @@ class ActionExecutor:
 
         else:
             self.world.cdm.add_virtual_items(removed_items, agent.token)
+
+    def get_location(self, x, y):
+        proximity = self.config['map']['proximity']
+
+        if x[0] < y[0]:
+            if x[0] + proximity >= y[0]:
+                lat = True
+            else:
+                lat = False
+        else:
+            if x[0] - proximity <= y[0]:
+                lat = True
+            else:
+                lat = False
+
+        if x[1] < y[1]:
+            if x[1] + proximity >= y[1]:
+                lon = True
+            else:
+                lon = False
+        else:
+            if x[1] - proximity <= y[1]:
+                lon = True
+            else:
+                lon = False
+
+        return lat and lon
