@@ -24,16 +24,16 @@ def get_agent_token():
     agent_info = request.get_json(force=True)
 
     if controller.check_population():
-        if not controller.check_connected(agent_info):
-            token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
+        if controller.check_timer():
+            if not controller.check_connected(agent_info):
+                token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
-            agent = Agent(token, agent_info)
+                agent = Agent(token, agent_info)
 
-            controller.agents[token] = agent
+                controller.agents[token] = agent
 
-            agent_response['can_connect'] = True
-            agent_response['data'] = token
-            agent_response['step_time'] = controller.timer
+                agent_response['can_connect'] = True
+                agent_response['data'] = token
 
     return jsonify(agent_response)
 
@@ -45,22 +45,20 @@ def validate_agent_token():
     agent_response = {'agent_connected': False}
 
     if controller.check_agent(token):
-        if controller.check_timer():
-            try:
-                agent = {'token': token, 'agent_info': controller.agents[token].agent_info}
-                simulation_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
-                                                    json=agent).json()
+        try:
+            agent = {'token': token, 'agent_info': controller.agents[token].agent_info}
+            simulation_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
+                                                json=agent).json()
 
-            except requests.exceptions.ConnectionError:
-                agent_response['message'] = 'Simulation is not online'
-                return jsonify(agent_response)
+        except requests.exceptions.ConnectionError:
+            agent_response['message'] = 'Simulation is not online'
+            return jsonify(agent_response)
 
-            controller.agents[token].connected = True
-            agent_response['agent_connected'] = True
-            agent_response['step_time'] = step_time
-            agent_response['agent_info'] = simulation_response
-        else:
-            agent_response['message'] = 'Time is up'
+        controller.agents[token].connected = True
+        agent_response['agent_connected'] = True
+        agent_response['step_time'] = int(step_time)
+        agent_response['info'] = simulation_response
+
     else:
         agent_response['message'] = 'Token not registered'
 
