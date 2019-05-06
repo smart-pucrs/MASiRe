@@ -34,11 +34,12 @@ class Simulation:
 
     def initial_percepts(self):
         self.pre_events = self.do_pre_step()
-        map_config = self.world.config['map']
+        map_config = self.world.config['map'].copy()
         map_config_agents = map_config.copy()
         for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
             del map_config_agents[key]
-        return map_config_agents, map_config
+
+        return [map_config_agents, self.pre_events['current_event']], map_config
 
     def create_agent(self, token, agent_info):
         """
