@@ -248,6 +248,9 @@ class ActionExecutor:
                 for social_asset in self.world.social_assets:
                     for social_asset_agent in agent.social_assets:
                         if social_asset_agent == social_asset:
+
+                            agent.location = social_asset.location
+
                             if agent.location == social_asset.location and social_asset.active:
                                 agent.add_physical(social_asset)
                                 agent.last_action_result = True
@@ -264,7 +267,8 @@ class ActionExecutor:
                     raise Failed_item_amount('The agent has no photos to analyze.')
 
                 for photo in agent.virtual_storage_vector:
-                    pass
+                    for victim in photo.victims:
+                        victim.active = True
 
                 # clears virtual storage
                 agent.last_action_result = True
