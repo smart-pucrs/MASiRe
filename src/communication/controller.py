@@ -5,7 +5,7 @@ class Controller:
 
     def __init__(self):
         self.agents = {}
-        self.timer = None
+        self.timer = time.time()
         self.simulation_response = None
 
     def check_population(self):
@@ -15,10 +15,7 @@ class Controller:
             return False
 
     def check_timer(self):
-        if self.timer is None:
-            self.timer = time.time()
-
-        if time.time() - self.timer < 10:
+        if time.time() - self.timer < 60:
             return True
         else:
             return False
