@@ -82,12 +82,11 @@ def do_actions():
     json_events = {'current_event': {}, 'pending_events': []}
 
     if current is not None:
-
         for event in current:
             if isinstance(current[event], list):
                 json_events['current_event'][event] = []
                 for obj_event in current[event]:
-                    json_events['current_event'][event] = obj_event.json()
+                    json_events['current_event'][event].append(obj_event.json())
             else:
                 json_events['current_event'][event] = current[event].json()
 
@@ -105,7 +104,9 @@ def do_actions():
 def finish():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
-    exit()
+
+    import os
+    os._exit(0)
 
 
 if __name__ == '__main__':
