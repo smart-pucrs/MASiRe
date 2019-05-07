@@ -72,7 +72,7 @@ def handle_arguments():
     if args.g:
         install_requirements(pyv)
 
-    return [config_file_location, base_url, simulation_port], \
+    return [config_file_location, base_url, simulation_port, api_port], \
            [base_url, api_port, simulation_port, step_time, first_conn_time], \
            pyversion, args.g
 
@@ -94,17 +94,14 @@ if __name__ == '__main__':
     simulation_args, api_args, pyv, globally = handle_arguments()
     path = handle_enviroment(pyv, globally)
 
-    qtd_agents = 0
+    qt_agents = 0
     with open(simulation_args[0], 'r') as file:
         json_file = json.loads(file.read())
         for role in json_file['agents']:
-            qtd_agents += json_file['agents'][role]
+            qt_agents += json_file['agents'][role]
 
-    simulation = multiprocessing.Process(target=start_simulation, args=(simulation_args, pyv, path))
-    api = multiprocessing.Process(target=start_api, args=(api_args, pyv, path, qtd_agents))
-
-    simulation.daemon = True
-    api.daemon = True
+    simulation = multiprocessing.Process(target=start_simulation, args=(simulation_args, pyv, path), daemon=True)
+    api = multiprocessing.Process(target=start_api, args=(api_args, pyv, path, qt_agents), daemon=True)
 
     simulation.start()
     api.start()

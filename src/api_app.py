@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.debug = False
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 CORS(app)
+controller = None
 
 
 @app.route('/connect_agent', methods=['POST'])
@@ -124,9 +125,18 @@ def get_job():
         return jsonify({'response': False, 'message': "No data from simulation"})
 
 
+@app.route('/started', methods=['GET'])
+def simulation_started():
+    global controller
+    multiprocessing.Process(target=counter, args=(first_conn_time,), daemon=True).start()
+    controller = Controller(qtd_agents, first_conn_time)
+    return jsonify('')
+
+
 @app.route('/time_ended', methods=['GET'])
 def finish_step():
     """Send all the jobs to the simulation and save the results."""
+
     if request.remote_addr != base_url:
         return jsonify("Error")
 
@@ -169,6 +179,4 @@ def counter(sec):
 
 
 if __name__ == '__main__':
-    multiprocessing.Process(target=counter, args=(first_conn_time,)).start()
-    controller = Controller(qtd_agents, first_conn_time)
     serve(app, host=base_url, port=port)

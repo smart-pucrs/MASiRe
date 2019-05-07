@@ -9,6 +9,7 @@ Also, one file to start the app is needed, check previous versions of the repo l
 """
 import json
 import sys
+import requests
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -16,7 +17,7 @@ from simulation.simulation import Simulation
 from waitress import serve
 
 
-config_path, base_url, port = sys.argv[1:]
+config_path, base_url, port, api_port = sys.argv[1:]
 
 
 def start_instance(path):
@@ -111,4 +112,7 @@ if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    serve(app, host=base_url, port=port)
+    if requests.get(f'http://{base_url}:{api_port}/started'):
+        serve(app, host=base_url, port=port)
+    else:
+        print('Errors during startup')
