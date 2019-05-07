@@ -1,0 +1,5 @@
+
+The simulation ended with 0 steps in 19.102 at 16:29:29. It had 0 floods, 0 victims, 0 photos, 0 water_samples
+The amount of completed events victims: 0, photos: 0 and water samples: 0
+
+====================================================================================================

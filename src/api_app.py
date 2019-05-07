@@ -42,6 +42,9 @@ def validate_agent_token():
     token = request.get_json(force=True)
     agent_response = {'agent_connected': False}
 
+    if not isinstance(token, str):
+        return jsonify({'response': agent_response, 'message': "Token is not a string"})
+
     if token not in controller.agents:
         return jsonify({'response': agent_response, 'message': "Token not registered"})
 
@@ -148,7 +151,9 @@ def finish_step():
 
         if isinstance(controller.simulation_response, str):
             return jsonify(1)
-        print("time ended")
+
+        print("Step finalizado!")
+
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
@@ -164,6 +169,7 @@ def counter(sec):
         end_code = requests.get(f'http://{base_url}:{port}/time_ended').json()
         if isinstance(end_code, int):
             requests.get(f'http://{base_url}:{simulation_port}/finish')
+
     except Exception as e:
         print(e)
 

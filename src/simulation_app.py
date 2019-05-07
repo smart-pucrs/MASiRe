@@ -90,6 +90,7 @@ def do_actions():
 def finish():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
+
     exit()
 
 

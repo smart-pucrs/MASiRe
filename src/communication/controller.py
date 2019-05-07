@@ -28,5 +28,4 @@ class Controller:
         for token in self.agents:
             if token == agent_token:
                 return True
-
         return False
