@@ -1,0 +1,12 @@
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to search_social_asset passing doctor at 17:44:41. The result was No social asset found for the needed purposes
+
+====================================================================================================
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to search_social_asset passing doctor at 17:44:59. The result was True
+
+====================================================================================================
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to move passing -30.1114664,-51.2180524 at 17:45:26. The result was Unknown facility
+
+====================================================================================================

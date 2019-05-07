@@ -158,7 +158,7 @@ class Generator:
         self.total_social_assets += len(social_assets)
 
         for i in range(len(social_assets)):
-            asset_location = self.router.get_closest_node(random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon))
+            asset_location = self.router.get_node_coord(self.router.get_closest_node(random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon)))
 
             social_size = random.randint(
                 self.config['generate']['socialAsset']['minSize'],

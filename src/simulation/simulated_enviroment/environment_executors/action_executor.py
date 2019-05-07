@@ -91,8 +91,6 @@ class ActionExecutor:
                     if parameters[0] != 'cdm':
                         raise Failed_wrong_param('Unknown facility')
 
-                    location = cdm_location
-
                 else:
                     location = [parameters[0], parameters[1]]
 
@@ -130,8 +128,6 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                agent.location = cdm_location
-
                 if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
@@ -147,8 +143,6 @@ class ActionExecutor:
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
-                agent.location = cdm_location
-
                 if agent.location == cdm_location:
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
@@ -163,8 +157,6 @@ class ActionExecutor:
             elif action_name == 'charge':
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
-
-                agent.location = cdm_location
 
                 if agent.location == cdm_location:
                     agent.charge()
@@ -196,9 +188,6 @@ class ActionExecutor:
 
                 for event in self.world.events:
                     for water_sample in event['water_samples']:
-
-                        agent.location = water_sample.location
-
                         if water_sample.active and water_sample.location == agent.location:
                             agent.add_physical_item(water_sample)
                             water_sample.active = False
@@ -213,9 +202,6 @@ class ActionExecutor:
 
                 for event in self.world.events:
                     for photo in event['photos']:
-
-                        agent.location = photo.location
-
                         if photo.active and photo.location == agent.location:
                             agent.add_virtual_item(photo)
                             photo.active = False
@@ -248,9 +234,6 @@ class ActionExecutor:
                 for social_asset in self.world.social_assets:
                     for social_asset_agent in agent.social_assets:
                         if social_asset_agent == social_asset:
-
-                            agent.location = social_asset.location
-
                             if agent.location == social_asset.location and social_asset.active:
                                 agent.add_physical(social_asset)
                                 agent.last_action_result = True

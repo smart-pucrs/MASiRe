@@ -120,7 +120,10 @@ def get_job():
 
                     return jsonify({'simulation_state': simulation_state})
 
-        return jsonify({'response': False, 'message': "No action of agent from the last step"})
+        simulation_state = controller.simulation_response.copy()
+        simulation_state['action_results'] = []
+
+        return jsonify({'simulation_state': simulation_state})
 
     else:
         return jsonify({'response': False, 'message': "No data from simulation"})
