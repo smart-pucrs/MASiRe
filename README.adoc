@@ -16,7 +16,7 @@ This project was initially developed at http://www.tools.ages.pucrs.br/desastres
 == Run the Disaster Simulator
 After having the environment configured, you can run the simulation in a terminal at the root of this project directory, just type the following command in the terminal:
 
-`python3 start_simulation.py <server-configuration-file>.json`
+`python3 start_system.py <server-configuration-file>.json`
 
 
 == Run MAS Examples
