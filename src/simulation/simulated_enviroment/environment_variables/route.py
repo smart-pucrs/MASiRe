@@ -132,12 +132,17 @@ class Route:
         elif role == 'boat':
             return self.generate_coordinates_for_boats(start, end, speed, list_of_nodes)
 
-        coords = []
-        result, nodes = self.router.doRoute(start, end)
-        for node in nodes:
-            coords.append(list(self.get_node_coord(node)))
+        if start not in list_of_nodes:
+            coords = []
+            result, nodes = self.router.doRoute(start, end)
+            for node in nodes:
+                if node not in list_of_nodes:
+                    coords.append(list(self.get_node_coord(node)))
+                else:
+                    return "no_route", []
+            return result, coords
 
-        return result, coords
+        return "no_route", []
 
     def nodes_in_radius(self, coord, radius):
         """

@@ -1,0 +1,8 @@
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to move passing [] at 15:19:54. The result was True
+
+====================================================================================================
+
+Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to move passing [] at 15:20:24. The result was True
+
+====================================================================================================

@@ -91,6 +91,7 @@ class ActionExecutor:
                     if parameters[0] != 'cdm':
                         raise Failed_wrong_param('Unknown facility')
 
+                    location = cdm_location
                 else:
                     location = [parameters[0], parameters[1]]
 
@@ -98,27 +99,13 @@ class ActionExecutor:
                     agent.route, distance = [agent.location], 0
                     return
 
-                if not agent.check_battery():
-                    raise Failed_insufficient_battery('Not enough battery to complete this step')
+                # if not agent.check_battery():
+                #   raise Failed_insufficient_battery('Not enough battery to complete this step')
 
                 if not agent.route:
-                    if agent.role == 'drone' or agent.role == 'boat':
-                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed)/2, self.world.events[step]["flood"].list_of_nodes)
-                        agent.destination_distance = distance
-
-                        if not distance:
-                            return
-                    else:
-                        start_node = self.route.get_closest_node(*agent.location)
-                        end_node = self.route.get_closest_node(*location)
-                        route_result, route = self.route.get_route(start_node, end_node, False)
-
-                        if route_result == 'success':
-                            agent.route = route
-                        else:
-                            raise Failed_no_route()
-
-                        agent.destination_distance = self.route.node_distance(start_node, end_node)
+                    self.get_route(agent, location, self.world.events[step]["flood"].list_of_nodes)
+                elif agent.route[-1] != location:
+                    self.get_route(agent, location, self.world.events[step]["flood"].list_of_nodes)
 
                 agent.last_action_result = True
                 agent.discharge()
@@ -344,3 +331,23 @@ class ActionExecutor:
 
         else:
             self.world.cdm.add_virtual_items(removed_items, agent.token)
+
+    def get_route(self, agent, location, list_of_nodes):
+        if agent.role == 'drone' or agent.role == 'boat':
+            agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed) / 2,
+                                                         list_of_nodes)
+            agent.destination_distance = distance
+
+            if not distance:
+                return
+        else:
+            start_node = self.route.get_closest_node(*agent.location)
+            end_node = self.route.get_closest_node(*location)
+            route_result, route = self.route.get_route(start_node, end_node, False)
+
+            if route_result == 'success':
+                agent.route = route
+            else:
+                raise Failed_no_route()
+
+            agent.destination_distance = self.route.node_distance(start_node, end_node)
