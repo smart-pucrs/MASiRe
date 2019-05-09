@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 10,
+    "steps": 20,
     "map": "files/map.osm",
     "minLon": -51.2163800,
     "maxLon": -51.2076000,
@@ -9,15 +9,15 @@
     "maxLat": -30.1086200,
     "centerLat": -30.110815,
     "centerLon": -51.21199,
-    "proximity": 0.005,
+    "proximity": 0.00005,
     "randomSeed": 2018,
     "gotoCost": 2,
     "rechargeRate": 2
   },
   "agents": {
-    "drone": 1,
+    "boat": 1,
     "car": 1,
-    "boat": 1
+    "drone": 1
   },
   "roles": {
     "drone": {

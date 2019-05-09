@@ -101,10 +101,18 @@ class ActionExecutor:
                 # if not agent.check_battery():
                 #   raise Failed_insufficient_battery('Not enough battery to complete this step')
 
+                list_of_nodes = []
+                for event in self.world.events:
+                    if event['flood'].active:
+                        list_of_nodes.extend(event['flood'].list_of_nodes)
+
                 if not agent.route:
-                    self.get_route(agent, location, self.world.events[step]["flood"].list_of_nodes)
+                    self.get_route(agent, location, list_of_nodes)
                 elif agent.route[-1] != location:
-                    self.get_route(agent, location, self.world.events[step]["flood"].list_of_nodes)
+                    self.get_route(agent, location, list_of_nodes)
+
+                if not agent.destination_distance:
+                    return
 
                 agent.last_action_result = True
                 agent.discharge()
@@ -115,7 +123,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -133,7 +141,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -151,7 +159,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     agent.charge()
@@ -168,7 +176,7 @@ class ActionExecutor:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = victim.location
+                        #agent.location = victim.location
 
                         if victim.active and self.get_location(victim.location, agent.location):
                             agent.add_physical_item(victim)
@@ -185,7 +193,7 @@ class ActionExecutor:
                 for event in self.world.events:
                     for water_sample in event['water_samples']:
                         # ================= TEST CODE HERE ==================
-                        agent.location = water_sample.location
+                        #agent.location = water_sample.location
 
                         if water_sample.active and self.get_location(water_sample.location, agent.location):
                             agent.add_physical_item(water_sample)
@@ -203,7 +211,7 @@ class ActionExecutor:
                     for photo in event['photos']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = photo.location
+                        #agent.location = photo.location
 
                         if photo.active and self.get_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)
@@ -349,15 +357,11 @@ class ActionExecutor:
         else:
             self.world.cdm.add_virtual_items(removed_items, agent.token)
 
-
     def get_route(self, agent, location, list_of_nodes):
         if agent.role == 'drone' or agent.role == 'boat':
             agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed) / 2,
                                                          list_of_nodes)
             agent.destination_distance = distance
-
-            if not distance:
-                return
         else:
             start_node = self.route.get_closest_node(*agent.location)
             end_node = self.route.get_closest_node(*location)
@@ -369,6 +373,8 @@ class ActionExecutor:
                 raise Failed_no_route()
 
             agent.destination_distance = self.route.node_distance(start_node, end_node)
+
+        print("ROUTE ->>> ", agent.route)
 
     def get_location(self, x, y):
         proximity = self.config['map']['proximity']

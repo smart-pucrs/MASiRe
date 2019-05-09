@@ -45,6 +45,7 @@ boat_actions = [get_action(token_boat, "rescue_victim", []),
 def do_actions():
     actions = []
     agents = ["car", "drone", "boat"]
+    steps = 1
 
     for step in range(steps-1):
         actions.append(car_actions[step])

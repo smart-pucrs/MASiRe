@@ -218,9 +218,12 @@ class Route:
 
         return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
 
-    def generate_coordinates_for_boats(self, start, end, speed, list_of_nodes):
-        if end in list(map(lambda x: self.get_node_coord(x), list_of_nodes)):
-            if start in list(map(lambda x: self.get_node_coord(x), list_of_nodes)):
+    def generate_coordinates_for_boats(self, start, end, speed, list_of_nodes=None):
+        start_node = self.get_closest_node(*start)
+        end_node = self.get_closest_node(*end)
+
+        if start_node in list_of_nodes:
+            if end_node in list_of_nodes:
                 actual_x, actual_y = start
 
                 if actual_x > end[0]:
@@ -237,8 +240,7 @@ class Route:
                 distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
 
                 return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
-        else:
-            return [], 0
+        return [], 0
 
     def decrease_until_reached(self, start, end, speed):
         if start == end:
