@@ -365,7 +365,7 @@ class ActionExecutor:
         else:
             start_node = self.route.get_closest_node(*agent.location)
             end_node = self.route.get_closest_node(*location)
-            route_result, route = self.route.get_route(start_node, end_node, False)
+            route_result, route = self.route.get_route(start_node, end_node, False, 4, list_of_nodes)
 
             if route_result == 'success':
                 agent.route = route
