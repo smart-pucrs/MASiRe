@@ -10,6 +10,7 @@ Also, one file to start the app is needed, check previous versions of the repo l
 import json
 import sys
 import requests
+import time
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -110,6 +111,9 @@ def finish():
 
 
 if __name__ == '__main__':
+    start = time.time()
+    end = time.time()
+    print(f'Demorou: {end-start}')
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
