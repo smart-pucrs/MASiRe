@@ -246,11 +246,11 @@ class Route:
 
         points = []
         while True:
-            if start - .0001 * speed < end:
+            if start - .001 * speed < end:
                 points.append(end)
                 break
             else:
-                start -= .0001 * speed
+                start -= .001 * speed
 
             points.append(start)
 
@@ -262,11 +262,11 @@ class Route:
 
         points = []
         while True:
-            if start + .0001 * speed > end:
+            if start + .001 * speed > end:
                 points.append(end)
                 break
             else:
-                start += .0001 * speed
+                start += .001 * speed
 
             points.append(start)
 

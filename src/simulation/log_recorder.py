@@ -20,8 +20,20 @@ class Logger:
         self.percepts_file = str(self.percepts_file / f'{time_of_date}_percepts.txt')
 
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
+        events = agent_percepts[1].copy()
+
+        for event in events:
+            if event == 'flood':
+                events[event] = events[event].json()
+            else:
+                aux = []
+                for x in events[event]:
+                    aux.append(x.json())
+                events[event] = aux
+
         with open(self.percepts_file, 'w') as file:
-            file.write(f'Agent perceptions: \n{json.dumps(agent_percepts, indent=4)}'
+            file.write(f'Agent perceptions: \n{json.dumps(agent_percepts[0], indent=4)}\n'
+                       f'{json.dumps(events, indent=4)}'
                        f'\nMap perceptions: \n{json.dumps(percepts, indent=4)}'
                        f'\nRoles: {"; ".join(roles)}'
                        f'\nSeed: {seed}')

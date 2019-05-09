@@ -9,7 +9,7 @@
     "maxLat": -30.1086200,
     "centerLat": -30.110815,
     "centerLon": -51.21199,
-    "proximity": 5,
+    "proximity": 0.005,
     "randomSeed": 2018,
     "gotoCost": 2,
     "rechargeRate": 2

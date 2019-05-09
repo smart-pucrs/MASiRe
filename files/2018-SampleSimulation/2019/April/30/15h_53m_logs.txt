@@ -1,5 +1,0 @@
-
-Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQxIn0.nC64_8rt6QKRm1JuHGIs1s6l_N3P88uP1LLGRH3uSHs, role: drone and name: jorginho tried to pass passing [] at 15:54:13. The result was True
-====================================================================================================
-Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQxIn0.nC64_8rt6QKRm1JuHGIs1s6l_N3P88uP1LLGRH3uSHs, role: drone and name: jorginho tried to pass passing [] at 15:54:39. The result was True
-====================================================================================================

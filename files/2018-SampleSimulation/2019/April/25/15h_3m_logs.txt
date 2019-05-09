@@ -1,5 +1,0 @@
-
-Agent of token: eyJuYW1lIjoidWJ1bnR1IiwidmVyc2lvbiI6IjEuMyIsIm93bmVyIjoiODc0NjIiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tojNY-k6W8NKsxTH9o0OIP7-a6FUBVh1sQ8nq-cD_Co, role: drone and name: ubuntu tried to deliver_virtual passing photo at 15:6:12. The result was The given amount is greater than what the agent is carrying
-====================================================================================================
-Agent of token: eyJuYW1lIjoidWJ1bnR1IiwidmVyc2lvbiI6IjEuMyIsIm93bmVyIjoiODc0NjIiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.tojNY-k6W8NKsxTH9o0OIP7-a6FUBVh1sQ8nq-cD_Co, role: drone and name: ubuntu tried to deliver_virtual passing photo at 15:6:34. The result was The given amount is greater than what the agent is carrying
-====================================================================================================

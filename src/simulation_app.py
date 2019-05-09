@@ -9,6 +9,7 @@ Also, one file to start the app is needed, check previous versions of the repo l
 """
 import json
 import sys
+import requests
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -16,7 +17,7 @@ from simulation.simulation import Simulation
 from waitress import serve
 
 
-config_path, base_url, port = sys.argv[1:]
+config_path, base_url, port, api_port = sys.argv[1:]
 
 
 def start_instance(path):
@@ -38,7 +39,20 @@ def register_agent():
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).__dict__.copy()
     del agent['agent_info']
-    return jsonify({'agent': agent, 'initial_percepts': initial_percepts})
+
+    events = initial_percepts[1].copy()
+    map_percepts = initial_percepts[0].copy()
+
+    for event in events:
+        if event == 'flood':
+            events[event] = events[event].json()
+        else:
+            aux = []
+            for x in events[event]:
+                aux.append(x.json())
+            events[event] = aux
+
+    return jsonify({'agent': agent, 'initial_percepts': [map_percepts, events]})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -66,13 +80,13 @@ def do_actions():
 
     current = result['events']['current_event']
     json_events = {'current_event': {}, 'pending_events': []}
-    if current is not None:
 
+    if current is not None:
         for event in current:
             if isinstance(current[event], list):
                 json_events['current_event'][event] = []
                 for obj_event in current[event]:
-                    json_events['current_event'][event] = obj_event.json()
+                    json_events['current_event'][event].append(obj_event.json())
             else:
                 json_events['current_event'][event] = current[event].json()
 
@@ -91,11 +105,15 @@ def finish():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
 
-    exit()
+    import os
+    os._exit(0)
 
 
 if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    serve(app, host=base_url, port=port)
+    if requests.get(f'http://{base_url}:{api_port}/started'):
+        serve(app, host=base_url, port=port)
+    else:
+        print('Errors during startup')

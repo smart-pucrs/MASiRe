@@ -25,4 +25,5 @@ class Flood:
         """Return a json like representation of the object"""
         copy = self.__dict__.copy()
         del copy['list_of_nodes']
+        del copy['period']
         return copy
