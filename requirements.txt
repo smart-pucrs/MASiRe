@@ -5,3 +5,4 @@ eventlet
 pyroutelib3==1.1
 requests
 waitress
+cython
