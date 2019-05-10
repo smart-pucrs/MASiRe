@@ -103,7 +103,7 @@ class ActionExecutor:
 
                 list_of_nodes = []
                 for event in self.world.events:
-                    if event['flood'].active:
+                    if event['flood'] and event['flood'].active:
                         list_of_nodes.extend(event['flood'].list_of_nodes)
 
                 if not agent.route:
@@ -237,8 +237,8 @@ class ActionExecutor:
                 raise Failed_no_social_asset('No social asset found for the needed purposes')
 
             elif action_name == 'get_social_asset':
-                if len(parameters) != 1:
-                    raise Failed_wrong_param('More than 1 or less than 1 parameter given.')
+                if parameters:
+                    raise Failed_wrong_param('Wrong amount of parameters given.')
 
                 if agent.role == 'drone':
                     raise Failed_invalid_kind('Agent role does not support carrying social asset.')

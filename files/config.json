@@ -15,9 +15,9 @@
     "rechargeRate": 2
   },
   "agents": {
-    "car": 1,
+    "drone": 1,
     "boat": 1,
-    "drone": 1
+    "car": 1
   },
   "roles": {
     "drone": {

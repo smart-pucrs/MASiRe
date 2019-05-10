@@ -116,7 +116,7 @@ def register_job():
         return jsonify(agent_response)
 
     except TypeError as t:
-        agent_response['message'] = t
+        agent_response['message'] = str(t)
         return jsonify(agent_response)
 
     except KeyError as k:

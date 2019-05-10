@@ -24,19 +24,21 @@ class Generator:
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self) -> list:
-        events: list = [dict()] * self.config['map']['steps']
-        events[0]['flood'] = self.generate_flood()
+        events = list()
+        events.append(dict(flood=self.generate_flood(), victims=[], water_samples=[], photos=[], social_assets=[]))
 
         for step in range(1, self.config['map']['steps']):
+            event = dict(flood=None, victims=[], water_samples=[], photos=[], social_assets=[])
             if random.randint(0, 99) <= self.config['generate']['floodProbability']:
-                events[step]['flood'] = self.generate_flood()
-                nodes: list = events[step]['flood'].list_of_nodes
-                events[step]['victims']: list = self.generate_victims(nodes, False)
-                events[step]['water_samples']: list = self.generate_water_samples(nodes)
-                events[step]['photos']: list = self.generate_photos(nodes)
-                events[step]['social_assets']: list = self.generate_social_assets()
+                event['flood'] = self.generate_flood()
+                nodes: list = event['flood'].list_of_nodes
+                event['victims']: list = self.generate_victims(nodes, False)
+                event['water_samples']: list = self.generate_water_samples(nodes)
+                event['photos']: list = self.generate_photos(nodes)
+                event['social_assets']: list = self.generate_social_assets()
 
                 self.total_floods += 1
+            events.append(event)
 
         self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events

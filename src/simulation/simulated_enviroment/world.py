@@ -35,19 +35,23 @@ class World:
         # Get all active floods
         floods, photos, victims, water_samples = [], [], [], []
 
-        for idx, obj in enumerate(self.events):
+        for idx, event in enumerate(self.events):
             if idx == step - 1:
                 break
-            if obj['flood'].active:
-                floods.append(obj['flood'])
-                photos.extend([photo for photo in obj['photos'] if photo.active])
-                victims.extend([victim for victim in obj['victims'] if victim.active])
-                water_samples.extend([water_sample for water_sample in obj['water_samples'] if water_sample.active])
+            if event['flood'] and event['flood'].active:
+                floods.append(event['flood'])
+                photos.extend([photo for photo in event['photos'] if photo.active])
+                victims.extend([victim for victim in event['victims'] if victim.active])
+                water_samples.extend([water_sample for water_sample in event['water_samples'] if water_sample.active])
 
         return [floods, photos, victims, water_samples]
 
     def get_current_event(self, step):
         flood = self.events[step]['flood']
+
+        if not flood:
+            return {}
+
         photos = self.events[step]['photos']
         victims = self.events[step]['victims']
         water_samples = self.events[step]['water_samples']
@@ -72,6 +76,9 @@ class World:
     def decrease_period_and_lifetime(self, step):
         for i in range(step):
             prev_event = self.events[i]
+            if not prev_event['flood']:
+                continue
+
             if not prev_event['flood'].period:
                 prev_event['flood'].active = False
             else:
@@ -86,18 +93,18 @@ class World:
     def events_completed(self):
         photos, victims, water_samples = [], [], []
 
-        for obj in self.events:
-            for victim in obj['victims']:
+        for event in self.events:
+            for victim in event['victims']:
                 if not victim.active and victim.lifetime:
                     victims.append(victim)
 
-        for obj in self.events:
-            for photo in obj['photos']:
+        for event in self.events:
+            for photo in event['photos']:
                 if not photo.active:
                     photos.append(photo)
 
-        for obj in self.events:
-            for water_sample in obj['water_samples']:
+        for event in self.events:
+            for water_sample in event['water_samples']:
                 if not water_sample.active:
                     water_samples.append(water_sample)
 
