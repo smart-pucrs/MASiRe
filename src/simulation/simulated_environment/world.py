@@ -1,10 +1,10 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data
 # /WorldState.java
-from simulation.simulated_enviroment.environment_executors.action_executor import ActionExecutor
-from simulation.simulated_enviroment.environment_variables.agent import Agent
-from simulation.simulated_enviroment.environment_variables.role import Role
-from simulation.simulated_enviroment.environment_executors.generator import Generator
-from simulation.simulated_enviroment.environment_variables.cdm import Cdm
+from simulation.simulated_environment.environment_executors.action_executor import ActionExecutor
+from simulation.simulated_environment.environment_variables.agent import Agent
+from simulation.simulated_environment.environment_variables.role import Role
+from simulation.simulated_environment.environment_executors.generator import Generator
+from simulation.simulated_environment.environment_variables.cdm import Cdm
 
 
 class World:
