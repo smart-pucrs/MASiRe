@@ -2,7 +2,7 @@ class Flood:
 
     # still missing location attribute
 
-    def __init__(self, period, dimensions, list_of_nodes):
+    def __init__(self, period: int, dimensions: dict, list_of_nodes: list):
         """
         [Object that represents a flood.]
 
@@ -15,11 +15,11 @@ class Flood:
         :param water_samples: All 'collectible water samples' that were randomly generated
         over a certain flood instance.
         """
-        self.type = 'flood'
-        self.active = False
-        self.period = period
-        self.dimensions = dimensions
-        self.list_of_nodes = list_of_nodes
+        self.type: str = 'flood'
+        self.active: bool = False
+        self.period: int = period
+        self.dimensions: dict = dimensions
+        self.list_of_nodes: list = list_of_nodes
 
     def json(self):
         """Return a json like representation of the object"""

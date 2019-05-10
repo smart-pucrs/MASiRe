@@ -94,7 +94,7 @@
   },
   "generate": {
     "quadSize": 2,
-    "floodProbability": 5,
+    "floodProbability": 100,
     "flood": {
       "minPeriod": 40,
       "maxPeriod": 80,
@@ -111,21 +111,21 @@
     },
     "photo": {
       "size": 3,
-      "minAmount": 1,
-      "maxAmount": 6,
-      "victimProbability": 20
+      "minAmount": 1000,
+      "maxAmount": 1000,
+      "victimProbability": 100
     },
     "victim": {
       "minSize": 5,
       "maxSize": 10,
-      "minAmount": 0,
-      "maxAmount": 5,
+      "minAmount": 1000,
+      "maxAmount": 1000,
       "minLifetime": 10,
       "maxLifetime": 30
     },
     "socialAsset": {
-      "minAmount": 2,
-      "maxAmount": 8,
+      "minAmount": 1000,
+      "maxAmount": 1000,
       "minSize": 5,
       "maxSize": 10,
       "profession": [
@@ -134,8 +134,8 @@
     },
     "waterSample": {
       "size": 4,
-      "minAmount": 1,
-      "maxAmount": 4
+      "minAmount": 1000,
+      "maxAmount": 1000
     }
   }
 }

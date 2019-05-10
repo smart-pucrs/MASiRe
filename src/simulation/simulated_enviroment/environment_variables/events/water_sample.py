@@ -1,6 +1,6 @@
 class WaterSample:
 
-    def __init__(self, size, location):
+    def __init__(self, size: int, location: list):
         """
         [Object <Consumable> that represents a water sample
         collected at a flood instance.]
@@ -11,10 +11,10 @@ class WaterSample:
         instance was collected.
         """
 
-        self.type = 'water_sample'
-        self.size = size
-        self.location = location
-        self.active = False
+        self.type: str = 'water_sample'
+        self.size: int = size
+        self.location: list = location
+        self.active: bool = False
 
     def json(self):
         copy = self.__dict__.copy()

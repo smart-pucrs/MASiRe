@@ -1,6 +1,6 @@
 
 class SocialAsset:
-    def __init__(self, size, location, profession):
+    def __init__(self, size: int, location: list, profession: str):
         """
              [Object <Consumable> that represents a social asset instance.]
 
@@ -10,11 +10,11 @@ class SocialAsset:
              was found.
          """
 
-        self.type = 'social_asset'
-        self.size = size
-        self.active = False
-        self.location = location
-        self.profession = profession
+        self.type: str = 'social_asset'
+        self.size: int = size
+        self.active: bool = False
+        self.location: list = location
+        self.profession: str = profession
 
     def __eq__(self, other):
         return self.location == other.location and self.size == other.size and self.profession == other.profession

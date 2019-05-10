@@ -1,6 +1,6 @@
 class Victim:
 
-    def __init__(self, size, lifetime, location, photo):
+    def __init__(self, size: int, lifetime: int, location: list, photo: bool):
         """
              [Object <Consumable> that represents a victim instance revealed
              by a photography instance analysis.]
@@ -13,12 +13,12 @@ class Victim:
              was found.
          """
 
-        self.type = 'victim'
-        self.size = size
-        self.lifetime = lifetime
-        self.active = False
-        self.in_photo = photo
-        self.location = location
+        self.type: str = 'victim'
+        self.size: int = size
+        self.lifetime: int = lifetime
+        self.active: bool = False
+        self.in_photo: bool = photo
+        self.location: list = location
 
     def __eq__(self, other):
         return self.size == other['size'] and self.location == other['location'] and self.lifetime == other['lifetime']
