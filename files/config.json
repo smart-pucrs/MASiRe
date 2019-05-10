@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 20,
+    "steps": 10,
     "map": "files/map.osm",
     "minLon": -51.2163800,
     "maxLon": -51.2076000,
@@ -94,7 +94,7 @@
   },
   "generate": {
     "quadSize": 2,
-    "floodProbability": 100,
+    "floodProbability": 90,
     "flood": {
       "minPeriod": 40,
       "maxPeriod": 80,
@@ -111,21 +111,21 @@
     },
     "photo": {
       "size": 3,
-      "minAmount": 1000,
-      "maxAmount": 1000,
-      "victimProbability": 100
+      "minAmount": 1,
+      "maxAmount": 3,
+      "victimProbability": 70
     },
     "victim": {
       "minSize": 5,
       "maxSize": 10,
-      "minAmount": 1000,
-      "maxAmount": 1000,
+      "minAmount": 1,
+      "maxAmount": 3,
       "minLifetime": 10,
       "maxLifetime": 30
     },
     "socialAsset": {
-      "minAmount": 1000,
-      "maxAmount": 1000,
+      "minAmount": 5,
+      "maxAmount": 6,
       "minSize": 5,
       "maxSize": 10,
       "profession": [
@@ -134,8 +134,8 @@
     },
     "waterSample": {
       "size": 4,
-      "minAmount": 1000,
-      "maxAmount": 1000
+      "minAmount": 1,
+      "maxAmount": 3
     }
   }
 }
