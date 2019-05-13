@@ -358,6 +358,7 @@ class ActionExecutor:
             self.world.cdm.add_virtual_items(removed_items, agent.token)
 
     def get_route(self, agent, location, list_of_nodes):
+        agent.location = [-30.0797053, -51.2161666]
         if agent.role == 'drone' or agent.role == 'boat':
             agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed) / 2,
                                                          list_of_nodes)

@@ -43,7 +43,7 @@ class Generator:
             events[i] = event
             i += 1
 
-        self.router.generate_routing_tables([obj['flood'] for obj in events])
+        #self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events
 
     def generate_flood(self) -> Flood:

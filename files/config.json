@@ -94,7 +94,7 @@
   },
   "generate": {
     "quadSize": 2,
-    "floodProbability": 100,
+    "floodProbability": 30,
     "flood": {
       "minPeriod": 40,
       "maxPeriod": 80,
