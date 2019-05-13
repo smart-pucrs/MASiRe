@@ -1,0 +1,27 @@
+Disaster Simulator
+==================
+:toc:
+:toc-placement: preamble
+:ages: AGES
+
+This is the source code of the Disaster Simulator for Multi-Agent Sysmte, currently supporting flooding environments. This simulater is inspired by the https://multiagentcontest.org/2018/[Multi-Agent Programming Contest (MAPC)] and was initially developed by a team of students of http://www.ages.pucrs.br/[AGES] at PUCRS. 
+In this repository, you will find all the information required to run the simulator. 
+
+// Need some preamble to get TOC:
+{empty}
+
+== Prepare the Environment
+This project was initially developed at http://www.tools.ages.pucrs.br/desastres/Desastres[AGES Repository]. In order to execute our simulator you need to....
+
+== Run the Disaster Simulator
+After having the environment configured, you can run the simulation in a terminal at the root of this project directory, just type the following command in the terminal:
+
+`python3 start_system.py <server-configuration-file>.json`
+
+
+== Run MAS Examples
+
+== Contributing to this Project
+
+
+
