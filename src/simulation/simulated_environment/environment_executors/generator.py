@@ -24,10 +24,12 @@ class Generator:
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self) -> list:
-        events = list()
-        events.append(dict(flood=self.generate_flood(), victims=[], water_samples=[], photos=[], social_assets=[]))
+        events = [0] * self.config['map']['steps']
+        flood = self.generate_flood()
+        events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False), water_samples=self.generate_water_samples(flood.list_of_nodes), photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
 
-        for step in range(1, self.config['map']['steps']):
+        i: int = 1
+        while i < self.config['map']['steps']:
             event = dict(flood=None, victims=[], water_samples=[], photos=[], social_assets=[])
             if random.randint(0, 99) <= self.config['generate']['floodProbability']:
                 event['flood'] = self.generate_flood()
@@ -38,7 +40,8 @@ class Generator:
                 event['social_assets']: list = self.generate_social_assets()
 
                 self.total_floods += 1
-            events.append(event)
+            events[i] = event
+            i += 1
 
         self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events
@@ -99,7 +102,8 @@ class Generator:
         victim_probability: int = self.config['generate']['photo']['victimProbability']
         photo_size: int = self.config['generate']['photo']['size']
 
-        for i in range(size):
+        i: int = 0
+        while i < size:
             photo_location: list = list(self.router.get_node_coord(random.choice(nodes)))
 
             photo_victims: list = []
@@ -107,7 +111,7 @@ class Generator:
                 photo_victims = self.generate_victims(nodes, True)
 
             photos[i] = Photo(photo_size, photo_victims, photo_location)
-
+            i += 1
         return photos
 
     def generate_victims(self, nodes: list, photo_call: bool) -> list:
@@ -125,7 +129,8 @@ class Generator:
         victim_min_lifetime: int = self.config['generate']['victim']['minLifetime']
         victim_max_lifetime: int = self.config['generate']['victim']['maxLifetime']
 
-        for i in range(size):
+        i: int = 0
+        while i < size:
             self.victim_counter += 1
 
             victim_size: int = random.randint(victim_min_size, victim_max_size)
@@ -133,7 +138,7 @@ class Generator:
             victim_location: list = list(self.router.get_node_coord(random.choice(nodes)))
 
             victims[i] = Victim(victim_size, victim_lifetime, victim_location, photo_call)
-
+            i += 1
         return victims
 
     def generate_water_samples(self, nodes: list) -> list:
@@ -146,10 +151,11 @@ class Generator:
         self.total_water_samples += size
         water_sample_size: int = self.config['generate']['waterSample']['size']
 
-        for i in range(size):
+        i: int = 0
+        while i < size:
             water_sample_location: list = list(self.router.get_node_coord(random.choice(nodes)))
             water_samples[i] = WaterSample(water_sample_size, water_sample_location)
-
+            i += 1
         return water_samples
 
     def generate_social_assets(self) -> list:
@@ -169,12 +175,13 @@ class Generator:
         asset_max_size: int = self.config['generate']['socialAsset']['maxSize']
         professions: list = self.config['generate']['socialAsset']['profession']
 
-        for i in range(size):
+        i: int = 0
+        while i < size:
             asset_location = [random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon)]
 
             social_size = random.randint(asset_min_size, asset_max_size)
             profession = random.choice(professions)
 
             social_assets[i] = SocialAsset(social_size, asset_location, profession)
-
+            i += 1
         return social_assets

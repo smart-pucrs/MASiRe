@@ -15,9 +15,9 @@
     "rechargeRate": 2
   },
   "agents": {
+    "car": 1,
     "drone": 1,
-    "boat": 1,
-    "car": 1
+    "boat": 1
   },
   "roles": {
     "drone": {
@@ -94,7 +94,7 @@
   },
   "generate": {
     "quadSize": 2,
-    "floodProbability": 90,
+    "floodProbability": 100,
     "flood": {
       "minPeriod": 40,
       "maxPeriod": 80,
@@ -111,15 +111,15 @@
     },
     "photo": {
       "size": 3,
-      "minAmount": 1,
-      "maxAmount": 3,
-      "victimProbability": 70
+      "minAmount": 100,
+      "maxAmount": 100,
+      "victimProbability": 100
     },
     "victim": {
       "minSize": 5,
       "maxSize": 10,
-      "minAmount": 1,
-      "maxAmount": 3,
+      "minAmount": 200,
+      "maxAmount": 200,
       "minLifetime": 10,
       "maxLifetime": 30
     },

@@ -227,14 +227,14 @@ class Route:
                 actual_x, actual_y = start
 
                 if actual_x > end[0]:
-                    x_axis = self.decrease_until_reached(actual_x, end[0], speed) or [end[0]]
+                    x_axis = self.decrease_until_reached(actual_x, end[0], speed, list_of_nodes) or [end[0]]
                 else:
-                    x_axis = self.increase_until_reached(actual_x, end[0], speed) or [end[0]]
+                    x_axis = self.increase_until_reached(actual_x, end[0], speed, list_of_nodes) or [end[0]]
 
                 if actual_y > end[1]:
-                    y_axis = self.decrease_until_reached(actual_y, end[1], speed) or [end[1]]
+                    y_axis = self.decrease_until_reached(actual_y, end[1], speed, list_of_nodes) or [end[1]]
                 else:
-                    y_axis = self.increase_until_reached(actual_y, end[1], speed) or [end[1]]
+                    y_axis = self.increase_until_reached(actual_y, end[1], speed, list_of_nodes) or [end[1]]
 
                 longest = y_axis[-1] if len(x_axis) > len(y_axis) else x_axis[-1]
                 distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
@@ -242,34 +242,48 @@ class Route:
                 return list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
         return [], 0
 
-    def decrease_until_reached(self, start, end, speed):
+    def decrease_until_reached(self, start, end, speed, list_of_nodes=None):
         if start == end:
             return [end]
 
         points = []
         while True:
-            if start - .001 * speed < end:
+            if start - .0005 * speed < end:
                 points.append(end)
                 break
             else:
-                start -= .001 * speed
+                start -= .0005 * speed
 
-            points.append(start)
+            if list_of_nodes:
+                node = self.get_closest_node(start, end)
+                if node in list_of_nodes:
+                    points.append(start)
+                else:
+                    return None
+            else:
+                points.append(start)
 
         return points
 
-    def increase_until_reached(self, start, end, speed):
+    def increase_until_reached(self, start, end, speed, list_of_nodes=None):
         if start == end:
             return [end]
 
         points = []
         while True:
-            if start + .001 * speed > end:
+            if start + .0005 * speed > end:
                 points.append(end)
                 break
             else:
-                start += .001 * speed
+                start += .0005 * speed
 
-            points.append(start)
+            if list_of_nodes:
+                node = self.get_closest_node(start, end)
+                if node in list_of_nodes:
+                    points.append(start)
+                else:
+                    return None
+            else:
+                points.append(start)
 
         return points

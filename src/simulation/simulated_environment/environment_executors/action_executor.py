@@ -95,14 +95,14 @@ class ActionExecutor:
                     location = [parameters[0], parameters[1]]
 
                 if self.get_location(agent.location, location):
-                    agent.route, distance = [agent.location], 0
+                    agent.route, distance = [], 0
                     return
 
                 # if not agent.check_battery():
                 #   raise Failed_insufficient_battery('Not enough battery to complete this step')
 
                 list_of_nodes = []
-                for event in self.world.events:
+                for event in self.world.events[:step]:
                     if event['flood'] and event['flood'].active:
                         list_of_nodes.extend(event['flood'].list_of_nodes)
 
