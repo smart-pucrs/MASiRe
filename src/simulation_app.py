@@ -28,8 +28,12 @@ def start_instance(path):
 
 
 app = Flask(__name__)
+
+start = time.time()
 simulation = start_instance(config_path)
 initial_percepts = simulation.start()
+end = time.time()
+print(f'Demorou: {end-start}')
 
 
 @app.route('/register_agent', methods=['POST'])
@@ -111,9 +115,6 @@ def finish():
 
 
 if __name__ == '__main__':
-    start = time.time()
-    end = time.time()
-    print(f'Demorou: {end-start}')
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)

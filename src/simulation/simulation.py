@@ -1,4 +1,4 @@
-from simulation.simulated_enviroment.world import World
+from simulation.simulated_environment.world import World
 from simulation.log_recorder import Logger
 
 
