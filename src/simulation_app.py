@@ -11,6 +11,7 @@ import json
 import sys
 import requests
 import time
+import pathlib
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -18,7 +19,7 @@ from simulation.simulation import Simulation
 from waitress import serve
 
 config_path, base_url, port, api_port = sys.argv[1:]
-
+config_path = str((pathlib.Path(__file__).parent.parent/config_path).absolute())
 
 def start_instance(path):
     with open(path, 'r') as simulation_config:

@@ -140,10 +140,13 @@ def get_job():
 
     elif controller.simulation_response:
         if controller.simulation_response['action_results']:
-            for agent_token, agent_dict in controller.simulation_response["action_results"]:
+            for agent_token, agent_dict, result in controller.simulation_response["action_results"]:
                 if token == agent_token:
                     simulation_state = controller.simulation_response.copy()
                     simulation_state['action_results'] = agent_dict
+
+                    if result:
+                        return jsonify({'response': simulation_state, 'message': result})
 
                     return jsonify({'response': simulation_state})
 
