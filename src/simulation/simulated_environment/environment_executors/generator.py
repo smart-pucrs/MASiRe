@@ -26,7 +26,9 @@ class Generator:
     def generate_events(self) -> list:
         events = [0] * self.config['map']['steps']
         flood = self.generate_flood()
-        events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False), water_samples=self.generate_water_samples(flood.list_of_nodes), photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
+        events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False),
+                         water_samples=self.generate_water_samples(flood.list_of_nodes),
+                         photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
 
         i: int = 1
         while i < self.config['map']['steps']:
@@ -43,7 +45,6 @@ class Generator:
             events[i] = event
             i += 1
 
-        #self.router.generate_routing_tables([obj['flood'] for obj in events])
         return events
 
     def generate_flood(self) -> Flood:

@@ -77,7 +77,7 @@ class ActionExecutor:
         agent.last_action_result = False
 
         if action_name is None:
-            return 'No action given'
+            return 'No action given.'
 
         elif action_name == 'pass':
             agent.last_action_result = True
@@ -86,6 +86,9 @@ class ActionExecutor:
             if action_name == 'move':
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
+
+                if not (isinstance(parameters[0], float) and isinstance(parameters[1], float)):
+                    raise Failed_wrong_param('The parameters must be floats.')
 
                 if len(parameters) == 1:
                     if parameters[0] != 'cdm':
@@ -99,8 +102,8 @@ class ActionExecutor:
                     agent.route, distance = [], 0
                     return
 
-                # if not agent.check_battery():
-                #   raise Failed_insufficient_battery('Not enough battery to complete this step')
+                if not agent.check_battery():
+                    raise Failed_insufficient_battery('Not enough battery to complete this step.')
 
                 list_of_nodes = []
                 for event in self.world.events[:step]:
@@ -235,7 +238,7 @@ class ActionExecutor:
                         agent.last_action_result = True
                         return
 
-                raise Failed_no_social_asset('No social asset found for the needed purposes')
+                raise Failed_no_social_asset('No social asset found for the needed purposes.')
 
             elif action_name == 'get_social_asset':
                 if parameters:
@@ -329,11 +332,7 @@ class ActionExecutor:
                 raise Failed_invalid_kind('Invalid item to deliver')
 
         else:
-            ''' 
-            if amount < 1 or amount > agent.virtual_storage:
-                raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
-                                         'than what the agent is capable of carrying.')
-            '''
+
             if amount < 1:
                 raise Failed_item_amount('The given amount is less than 1')
 
