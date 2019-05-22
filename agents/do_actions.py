@@ -45,7 +45,7 @@ boat_actions = [get_action(token_boat, "rescue_victim", []),
 def do_actions():
     actions = []
     agents = ["car", "drone", "boat"]
-    steps = 1
+    steps = 10
 
     for step in range(steps-1):
         actions.append(car_actions[step])
@@ -53,7 +53,7 @@ def do_actions():
         actions.append(boat_actions[step])
 
         print("Resultado do Step ", step+1, ":")
-        response = requests.post('http://localhost:12345/do_actions', json=actions).json()
+        response = requests.post('http://localhost:8910/do_actions', json=actions).json()
         actions = []
 
         for agent in range(3):

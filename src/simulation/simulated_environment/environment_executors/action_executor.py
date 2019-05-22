@@ -40,7 +40,7 @@ class ActionExecutor:
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location, step)
 
-            agent_copy = self.world.agents[obj['token']].__dict__.copy()
+            agent_copy = self.world.agents[obj['token']].json()
             parameters = action[1] if len(action) == 2 else []
             self.logger.register_agent_action(
                 token=agent_copy['token'],

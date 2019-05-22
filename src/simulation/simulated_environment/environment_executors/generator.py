@@ -77,18 +77,19 @@ class Generator:
         flood_lat: float = random.uniform(self.config['map']['minLat'], self.config['map']['maxLat'])
         flood_lon: float = random.uniform(self.config['map']['minLon'], self.config['map']['maxLon'])
 
-        dimensions['coord']: list = list(self.router.align_coords(flood_lat, flood_lon))
+        dimensions['location']: list = list(self.router.align_coords(flood_lat, flood_lon))
 
         # generate the list of nodes that are in the flood
         if dimensions['shape'] == 'circle':
-            list_of_nodes: list = self.router.nodes_in_radius(dimensions['coord'], dimensions['radius'])
+            list_of_nodes: list = self.router.nodes_in_radius(dimensions['location'], dimensions['radius'])
 
         else:
             if dimensions['height'] < dimensions['length']:
-                list_of_nodes: list = self.router.nodes_in_radius(dimensions['coord'], dimensions['height'])
+                list_of_nodes: list = self.router.nodes_in_radius(dimensions['location'], dimensions['height'])
             else:
-                list_of_nodes: list = self.router.nodes_in_radius(dimensions['coord'], dimensions['length'])
+                list_of_nodes: list = self.router.nodes_in_radius(dimensions['location'], dimensions['length'])
 
+        dimensions['location'] = {'lat': dimensions['location'][0], 'lon': dimensions['location'][1]}
         return Flood(period, dimensions, list_of_nodes)
 
     def generate_photos(self, nodes: list) -> list:

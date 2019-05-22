@@ -19,4 +19,5 @@ class WaterSample:
     def json(self):
         copy = self.__dict__.copy()
         del copy['active']
+        copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
         return copy
