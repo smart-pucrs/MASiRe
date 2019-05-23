@@ -6,7 +6,7 @@ import multiprocessing
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from communication.controller import Controller
-from communication.temporary_agent import Agent
+from communication.temporary_agents import JobSenderAgent, ConnectedAgent
 from waitress import serve
 
 base_url, port, simulation_port, step_time, first_conn_time, qtd_agents = sys.argv[1:]
@@ -32,18 +32,18 @@ def get_agent_token():
             if not controller.check_connected(agent_info):
                 token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
-                agent = Agent(token, agent_info)
+                agent = ConnectedAgent(token, agent_info)
 
-                controller.agents[token] = agent
+                controller.connected_agents[token] = agent
 
                 agent_response['can_connect'] = True
                 agent_response['data'] = token
             else:
-                agent_response['message'] = 'Agent already connected'
+                agent_response['message'] = 'Agent already connected.'
         else:
-            agent_response['message'] = 'Time is up'
+            agent_response['message'] = 'Time is up.'
     else:
-        agent_response['message'] = 'All possible '
+        agent_response['message'] = 'All agents connected.'
 
     return jsonify(agent_response)
 
@@ -52,28 +52,28 @@ def get_agent_token():
 def validate_agent_token():
     """Check if the token is registered and then register the new agent in the simulation."""
     if controller.terminated:
-        return jsonify({'message': 'Simulation already finished'})
+        return jsonify({'message': 'Simulation already finished.'})
 
     token = request.get_json(force=True)
     agent_response = {'agent_connected': False}
 
     if controller.check_agent(token):
         try:
-            agent = {'token': token, 'agent_info': controller.agents[token].agent_info}
+            agent = {'token': token, 'agent_info': controller.connected_agents[token].agent_info}
             simulation_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
                                                 json=agent).json()
 
         except requests.exceptions.ConnectionError:
-            agent_response['message'] = 'Simulation is not online'
+            agent_response['message'] = 'Simulation is not online.'
             return jsonify(agent_response)
 
-        controller.agents[token].connected = True
+        controller.connected_agents[token].connected = True
         agent_response['agent_connected'] = True
         agent_response['info'] = simulation_response
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer)
 
     else:
-        agent_response['message'] = 'Token not registered'
+        agent_response['message'] = 'Token not registered.'
 
     return jsonify(agent_response)
 
@@ -82,31 +82,38 @@ def validate_agent_token():
 def register_job():
     """Save the job ."""
     if controller.terminated:
-        return jsonify({'message': 'Simulation already finished'})
+        return jsonify({'message': 'Simulation already finished.'})
 
     agent_response = {'job_delivered': False}
 
     if controller.check_timer():
-        agent_response['message'] = 'Simulation still receiving connections'
+        agent_response['message'] = 'Simulation still receiving connections.'
         return jsonify(agent_response)
 
     try:
         message = request.get_json(force=True)
         token = message['token']
 
-        if token not in controller.agents:
-            agent_response['message'] = 'Token not registered'
+        if not controller.check_agent(token):
+            agent_response['message'] = 'Token not registered.'
             return jsonify(agent_response)
 
-        if controller.agents[token].action_name:
+        if not controller.connected_agents[token].connected:
+            agent_response['message'] = 'Agent not connected.'
+            return jsonify(agent_response)
+
+        if controller.agent_job[token].action_name:
             agent_response['message'] = 'The agent has already sent a job'
             return jsonify(agent_response)
+
+        controller.agent_job[token] = JobSenderAgent()
 
         action = message['action']
         params = [*message['parameters']]
 
-        controller.agents[token].action_name = action
-        controller.agents[token].action_param = params
+        controller.agent_job[token].action_name = action
+        controller.agent_job[token].action_param = params
+
         agent_response['job_delivered'] = True
         agent_response['time'] = float(step_time) - (time.time() - controller.step_time) + 2
 
@@ -174,16 +181,14 @@ def finish_step():
 
     jobs = []
 
-    for token in controller.agents:
-        action_name = controller.agents[token].action_name
-        action_params = controller.agents[token].action_param
+    for token in controller.agent_job:
+        action_name = controller.agent_job[token].action_name
+        action_params = controller.agent_job[token].action_param
 
         if action_name:
             jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
 
-        controller.agents[token].action = ()
-        controller.agents[token].action_name = ""
-        controller.agents[token].action_param = []
+        controller.reset_agent_job()
 
     try:
         controller.simulation_response = \
