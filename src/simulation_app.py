@@ -17,7 +17,6 @@ from flask_cors import CORS
 from simulation.simulation import Simulation
 from waitress import serve
 
-
 config_path, base_url, port, api_port = sys.argv[1:]
 
 
@@ -33,13 +32,13 @@ start = time.time()
 simulation = start_instance(config_path)
 initial_percepts = simulation.start()
 end = time.time()
-print(f'Demorou: {end-start}')
+print(f'Demorou: {end - start}')
 
 
 @app.route('/register_agent', methods=['POST'])
 def register_agent():
     if request.remote_addr != base_url:
-       return jsonify(message='This endpoint can not be accessed.')
+        return jsonify(message='This endpoint can not be accessed.')
 
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).__dict__.copy()
