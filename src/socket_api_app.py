@@ -22,8 +22,9 @@ all_connected_queue = Queue()
 
 
 @app.route('/connect_agent', methods=['POST'])
-def get_agent_token():
+def connect_agent():
     """Return the token generated"""
+    print('connect')
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished'})
 
@@ -54,8 +55,9 @@ def get_agent_token():
 
 
 @app.route('/validate_agent', methods=['POST'])
-def validate_agent_token():
+def validate_agent():
     """Check if the token is registered and then register the new agent in the simulation."""
+    print('validate')
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
 
@@ -86,6 +88,7 @@ def validate_agent_token():
 @app.route('/send_job', methods=['POST'])
 def register_job():
     """Save the job ."""
+    print('save')
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
 
@@ -182,9 +185,10 @@ def finish_step():
 
         else:
             for token, agent, message in simulation_response['action_results']:
-                event = f'job_result_{token}'
+                event = f'job_result'
                 response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
-                socket.emit(event, response)
+                namespace = controller.connected_agents[token].namespace
+                socket.emit(event, response, namespace=namespace)
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
@@ -211,4 +215,5 @@ def counter(sec):
 
 
 if __name__ == '__main__':
-    socket.run(app=app, host='127.0.0.1', port='12345')
+    print(f'Serving on http://{base_url}:{port}')
+    socket.run(app=app, host=base_url, port=port)
