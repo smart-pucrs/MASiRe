@@ -2,8 +2,9 @@ import sys
 import jwt
 import time
 import json
-import requests
 import queue
+import secrets
+import requests
 import multiprocessing
 from multiprocessing import Queue
 from flask import Flask, request, jsonify
@@ -33,13 +34,15 @@ def get_agent_token():
         if controller.check_timer():
             if not controller.check_connected(agent_info):
                 token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
+                namespace = secrets.token_urlsafe(10)
 
-                agent = ConnectedAgent(token, agent_info)
+                agent = ConnectedAgent(token, agent_info, namespace)
 
                 controller.connected_agents[token] = agent
 
                 agent_response['can_connect'] = True
                 agent_response['data'] = token
+                agent_response['namespace'] = namespace
             else:
                 agent_response['message'] = 'Agent already connected.'
         else:
