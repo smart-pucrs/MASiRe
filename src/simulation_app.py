@@ -10,7 +10,6 @@ Also, one file to start the app is needed, check previous versions of the repo l
 import json
 import sys
 import requests
-import time
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -28,11 +27,8 @@ def start_instance(path):
 
 app = Flask(__name__)
 
-start = time.time()
 simulation = start_instance(config_path)
 initial_percepts = simulation.start()
-end = time.time()
-print(f'Demorou: {end - start}')
 
 
 @app.route('/register_agent', methods=['POST'])
@@ -87,6 +83,8 @@ def do_actions():
 
     if current is not None:
         for event in current:
+            if isinstance(current[event], str):
+                continue
             if isinstance(current[event], list):
                 json_events['current_event'][event] = []
                 for obj_event in current[event]:
@@ -117,7 +115,7 @@ if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    if requests.get(f'http://{base_url}:{api_port}/started'):
+    if requests.get(f'http://{base_url}:{api_port}/start'):
         serve(app, host=base_url, port=port)
     else:
         print('Errors during startup')
