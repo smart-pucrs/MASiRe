@@ -9,10 +9,10 @@ import subprocess
 root = pathlib.Path(__file__).parent.absolute()
 
 
-def start_simulation(s_args, python_version, path):
+def start_simulation(s_args, python_version, venv_path):
     file_path = root / "src" / "simulation_app.py"
-    if path:
-        subprocess.call([f"{str(path)}/python{python_version}", str(file_path), *map(str, s_args)])
+    if venv_path:
+        subprocess.call([f"{str(venv_path)}/python{python_version}", str(file_path), *map(str, s_args)])
     else:
         subprocess.call([f"python{python_version}", str(file_path), *map(str, s_args)])
 
@@ -25,7 +25,7 @@ def start_api(a_args, python_version, path, qtd_agents):
         subprocess.call([f"python{python_version}", str(file_path), *map(str, a_args), str(qtd_agents)])
 
 
-def handle_enviroment(python_version, globally=False):
+def handle_enviroment(python_version, globally):
     if globally:
         return ''
     venv_path = root / 'venv'
@@ -50,7 +50,7 @@ def initialize_env(python_version):
         subprocess.call(['virtualenv', 'venv'])
 
 
-def install_requirements(python_version, venv_path=''):
+def install_requirements(python_version, venv_path):
     if venv_path:
         subprocess.call([f"{str(venv_path)}/pip{python_version}", "install", "-r", "requirements.txt"])
     else:
