@@ -77,7 +77,7 @@ def validate_agent():
         controller.connected_agents[token].connected = True
         agent_response['agent_connected'] = True
         agent_response['info'] = simulation_response
-        agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer)
+        agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
 
     else:
         agent_response['message'] = 'Token not registered.'
@@ -110,33 +110,33 @@ def register_job():
             agent_response['message'] = 'Token not registered.'
             return jsonify(agent_response)
 
-        if not controller.connected_agents[token].connected:
+        elif not controller.connected_agents[token].connected:
             agent_response['message'] = 'Agent not connected.'
             return jsonify(agent_response)
 
-        if controller.agent_job[token].action_name:
+        if token not in controller.agent_job:
+            controller.agent_job[token] = JobSenderAgent()
+
+            action = message['action']
+            params = [*message['parameters']]
+
+            controller.agent_job[token].action_name = action
+            controller.agent_job[token].action_param = params
+
+            agent_response['job_delivered'] = True
+
+            return jsonify(agent_response)
+
+        elif controller.agent_job[token].action_name:
             agent_response['message'] = 'The agent has already sent a job'
             return jsonify(agent_response)
 
-        controller.agent_job[token] = JobSenderAgent()
-
-        action = message['action']
-        params = [*message['parameters']]
-
-        controller.agent_job[token].action_name = action
-        controller.agent_job[token].action_param = params
-
-        agent_response['job_delivered'] = True
-        agent_response['time'] = float(step_time) - (time.time() - controller.step_time) + 2
-
-        return jsonify(agent_response)
-
     except TypeError as t:
-        agent_response['message'] = t
+        agent_response['message'] = 'TypeError: ' + str(t)
         return jsonify(agent_response)
 
     except KeyError as k:
-        agent_response['message'] = k
+        agent_response['message'] = 'KeyError: ' + str(k)
         return jsonify(agent_response)
 
 
@@ -155,26 +155,38 @@ def finish_step():
         return jsonify('This endpoint can not be accessed.')
 
     if controller.step_time is None:
-        controller.step_time = time.time()
+        controller.step_time = True
         multiprocessing.Process(target=counter, args=(step_time,), daemon=True).start()
         return jsonify(0)
 
-    controller.step_time = time.time()
     jobs = []
 
-    for token in controller.agent_job:
-        action_name = controller.agent_job[token].action_name
-        action_params = controller.agent_job[token].action_param
+    try:
+        for token in controller.agent_job:
+            action_name = controller.agent_job[token].action_name
+            action_params = controller.agent_job[token].action_param
 
-        if action_name:
-            jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+            if action_name:
+                jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
 
-        controller.reset_agent_job()
+            controller.reset_agent_job()
+    except RuntimeError as r:
+        if str(r) == 'dictionary changed size during iteration':
+            time.sleep(2)
+            jobs = []
+            for token in controller.agent_job:
+                action_name = controller.agent_job[token].action_name
+                action_params = controller.agent_job[token].action_param
+
+                if action_name:
+                    jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
+        else:
+            raise r
 
     try:
         simulation_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
-        if isinstance(controller.simulation_response, str):
+        if isinstance(simulation_response, str):
             controller.terminated = True
 
             event = f'simulation_ended'
