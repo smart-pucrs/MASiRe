@@ -38,6 +38,8 @@ class World:
         for idx, obj in enumerate(self.events):
             if idx == step - 1:
                 break
+            if not obj['flood']:
+                continue
             if obj['flood'].active:
                 floods.append(obj['flood'])
                 photos.extend([photo for photo in obj['photos'] if photo.active])
@@ -48,6 +50,9 @@ class World:
 
     def get_current_event(self, step):
         flood = self.events[step]['flood']
+        if not flood:
+            return {'flood': '', 'photos': [], 'victims': [], 'water_samples': []}
+
         photos = self.events[step]['photos']
         victims = self.events[step]['victims']
         water_samples = self.events[step]['water_samples']
@@ -72,6 +77,8 @@ class World:
     def decrease_period_and_lifetime(self, step):
         for i in range(step):
             prev_event = self.events[i]
+            if not prev_event['flood']:
+                continue
             if not prev_event['flood'].period:
                 prev_event['flood'].active = False
             else:
