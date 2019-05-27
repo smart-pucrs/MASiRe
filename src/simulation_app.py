@@ -39,17 +39,14 @@ def register_agent():
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
 
-    events = initial_percepts[1].copy()
     map_percepts = initial_percepts[0].copy()
+    events = initial_percepts[1].copy()
 
     for event in events:
         if event == 'flood' and events[event]:
             events[event] = events[event].json()
         else:
-            aux = []
-            for x in events[event]:
-                aux.append(x.json())
-            events[event] = aux
+            events[event] = [event.json() for event in events[event]]
 
     return jsonify({'agent': agent, 'initial_percepts': [map_percepts, events]})
 
