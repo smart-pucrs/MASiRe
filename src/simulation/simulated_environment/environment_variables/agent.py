@@ -40,12 +40,12 @@ class Agent:
         [Changes the agent's battery to zero.]
         """
         if self.destination_distance:
-            self.actual_battery = self.actual_battery - int(self.speed/5) \
-                if self.actual_battery - self.speed/5 \
+            self.actual_battery = self.actual_battery - int(self.speed / 5) \
+                if self.actual_battery - self.speed / 5 \
                 else 0
 
     def check_battery(self):
-        return self.actual_battery - int(self.speed/5) if self.actual_battery - self.speed/5 else 0
+        return self.actual_battery - int(self.speed / 5) if self.actual_battery - self.speed / 5 else 0
 
     def charge(self):
         """
@@ -164,3 +164,9 @@ class Agent:
             self.virtual_storage += removed_item.size
 
         return removed
+
+    def json(self):
+        copy = self.__dict__.copy()
+        del copy['agent_info']
+        copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
+        return copy

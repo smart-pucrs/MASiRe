@@ -36,7 +36,7 @@ response = requests.post(validate_url, json=token).json()
 if 'message' in response:
     exit(response['message'])
 
-time.sleep(response['time'] + 0.2)
+time.sleep(response['time'] + 1)
 agent_info = response['info']
 
 

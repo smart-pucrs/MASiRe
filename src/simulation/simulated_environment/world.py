@@ -38,10 +38,7 @@ class World:
         for idx, event in enumerate(self.events):
             if idx == step:
                 break
-
-            if not event['flood']:
-                continue
-            if event['flood'].active:
+            if event['flood'] and event['flood'].active:
                 floods.append(event['flood'])
                 photos.extend([photo for photo in event['photos'] if photo.active])
                 victims.extend([victim for victim in event['victims'] if victim.active])
@@ -51,7 +48,6 @@ class World:
 
     def get_current_event(self, step):
         flood = self.events[step]['flood']
-
         if not flood:
             return {'flood': '', 'photos': [], 'victims': [], 'water_samples': []}
 
@@ -81,7 +77,6 @@ class World:
             prev_event = self.events[i]
             if not prev_event['flood']:
                 continue
-
             if not prev_event['flood'].period:
                 prev_event['flood'].active = False
             else:

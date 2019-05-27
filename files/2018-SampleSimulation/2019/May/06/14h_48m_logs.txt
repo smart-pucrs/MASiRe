@@ -1,4 +1,0 @@
-
-Agent of token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWdlbnQzIn0.7EDzzHgxbuLOa5oncQdMrIJ7ceIi_GbHDWY97NEiNs4, role: boat and name: boat1 tried to move passing [] at 14:48:39. The result was True
-
-====================================================================================================

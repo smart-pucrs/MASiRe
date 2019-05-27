@@ -40,17 +40,18 @@ class ActionExecutor:
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location, step)
 
-            agent_copy = self.world.agents[obj['token']].__dict__.copy()
+            agent_info = self.world.agents[obj['token']].agent_info.copy()
+            agent_copy = self.world.agents[obj['token']].json()
             parameters = action[1] if len(action) == 2 else []
+
             self.logger.register_agent_action(
                 token=agent_copy['token'],
                 role=agent_copy['role'],
                 result=True if result is None else result,
-                name=agent_copy['agent_info']['name'],
+                name=agent_info,
                 action=action[0],
                 parameters=parameters
             )
-            del agent_copy['agent_info']
             action_results.append((obj['token'], agent_copy, result))
 
         return action_results
@@ -84,21 +85,15 @@ class ActionExecutor:
             return
         try:
             if action_name == 'move':
-                if len(parameters) < 1 or len(parameters) > 2:
-                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
-
-                if not (isinstance(parameters[0], float) and isinstance(parameters[1], float)):
-                    raise Failed_wrong_param('The parameters must be floats.')
-
                 if len(parameters) == 1:
-                    if parameters[0] != 'cdm':
-                        raise Failed_wrong_param('Unknown facility')
-
-                    location = cdm_location
+                    if parameters[0] == 'cdm':
+                        location = cdm_location
+                    else:
+                        raise Failed_unknown_facility('Unknown facility')
                 else:
-                    location = [parameters[0], parameters[1]]
+                    raise Failed_wrong_param('More than 1 or less than than 1 parameters were given')
 
-                if self.get_location(agent.location, location):
+                if self.check_location(agent.location, location):
                     agent.route, distance = [], 0
                     return
 
@@ -127,9 +122,9 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                #agent.location = cdm_location
+                # agent.location = cdm_location
 
-                if self.get_location(agent.location, cdm_location):
+                if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
@@ -145,9 +140,9 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                #agent.location = cdm_location
+                # agent.location = cdm_location
 
-                if self.get_location(agent.location, cdm_location):
+                if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='virtual', item=parameters[0])
 
@@ -163,9 +158,9 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                #agent.location = cdm_location
+                # agent.location = cdm_location
 
-                if self.get_location(agent.location, cdm_location):
+                if self.check_location(agent.location, cdm_location):
                     agent.charge()
                     agent.last_action_result = True
 
@@ -180,9 +175,9 @@ class ActionExecutor:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
-                        #agent.location = victim.location
+                        # agent.location = victim.location
 
-                        if victim.active and self.get_location(victim.location, agent.location):
+                        if victim.active and self.check_location(victim.location, agent.location):
                             agent.add_physical_item(victim)
                             victim.active = False
                             agent.last_action_result = True
@@ -197,9 +192,9 @@ class ActionExecutor:
                 for event in self.world.events:
                     for water_sample in event['water_samples']:
                         # ================= TEST CODE HERE ==================
-                        #agent.location = water_sample.location
+                        # agent.location = water_sample.location
 
-                        if water_sample.active and self.get_location(water_sample.location, agent.location):
+                        if water_sample.active and self.check_location(water_sample.location, agent.location):
                             agent.add_physical_item(water_sample)
                             water_sample.active = False
                             agent.last_action_result = True
@@ -215,9 +210,9 @@ class ActionExecutor:
                     for photo in event['photos']:
 
                         # ================= TEST CODE HERE ==================
-                        #agent.location = photo.location
+                        # agent.location = photo.location
 
-                        if photo.active and self.get_location(photo.location, agent.location):
+                        if photo.active and self.check_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)
                             photo.active = False
                             agent.last_action_result = True
@@ -250,7 +245,7 @@ class ActionExecutor:
                 for social_asset in self.world.social_assets:
                     for social_asset_agent in agent.social_assets:
                         if social_asset_agent == social_asset:
-                            if self.get_location(agent.location, social_asset.location) and social_asset.active:
+                            if self.check_location(agent.location, social_asset.location) and social_asset.active:
                                 agent.add_physical(social_asset)
                                 agent.last_action_result = True
                                 social_asset.active = False
@@ -269,13 +264,12 @@ class ActionExecutor:
                     for victim in photo.victims:
                         victim.active = True
 
-                # clears virtual storage
                 agent.last_action_result = True
-                agent.virtual_storage_vector = []
+                agent.virtual_storage_vector.clear()
                 agent.virtual_storage = agent.virtual_capacity
 
             else:
-                return 'Wrong action name'
+                return 'Wrong action name.'
 
         except Failed_no_social_asset as e:
             return e.message
@@ -376,7 +370,7 @@ class ActionExecutor:
 
         print("ROUTE ->>> ", agent.route)
 
-    def get_location(self, x, y):
+    def check_location(self, x, y):
         proximity = self.config['map']['proximity']
 
         if x[0] < y[0]:

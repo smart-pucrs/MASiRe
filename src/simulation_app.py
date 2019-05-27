@@ -10,8 +10,6 @@ Also, one file to start the app is needed, check previous versions of the repo l
 import json
 import sys
 import requests
-import time
-import pathlib
 from flask import request, jsonify
 from flask import Flask
 from flask_cors import CORS
@@ -19,7 +17,7 @@ from simulation.simulation import Simulation
 from waitress import serve
 
 config_path, base_url, port, api_port = sys.argv[1:]
-config_path = str((pathlib.Path(__file__).parent.parent/config_path).absolute())
+
 
 def start_instance(path):
     with open(path, 'r') as simulation_config:
@@ -39,8 +37,7 @@ def register_agent():
         return jsonify(message='This endpoint can not be accessed.')
 
     agent_info = request.get_json(force=True)
-    agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).__dict__.copy()
-    del agent['agent_info']
+    agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
 
     events = initial_percepts[1].copy()
     map_percepts = initial_percepts[0].copy()
@@ -79,6 +76,10 @@ def do_actions():
 
             agent[1]['social_assets'] = \
                 [asset.json() for asset in agent[1]['social_assets']]
+            locations = []
+            for location in agent[1]['route']:
+                locations.append({'lat': location[0], 'lon': location[1]})
+            agent[1]['route'] = locations
 
     current = result['events']['current_event']
     json_events = {'current_event': {}, 'pending_events': []}
@@ -121,4 +122,3 @@ if __name__ == '__main__':
         serve(app, host=base_url, port=port)
     else:
         print('Errors during startup')
-

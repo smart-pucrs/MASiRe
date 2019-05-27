@@ -1,4 +1,0 @@
-
-Agent of token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k, role: car and name: car tried to photograph passing [] at 17:27:35. The result was The agent is not in a location with a photograph event.
-
-====================================================================================================

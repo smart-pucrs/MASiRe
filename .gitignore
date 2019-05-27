@@ -224,3 +224,14 @@ pip-selfcheck.json
 client/node_modules/
 results.txt
 files/*/
+config.json
+misc.xml
+.idea
+files/
+files
+files/config.json
+.idea/
+.idea/misc.xml
+
+#VSCODE
+.vscode/

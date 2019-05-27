@@ -160,7 +160,7 @@ def register_job():
 @app.route('/start', methods=['GET'])
 def _start():
     controller.started = True
-    multiprocessing.Process(target=counter, args=(first_conn_time,), daemon=True).start()
+    multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
     controller.first_timer = time.time()
     return jsonify('')
 
@@ -168,13 +168,13 @@ def _start():
 @app.route('/finish_step', methods=['GET'])
 def finish_step():
     """Send all the jobs to the simulation and save the results."""
-    print('-> Finish Step')
+
     if request.remote_addr != base_url:
         return jsonify('This endpoint can not be accessed.')
 
     if controller.step_time is None:
         controller.step_time = True
-        multiprocessing.Process(target=counter, args=(step_time,), daemon=True).start()
+        multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
         return jsonify(0)
 
     jobs = []
@@ -240,18 +240,17 @@ def finish_step():
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
-    multiprocessing.Process(target=counter, args=(step_time,), daemon=True).start()
+    multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
     return jsonify(0)
 
 
-def counter(sec):
+def counter(sec, ready_queue):
     try:
-        job_queue.get(block=True, timeout=int(sec))
+        ready_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
-    print('Ended step')
+    
     try:
-        print('-> Counter')
         end_code = requests.get(f'http://{base_url}:{port}/finish_step').json()
         if end_code == 1:
             try:
