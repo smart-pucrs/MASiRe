@@ -3,7 +3,6 @@ import jwt
 import time
 import json
 import queue
-import secrets
 import requests
 import multiprocessing
 from multiprocessing import Queue
@@ -18,13 +17,29 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 socket = SocketIO(app=app)
 controller = Controller(qtd_agents, first_conn_time)
-all_connected_queue = Queue()
+job_queue = Queue()
+
+socket_clients = {}
+
+
+@socket.on('connect')
+def connect():
+    identifier = request.headers['Name']
+    socket_clients[identifier] = request.sid
+
+
+@socket.on('disconnect')
+def disconnect():
+    identifier = request.headers['Name']
+    del socket_clients[identifier]
 
 
 @app.route('/connect_agent', methods=['POST'])
 def connect_agent():
     """Return the token generated"""
-    print('connect')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished'})
 
@@ -35,15 +50,13 @@ def connect_agent():
         if controller.check_timer():
             if not controller.check_connected(agent_info):
                 token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
-                namespace = secrets.token_urlsafe(10)
 
-                agent = ConnectedAgent(token, agent_info, namespace)
+                agent = ConnectedAgent(token, agent_info)
 
                 controller.connected_agents[token] = agent
 
                 agent_response['can_connect'] = True
                 agent_response['data'] = token
-                agent_response['namespace'] = namespace
             else:
                 agent_response['message'] = 'Agent already connected.'
         else:
@@ -57,7 +70,9 @@ def connect_agent():
 @app.route('/validate_agent', methods=['POST'])
 def validate_agent():
     """Check if the token is registered and then register the new agent in the simulation."""
-    print('validate')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
 
@@ -88,13 +103,11 @@ def validate_agent():
 @app.route('/send_job', methods=['POST'])
 def register_job():
     """Save the job ."""
-    print('save')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
-
-    if controller.check_agents_job():
-        all_connected_queue.put(True)
-        return jsonify({'message': 'The results will be sent.'})
 
     agent_response = {'job_delivered': False}
 
@@ -125,6 +138,9 @@ def register_job():
 
             agent_response['job_delivered'] = True
 
+            if controller.check_agents_job():
+                job_queue.put(True)
+
             return jsonify(agent_response)
 
         elif controller.agent_job[token].action_name:
@@ -142,6 +158,7 @@ def register_job():
 
 @app.route('/start', methods=['GET'])
 def _start():
+    controller.started = True
     multiprocessing.Process(target=counter, args=(first_conn_time,), daemon=True).start()
     controller.first_timer = time.time()
     return jsonify('')
@@ -169,7 +186,7 @@ def finish_step():
             if action_name:
                 jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
 
-            controller.reset_agent_job()
+        controller.reset_agent_job()
     except RuntimeError as r:
         if str(r) == 'dictionary changed size during iteration':
             time.sleep(2)
@@ -196,11 +213,18 @@ def finish_step():
             return jsonify(1)
 
         else:
-            for token, agent, message in simulation_response['action_results']:
-                event = f'job_result'
-                response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
-                namespace = controller.connected_agents[token].namespace
-                socket.emit(event, response, namespace=namespace)
+            for item in simulation_response['action_results']:
+                token = item[0]
+                agent = item[1]
+                if len(item) > 2:
+                    message = item[2]
+                    response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
+                else:
+                    response = json.dumps({'agent': agent, 'events': simulation_response['events']})
+
+                identifier = controller.connected_agents[token].agent_info['name']
+                room = socket_clients[identifier]
+                socket.emit('job_result', response, room=room)
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
@@ -211,7 +235,7 @@ def finish_step():
 
 def counter(sec):
     try:
-        all_connected_queue.get(block=True, timeout=int(sec))
+        job_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
     print('Ended step')
