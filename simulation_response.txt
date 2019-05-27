@@ -1,0 +1,110 @@
+{
+    "action_results": [
+        [
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k",
+            {
+                "abilities": [
+                    [
+                        "photo",
+                        7.2,
+                        2.3
+                    ],
+                    [
+                        "victim",
+                        5
+                    ],
+                    [
+                        "water",
+                        0
+                    ]
+                ],
+                "actual_battery": 20,
+                "destination_distance": 0,
+                "is_active": 1,
+                "last_action": "move",
+                "last_action_result": 0,
+                "location": [
+                    -30.110815,
+                    -51.21199
+                ],
+                "max_charge": 20,
+                "physical_capacity": 10,
+                "physical_storage": 10,
+                "physical_storage_vector": [],
+                "role": "car",
+                "route": [],
+                "social_assets": [],
+                "speed": 7,
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY2FyIn0.7son9oUUuWMMG7rvYElgZmZE0U9c88S3eUkQJzSTU5k",
+                "virtual_capacity": 10,
+                "virtual_storage": 10,
+                "virtual_storage_vector": []
+            },
+            "The parameters must be floats."
+        ]
+    ],
+    "events": {
+        "current_event": {
+            "flood": {
+                "active": 1,
+                "dimensions": {
+                    "coord": [
+                        -30.11106,
+                        -51.2125325
+                    ],
+                    "radius": 0.10733944298669901,
+                    "shape": "circle"
+                },
+                "type": "flood"
+            },
+            "photos": [
+                {
+                    "location": [
+                        -30.11106,
+                        -51.2125325
+                    ],
+                    "size": 3,
+                    "type": "photo",
+                    "victims": []
+                }
+            ],
+            "victims": [
+                {
+                    "lifetime": 22,
+                    "location": [
+                        -30.1112706,
+                        -51.2130629
+                    ],
+                    "size": 5,
+                    "type": "victim"
+                },
+                {
+                    "lifetime": 16,
+                    "location": [
+                        -30.1106934,
+                        -51.2121034
+                    ],
+                    "size": 9,
+                    "type": "victim"
+                }
+            ],
+            "water_samples": [
+                {
+                    "location": [
+                        -30.1103825,
+                        -51.2120283
+                    ],
+                    "size": 4,
+                    "type": "water_sample"
+                }
+            ]
+        },
+        "pending_events": [
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    }
+}

@@ -23,12 +23,13 @@ class Logger:
         events = agent_percepts[1].copy()
 
         for event in events:
-            if event == 'flood':
+            if event == 'flood' and events[event]:
                 events[event] = events[event].json()
             else:
                 aux = []
                 for x in events[event]:
-                    aux.append(x.json())
+                    if not isinstance(x, str):
+                        aux.append(x.json())
                 events[event] = aux
 
         with open(self.percepts_file, 'w') as file:
