@@ -146,6 +146,7 @@ class World:
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
         
+        :param step:
         :param actions: A json file sent by the communication core
         containing all the actions, including the necessary parameters,
         and its respective agents.
