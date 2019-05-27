@@ -43,7 +43,7 @@ def register_agent():
     map_percepts = initial_percepts[0].copy()
 
     for event in events:
-        if event == 'flood':
+        if event == 'flood' and events[event]:
             events[event] = events[event].json()
         else:
             aux = []
