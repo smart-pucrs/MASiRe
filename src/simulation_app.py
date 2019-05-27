@@ -123,15 +123,3 @@ if __name__ == '__main__':
         serve(app, host=base_url, port=port)
     else:
         print('Errors during startup')
-
-    try:
-        if requests.get(f'http://{base_url}:{api_port}/started'):
-            serve(app, host=base_url, port=port)
-        else:
-            print('Errors during startup')
-    except requests.exceptions.ConnectionError:
-        time.sleep(5)
-        if requests.get(f'http://{base_url}:{api_port}/started'):
-            serve(app, host=base_url, port=port)
-        else:
-            print('Errors during startup')
