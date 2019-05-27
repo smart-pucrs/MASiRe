@@ -10,6 +10,7 @@ class Controller:
         self.step_time = None
         self.terminated = False
         self.simulation_response = None
+        self.started = False
         self.qtd_agents = int(qtd_agents)
         self.time_limit = int(first_conn_time)
 

@@ -24,7 +24,8 @@ all_connected_queue = Queue()
 @app.route('/connect_agent', methods=['POST'])
 def connect_agent():
     """Return the token generated"""
-    print('connect')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished'})
 
@@ -57,7 +58,9 @@ def connect_agent():
 @app.route('/validate_agent', methods=['POST'])
 def validate_agent():
     """Check if the token is registered and then register the new agent in the simulation."""
-    print('validate')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
 
@@ -88,7 +91,8 @@ def validate_agent():
 @app.route('/send_job', methods=['POST'])
 def register_job():
     """Save the job ."""
-    print('save')
+    if not controller.started:
+        return jsonify({'message': 'Simulation was not started.'})
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
 
@@ -142,6 +146,7 @@ def register_job():
 
 @app.route('/start', methods=['GET'])
 def _start():
+    controller.started = True
     multiprocessing.Process(target=counter, args=(first_conn_time,), daemon=True).start()
     controller.first_timer = time.time()
     return jsonify('')
