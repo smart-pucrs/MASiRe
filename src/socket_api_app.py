@@ -216,11 +216,8 @@ def finish_step():
             for item in simulation_response['action_results']:
                 token = item[0]
                 agent = item[1]
-                if len(item) > 2:
-                    message = item[2]
-                    response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
-                else:
-                    response = json.dumps({'agent': agent, 'events': simulation_response['events']})
+                message = item[2]
+                response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
 
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
