@@ -1,6 +1,3 @@
-# based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/util
-# /Generator.java
-
 import random
 from simulation.simulated_environment.environment_variables.events.flood import Flood
 from simulation.simulated_environment.environment_variables.events.photo import Photo
@@ -24,16 +21,18 @@ class Generator:
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self) -> list:
-        events = [0] * self.config['map']['steps']
+        steps_number: int = self.config['map']['steps']
+        events = [0] * steps_number
         flood = self.generate_flood()
         events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False),
                          water_samples=self.generate_water_samples(flood.list_of_nodes),
                          photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
 
-        i: int = 1
-        while i < self.config['map']['steps']:
+        i: int = 0
+        flood_probability: int = self.config['generate']['floodProbability']
+        while i < steps_number:
             event = dict(flood=None, victims=[], water_samples=[], photos=[], social_assets=[])
-            if random.randint(0, 99) <= self.config['generate']['floodProbability']:
+            if random.randint(0, 99) <= flood_probability:
                 event['flood'] = self.generate_flood()
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes, False)

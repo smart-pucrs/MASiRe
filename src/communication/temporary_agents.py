@@ -7,7 +7,8 @@ class JobSenderAgent:
 
 
 class ConnectedAgent:
-    def __init__(self, token, obj):
+    def __init__(self, token, obj, namespace):
         self.token = token
         self.connected = False
         self.agent_info = obj
+        self.namespace = namespace
