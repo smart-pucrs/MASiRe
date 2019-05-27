@@ -159,7 +159,7 @@ def register_job():
 @app.route('/start', methods=['GET'])
 def _start():
     controller.started = True
-    multiprocessing.Process(target=counter, args=(first_conn_time,), daemon=True).start()
+    multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
     controller.first_timer = time.time()
     return jsonify('')
 
@@ -173,7 +173,7 @@ def finish_step():
 
     if controller.step_time is None:
         controller.step_time = True
-        multiprocessing.Process(target=counter, args=(step_time,), daemon=True).start()
+        multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
         return jsonify(0)
 
     jobs = []
@@ -229,13 +229,13 @@ def finish_step():
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 
-    multiprocessing.Process(target=counter, args=(step_time,), daemon=True).start()
+    multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
     return jsonify(0)
 
 
-def counter(sec):
+def counter(sec, ready_queue):
     try:
-        job_queue.get(block=True, timeout=int(sec))
+        ready_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
     print('Ended step')
