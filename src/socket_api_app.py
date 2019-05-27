@@ -3,7 +3,6 @@ import jwt
 import time
 import json
 import queue
-import secrets
 import requests
 import multiprocessing
 from multiprocessing import Queue
@@ -19,6 +18,19 @@ app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 socket = SocketIO(app=app)
 controller = Controller(qtd_agents, first_conn_time)
 all_connected_queue = Queue()
+socket_clients = {}
+
+
+@socket.on('connect')
+def connect():
+    identifier = request.headers['Name']
+    socket_clients[identifier] = request.sid
+
+
+@socket.on('disconnect')
+def disconnect():
+    identifier = request.headers['Name']
+    del socket_clients[identifier]
 
 
 @app.route('/connect_agent', methods=['POST'])
@@ -36,15 +48,13 @@ def connect_agent():
         if controller.check_timer():
             if not controller.check_connected(agent_info):
                 token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
-                namespace = secrets.token_urlsafe(10)
 
-                agent = ConnectedAgent(token, agent_info, namespace)
+                agent = ConnectedAgent(token, agent_info)
 
                 controller.connected_agents[token] = agent
 
                 agent_response['can_connect'] = True
                 agent_response['data'] = token
-                agent_response['namespace'] = namespace
             else:
                 agent_response['message'] = 'Agent already connected.'
         else:
@@ -201,11 +211,18 @@ def finish_step():
             return jsonify(1)
 
         else:
-            for token, agent, message in simulation_response['action_results']:
-                event = f'job_result'
-                response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
-                namespace = controller.connected_agents[token].namespace
-                socket.emit(event, response, namespace=namespace)
+            for item in simulation_response['action_results']:
+                token = item[0]
+                agent = item[1]
+                if len(item) > 2:
+                    message = item[2]
+                    response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
+                else:
+                    response = json.dumps({'agent': agent, 'events': simulation_response['events']})
+
+                identifier = controller.connected_agents[token].agent_info['name']
+                room = socket_clients[identifier]
+                socket.emit('job_result', response, room=room)
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
