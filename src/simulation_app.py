@@ -38,7 +38,6 @@ def register_agent():
 
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
-    del agent['agent_info']
 
     events = initial_percepts[1].copy()
     map_percepts = initial_percepts[0].copy()
