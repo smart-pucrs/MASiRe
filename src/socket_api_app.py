@@ -238,7 +238,7 @@ def counter(sec, ready_queue):
         ready_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
-    print('Ended step')
+    
     try:
         end_code = requests.get(f'http://{base_url}:{port}/finish_step').json()
         if end_code == 1:
