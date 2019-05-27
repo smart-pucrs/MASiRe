@@ -17,7 +17,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 socket = SocketIO(app=app)
 controller = Controller(qtd_agents, first_conn_time)
-all_connected_queue = Queue()
+job_queue = Queue()
+
 socket_clients = {}
 
 
@@ -38,6 +39,7 @@ def connect_agent():
     """Return the token generated"""
     if not controller.started:
         return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished'})
 
@@ -103,12 +105,9 @@ def register_job():
     """Save the job ."""
     if not controller.started:
         return jsonify({'message': 'Simulation was not started.'})
+
     if controller.terminated:
         return jsonify({'message': 'Simulation already finished.'})
-
-    if controller.check_agents_job():
-        all_connected_queue.put(True)
-        return jsonify({'message': 'The results will be sent.'})
 
     agent_response = {'job_delivered': False}
 
@@ -138,6 +137,9 @@ def register_job():
             controller.agent_job[token].action_param = params
 
             agent_response['job_delivered'] = True
+
+            if controller.check_agents_job():
+                job_queue.put(True)
 
             return jsonify(agent_response)
 
@@ -184,7 +186,7 @@ def finish_step():
             if action_name:
                 jobs.append({'token': token, 'action': action_name, 'parameters': action_params})
 
-            controller.reset_agent_job()
+        controller.reset_agent_job()
     except RuntimeError as r:
         if str(r) == 'dictionary changed size during iteration':
             time.sleep(2)
@@ -233,7 +235,7 @@ def finish_step():
 
 def counter(sec):
     try:
-        all_connected_queue.get(block=True, timeout=int(sec))
+        job_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
     print('Ended step')
