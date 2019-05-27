@@ -85,25 +85,10 @@ class ActionExecutor:
         try:
             if action_name == 'move':
                 if len(parameters) == 1:
-                    if isinstance(parameters[0], dict):
-                        if 'lat' in parameters[0] and 'lon' in parameters[0]:
-                            if not (isinstance(parameters[0]['lat'], float) and isinstance(parameters[0]['lon'],
-                                                                                           float)):
-                                raise Failed_wrong_param('\'lat\' and \'lon\' must be floats.')
-
-                            location = [parameters[0]['lat'], parameters[0]['lon']]
-                        else:
-                            raise Failed_wrong_param('The object need to have the attributes: \'lat\': '
-                                                     'float and \'lon\': float')
-                    elif isinstance(parameters[0], str):
-                        if parameters[0] == 'cdm':
-                            location = cdm_location
-
-                        else:
-                            raise Failed_unknown_facility('Unknown facility')
+                    if parameters[0] == 'cdm':
+                        location = cdm_location
                     else:
-                        raise Failed_wrong_param('The parameters need to be a object with attributes: \'lat\': float '
-                                                 'and \'lon\': float, our a string with the name of a facility')
+                        raise Failed_unknown_facility('Unknown facility')
                 else:
                     raise Failed_wrong_param('More than 1 or less than than 1 parameters were given')
 
