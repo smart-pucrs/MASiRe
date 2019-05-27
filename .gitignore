@@ -232,3 +232,6 @@ files
 files/config.json
 .idea/
 .idea/misc.xml
+
+#VSCODE
+.vscode/

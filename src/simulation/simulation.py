@@ -93,7 +93,7 @@ class Simulation:
 
             return 'Simulation Ended'
 
-        action_results = self.world.execute_actions(actions)
+        action_results = self.world.execute_actions(actions, self.step)
         results = {'action_results': action_results, 'events': self.pre_events.copy()}
         self.step += 1
         self.pre_events = self.do_pre_step()

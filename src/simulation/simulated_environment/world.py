@@ -35,16 +35,14 @@ class World:
         # Get all active floods
         floods, photos, victims, water_samples = [], [], [], []
 
-        for idx, obj in enumerate(self.events):
-            if idx == step - 1:
+        for idx, event in enumerate(self.events):
+            if idx == step:
                 break
-            if not obj['flood']:
-                continue
-            if obj['flood'].active:
-                floods.append(obj['flood'])
-                photos.extend([photo for photo in obj['photos'] if photo.active])
-                victims.extend([victim for victim in obj['victims'] if victim.active])
-                water_samples.extend([water_sample for water_sample in obj['water_samples'] if water_sample.active])
+            if event['flood'] and event['flood'].active:
+                floods.append(event['flood'])
+                photos.extend([photo for photo in event['photos'] if photo.active])
+                victims.extend([victim for victim in event['victims'] if victim.active])
+                water_samples.extend([water_sample for water_sample in event['water_samples'] if water_sample.active])
 
         return [floods, photos, victims, water_samples]
 
@@ -93,18 +91,18 @@ class World:
     def events_completed(self):
         photos, victims, water_samples = [], [], []
 
-        for obj in self.events:
-            for victim in obj['victims']:
+        for event in self.events:
+            for victim in event['victims']:
                 if not victim.active and victim.lifetime:
                     victims.append(victim)
 
-        for obj in self.events:
-            for photo in obj['photos']:
+        for event in self.events:
+            for photo in event['photos']:
                 if not photo.active:
                     photos.append(photo)
 
-        for obj in self.events:
-            for water_sample in obj['water_samples']:
+        for event in self.events:
+            for water_sample in event['water_samples']:
                 if not water_sample.active:
                     water_samples.append(water_sample)
 
@@ -143,7 +141,7 @@ class World:
         self.agent_counter += 1
         return agent
 
-    def execute_actions(self, actions):
+    def execute_actions(self, actions, step):
         """
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
@@ -154,4 +152,4 @@ class World:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
-        return self.action_executor.execute_actions(actions, self.cdm.location)
+        return self.action_executor.execute_actions(actions, self.cdm.location, step)

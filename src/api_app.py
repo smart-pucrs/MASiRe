@@ -21,10 +21,12 @@ controller = None
 @app.route('/connect_agent', methods=['POST'])
 def get_agent_token():
     """Return the token generated"""
-    if controller.terminated:
-        return jsonify({'message': 'Simulation already finished'})
+    agent_response = dict(message="Agent connected", can_connect=False, data="")
 
-    agent_response = {'can_connect': False}
+    if controller.terminated:
+        agent_response['message'] = 'Simulation already finished'
+        return jsonify(agent_response)
+
     agent_info = request.get_json(force=True)
 
     if controller.check_population():
@@ -51,11 +53,17 @@ def get_agent_token():
 @app.route('/validate_agent', methods=['POST'])
 def validate_agent_token():
     """Check if the token is registered and then register the new agent in the simulation."""
+    agent_response = dict(message="Validated agent", agent_connected=False, info="", time=0)
+
     if controller.terminated:
-        return jsonify({'message': 'Simulation already finished.'})
+        agent_response['message'] = 'Simulation already finished'
+        return jsonify(agent_response)
 
     token = request.get_json(force=True)
-    agent_response = {'agent_connected': False}
+
+    if not isinstance(token, str):
+        agent_response['message'] = "Token is not a string"
+        return jsonify(agent_response)
 
     if controller.check_agent(token):
         try:
@@ -81,10 +89,11 @@ def validate_agent_token():
 @app.route('/send_job', methods=['POST'])
 def register_job():
     """Save the job ."""
-    if controller.terminated:
-        return jsonify({'message': 'Simulation already finished.'})
+    agent_response = dict(message="", job_delivered=False, time=0)
 
-    agent_response = {'job_delivered': False}
+    if controller.terminated:
+        agent_response['message'] = 'Simulation already finished'
+        return jsonify(agent_response)
 
     if controller.check_timer():
         agent_response['message'] = 'Simulation still receiving connections.'
@@ -120,7 +129,7 @@ def register_job():
         return jsonify(agent_response)
 
     except TypeError as t:
-        agent_response['message'] = t
+        agent_response['message'] = str(t)
         return jsonify(agent_response)
 
     except KeyError as k:
@@ -130,31 +139,49 @@ def register_job():
 
 @app.route('/get_job', methods=['POST'])
 def get_job():
+    agent_response = dict(message="", response=False, simulation_state="")
+
     """Return the agent state and job result."""
     if controller.terminated:
-        return jsonify({'message': 'Simulation already finished'})
+        agent_response['message'] = 'Simulation already finished'
+        return jsonify(agent_response)
 
     token = request.get_json(force=True)
 
     if token not in controller.agents:
-        return jsonify({'response': False, 'message': 'Token not registered'})
+        agent_response['response'] = False
+        agent_response['message'] = 'Token not registered'
+        return jsonify(agent_response)
 
     if isinstance(controller.simulation_response, str):
-        return jsonify({'response': controller.simulation_response, 'message': 'Simulation ended'})
+        agent_response['response'] = controller.simulation_response
+        agent_response['message'] = 'Simulation ended'
+        return jsonify(agent_response)
 
     elif controller.simulation_response:
+        agent_response['response'] = True
         if controller.simulation_response['action_results']:
-            for agent_token, agent_dict in controller.simulation_response["action_results"]:
+            for agent_token, agent_dict, result in controller.simulation_response["action_results"]:
                 if token == agent_token:
                     simulation_state = controller.simulation_response.copy()
                     simulation_state['action_results'] = agent_dict
 
-                    return jsonify({'response': simulation_state})
+                    agent_response['simulation_state'] = simulation_state
 
-        return jsonify({'response': False, 'message': "No action of agent from the last step"})
+                    if result:
+                        agent_response['message'] = result
+                        return jsonify(agent_response)
+
+                    return jsonify(agent_response)
+
+        simulation_state = controller.simulation_response.copy()
+        simulation_state['action_results'] = []
+        agent_response['simulation_state'] = simulation_state
+        return jsonify(agent_response)
 
     else:
-        return jsonify({'response': False, 'message': "No data from simulation"})
+        agent_response['message'] = 'No data from simulation'
+        return jsonify(agent_response)
 
 
 @app.route('/started', methods=['GET'])
@@ -198,6 +225,7 @@ def finish_step():
             controller.terminated = True
             return jsonify(1)
 
+        print("Step finalizado!")
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')
 

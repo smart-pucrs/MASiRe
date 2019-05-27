@@ -19,11 +19,12 @@ class ActionExecutor:
         self.route = world.generator.router
         self.logger = logger
 
-    def execute_actions(self, actions, cdm_location):
+    def execute_actions(self, actions, cdm_location, step):
         """
         [Method that parses all the actions recovered from the communication core
         and calls its execution during a step.]
 
+        :param step: current step of simulation
         :param cdm_location: Location of the cdm specified in the config file
         :param actions: A json file sent by the communication core
         containing all the actions, including the necessary parameters,
@@ -37,9 +38,9 @@ class ActionExecutor:
         for obj in actions:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
-            result = self.execute(self.world.agents[token], action, cdm_location)
+            result = self.execute(self.world.agents[token], action, cdm_location, step)
 
-            agent_copy = self.world.agents[obj['token']].__dict__.copy()
+            agent_copy = self.world.agents[obj['token']].json()
             parameters = action[1] if len(action) == 2 else []
             self.logger.register_agent_action(
                 token=agent_copy['token'],
@@ -50,11 +51,11 @@ class ActionExecutor:
                 parameters=parameters
             )
             del agent_copy['agent_info']
-            action_results.append((obj['token'], agent_copy))
+            action_results.append((obj['token'], agent_copy, result))
 
         return action_results
 
-    def execute(self, agent, action, cdm_location):
+    def execute(self, agent, action, cdm_location, step):
         """
         [Method that tries to execute a single action for a parametrized agent.
         The action may contain necessary parameters.
@@ -76,47 +77,55 @@ class ActionExecutor:
         agent.last_action_result = False
 
         if action_name is None:
-            return 'No action given'
+            return 'No action given.'
 
         elif action_name == 'pass':
             agent.last_action_result = True
             return
         try:
             if action_name == 'move':
-                if len(parameters) < 1 or len(parameters) > 2:
-                    raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
-
                 if len(parameters) == 1:
-                    if parameters[0] != 'cdm':
-                        raise Failed_wrong_param('Unknown facility')
+                    if isinstance(parameters[0], dict):
+                        if 'lat' in parameters[0] and 'lon' in parameters[0]:
+                            if not (isinstance(parameters[0]['lat'], float) and isinstance(parameters[0]['lon'],
+                                                                                           float)):
+                                raise Failed_wrong_param('\'lat\' and \'lon\' must be floats.')
 
-                    location = cdm_location
+                            location = [parameters[0]['lat'], parameters[0]['lon']]
+                        else:
+                            raise Failed_wrong_param('The object need to have the attributes: \'lat\': '
+                                                     'float and \'lon\': float')
+                    elif isinstance(parameters[0], str):
+                        if parameters[0] == 'cdm':
+                            location = cdm_location
 
+                        else:
+                            raise Failed_unknown_facility('Unknown facility')
+                    else:
+                        raise Failed_wrong_param('The parameters need to be a object with attributes: \'lat\': float '
+                                                 'and \'lon\': float, our a string with the name of a facility')
                 else:
-                    location = [parameters[0], parameters[1]]
+                    raise Failed_wrong_param('More than 1 or less than than 1 parameters were given')
 
                 if self.get_location(agent.location, location):
-                    agent.route, distance = [agent.location], 0
+                    agent.route, distance = [], 0
                     return
 
                 if not agent.check_battery():
-                    raise Failed_insufficient_battery('Not enough battery to complete this step')
+                    raise Failed_insufficient_battery('Not enough battery to complete this step.')
+
+                list_of_nodes = []
+                for event in self.world.events[:step]:
+                    if event['flood'] and event['flood'].active:
+                        list_of_nodes.extend(event['flood'].list_of_nodes)
 
                 if not agent.route:
-                    if agent.role == 'drone' or agent.role == 'boat':
-                        agent.route, distance = self.route.get_route(agent.location, location, agent.role, agent.speed)
-                        agent.destination_distance = distance
-                    else:
-                        start_node = self.route.get_closest_node(*agent.location)
-                        end_node = self.route.get_closest_node(*location)
-                        route_result, route = self.route.get_route(start_node, end_node, agent.role, agent.speed)
+                    self.get_route(agent, location, list_of_nodes)
+                elif agent.route[-1] != location:
+                    self.get_route(agent, location, list_of_nodes)
 
-                        if route_result == 'success':
-                            agent.route = route
-                        else:
-                            raise Failed_no_route()
-
-                        agent.destination_distance = self.route.node_distance(start_node, end_node)
+                if not agent.destination_distance:
+                    return
 
                 agent.last_action_result = True
                 agent.discharge()
@@ -127,7 +136,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -145,7 +154,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -163,7 +172,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                #agent.location = cdm_location
 
                 if self.get_location(agent.location, cdm_location):
                     agent.charge()
@@ -180,7 +189,7 @@ class ActionExecutor:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = victim.location
+                        #agent.location = victim.location
 
                         if victim.active and self.get_location(victim.location, agent.location):
                             agent.add_physical_item(victim)
@@ -196,9 +205,8 @@ class ActionExecutor:
 
                 for event in self.world.events:
                     for water_sample in event['water_samples']:
-
                         # ================= TEST CODE HERE ==================
-                        agent.location = water_sample.location
+                        #agent.location = water_sample.location
 
                         if water_sample.active and self.get_location(water_sample.location, agent.location):
                             agent.add_physical_item(water_sample)
@@ -216,7 +224,7 @@ class ActionExecutor:
                     for photo in event['photos']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = photo.location
+                        #agent.location = photo.location
 
                         if photo.active and self.get_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)
@@ -239,11 +247,11 @@ class ActionExecutor:
                         agent.last_action_result = True
                         return
 
-                raise Failed_no_social_asset('No social asset found for the needed purposes')
+                raise Failed_no_social_asset('No social asset found for the needed purposes.')
 
             elif action_name == 'get_social_asset':
-                if len(parameters) != 1:
-                    raise Failed_wrong_param('More than 1 or less than 1 parameter given.')
+                if parameters:
+                    raise Failed_wrong_param('Wrong amount of parameters given.')
 
                 if agent.role == 'drone':
                     raise Failed_invalid_kind('Agent role does not support carrying social asset.')
@@ -267,7 +275,8 @@ class ActionExecutor:
                     raise Failed_item_amount('The agent has no photos to analyze.')
 
                 for photo in agent.virtual_storage_vector:
-                    pass
+                    for victim in photo.victims:
+                        victim.active = True
 
                 # clears virtual storage
                 agent.last_action_result = True
@@ -332,11 +341,7 @@ class ActionExecutor:
                 raise Failed_invalid_kind('Invalid item to deliver')
 
         else:
-            ''' 
-            if amount < 1 or amount > agent.virtual_storage:
-                raise Failed_item_amount('The given amount is not an integer, less than 1 or greater '
-                                         'than what the agent is capable of carrying.')
-            '''
+
             if amount < 1:
                 raise Failed_item_amount('The given amount is less than 1')
 
@@ -360,6 +365,25 @@ class ActionExecutor:
 
         else:
             self.world.cdm.add_virtual_items(removed_items, agent.token)
+
+    def get_route(self, agent, location, list_of_nodes):
+        if agent.role == 'drone' or agent.role == 'boat':
+            agent.route, distance = self.route.get_route(agent.location, location, agent.role, int(agent.speed) / 2,
+                                                         list_of_nodes)
+            agent.destination_distance = distance
+        else:
+            start_node = self.route.get_closest_node(*agent.location)
+            end_node = self.route.get_closest_node(*location)
+            route_result, route = self.route.get_route(start_node, end_node, False, 4, list_of_nodes)
+
+            if route_result == 'success':
+                agent.route = route
+            else:
+                raise Failed_no_route()
+
+            agent.destination_distance = self.route.node_distance(start_node, end_node)
+
+        print("ROUTE ->>> ", agent.route)
 
     def get_location(self, x, y):
         proximity = self.config['map']['proximity']

@@ -23,5 +23,6 @@ class Photo:
         copy = self.__dict__.copy()
         copy['victims'] = victims
         del copy['active']
+        copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
         return copy
 
