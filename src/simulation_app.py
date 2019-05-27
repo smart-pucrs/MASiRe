@@ -44,7 +44,7 @@ def register_agent():
     map_percepts = initial_percepts[0].copy()
 
     for event in events:
-        if event == 'flood':
+        if event == 'flood' and events[event]:
             events[event] = events[event].json()
         else:
             aux = []
@@ -124,14 +124,3 @@ if __name__ == '__main__':
     else:
         print('Errors during startup')
 
-    try:
-        if requests.get(f'http://{base_url}:{api_port}/started'):
-            serve(app, host=base_url, port=port)
-        else:
-            print('Errors during startup')
-    except requests.exceptions.ConnectionError:
-        time.sleep(5)
-        if requests.get(f'http://{base_url}:{api_port}/started'):
-            serve(app, host=base_url, port=port)
-        else:
-            print('Errors during startup')

@@ -111,15 +111,15 @@
     },
     "photo": {
       "size": 3,
-      "minAmount": 1000,
-      "maxAmount": 1000,
-      "victimProbability": 100
+      "minAmount": 1,
+      "maxAmount": 2,
+      "victimProbability": 50
     },
     "victim": {
       "minSize": 5,
       "maxSize": 10,
-      "minAmount": 1000,
-      "maxAmount": 1000,
+      "minAmount": 1,
+      "maxAmount": 2,
       "minLifetime": 10,
       "maxLifetime": 30
     },

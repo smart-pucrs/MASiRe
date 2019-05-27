@@ -167,7 +167,7 @@ def _start():
 @app.route('/finish_step', methods=['GET'])
 def finish_step():
     """Send all the jobs to the simulation and save the results."""
-
+    print('-> Finish Step')
     if request.remote_addr != base_url:
         return jsonify('This endpoint can not be accessed.')
 
@@ -240,6 +240,7 @@ def counter(sec):
         pass
     print('Ended step')
     try:
+        print('-> Counter')
         end_code = requests.get(f'http://{base_url}:{port}/finish_step').json()
         if end_code == 1:
             try:
