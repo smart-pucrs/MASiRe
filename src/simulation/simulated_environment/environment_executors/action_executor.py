@@ -50,7 +50,6 @@ class ActionExecutor:
                 action=action[0],
                 parameters=parameters
             )
-            del agent_copy['agent_info']
             action_results.append((obj['token'], agent_copy, result))
 
         return action_results
