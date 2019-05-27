@@ -220,3 +220,6 @@ pip-selfcheck.json
 client/node_modules/
 results.txt
 files/*/
+
+#VSCODE
+.vscode/
