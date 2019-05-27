@@ -90,6 +90,7 @@ def validate_agent():
             return jsonify(agent_response)
 
         controller.connected_agents[token].connected = True
+        controller.connected_agents[token].simulation_agent = simulation_response
         agent_response['agent_connected'] = True
         agent_response['info'] = simulation_response
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
@@ -177,6 +178,7 @@ def finish_step():
         return jsonify(0)
 
     jobs = []
+    lista = controller.dif()
 
     try:
         for token in controller.agent_job:
@@ -222,6 +224,15 @@ def finish_step():
                 else:
                     response = json.dumps({'agent': agent, 'events': simulation_response['events']})
 
+                identifier = controller.connected_agents[token].agent_info['name']
+                room = socket_clients[identifier]
+                socket.emit('job_result', response, room=room)
+
+            for token in lista:
+                agent = controller.connected_agents[token].simulation_agent
+                agent['last_action_result'] = False
+                agent['last_action'] = 'pass'
+                response = json.dumps({'agent': agent, 'message': 'agent dont send a action', 'events': simulation_response['events']})
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', response, room=room)

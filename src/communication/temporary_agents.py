@@ -10,3 +10,4 @@ class ConnectedAgent:
         self.token = token
         self.connected = False
         self.agent_info = obj
+        self.simulation_agent = None
