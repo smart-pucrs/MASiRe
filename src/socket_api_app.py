@@ -242,7 +242,7 @@ def counter(sec, ready_queue):
             try:
                 requests.get(f'http://{base_url}:{simulation_port}/finish')
             except requests.exceptions.ConnectionError:
-                print('Simulation terminated.')
+                pass
     except Exception as e:
         print(e)
 
