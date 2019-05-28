@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import copy
 from datetime import datetime
 from directory_path import dir as root
 
@@ -20,17 +21,13 @@ class Logger:
         self.percepts_file = str(self.percepts_file / f'{time_of_date}_percepts.txt')
 
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
-        events = agent_percepts[1].copy()
+        events = copy.deepcopy(agent_percepts[1])
 
         for event in events:
             if event == 'flood' and events[event]:
                 events[event] = events[event].json()
             else:
-                aux = []
-                for x in events[event]:
-                    if not isinstance(x, str):
-                        aux.append(x.json())
-                events[event] = aux
+                events[event] = [e.json() for e in events[event]]
 
         with open(self.percepts_file, 'w') as file:
             file.write(f'Agent perceptions: \n{json.dumps(agent_percepts[0], indent=4)}\n'

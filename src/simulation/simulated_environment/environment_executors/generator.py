@@ -88,7 +88,6 @@ class Generator:
             else:
                 list_of_nodes: list = self.router.nodes_in_radius(dimensions['location'], dimensions['length'])
 
-        dimensions['location'] = {'lat': dimensions['location'][0], 'lon': dimensions['location'][1]}
         return Flood(period, dimensions, list_of_nodes)
 
     def generate_photos(self, nodes: list) -> list:
