@@ -13,10 +13,10 @@ agent_data = {
     'name': 'agent1'
 }
 
-server_url = 'http://127.0.0.1:12345'
-validate_url = 'http://127.0.0.1:12345/validate_agent'
-send_job_url = 'http://127.0.0.1:12345/send_job'
-connect_url = 'http://127.0.0.1:12345/connect_agent'
+server_url = 'http://127.0.0.1:12346'
+validate_url = 'http://127.0.0.1:12346/validate_agent'
+send_job_url = 'http://127.0.0.1:12346/send_job'
+connect_url = 'http://127.0.0.1:12346/connect_agent'
 receive_job_event = 'job_result'
 simulation_ended_event = 'simulation_ended'
 

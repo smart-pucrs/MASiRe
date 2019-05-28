@@ -82,7 +82,7 @@ def create_parser():
     parser.add_argument('-conf', required=True, type=str)
     parser.add_argument('-url', required=False, type=str, default='127.0.0.1')
     parser.add_argument('-sp', required=False, type=str, default='8910')
-    parser.add_argument('-ap', required=False, type=str, default='12345')
+    parser.add_argument('-ap', required=False, type=str, default='12346')
     parser.add_argument('-pyv', required=False, type=str, default='')
     parser.add_argument('-g', required=False, type=bool, default=False)
     parser.add_argument('-step_t', required=False, type=int, default=30)

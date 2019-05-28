@@ -14,7 +14,7 @@ class Role:
         self.roads = config[id]['kind']
         self.speed = config[id]['speed']
         self.battery = config[id]['battery']
-        self.percieve = config[id]['percieve']
+        self.perceive = config[id]['perceive']
         self.abilities = config[id]['abilities']
         self.virtual_capacity = config[id]['capacity_virtual']
         self.physical_capacity = config[id]['capacity_physical']

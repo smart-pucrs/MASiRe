@@ -160,29 +160,29 @@ class Generator:
         return water_samples
 
     def generate_social_assets(self) -> list:
-        min_lat, max_lat, min_lon, max_lon = self.config['map']['minLat'], self.config['map']['maxLat'], \
-                                             self.config['map']['minLon'], self.config['map']['maxLon']
-
-        size: int = random.randint(
-            self.config['generate']['socialAsset']['minAmount'],
-            self.config['generate']['socialAsset']['maxAmount']
-        )
-
-        social_assets: list = [0] * size
-
-        self.total_social_assets += size
-
-        asset_min_size: int = self.config['generate']['socialAsset']['minSize']
-        asset_max_size: int = self.config['generate']['socialAsset']['maxSize']
-        professions: list = self.config['generate']['socialAsset']['profession']
-
-        i: int = 0
-        while i < size:
-            asset_location = [random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon)]
-
-            social_size = random.randint(asset_min_size, asset_max_size)
-            profession = random.choice(professions)
-
-            social_assets[i] = SocialAsset(social_size, asset_location, profession)
-            i += 1
-        return social_assets
+        # min_lat, max_lat, min_lon, max_lon = self.config['map']['minLat'], self.config['map']['maxLat'], \
+        #                                      self.config['map']['minLon'], self.config['map']['maxLon']
+        #
+        # size: int = random.randint(
+        #     self.config['generate']['socialAsset']['minAmount'],
+        #     self.config['generate']['socialAsset']['maxAmount']
+        # )
+        #
+        # social_assets: list = [0] * size
+        #
+        # self.total_social_assets += size
+        #
+        # asset_min_size: int = self.config['generate']['socialAsset']['minSize']
+        # asset_max_size: int = self.config['generate']['socialAsset']['maxSize']
+        # professions: list = self.config['generate']['socialAsset']['profession']
+        #
+        # i: int = 0
+        # while i < size:
+        #     asset_location = [random.uniform(min_lat, max_lat), random.uniform(min_lon, max_lon)]
+        #
+        #     social_size = random.randint(asset_min_size, asset_max_size)
+        #     profession = random.choice(professions)
+        #
+        #     social_assets[i] = SocialAsset(social_size, asset_location, profession)
+        #     i += 1
+        return [] #social_assets
