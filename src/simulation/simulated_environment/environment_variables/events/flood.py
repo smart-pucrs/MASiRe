@@ -26,4 +26,7 @@ class Flood:
         copy = self.__dict__.copy()
         del copy['list_of_nodes']
         del copy['period']
+        lat = copy['dimensions']['location'][0]
+        lon = copy['dimensions']['location'][1]
+        copy['dimensions']['location'] = {'lat': lat, 'lon': lon}
         return copy

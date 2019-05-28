@@ -18,7 +18,7 @@ def start_simulation(s_args, python_version, venv_path):
 
 
 def start_api(a_args, python_version, path, qtd_agents):
-    file_path = root / "src" / "api_app.py"
+    file_path = root / "src" / "socket_api_app.py"
     if path:
         subprocess.call([f"{str(path)}/python{python_version}", str(file_path), *map(str, a_args), str(qtd_agents)])
     else:
@@ -68,9 +68,6 @@ def handle_arguments():
     pyversion = args.pyv
     step_time = args.step_t
     first_conn_time = args.first_t
-
-    if args.g:
-        install_requirements(pyv)
 
     return [config_file_location, base_url, simulation_port, api_port], \
            [base_url, api_port, simulation_port, step_time, first_conn_time], \

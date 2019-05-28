@@ -7,9 +7,9 @@ from directory_path import dir as root
 
 class Route:
 
-    def __init__(self, map):
-        map_file_location = root / map
-        self.router = Router("car", str(map_file_location)) # Initialise router object from pyroutelib3
+    def __init__(self, map_name):
+        map_file_location = root / map_name
+        self.router = Router("car", str(map_file_location))
 
     def get_closest_node(self, lat, lon):
         """
