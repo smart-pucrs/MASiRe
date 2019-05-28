@@ -116,7 +116,8 @@ class ActionExecutor:
 
                 agent.last_action_result = True
                 agent.discharge()
-                agent.location = agent.route.pop(0)
+                dict_location = agent.route.pop(0)
+                agent.location = [dict_location['lat'], dict_location['lon']]
 
             elif action_name == 'deliver_physical':
                 if len(parameters) < 1 or len(parameters) > 2:

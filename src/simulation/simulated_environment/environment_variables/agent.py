@@ -168,4 +168,6 @@ class Agent:
     def json(self):
         copy = self.__dict__.copy()
         del copy['agent_info']
+        copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
+        copy['route'] = [{'lat': position[0], 'lon': position[1]} for position in copy['route']]
         return copy
