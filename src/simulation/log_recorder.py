@@ -27,11 +27,7 @@ class Logger:
             if event == 'flood' and events[event]:
                 events[event] = events[event].json()
             else:
-                aux = []
-                for x in events[event]:
-                    if not isinstance(x, str):
-                        aux.append(x.json())
-                events[event] = aux
+                events[event] = [e.json() for e in events[event]]
 
         with open(self.percepts_file, 'w') as file:
             file.write(f'Agent perceptions: \n{json.dumps(agent_percepts[0], indent=4)}\n'
