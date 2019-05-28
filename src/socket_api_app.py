@@ -8,8 +8,8 @@ import multiprocessing
 from multiprocessing import Queue
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
-from src.communication.temporary_agents import JobSenderAgent, ConnectedAgent
-from src.communication.controller import Controller
+from communication.temporary_agents import JobSenderAgent, ConnectedAgent
+from communication.controller import Controller
 
 base_url, port, simulation_port, step_time, first_conn_time, qtd_agents = sys.argv[1:]
 
