@@ -117,6 +117,7 @@ if __name__ == '__main__':
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
     if requests.get(f'http://{base_url}:{api_port}/start'):
+        print('Simulation ')
         serve(app, host=base_url, port=port)
     else:
         print('Errors during startup')

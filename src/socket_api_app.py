@@ -248,5 +248,5 @@ def counter(sec, ready_queue):
 
 
 if __name__ == '__main__':
-    print(f'Serving on http://{base_url}:{port}')
+    print(f'API Serving on http://{base_url}:{port}')
     socket.run(app=app, host=base_url, port=port)
