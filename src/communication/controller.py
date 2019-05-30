@@ -34,3 +34,10 @@ class Controller:
 
     def check_agents_job(self):
         return len(self.agent_job) == self.qtd_agents
+
+    def dif(self):
+        lista = []
+        for agent in self.connected_agents:
+            if not agent in self.agent_job:
+                lista.append(agent)
+        return lista

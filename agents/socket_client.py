@@ -50,6 +50,7 @@ def simulation_ended(msg):
 @socket_client.on(receive_job_event)
 def receive_job(msg):
     print('receive_job')
+    print(msg)
 
 
 job_json = {
@@ -63,5 +64,6 @@ response = requests.post(send_job_url, json=job_json).json()
 if 'message' in response:
     print(response['message'])
     socket_client.disconnect()
+    print('FIM!!')
     exit()
 
