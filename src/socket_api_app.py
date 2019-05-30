@@ -24,13 +24,13 @@ socket_clients = {}
 
 @socket.on('connect')
 def connect():
-    identifier = request.headers['Name']
+    identifier = request.headers['Token']
     socket_clients[identifier] = request.sid
 
 
 @socket.on('disconnect')
 def disconnect():
-    identifier = request.headers['Name']
+    identifier = request.headers['Token']
     del socket_clients[identifier]
 
 
@@ -219,8 +219,7 @@ def finish_step():
                 message = item[2]
                 response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
 
-                identifier = controller.connected_agents[token].agent_info['name']
-                room = socket_clients[identifier]
+                room = socket_clients[token]
                 socket.emit('job_result', response, room=room)
 
     except requests.exceptions.ConnectionError:
