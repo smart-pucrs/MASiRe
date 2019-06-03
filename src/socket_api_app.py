@@ -227,6 +227,7 @@ def finish_step():
                 else:
                     response = json.dumps({'type': 'percepts', 'agent': agent, 'events': simulation_response['events']})
 
+                controller.connected_agents[token].simulation_agent = agent
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', response, room=room)
