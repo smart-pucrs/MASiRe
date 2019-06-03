@@ -22,19 +22,11 @@ class Logger:
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
         events = agent_percepts[1].copy()
 
-        for event in events:
-            if event == 'flood' and events[event]:
-                events[event] = events[event].json()
-            else:
-                aux = []
-                for x in events[event]:
-                    if not isinstance(x, str):
-                        aux.append(x.json())
-                events[event] = aux
+        events_json = [event.json() for event in events]
 
         with open(self.percepts_file, 'w') as file:
             file.write(f'Agent perceptions: \n{json.dumps(agent_percepts[0], indent=4)}\n'
-                       f'{json.dumps(events, indent=4)}'
+                       f'{json.dumps(events_json, indent=4)}'
                        f'\nMap perceptions: \n{json.dumps(percepts, indent=4)}'
                        f'\nRoles: {"; ".join(roles)}'
                        f'\nSeed: {seed}')

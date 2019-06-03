@@ -40,7 +40,7 @@
           0
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "air"
     },
 
@@ -64,7 +64,7 @@
           0
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "earth"
     },
 
@@ -88,7 +88,7 @@
           10
         ]
       ],
-      "percieve": 5,
+      "perceive": 5,
       "kind": "water"
     }
   },

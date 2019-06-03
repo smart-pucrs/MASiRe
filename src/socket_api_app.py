@@ -157,6 +157,9 @@ def register_job():
         return jsonify(agent_response)
 
 
+
+
+
 @app.route('/start', methods=['GET'])
 def _start():
     controller.started = True
@@ -220,9 +223,9 @@ def finish_step():
                 agent = item[1]
                 if len(item) > 2:
                     message = item[2]
-                    response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
+                    response = json.dumps({'type': 'percepts', 'agent': agent, 'message': message, 'events': simulation_response['events']})
                 else:
-                    response = json.dumps({'agent': agent, 'events': simulation_response['events']})
+                    response = json.dumps({'type': 'percepts', 'agent': agent, 'events': simulation_response['events']})
 
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
@@ -232,7 +235,7 @@ def finish_step():
                 agent = controller.connected_agents[token].simulation_agent
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
-                response = json.dumps({'agent': agent, 'message': 'agent dont send a action', 'events': simulation_response['events']})
+                response = json.dumps({'type': 'percepts', 'agent': agent, 'message': 'agent dont send a action', 'info': simulation_response['events']})
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', response, room=room)

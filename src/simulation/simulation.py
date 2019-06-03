@@ -39,7 +39,7 @@ class Simulation:
         for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
             del map_config_agents[key]
 
-        return [map_config_agents, self.pre_events['current_event']], map_config
+        return [map_config_agents, self.pre_events], map_config
 
     def create_agent(self, token, agent_info):
         """
@@ -57,16 +57,14 @@ class Simulation:
         
         :return: A dict containing every agent's step percepts.
         """
-
         try:
-            event = self.world.get_current_event(self.step)
+            events = self.world.get_current_event(self.step)
         except IndexError:
             return None
 
-        pending_events = self.world.percepts(self.step)
+        events.extend(self.world.percepts(self.step))
         self.world.decrease_period_and_lifetime(self.step)
-
-        return {'current_event': event, 'pending_events': pending_events}
+        return events
 
     def do_step(self, actions):
         """
