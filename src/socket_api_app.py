@@ -95,6 +95,10 @@ def validate_agent():
         agent_response['info'] = simulation_response
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
 
+        identifier = controller.connected_agents[token].agent_info['name']
+        room = socket_clients[identifier]
+        socket.emit('initial_percepts', agent_response, room=room)
+
     else:
         agent_response['message'] = 'Token not registered.'
 
@@ -157,9 +161,12 @@ def register_job():
         return jsonify(agent_response)
 
 
-@app.route('/start', methods=['GET'])
+@app.route('/start', methods=['POST'])
 def _start():
+    initial_percepts = request.get_json(force=True)
+
     controller.started = True
+    controller.initial_percepts = initial_percepts
     multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
     controller.first_timer = time.time()
     return jsonify('')
@@ -168,11 +175,18 @@ def _start():
 @app.route('/finish_step', methods=['GET'])
 def finish_step():
     """Send all the jobs to the simulation and save the results."""
-
     if request.remote_addr != base_url:
         return jsonify('This endpoint can not be accessed.')
 
     if controller.step_time is None:
+        initial_percepts = dict(type='percepts', events=controller.initial_percepts, step=0)
+        for token in controller.connected_agents:
+            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent
+
+            identifier = controller.connected_agents[token].agent_info['name']
+            room = socket_clients[identifier]
+            socket.emit('job_result', json.dumps(initial_percepts), room=room)
+
         controller.step_time = True
         multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
         return jsonify(0)
@@ -215,29 +229,34 @@ def finish_step():
             return jsonify(1)
 
         else:
+            info = {'type': 'percepts', 'events': simulation_response['events'],
+                    'step': simulation_response['step']}
+
             for item in simulation_response['action_results']:
                 token = item[0]
                 agent = item[1]
 
+                info['agent'] = agent
+
                 if len(item) > 2:
                     message = item[2]
-                    response = json.dumps({'type': 'percepts', 'agent': agent, 'message': message, 'events': simulation_response['events']})
-                else:
-                    response = json.dumps({'type': 'percepts', 'agent': agent, 'events': simulation_response['events']})
+                    info['message'] = message
 
                 controller.connected_agents[token].simulation_agent = agent
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
-                socket.emit('job_result', response, room=room)
+                socket.emit('job_result', json.dumps(info), room=room)
 
             for token in idle_agents:
                 agent = controller.connected_agents[token].simulation_agent
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
-                response = json.dumps({'type': 'percepts', 'agent': agent, 'message': 'agent dont send a action', 'info': simulation_response['events']})
+                info['agent'] = agent
+                info['message'] = 'agent don\'t send a action'
+
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
-                socket.emit('job_result', response, room=room)
+                socket.emit('job_result', json.dumps(info), room=room)
 
     except requests.exceptions.ConnectionError:
         print('Simulation is not online')

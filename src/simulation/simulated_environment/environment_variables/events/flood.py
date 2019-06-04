@@ -10,11 +10,9 @@ class Flood:
         takes at the simulation.
         :param dimensions: Representation of the shape, size,
         latitude, longitude and 'disabled' nodes of a certain flood instance.
-        :param photos: All 'photography events' that were randomly generated over a
-        certain flood instance.
-        :param water_samples: All 'collectible water samples' that were randomly generated
-        over a certain flood instance.
+        :param list_of_nodes: A list with the nodes what the flood reaches
         """
+
         self.type: str = 'flood'
         self.active: bool = False
         self.period: int = period

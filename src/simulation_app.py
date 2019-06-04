@@ -40,10 +40,9 @@ def register_agent():
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
 
-    initial_info = initial_percepts[0].copy()
-    # events = initial_percepts[1].copy()
-    # map_percepts = initial_percepts[0].copy()
-    #
+    events = initial_percepts[1].copy()
+    map_percepts = initial_percepts[0].copy()
+
     # for event in events:
     #     if event == 'flood' and events[event]:
     #         events[event] = events[event].json()
@@ -53,14 +52,14 @@ def register_agent():
     #             aux.append(x.json())
     #         events[event] = aux
 
-    return jsonify({'agent': agent, 'initial_info': initial_info})
+    return jsonify({'agent': agent, 'map_percepts': map_percepts})
 
 
 @app.route('/do_actions', methods=['POST'])
 def do_actions():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
-
+    print('1')
     actions = request.get_json(force=True)
 
     result = copy.deepcopy(simulation.do_step(actions))
@@ -84,7 +83,7 @@ def do_actions():
             agent[1]['route'] = locations
 
     result['events'] = [event.json() for event in result['events']]
-    result['current_step'] = simulation.step
+    result['step'] = simulation.step
 
     return jsonify(result)
 
@@ -102,7 +101,8 @@ if __name__ == '__main__':
     app.debug = False
     app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
     CORS(app)
-    if requests.get(f'http://{base_url}:{api_port}/start'):
+    init_percepts = copy.deepcopy(initial_percepts[1])
+    if requests.post(f'http://{base_url}:{api_port}/start', json=[event.json() for event in init_percepts]):
         print('Simulation ')
         serve(app, host=base_url, port=port)
     else:
