@@ -13,6 +13,7 @@ class Controller:
         self.started = False
         self.qtd_agents = int(qtd_agents)
         self.time_limit = int(first_conn_time)
+        self.initial_percepts = None
 
     def reset_agent_job(self):
         self.agent_job.clear()
@@ -36,8 +37,8 @@ class Controller:
         return len(self.agent_job) == self.qtd_agents
 
     def dif(self):
-        lista = []
+        idle_agents = []
         for agent in self.connected_agents:
-            if not agent in self.agent_job:
-                lista.append(agent)
-        return lista
+            if not (agent in self.agent_job):
+                idle_agents.append(agent)
+        return idle_agents
