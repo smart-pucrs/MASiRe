@@ -40,16 +40,20 @@ def register_agent():
     agent_info = request.get_json(force=True)
     agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
 
-    map_percepts = copy.deepcopy(initial_percepts[0])
-    events = copy.deepcopy(initial_percepts[1])
+    initial_info = initial_percepts[0].copy()
+    # events = initial_percepts[1].copy()
+    # map_percepts = initial_percepts[0].copy()
+    #
+    # for event in events:
+    #     if event == 'flood' and events[event]:
+    #         events[event] = events[event].json()
+    #     else:
+    #         aux = []
+    #         for x in events[event]:
+    #             aux.append(x.json())
+    #         events[event] = aux
 
-    for event in events:
-        if event == 'flood' and events[event]:
-            events[event] = events[event].json()
-        else:
-            events[event] = [event.json() for event in events[event]]
-
-    return jsonify({'agent': agent, 'initial_percepts': [map_percepts, events]})
+    return jsonify({'agent': agent, 'initial_info': initial_info})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -79,26 +83,8 @@ def do_actions():
                 locations.append({'lat': location[0], 'lon': location[1]})
             agent[1]['route'] = locations
 
-    current = result['events']['current_event']
-    json_events = {'current_event': {}, 'pending_events': []}
-
-    if current is not None:
-        for event in current:
-            if isinstance(current[event], str):
-                continue
-            if isinstance(current[event], list):
-                json_events['current_event'][event] = []
-                for obj_event in current[event]:
-                    json_events['current_event'][event].append(obj_event.json())
-            else:
-                json_events['current_event'][event] = current[event].json()
-
-    for idx, event_list in enumerate(result['events']['pending_events']):
-        json_events['pending_events'].append([])
-        for event in event_list:
-            json_events['pending_events'][idx].append(event.json())
-
-    result['events'] = json_events
+    result['events'] = [event.json() for event in result['events']]
+    result['current_step'] = simulation.step
 
     return jsonify(result)
 

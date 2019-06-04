@@ -24,13 +24,13 @@ socket_clients = {}
 
 @socket.on('connect')
 def connect():
-    identifier = request.headers['Name']
+    identifier = request.headers['name']
     socket_clients[identifier] = request.sid
 
 
 @socket.on('disconnect')
 def disconnect():
-    identifier = request.headers['Name']
+    identifier = request.headers['Token']
     del socket_clients[identifier]
 
 
@@ -178,7 +178,7 @@ def finish_step():
         return jsonify(0)
 
     jobs = []
-    lista = controller.dif()
+    idle_agents = controller.dif()
 
     try:
         for token in controller.agent_job:
@@ -218,18 +218,23 @@ def finish_step():
             for item in simulation_response['action_results']:
                 token = item[0]
                 agent = item[1]
-                message = item[2]
-                response = json.dumps({'agent': agent, 'message': message, 'events': simulation_response['events']})
 
+                if len(item) > 2:
+                    message = item[2]
+                    response = json.dumps({'type': 'percepts', 'agent': agent, 'message': message, 'events': simulation_response['events']})
+                else:
+                    response = json.dumps({'type': 'percepts', 'agent': agent, 'events': simulation_response['events']})
+
+                controller.connected_agents[token].simulation_agent = agent
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', response, room=room)
 
-            for token in lista:
+            for token in idle_agents:
                 agent = controller.connected_agents[token].simulation_agent
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
-                response = json.dumps({'agent': agent, 'message': 'agent dont send a action', 'events': simulation_response['events']})
+                response = json.dumps({'type': 'percepts', 'agent': agent, 'message': 'agent dont send a action', 'info': simulation_response['events']})
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', response, room=room)
@@ -253,7 +258,7 @@ def counter(sec, ready_queue):
             try:
                 requests.get(f'http://{base_url}:{simulation_port}/finish')
             except requests.exceptions.ConnectionError:
-                print('Simulation terminated.')
+                pass
     except Exception as e:
         print(e)
 

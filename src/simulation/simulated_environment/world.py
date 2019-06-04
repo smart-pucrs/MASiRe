@@ -2,6 +2,8 @@
 # /WorldState.java
 from simulation.simulated_environment.environment_executors.action_executor import ActionExecutor
 from simulation.simulated_environment.environment_variables.agent import Agent
+from simulation.simulated_environment.environment_variables.events.flood import Flood
+from simulation.simulated_environment.environment_variables.events.social_asset import SocialAsset
 from simulation.simulated_environment.environment_variables.role import Role
 from simulation.simulated_environment.environment_executors.generator import Generator
 from simulation.simulated_environment.environment_variables.cdm import Cdm
@@ -29,27 +31,24 @@ class World:
         self.action_executor = ActionExecutor(config, self, logger)
 
     def percepts(self, step):
-        if step == 0:
-            return [[], [], [], [], []]
+        events = []
 
-        # Get all active floods
-        floods, photos, victims, water_samples = [], [], [], []
+        for step in range(step):
+            event = list(self.events[step].values())
 
-        for idx, event in enumerate(self.events):
-            if idx == step:
-                break
-            if event['flood'] and event['flood'].active:
-                floods.append(event['flood'])
-                photos.extend([photo for photo in event['photos'] if photo.active])
-                victims.extend([victim for victim in event['victims'] if victim.active])
-                water_samples.extend([water_sample for water_sample in event['water_samples'] if water_sample.active])
+            for element in event:
+                if isinstance(element, list):
+                    events.extend([e for e in element if e.active and not isinstance(e, SocialAsset)])
+                else:
+                    if element.active:
+                        events.append(element)
 
-        return [floods, photos, victims, water_samples]
+        return events
 
     def get_current_event(self, step):
         flood = self.events[step]['flood']
         if not flood:
-            return {'flood': '', 'photos': [], 'victims': [], 'water_samples': []}
+            return []
 
         photos = self.events[step]['photos']
         victims = self.events[step]['victims']
@@ -70,7 +69,12 @@ class World:
         for water_sample in water_samples:
             water_sample.active = True
 
-        return {'flood': flood, 'photos': photos, 'victims': victims, 'water_samples': water_samples}
+        events = [flood]
+        events.extend(photos)
+        events.extend(victims)
+        events.extend(water_samples)
+
+        return events
 
     def decrease_period_and_lifetime(self, step):
         for i in range(step):
