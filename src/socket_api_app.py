@@ -30,7 +30,7 @@ def connect():
 
 @socket.on('disconnect')
 def disconnect():
-    identifier = request.headers['Token']
+    identifier = request.headers['name']
     del socket_clients[identifier]
 
 

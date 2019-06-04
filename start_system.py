@@ -82,8 +82,8 @@ def create_parser():
     parser.add_argument('-ap', required=False, type=str, default='12346')
     parser.add_argument('-pyv', required=False, type=str, default='')
     parser.add_argument('-g', required=False, type=bool, default=False)
-    parser.add_argument('-step_t', required=False, type=int, default=30)
-    parser.add_argument('-first_t', required=False, type=int, default=60)
+    parser.add_argument('-step_t', required=False, type=int, default=1)
+    parser.add_argument('-first_t', required=False, type=int, default=5)
     return parser
 
 
