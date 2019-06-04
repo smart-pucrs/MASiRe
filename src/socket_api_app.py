@@ -24,7 +24,7 @@ socket_clients = {}
 
 @socket.on('connect')
 def connect():
-    identifier = request.headers['Token']
+    identifier = request.headers['name']
     socket_clients[identifier] = request.sid
 
 
@@ -155,9 +155,6 @@ def register_job():
     except KeyError as k:
         agent_response['message'] = 'KeyError: ' + str(k)
         return jsonify(agent_response)
-
-
-
 
 
 @app.route('/start', methods=['GET'])

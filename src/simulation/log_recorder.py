@@ -23,15 +23,7 @@ class Logger:
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
         events = copy.deepcopy(agent_percepts[1])
 
-<<<<<<< HEAD
         events_json = [event.json() for event in events]
-=======
-        for event in events:
-            if event == 'flood' and events[event]:
-                events[event] = events[event].json()
-            else:
-                events[event] = [e.json() for e in events[event]]
->>>>>>> b2ca54e9dca43e6f0e8801081654b93930f61a5f
 
         with open(self.percepts_file, 'w') as file:
             file.write(f'Agent perceptions: \n{json.dumps(agent_percepts[0], indent=4)}\n'
