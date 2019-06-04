@@ -59,7 +59,6 @@ def register_agent():
 def do_actions():
     if request.remote_addr != base_url:
         return jsonify(message='This endpoint can not be accessed.')
-    print('1')
     actions = request.get_json(force=True)
 
     result = copy.deepcopy(simulation.do_step(actions))
