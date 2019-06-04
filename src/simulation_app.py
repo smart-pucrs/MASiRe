@@ -9,6 +9,7 @@ Also, one file to start the app is needed, check previous versions of the repo l
 """
 import json
 import sys
+import copy
 import requests
 from flask import request, jsonify
 from flask import Flask
@@ -62,7 +63,7 @@ def do_actions():
 
     actions = request.get_json(force=True)
 
-    result = simulation.do_step(actions)
+    result = copy.deepcopy(simulation.do_step(actions))
 
     if isinstance(result, str):
         return jsonify(result)

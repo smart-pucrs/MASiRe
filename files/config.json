@@ -124,8 +124,8 @@
       "maxLifetime": 30
     },
     "socialAsset": {
-      "minAmount": 1000,
-      "maxAmount": 1000,
+      "minAmount": 2,
+      "maxAmount": 7,
       "minSize": 5,
       "maxSize": 10,
       "profession": [
@@ -134,8 +134,8 @@
     },
     "waterSample": {
       "size": 4,
-      "minAmount": 1000,
-      "maxAmount": 1000
+      "minAmount": 1,
+      "maxAmount": 3
     }
   }
 }

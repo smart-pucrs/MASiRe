@@ -1,3 +1,4 @@
+import copy
 from simulation.simulated_environment.world import World
 from simulation.log_recorder import Logger
 
@@ -34,8 +35,8 @@ class Simulation:
 
     def initial_percepts(self):
         self.pre_events = self.do_pre_step()
-        map_config = self.world.config['map'].copy()
-        map_config_agents = map_config.copy()
+        map_config = copy.deepcopy(self.world.config['map'])
+        map_config_agents = copy.deepcopy(map_config)
         for key in ['steps', 'randomSeed', 'gotoCost', 'rechargeRate']:
             del map_config_agents[key]
 
@@ -92,7 +93,7 @@ class Simulation:
             return 'Simulation Ended'
 
         action_results = self.world.execute_actions(actions, self.step)
-        results = {'action_results': action_results, 'events': self.pre_events.copy()}
+        results = {'action_results': action_results, 'events': self.pre_events}
         self.step += 1
         self.pre_events = self.do_pre_step()
         return results

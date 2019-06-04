@@ -1,4 +1,5 @@
 # based https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
+import copy
 from simulation.exceptions.exceptions import *
 
 
@@ -40,15 +41,15 @@ class ActionExecutor:
             action = (obj['action'], *obj['parameters'])
             result = self.execute(self.world.agents[token], action, cdm_location, step)
 
-            agent_info = self.world.agents[obj['token']].agent_info.copy()
-            agent_copy = self.world.agents[obj['token']].json()
+            agent_info_copy = copy.deepcopy(self.world.agents[obj['token']].agent_info)
+            agent_copy = copy.deepcopy(self.world.agents[obj['token']].json())
             parameters = action[1] if len(action) == 2 else []
 
             self.logger.register_agent_action(
                 token=agent_copy['token'],
                 role=agent_copy['role'],
                 result=True if result is None else result,
-                name=agent_info,
+                name=agent_info_copy,
                 action=action[0],
                 parameters=parameters
             )
@@ -115,7 +116,8 @@ class ActionExecutor:
 
                 agent.last_action_result = True
                 agent.discharge()
-                agent.location = agent.route.pop(0)
+                dict_location = agent.route.pop(0)
+                agent.location = [dict_location['lat'], dict_location['lon']]
 
             elif action_name == 'deliver_physical':
                 if len(parameters) < 1 or len(parameters) > 2:
