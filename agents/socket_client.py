@@ -1,6 +1,5 @@
 import requests
 import socketio
-import time
 
 # Server URL           = http://127.0.0.1:12345
 # Connect URL          = http://127.0.0.1:12345/connect_agent
