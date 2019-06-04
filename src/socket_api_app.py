@@ -94,11 +94,6 @@ def validate_agent():
         agent_response['agent_connected'] = True
         agent_response['info'] = simulation_response
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
-
-        identifier = controller.connected_agents[token].agent_info['name']
-        room = socket_clients[identifier]
-        socket.emit('initial_percepts', agent_response, room=room)
-
     else:
         agent_response['message'] = 'Token not registered.'
 
@@ -181,7 +176,7 @@ def finish_step():
     if controller.step_time is None:
         initial_percepts = dict(type='percepts', events=controller.initial_percepts, step=0)
         for token in controller.connected_agents:
-            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent
+            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent['agent']
 
             identifier = controller.connected_agents[token].agent_info['name']
             room = socket_clients[identifier]
@@ -248,7 +243,7 @@ def finish_step():
                 socket.emit('job_result', json.dumps(info), room=room)
 
             for token in idle_agents:
-                agent = controller.connected_agents[token].simulation_agent
+                agent = controller.connected_agents[token].simulation_agent['agent']
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
                 info['agent'] = agent
