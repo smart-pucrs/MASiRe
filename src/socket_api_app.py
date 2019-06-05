@@ -24,14 +24,20 @@ socket_clients = {}
 
 @socket.on('connect')
 def connect():
-    identifier = request.headers['name']
-    socket_clients[identifier] = request.sid
+    print("connect")
+    # identifier = request.headers['name']
+    # socket_clients[identifier] = request.sid
 
 
 @socket.on('disconnect')
 def disconnect():
     identifier = request.headers['name']
     del socket_clients[identifier]
+
+@socket.on('register')
+def handle_message(message):
+    identifier = json.loads(message)['name']
+    socket_clients[identifier] = request.sid
 
 
 @app.route('/connect_agent', methods=['POST'])
