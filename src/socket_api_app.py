@@ -226,7 +226,6 @@ def finish_step():
             return jsonify(1)
 
         else:
-            print('Match -> ', controller.current_match, ' step -> ', simulation_response['step'])
             for item in simulation_response['action_results']:
                 info = {'type': 'percepts', 'events': simulation_response['events'],
                         'step': simulation_response['step']}
@@ -267,8 +266,6 @@ def finish_step():
 
 @app.route('/restart', methods=['GET'])
 def restart():
-    print('API was restarted')
-
     event = 'match_ended'
     response = json.dumps({'message': f'The match {controller.current_match} ended.'})
     socket.emit(event, response, broadcast=True)
@@ -286,7 +283,6 @@ def notify_agents():
     response = json.dumps({'message': 'Simulation finished.'})
     socket.emit(event, response, broadcast=True)
 
-    print('Finish')
     return jsonify(0)
 
 
@@ -308,7 +304,6 @@ def counter(sec, ready_queue):
                 try:
                     requests.get(f'http://{base_url}:{simulation_port}/restart')
                     requests.get(f'http://{base_url}:{port}/restart')
-                    print('Match ', controller.current_match)
                 except requests.exceptions.ConnectionError:
                     pass
     except Exception as e:
