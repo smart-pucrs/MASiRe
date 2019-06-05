@@ -3,7 +3,7 @@ import time
 
 class Controller:
 
-    def __init__(self, qtd_agents, first_conn_time):
+    def __init__(self, qtd_agents, first_conn_time, matches):
         self.connected_agents = {}
         self.agent_job = {}
         self.first_timer = None
@@ -14,6 +14,8 @@ class Controller:
         self.qtd_agents = int(qtd_agents)
         self.time_limit = int(first_conn_time)
         self.initial_percepts = None
+        self.matches = int(matches)
+        self.current_match = 1
 
     def reset_agent_job(self):
         self.agent_job.clear()
@@ -42,3 +44,9 @@ class Controller:
             if not (agent in self.agent_job):
                 idle_agents.append(agent)
         return idle_agents
+
+    def check_matches(self):
+        return self.current_match == self.matches
+
+    def start_new_match(self):
+        self.current_match += 1

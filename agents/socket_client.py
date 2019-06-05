@@ -7,6 +7,7 @@ import socketio
 # Send job URL         = http://127.0.0.1:12345/send_job
 # Receive job EVENT    = job_result
 # Simulation end Event = simulation_ended
+import json
 
 agent_data = {
     'name': 'agent1'
@@ -18,6 +19,7 @@ send_job_url = 'http://127.0.0.1:12345/send_job'
 connect_url = 'http://127.0.0.1:12345/connect_agent'
 initial_percepts_event = 'initial_percepts'
 receive_job_event = 'job_result'
+match_ended_event = 'match_ended'
 simulation_ended_event = 'simulation_ended'
 
 
@@ -38,22 +40,30 @@ print(response)
 if 'message' in response:
     exit(response['message'])
 
+# Register the agent in the server
+socket_client.emit('register', json.dumps({'name': 'agent1'}))
+
 
 @socket_client.on(initial_percepts_event)
 def initial_percepts(msg):
     print("map_percepts -> ", msg)
 
 
+@socket_client.on(match_ended_event)
+def match_ended(msg):
+    print(f'\n{msg}\n')
+
+
 @socket_client.on(simulation_ended_event)
 def simulation_ended(msg):
+    print(msg)
     socket_client.disconnect()
-    print('simulation ended')
     exit()
 
 
 @socket_client.on(receive_job_event)
 def receive_job(msg):
-    print(msg)
+    print('\n'+msg+'\n')
 
 
 job_json = {

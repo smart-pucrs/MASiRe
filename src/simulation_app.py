@@ -87,6 +87,16 @@ def do_actions():
     return jsonify(result)
 
 
+@app.route('/restart', methods=['GET'])
+def restart():
+    global simulation
+    simulation = start_instance(config_path)
+    global initial_percepts
+    initial_percepts = simulation.start()
+
+    return jsonify(0)
+
+
 @app.route('/finish', methods=['GET'])
 def finish():
     if request.remote_addr != base_url:

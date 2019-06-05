@@ -11,12 +11,13 @@ from flask_socketio import SocketIO
 from communication.temporary_agents import JobSenderAgent, ConnectedAgent
 from communication.controller import Controller
 
-base_url, port, simulation_port, step_time, first_conn_time, qtd_agents = sys.argv[1:]
+base_url, port, simulation_port, step_time, first_conn_time, qtd_agents, matches = sys.argv[1:]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 socket = SocketIO(app=app)
-controller = Controller(qtd_agents, first_conn_time)
+controller = Controller(qtd_agents, first_conn_time, matches)
+
 job_queue = Queue()
 
 socket_clients = {}
@@ -33,6 +34,7 @@ def connect():
 def disconnect():
     identifier = request.headers['name']
     del socket_clients[identifier]
+
 
 @socket.on('register')
 def handle_message(message):
@@ -221,15 +223,10 @@ def finish_step():
         simulation_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
         if isinstance(simulation_response, str):
-            controller.terminated = True
-
-            event = f'simulation_ended'
-            response = json.dumps({'message': 'Simulation finished.'})
-            socket.emit(event, response, broadcast=True)
-
             return jsonify(1)
 
         else:
+            print('Match -> ', controller.current_match, ' step -> ', simulation_response['step'])
             for item in simulation_response['action_results']:
                 info = {'type': 'percepts', 'events': simulation_response['events'],
                         'step': simulation_response['step']}
@@ -268,19 +265,52 @@ def finish_step():
     return jsonify(0)
 
 
+@app.route('/restart', methods=['GET'])
+def restart():
+    print('API was restarted')
+
+    event = 'match_ended'
+    response = json.dumps({'message': f'The match {controller.current_match} ended.'})
+    socket.emit(event, response, broadcast=True)
+
+    controller.start_new_match()
+    multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
+    return jsonify(0)
+
+
+@app.route('/notify_agents')
+def notify_agents():
+    controller.terminated = True
+
+    event = 'simulation_ended'
+    response = json.dumps({'message': 'Simulation finished.'})
+    socket.emit(event, response, broadcast=True)
+
+    print('Finish')
+    return jsonify(0)
+
+
 def counter(sec, ready_queue):
     try:
         ready_queue.get(block=True, timeout=int(sec))
     except queue.Empty:
         pass
-    
     try:
         end_code = requests.get(f'http://{base_url}:{port}/finish_step').json()
         if end_code == 1:
-            try:
-                requests.get(f'http://{base_url}:{simulation_port}/finish')
-            except requests.exceptions.ConnectionError:
-                pass
+            if controller.check_matches():
+                try:
+                    requests.get(f'http://{base_url}:{simulation_port}/finish')
+                except requests.exceptions.ConnectionError:
+                    requests.get(f'http://{base_url}:{port}/notify_agents')
+                    pass
+            else:
+                try:
+                    requests.get(f'http://{base_url}:{simulation_port}/restart')
+                    requests.get(f'http://{base_url}:{port}/restart')
+                    print('Match ', controller.current_match)
+                except requests.exceptions.ConnectionError:
+                    pass
     except Exception as e:
         print(e)
 
