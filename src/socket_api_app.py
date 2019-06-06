@@ -182,7 +182,7 @@ def finish_step():
         return jsonify('This endpoint can not be accessed.')
 
     if controller.step_time is None:
-        initial_percepts = dict(type='percepts', events=controller.initial_percepts, step=0)
+        initial_percepts = dict(type='percepts', environment=dict(events=controller.initial_percepts, step=0))
         for token in controller.connected_agents:
             initial_percepts['agent'] = controller.connected_agents[token].simulation_agent['agent']
 
@@ -227,8 +227,8 @@ def finish_step():
 
         else:
             for item in simulation_response['action_results']:
-                info = {'type': 'percepts', 'events': simulation_response['events'],
-                        'step': simulation_response['step']}
+                info = {'type': 'percepts', 'environment': {'events': simulation_response['events'],
+                        'step': simulation_response['step']}}
 
                 token = item[0]
                 agent = item[1]
@@ -244,8 +244,8 @@ def finish_step():
                 room = socket_clients[identifier]
                 socket.emit('job_result', json.dumps(info), room=room)
 
-            info = {'type': 'percepts', 'events': simulation_response['events'],
-                    'step': simulation_response['step'], 'message': 'agent don\'t send a action'}
+            info = {'type': 'percepts', 'environment': {'events': simulation_response['events'],
+                    'step': simulation_response['step']}, 'message': 'agent don\'t send a action'}
 
             for token in idle_agents:
                 agent = controller.connected_agents[token].simulation_agent['agent']
