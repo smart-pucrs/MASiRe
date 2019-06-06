@@ -85,7 +85,7 @@ def validate_agent():
         return jsonify({'message': 'Simulation already finished.'})
 
     token = request.get_json(force=True)
-    agent_response = {'agent_connected': False}
+    agent_response = {'agent_connected': False, 'type': 'initial_percepts'}
 
     if controller.check_agent(token):
         try:
@@ -98,9 +98,19 @@ def validate_agent():
             return jsonify(agent_response)
 
         controller.connected_agents[token].connected = True
-        controller.connected_agents[token].simulation_agent = simulation_response
+        controller.connected_agents[token].simulation_agent = simulation_response['agent']
+
+        print('-> ', simulation_response)
+        agent_percepts = {'role': simulation_response['agent']['role'],
+                          'abilities': simulation_response['agent']['abilities'],
+                          'max_charge': simulation_response['agent']['max_charge'],
+                          'physical_capacity': simulation_response['agent']['physical_capacity'],
+                          'virtual_capacity': simulation_response['agent']['virtual_capacity'],
+                          'speed': simulation_response['agent']['speed']}
+
         agent_response['agent_connected'] = True
-        agent_response['info'] = simulation_response
+        agent_response['map_percepts'] = simulation_response['map_percepts']
+        agent_response['agent_percepts'] = agent_percepts
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
     else:
         agent_response['message'] = 'Token not registered.'
@@ -184,7 +194,7 @@ def finish_step():
     if controller.step_time is None:
         initial_percepts = dict(type='percepts', environment=dict(events=controller.initial_percepts, step=0))
         for token in controller.connected_agents:
-            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent['agent']
+            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent
 
             identifier = controller.connected_agents[token].agent_info['name']
             room = socket_clients[identifier]
@@ -248,7 +258,7 @@ def finish_step():
                     'step': simulation_response['step']}, 'message': 'agent don\'t send a action'}
 
             for token in idle_agents:
-                agent = controller.connected_agents[token].simulation_agent['agent']
+                agent = controller.connected_agents[token].simulation_agent
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
                 info['agent'] = agent
@@ -267,7 +277,7 @@ def finish_step():
 @app.route('/restart', methods=['GET'])
 def restart():
     event = 'match_ended'
-    response = json.dumps({'message': f'The match {controller.current_match} ended.'})
+    response = json.dumps({'message': f'The match {controller.current_match} ended.', 'type': 'end'})
     socket.emit(event, response, broadcast=True)
 
     controller.start_new_match()
@@ -280,7 +290,7 @@ def notify_agents():
     controller.terminated = True
 
     event = 'simulation_ended'
-    response = json.dumps({'message': 'Simulation finished.'})
+    response = json.dumps({'message': 'Simulation finished.', 'type': 'bye'})
     socket.emit(event, response, broadcast=True)
 
     return jsonify(0)
