@@ -100,7 +100,6 @@ def validate_agent():
         controller.connected_agents[token].connected = True
         controller.connected_agents[token].simulation_agent = simulation_response['agent']
 
-        print('-> ', simulation_response)
         agent_percepts = {'role': simulation_response['agent']['role'],
                           'abilities': simulation_response['agent']['abilities'],
                           'max_charge': simulation_response['agent']['max_charge'],
