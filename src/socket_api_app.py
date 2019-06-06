@@ -275,7 +275,7 @@ def restart():
     return jsonify(0)
 
 
-@app.route('/notify_agents')
+@app.route('/simulation_ended')
 def notify_agents():
     controller.terminated = True
 
@@ -298,7 +298,7 @@ def counter(sec, ready_queue):
                 try:
                     requests.get(f'http://{base_url}:{simulation_port}/finish')
                 except requests.exceptions.ConnectionError:
-                    requests.get(f'http://{base_url}:{port}/notify_agents')
+                    requests.get(f'http://{base_url}:{port}/simulation_ended')
                     pass
             else:
                 try:
