@@ -21,3 +21,9 @@ class WaterSample:
         del copy['active']
         copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
         return copy
+
+    def json_file(self):
+        copy = self.__dict__.copy()
+        del copy['active']
+        del copy['type']
+        return copy

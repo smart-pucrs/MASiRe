@@ -26,3 +26,9 @@ class Photo:
         copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
         return copy
 
+    def json_file(self):
+        copy = self.__dict__.copy()
+        del copy['active']
+        del copy['type']
+        copy['victims'] = [victim.json_file() for victim in copy['victims']]
+        return copy
