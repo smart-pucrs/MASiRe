@@ -1,3 +1,5 @@
+import copy
+import json
 import random
 from simulation.simulated_environment.environment_variables.events.flood import Flood
 from simulation.simulated_environment.environment_variables.events.photo import Photo
@@ -20,29 +22,47 @@ class Generator:
         self.victim_counter: int = 0
         random.seed(config['map']['randomSeed'])
 
-    def generate_events(self) -> list:
+    def generate_events(self, events_path) -> list:
         steps_number: int = self.config['map']['steps']
         events = [0] * steps_number
+
         flood = self.generate_flood()
         events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False),
                          water_samples=self.generate_water_samples(flood.list_of_nodes),
                          photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
+        json_events = {'0': dict(flood=events[0]['flood'].json_file(),
+                                 victims=[victim.json_file() for victim in events[0]['victims']],
+                                 water_sample=[water_sample.json_file() for water_sample in events[0]['water_samples']],
+                                 photos=[photo.json_file() for photo in events[0]['photos']],
+                                 social_asset=[social_asset.json_file() for social_asset in
+                                               events[0]['social_assets']])}
 
         i: int = 0
         flood_probability: int = self.config['generate']['floodProbability']
         while i < steps_number:
+            event_list = {}
             event = dict(flood=None, victims=[], water_samples=[], photos=[], social_assets=[])
             if random.randint(0, 99) <= flood_probability:
                 event['flood'] = self.generate_flood()
+                event_list['flood'] = event['flood'].json_file()
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes, False)
+                event_list['victims'] = [victim.json_file() for victim in event['victims']]
                 event['water_samples']: list = self.generate_water_samples(nodes)
+                event_list['water_samples'] = [water_sample.json_file() for water_sample in event['water_samples']]
                 event['photos']: list = self.generate_photos(nodes)
+                event_list['photos'] = [photo.json_file() for photo in event['photos']]
                 event['social_assets']: list = self.generate_social_assets()
+                event_list['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
 
                 self.total_floods += 1
+            json_events[i] = event_list
             events[i] = event
             i += 1
+
+        file = open(events_path, 'w+')
+        file.write(json.dumps(json_events))
+        file.close()
 
         return events
 
