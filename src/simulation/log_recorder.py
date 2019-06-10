@@ -13,12 +13,11 @@ class Logger:
         month = str(datetime.today().strftime("%B"))
         year = str(datetime.today().strftime("%Y"))
         self.log_file = root / 'files' / simulation_id / year / month / day
-        self.percepts_file = root / 'files' / simulation_id / year / month / day
         self.timer = time.time()
 
         os.makedirs(self.log_file, exist_ok=True)
+        self.percepts_file = str(self.log_file / f'{time_of_date}_percepts.txt')
         self.log_file = str(self.log_file / f'{time_of_date}_logs.txt')
-        self.percepts_file = str(self.percepts_file / f'{time_of_date}_percepts.txt')
 
     def register_perceptions(self, percepts, roles, agent_percepts, seed):
         events = copy.deepcopy(agent_percepts[1])
