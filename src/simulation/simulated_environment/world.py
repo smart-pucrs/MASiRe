@@ -1,24 +1,26 @@
 # based on https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/data
 # /WorldState.java
+import json
+
 from simulation.simulated_environment.environment_executors.action_executor import ActionExecutor
 from simulation.simulated_environment.environment_variables.agent import Agent
-from simulation.simulated_environment.environment_variables.events.flood import Flood
 from simulation.simulated_environment.environment_variables.events.social_asset import SocialAsset
 from simulation.simulated_environment.environment_variables.role import Role
 from simulation.simulated_environment.environment_executors.generator import Generator
 from simulation.simulated_environment.environment_variables.cdm import Cdm
+from simulation.simulated_environment.loader import load_events
 
 
 class World:
 
-    def __init__(self, config, logger):
+    def __init__(self, sim_config, events_config, logger):
         """
         [Object that represents the simulation universe.]
 
         :param config: The configuration archive received by the
         communication core.
         """
-        self.config = config
+        self.config = sim_config
         self.roles = {}
         self.agents = {}
         self.events = []
@@ -26,9 +28,10 @@ class World:
         self.social_assets = []
         self.agent_counter = 0
         self.free_roles = []
-        self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
-        self.generator = Generator(config)
-        self.action_executor = ActionExecutor(config, self, logger)
+        self.cdm = Cdm([sim_config['map']['centerLat'], sim_config['map']['centerLon']])
+        self.generator = Generator(sim_config)
+        self.action_executor = ActionExecutor(sim_config, self, logger)
+        self.events_config = events_config
 
     def percepts(self, step):
         events = []
@@ -112,12 +115,19 @@ class World:
 
         return [victims, photos, water_samples]
 
+    def check_default_events(self):
+        return self.events_config.endswith('default_events.txt')
+
+    def load_events(self):
+        self.events = load_events(self.events_config)
+        pass
+
     def generate_events(self):
         """
         [Method that generates the world's random events and 
         adds them to their respective category.]
         """
-        self.events = self.generator.generate_events()
+        self.events = self.generator.generate_events(self.events_config)
 
     def create_roles(self):
         """
