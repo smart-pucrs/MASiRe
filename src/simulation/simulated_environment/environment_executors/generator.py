@@ -1,17 +1,18 @@
-import copy
 import json
+import os
 import random
+from datetime import datetime
+from directory_path import dir as root
 from simulation.simulated_environment.environment_variables.events.flood import Flood
 from simulation.simulated_environment.environment_variables.events.photo import Photo
 from simulation.simulated_environment.environment_variables.events.victim import Victim
-from simulation.simulated_environment.environment_variables.events.social_asset import SocialAsset
 from simulation.simulated_environment.environment_variables.events.water_sample import WaterSample
 from simulation.simulated_environment.environment_variables.route import Route
 
 
 class Generator:
 
-    def __init__(self, config):
+    def __init__(self, config, seed):
         self.total_photos: int = 0
         self.total_water_samples: int = 0
         self.total_victims: int = 0
@@ -20,48 +21,66 @@ class Generator:
         self.config = config
         self.router = Route(config['map']['map'])
         self.victim_counter: int = 0
-        random.seed(config['map']['randomSeed'])
+        random.seed(seed)
 
-    def generate_events(self, events_path) -> list:
+    def generate_events(self) -> list:
+        time_of_date = f'{datetime.today().hour}h_{datetime.today().minute}m'
+        day = str(datetime.today().strftime("%d"))
+        month = str(datetime.today().strftime("%B"))
+        year = str(datetime.today().strftime("%Y"))
+        events_path = root / 'files' / self.config['map']['id'] / year / month / day
+        os.makedirs(events_path, exist_ok=True)
+        events_path = str(events_path / time_of_date) + '_events.txt'
+
+        file = open(events_path, 'w+')
+
         steps_number: int = self.config['map']['steps']
         events = [0] * steps_number
-
         flood = self.generate_flood()
         events[0] = dict(flood=flood, victims=self.generate_victims(flood.list_of_nodes, False),
                          water_samples=self.generate_water_samples(flood.list_of_nodes),
                          photos=self.generate_photos(flood.list_of_nodes), social_assets=self.generate_social_assets())
-        json_events = {'0': dict(flood=events[0]['flood'].json_file(),
-                                 victims=[victim.json_file() for victim in events[0]['victims']],
-                                 water_sample=[water_sample.json_file() for water_sample in events[0]['water_samples']],
-                                 photos=[photo.json_file() for photo in events[0]['photos']],
-                                 social_asset=[social_asset.json_file() for social_asset in
-                                               events[0]['social_assets']])}
+        locations = []
+        for node in flood.list_of_nodes:
+            locations.append(self.router.get_node_coord(node))
 
-        i: int = 0
+        json_event = {'0': dict(flood=events[0]['flood'].json_file(locations),
+                                victims=[victim.json_file() for victim in events[0]['victims']],
+                                water_sample=[water_sample.json_file() for water_sample in events[0]['water_samples']],
+                                photos=[photo.json_file() for photo in events[0]['photos']],
+                                social_asset=[social_asset.json_file() for social_asset in
+                                              events[0]['social_assets']])}
+
+        file.write(json.dumps(json_event, indent=4))
+        file.flush()
+
+        i: int = 1
         flood_probability: int = self.config['generate']['floodProbability']
         while i < steps_number:
-            event_list = {}
+            json_event = {}
             event = dict(flood=None, victims=[], water_samples=[], photos=[], social_assets=[])
             if random.randint(0, 99) <= flood_probability:
                 event['flood'] = self.generate_flood()
-                event_list['flood'] = event['flood'].json_file()
+                locations = []
+                for node in flood.list_of_nodes:
+                    locations.append(self.router.get_node_coord(node))
+                json_event['flood'] = event['flood'].json_file(locations)
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes, False)
-                event_list['victims'] = [victim.json_file() for victim in event['victims']]
+                json_event['victims'] = [victim.json_file() for victim in event['victims']]
                 event['water_samples']: list = self.generate_water_samples(nodes)
-                event_list['water_samples'] = [water_sample.json_file() for water_sample in event['water_samples']]
+                json_event['water_samples'] = [water_sample.json_file() for water_sample in event['water_samples']]
                 event['photos']: list = self.generate_photos(nodes)
-                event_list['photos'] = [photo.json_file() for photo in event['photos']]
+                json_event['photos'] = [photo.json_file() for photo in event['photos']]
                 event['social_assets']: list = self.generate_social_assets()
-                event_list['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
+                json_event['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
 
                 self.total_floods += 1
-            json_events[i] = event_list
+            file.write(json.dumps(json_event, indent=4))
+            file.flush()
             events[i] = event
             i += 1
 
-        file = open(events_path, 'w+')
-        file.write(json.dumps(json_events))
         file.close()
 
         return events
@@ -204,4 +223,7 @@ class Generator:
         #
         #     social_assets[i] = SocialAsset(social_size, asset_location, profession)
         #     i += 1
-        return [] #social_assets
+        return []  # social_assets
+
+    def set_seed(self, seed):
+        random.seed(seed)

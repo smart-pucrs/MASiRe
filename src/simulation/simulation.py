@@ -1,11 +1,12 @@
 import copy
+import secrets
 from simulation.simulated_environment.world import World
 from simulation.log_recorder import Logger
 
 
 class Simulation:
 
-    def __init__(self, sim_config, events_config):
+    def __init__(self, config):
         """
         [Object that represents an instance of a simulation.]
         
@@ -14,8 +15,11 @@ class Simulation:
         """
         self.step = 0
         self.pre_events = None
-        self.logger = Logger(sim_config['map']['id'])
-        self.world = World(sim_config, events_config, self.logger)
+        self.logger = Logger(config['map']['id'])
+        seed = config['map']['randomSeed']
+        if not seed:
+            seed = secrets.token_hex(5)
+        self.world = World(config, self.logger, seed)
 
     def start(self):
         """
@@ -25,10 +29,7 @@ class Simulation:
         :return: A list containing the simulation's agents, and a list
         containing the agent's initial percepts.
         """
-        if self.world.check_default_events():
-            self.world.generate_events()
-        else:
-            self.world.load_events()
+        self.world.generate_events()
 
         roles = self.world.create_roles()
         agent_percepts, full_percepts = self.initial_percepts()
@@ -101,4 +102,8 @@ class Simulation:
         self.step += 1
         self.pre_events = self.do_pre_step()
         return results
+
+    def start_new_match(self):
+        self.world.reset_events()
+        self.step = 0
 

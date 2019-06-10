@@ -30,10 +30,11 @@ class Flood:
         copy['dimensions']['location'] = {'lat': lat, 'lon': lon}
         return copy
 
-    def json_file(self):
+    def json_file(self, locations):
         """Return a json like representation of the object to be write in a file"""
         copy = self.__dict__.copy()
         del copy['active']
         del copy['type']
+        copy['list_of_nodes'] = locations
         return copy
 

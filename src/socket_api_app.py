@@ -301,8 +301,8 @@ def counter(sec, ready_queue):
     except queue.Empty:
         pass
     try:
-        end_code = requests.get(f'http://{base_url}:{port}/finish_step').json()
-        if end_code == 1:
+        code = requests.get(f'http://{base_url}:{port}/finish_step').json()
+        if code == 1:
             if controller.check_matches():
                 try:
                     requests.get(f'http://{base_url}:{simulation_port}/finish')
