@@ -40,6 +40,9 @@ class World:
             event = list(self.events[step].values())
 
             for element in event:
+                if not element:
+                    continue
+
                 if isinstance(element, list):
                     events.extend([e for e in element if e.active and not isinstance(e, SocialAsset)])
                 else:
@@ -168,3 +171,4 @@ class World:
         marking it with a success or failure flag.
         """
         return self.action_executor.execute_actions(actions, self.cdm.location, step)
+
