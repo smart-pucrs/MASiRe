@@ -7,6 +7,7 @@ import subprocess
 
 
 root = pathlib.Path(__file__).parent.absolute()
+default_events_path = 'default_events.txt'
 
 
 def start_simulation(s_args, python_version, venv_path):
@@ -62,6 +63,13 @@ def handle_arguments():
     args = parser.parse_args()
 
     config_file_location = args.conf
+    events = args.events
+
+    if events == 'default':
+        events_path = root / 'files' / default_events_path
+    else:
+        events_path = root / 'files' / events
+
     base_url = args.url
     simulation_port = args.sp
     api_port = args.ap
@@ -70,7 +78,7 @@ def handle_arguments():
     first_conn_time = args.first_t
     matches = args.matches
 
-    return [config_file_location, base_url, simulation_port, api_port], \
+    return [config_file_location, events_path, base_url, simulation_port, api_port], \
            [base_url, api_port, simulation_port, step_time, first_conn_time, matches], \
            pyversion, args.g
 
@@ -78,6 +86,7 @@ def handle_arguments():
 def create_parser():
     parser = argparse.ArgumentParser(prog='Disaster Simulator')
     parser.add_argument('-conf', required=True, type=str)
+    parser.add_argument('-events', required=False, type=str, default='default')
     parser.add_argument('-url', required=False, type=str, default='127.0.0.1')
     parser.add_argument('-sp', required=False, type=str, default='8910')
     parser.add_argument('-ap', required=False, type=str, default='12345')
