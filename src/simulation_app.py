@@ -17,18 +17,18 @@ from flask_cors import CORS
 from simulation.simulation import Simulation
 from waitress import serve
 
-config_path, base_url, port, api_port = sys.argv[1:]
+config_path, events_path, base_url, port, api_port = sys.argv[1:]
 
 
-def start_instance(path):
-    with open(path, 'r') as simulation_config:
+def start_instance(config_sim_path, config_events_path):
+    with open(config_sim_path, 'r') as simulation_config:
         json_config = json.loads(simulation_config.read())
-        return Simulation(json_config)
+
+    return Simulation(json_config, config_events_path)
 
 
 app = Flask(__name__)
-
-simulation = start_instance(config_path)
+simulation = start_instance(config_path, events_path)
 initial_percepts = simulation.start()
 
 

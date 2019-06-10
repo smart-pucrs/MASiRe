@@ -5,7 +5,7 @@ from simulation.log_recorder import Logger
 
 class Simulation:
 
-    def __init__(self, config):
+    def __init__(self, sim_config, events_config):
         """
         [Object that represents an instance of a simulation.]
         
@@ -14,8 +14,8 @@ class Simulation:
         """
         self.step = 0
         self.pre_events = None
-        self.logger = Logger(config['map']['id'])
-        self.world = World(config, self.logger)
+        self.logger = Logger(sim_config['map']['id'])
+        self.world = World(sim_config, events_config, self.logger)
 
     def start(self):
         """
@@ -25,7 +25,11 @@ class Simulation:
         :return: A list containing the simulation's agents, and a list
         containing the agent's initial percepts.
         """
-        self.world.generate_events()
+        if self.world.check_default_events():
+            self.world.generate_events()
+        else:
+            self.world.load_events()
+
         roles = self.world.create_roles()
         agent_percepts, full_percepts = self.initial_percepts()
 
@@ -97,3 +101,4 @@ class Simulation:
         self.step += 1
         self.pre_events = self.do_pre_step()
         return results
+
