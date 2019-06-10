@@ -13,14 +13,14 @@ from simulation.simulated_environment.loader import load_events
 
 class World:
 
-    def __init__(self, sim_config, events_config, logger):
+    def __init__(self, config, logger, seed):
         """
         [Object that represents the simulation universe.]
 
         :param config: The configuration archive received by the
         communication core.
         """
-        self.config = sim_config
+        self.config = config
         self.roles = {}
         self.agents = {}
         self.events = []
@@ -28,10 +28,10 @@ class World:
         self.social_assets = []
         self.agent_counter = 0
         self.free_roles = []
-        self.cdm = Cdm([sim_config['map']['centerLat'], sim_config['map']['centerLon']])
-        self.generator = Generator(sim_config)
-        self.action_executor = ActionExecutor(sim_config, self, logger)
-        self.events_config = events_config
+        self.cdm = Cdm([config['map']['centerLat'], config['map']['centerLon']])
+        self.generator = Generator(config, seed)
+        self.action_executor = ActionExecutor(config, self, logger)
+        self.seed = seed
 
     def percepts(self, step):
         events = []
@@ -118,19 +118,12 @@ class World:
 
         return [victims, photos, water_samples]
 
-    def check_default_events(self):
-        return self.events_config.endswith('default_events.txt')
-
-    def load_events(self):
-        self.events = load_events(self.events_config)
-        pass
-
     def generate_events(self):
         """
         [Method that generates the world's random events and 
         adds them to their respective category.]
         """
-        self.events = self.generator.generate_events(self.events_config)
+        self.events = self.generator.generate_events()
 
     def create_roles(self):
         """
@@ -172,3 +165,6 @@ class World:
         """
         return self.action_executor.execute_actions(actions, self.cdm.location, step)
 
+    def reset_events(self):
+        self.generator.set_seed(self.seed)
+        self.generate_events()
