@@ -85,7 +85,7 @@ def create_parser():
     parser.add_argument('-g', required=False, type=bool, default=False)
     parser.add_argument('-step_t', required=False, type=int, default=1)
     parser.add_argument('-first_t', required=False, type=int, default=5)
-    parser.add_argument('-matches', required=False, type=int, default=1)
+    parser.add_argument('-matches', required=False, type=int, default=2)
     return parser
 
 
