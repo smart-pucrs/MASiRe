@@ -11,7 +11,7 @@ from flask_socketio import SocketIO
 from communication.temporary_agents import JobSenderAgent, ConnectedAgent
 from communication.controller import Controller
 
-base_url, port, simulation_port, step_time, first_conn_time, qtd_agents, matches = sys.argv[1:]
+base_url, port, simulation_port, step_time, first_conn_time, matches, qtd_agents = sys.argv[1:]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
@@ -231,7 +231,8 @@ def finish_step():
     try:
         simulation_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
-        if isinstance(simulation_response, str):
+        if 'events' not in simulation_response:
+            controller.match_result = simulation_response
             return jsonify(1)
 
         else:
@@ -275,9 +276,15 @@ def finish_step():
 
 @app.route('/restart', methods=['GET'])
 def restart():
-    event = 'match_ended'
-    response = json.dumps({'message': f'The match {controller.current_match} ended.', 'type': 'end'})
-    socket.emit(event, response, broadcast=True)
+    for token in controller.connected_agents:
+        event = 'match_ended'
+        response = json.dumps(
+            {'message': f'The match {controller.current_match} ended.',
+             'match_result': controller.match_result[token], 'type': 'end'})
+
+        identifier = controller.connected_agents[token].agent_info['name']
+        room = socket_clients[identifier]
+        socket.emit(event, response, room=room)
 
     controller.start_new_match()
     multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
@@ -287,6 +294,16 @@ def restart():
 @app.route('/simulation_ended')
 def notify_agents():
     controller.terminated = True
+
+    for token in controller.connected_agents:
+        event = 'match_ended'
+        response = json.dumps(
+            {'message': f'The match {controller.current_match} ended.',
+             'match_result': controller.match_result[token], 'type': 'end'})
+
+        identifier = controller.connected_agents[token].agent_info['name']
+        room = socket_clients[identifier]
+        socket.emit(event, response, room=room)
 
     event = 'simulation_ended'
     response = json.dumps({'message': 'Simulation finished.', 'type': 'bye'})

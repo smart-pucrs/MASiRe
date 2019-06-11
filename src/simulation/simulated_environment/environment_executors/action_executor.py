@@ -124,7 +124,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                # agent.location = cdm_location
+                agent.location = cdm_location
 
                 if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -177,7 +177,7 @@ class ActionExecutor:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
-                        # agent.location = victim.location
+                        agent.location = victim.location
 
                         if victim.active and self.check_location(victim.location, agent.location):
                             agent.add_physical_item(victim)

@@ -105,5 +105,9 @@ class Simulation:
 
     def start_new_match(self):
         self.world.reset_events()
+        self.world.cdm.reset_events()
         self.step = 0
+
+    def match_result(self):
+        return self.world.get_agents_results()
 

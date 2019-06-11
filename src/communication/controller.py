@@ -16,6 +16,7 @@ class Controller:
         self.initial_percepts = None
         self.matches = int(matches)
         self.current_match = 1
+        self.match_result = None
 
     def reset_agent_job(self):
         self.agent_job.clear()

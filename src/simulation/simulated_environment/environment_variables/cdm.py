@@ -29,3 +29,7 @@ class Cdm:
 
         for item in items:
             self.virtual_items[agent_id].append(item)
+
+    def reset_events(self):
+        self.virtual_items = {}
+        self.physical_items = {}

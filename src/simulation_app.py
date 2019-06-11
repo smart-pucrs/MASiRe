@@ -64,7 +64,7 @@ def do_actions():
     result = copy.deepcopy(simulation.do_step(actions))
 
     if isinstance(result, str):
-        return jsonify(result)
+        return jsonify(simulation.match_result())
 
     if result['action_results']:
         for agent in result['action_results']:

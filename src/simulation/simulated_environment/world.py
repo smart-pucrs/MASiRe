@@ -4,7 +4,10 @@ import json
 
 from simulation.simulated_environment.environment_executors.action_executor import ActionExecutor
 from simulation.simulated_environment.environment_variables.agent import Agent
+from simulation.simulated_environment.environment_variables.events.photo import Photo
 from simulation.simulated_environment.environment_variables.events.social_asset import SocialAsset
+from simulation.simulated_environment.environment_variables.events.victim import Victim
+from simulation.simulated_environment.environment_variables.events.water_sample import WaterSample
 from simulation.simulated_environment.environment_variables.role import Role
 from simulation.simulated_environment.environment_executors.generator import Generator
 from simulation.simulated_environment.environment_variables.cdm import Cdm
@@ -167,3 +170,24 @@ class World:
     def reset_events(self):
         self.generator.set_seed(self.seed)
         self.generate_events()
+
+    def get_agents_results(self):
+        agents_results = {}
+        for token in self.agents:
+            agent_result = dict(total_victims=0, total_water_samples=0, total_photos=0)
+
+            if token not in self.cdm.physical_items:
+                agents_results[token] = agent_result
+                continue
+
+            for event in self.cdm.physical_items[token]:
+                if isinstance(event, Victim):
+                    agent_result['total_victims'] += 1
+                elif isinstance(event, WaterSample):
+                    agent_result['total_water_samples'] += 1
+                elif isinstance(event, Photo):
+                    agent_result['total_photos'] += 1
+
+            agents_results[token] = agent_result
+
+        return agents_results

@@ -1,6 +1,7 @@
 import requests
 import json
 import socketio
+import time
 
 # Server URL           = http://127.0.0.1:12345
 # Connect URL          = http://127.0.0.1:12345/connect_agent
@@ -68,9 +69,22 @@ def receive_job(msg):
 
 job_json = {
     'token': token,
-    'action': 'pass',
+    'action': 'rescue_victim',
     'parameters': []
 }
+
+time.sleep(4)
+response = requests.post(send_job_url, json=job_json).json()
+
+print(response)
+
+job_json['action'] = 'deliver_physical'
+job_json['parameters'] = ['victim', 1]
+
+time.sleep(1)
+response = requests.post(send_job_url, json=job_json).json()
+
+print(response)
 
 # Send one job to the server
 # response = requests.post(send_job_url, json=job_json).json()
