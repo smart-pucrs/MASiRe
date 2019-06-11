@@ -76,7 +76,8 @@ class Generator:
                 json_event['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
 
                 self.total_floods += 1
-            file.write(json.dumps(json_event, indent=4))
+            step = {str(i): json_event}
+            file.write(json.dumps(step, indent=4))
             file.flush()
             events[i] = event
             i += 1

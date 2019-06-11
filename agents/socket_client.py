@@ -1,4 +1,5 @@
 import requests
+import json
 import socketio
 
 # Server URL           = http://127.0.0.1:12345
@@ -7,7 +8,6 @@ import socketio
 # Send job URL         = http://127.0.0.1:12345/send_job
 # Receive job EVENT    = job_result
 # Simulation end Event = simulation_ended
-import json
 
 agent_data = {
     'name': 'agent1'
@@ -80,4 +80,3 @@ job_json = {
 #     socket_client.disconnect()
 #     print('FIM!!')
 #     exit()
-
