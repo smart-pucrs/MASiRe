@@ -8,7 +8,6 @@ from simulation.simulated_environment.environment_variables.events.social_asset 
 from simulation.simulated_environment.environment_variables.role import Role
 from simulation.simulated_environment.environment_executors.generator import Generator
 from simulation.simulated_environment.environment_variables.cdm import Cdm
-from simulation.simulated_environment.loader import load_events
 
 
 class World:
