@@ -32,8 +32,9 @@ def connect():
 
 @socket.on('disconnect')
 def disconnect():
-    identifier = request.headers['name']
-    del socket_clients[identifier]
+    print('disconnect')
+    # identifier = request.headers['name']
+    # del socket_clients[identifier]
 
 
 @socket.on('register')
