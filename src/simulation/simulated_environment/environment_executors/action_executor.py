@@ -1,5 +1,7 @@
 # based https://github.com/agentcontest/massim/blob/master/server/src/main/java/massim/scenario/city/ActionExecutor.java
 import copy
+from math import sqrt, pow
+
 from simulation.exceptions.exceptions import *
 
 
@@ -224,36 +226,20 @@ class ActionExecutor:
 
             elif action_name == 'search_social_asset':
                 if len(parameters) != 1:
-                    raise Failed_wrong_param('Wrong amount of parameters given.')
+                    raise Failed_wrong_param('Wrong parameters amount were given.')
 
-                for social_asset in self.world.social_assets:
-                    if social_asset in agent.social_assets:
-                        continue
+                if isinstance(parameters[0], float):
+                    raise Failed_wrong_param('The radius must be float.')
 
-                    if social_asset.active and social_asset.profession == parameters[0]:
-                        agent.social_assets.append(social_asset)
-                        agent.last_action_result = True
-                        return
+                social_assets = self.get_closest_social_assets(parameters[0], agent.location)
+                agent.social_assets = social_assets
+                agent.last_action_result = True
 
-                raise Failed_no_social_asset('No social asset found for the needed purposes.')
+                return
 
             elif action_name == 'get_social_asset':
-                if parameters:
-                    raise Failed_wrong_param('Wrong amount of parameters given.')
-
-                if agent.role == 'drone':
-                    raise Failed_invalid_kind('Agent role does not support carrying social asset.')
-
-                for social_asset in self.world.social_assets:
-                    for social_asset_agent in agent.social_assets:
-                        if social_asset_agent == social_asset:
-                            if self.check_location(agent.location, social_asset.location) and social_asset.active:
-                                agent.add_physical(social_asset)
-                                agent.last_action_result = True
-                                social_asset.active = False
-                                return
-
-                raise Failed_no_social_asset('Invalid social asset requested.')
+                pass
+                
 
             elif action_name == 'analyze_photo':
                 if len(parameters) > 0:
@@ -398,3 +384,13 @@ class ActionExecutor:
                 lon = False
 
         return lat and lon
+
+    def get_closest_social_assets(self, radius, origin):
+        social_assets = []
+        for social_asset in self.world.social_assets:
+            distance = sqrt(pow(social_asset.location[0] - origin[0], 2) + pow(social_asset.location[1] - origin[1],
+                                                                               2))  # distance between two points
+            if distance <= radius and social_asset.active:
+                social_assets.append(social_asset)
+
+        return social_assets
