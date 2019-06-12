@@ -19,8 +19,11 @@ socket = SocketIO(app=app)
 controller = Controller(qtd_agents, first_conn_time, matches)
 
 job_queue = Queue()
-
 socket_clients = {}
+
+send_job_result_event = 'send_job_result'
+job_result_event = 'job_result'
+simulation_result_event = 'simulation_result'
 
 
 @socket.on('connect')
@@ -118,32 +121,37 @@ def validate_agent():
     return jsonify(agent_response)
 
 
-@app.route('/send_job', methods=['POST'])
-def register_job():
+@socket.on('send_job')
+def register_job(message):
     """Save the job ."""
+
+    identifier = controller.connected_agents[message['token']].agent_info['name']
+    room = socket_clients[identifier]
+
     if not controller.started:
-        return jsonify({'message': 'Simulation was not started.'})
+        result = {'message': 'Simulation was not started.'}
+        socket.emit(send_job_result_event, result, room=room)
 
     if controller.terminated:
-        return jsonify({'message': 'Simulation already finished.'})
+        result = {'message': 'Simulation already finished.'}
+        socket.emit(send_job_result_event, result, room=room)
+
+    if controller.check_timer():
+        result = {'message': 'Simulation still receiving connections.'}
+        socket.emit(send_job_result_event, result, room=room)
 
     agent_response = {'job_delivered': False}
 
-    if controller.check_timer():
-        agent_response['message'] = 'Simulation still receiving connections.'
-        return jsonify(agent_response)
-
     try:
-        message = request.get_json(force=True)
         token = message['token']
 
         if not controller.check_agent(token):
-            agent_response['message'] = 'Token not registered.'
-            return jsonify(agent_response)
+            result = {'message': 'Token not registered.'}
+            socket.emit(send_job_result_event, result, room=room)
 
         elif not controller.connected_agents[token].connected:
-            agent_response['message'] = 'Agent not connected.'
-            return jsonify(agent_response)
+            result = {'message': 'Agent not connected.'}
+            socket.emit(send_job_result_event, result, room=room)
 
         if token not in controller.agent_job:
             controller.agent_job[token] = JobSenderAgent()
@@ -159,19 +167,19 @@ def register_job():
             if controller.check_agents_job():
                 job_queue.put(True)
 
-            return jsonify(agent_response)
+            socket.emit(send_job_result_event, agent_response, room=room)
 
         elif controller.agent_job[token].action_name:
-            agent_response['message'] = 'The agent has already sent a job'
-            return jsonify(agent_response)
+            result = 'The agent has already sent a job'
+            socket.emit(send_job_result_event, result, room=room)
 
     except TypeError as t:
-        agent_response['message'] = 'TypeError: ' + str(t)
-        return jsonify(agent_response)
+        result = 'TypeError: ' + str(t)
+        socket.emit(send_job_result_event, result, room=room)
 
     except KeyError as k:
-        agent_response['message'] = 'KeyError: ' + str(k)
-        return jsonify(agent_response)
+        result = 'KeyError: ' + str(k)
+        socket.emit(send_job_result_event, result, room=room)
 
 
 @app.route('/start', methods=['POST'])
@@ -278,14 +286,13 @@ def finish_step():
 @app.route('/restart', methods=['GET'])
 def restart():
     for token in controller.connected_agents:
-        event = 'match_ended'
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
              'match_result': controller.match_result[token], 'type': 'end'})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
-        socket.emit(event, response, room=room)
+        socket.emit(simulation_result_event, response, room=room)
 
     controller.start_new_match()
     multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
@@ -297,18 +304,16 @@ def notify_agents():
     controller.terminated = True
 
     for token in controller.connected_agents:
-        event = 'match_ended'
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
              'match_result': controller.match_result[token], 'type': 'end'})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
-        socket.emit(event, response, room=room)
+        socket.emit(simulation_result_event, response, room=room)
 
-    event = 'simulation_ended'
     response = json.dumps({'message': 'Simulation finished.', 'type': 'bye'})
-    socket.emit(event, response, broadcast=True)
+    socket.emit(simulation_result_event, response, broadcast=True)
 
     return jsonify(0)
 

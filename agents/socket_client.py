@@ -20,9 +20,10 @@ send_job_url = 'http://127.0.0.1:12345/send_job'
 connect_url = 'http://127.0.0.1:12345/connect_agent'
 initial_percepts_event = 'initial_percepts'
 receive_job_event = 'job_result'
+send_job_event = 'send_job'
 match_ended_event = 'match_ended'
-simulation_ended_event = 'simulation_ended'
-
+simulation_result_event = 'simulation_result'
+send_job_result_event = 'send_job_result'
 
 socket_client = socketio.Client()
 socket_client.connect(server_url, agent_data)
@@ -55,11 +56,14 @@ def match_ended(msg):
     print(f'\n{msg}\n')
 
 
-@socket_client.on(simulation_ended_event)
-def simulation_ended(msg):
-    print(msg)
-    socket_client.disconnect()
-    exit()
+@socket_client.on(simulation_result_event)
+def simulation_result(msg):
+    print('\n' + msg + '\n')
+
+
+@socket_client.on(send_job_result_event)
+def send_job_result(message):
+    print('\n' + json.dumps(message) + '\n')
 
 
 @socket_client.on(receive_job_event)
@@ -74,17 +78,13 @@ job_json = {
 }
 
 time.sleep(4)
-response = requests.post(send_job_url, json=job_json).json()
-
-print(response)
+socket_client.emit(send_job_event, job_json)
 
 job_json['action'] = 'deliver_physical'
 job_json['parameters'] = ['victim', 1]
 
 time.sleep(1)
-response = requests.post(send_job_url, json=job_json).json()
-
-print(response)
+socket_client.emit(send_job_event, job_json)
 
 # Send one job to the server
 # response = requests.post(send_job_url, json=job_json).json()
