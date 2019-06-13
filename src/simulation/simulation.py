@@ -115,8 +115,7 @@ class Simulation:
         return self.world.get_agents_results()
 
     def agents_percepts(self):
-        agents_percepts = {'agents_percepts': self.world.agents_percepts(), 'step_percepts': self.pre_events}
-        return agents_percepts
+        return self.world.agents_percepts()
 
     def simulation_report(self):
         return self.world.get_simulation_result()

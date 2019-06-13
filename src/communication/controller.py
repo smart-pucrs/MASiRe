@@ -52,3 +52,4 @@ class Controller:
 
     def start_new_match(self):
         self.current_match += 1
+        self.step_time = None

@@ -84,10 +84,10 @@ def restart():
     global simulation
     global initial_percepts
 
-    match_result = simulation.match_result()
+    response = {'match_result': simulation.match_result(), 'agents': simulation.agents_percepts()}
     simulation.start_new_match()
 
-    return jsonify(match_result)
+    return jsonify(response)
 
 
 @app.route('/simulation_report', methods=['GET'])

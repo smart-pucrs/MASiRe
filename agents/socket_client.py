@@ -76,21 +76,12 @@ job_json = {
     'action': 'rescue_victim',
     'parameters': []
 }
-
-time.sleep(4)
-socket_client.emit(send_job_event, job_json)
-
-job_json['action'] = 'deliver_physical'
-job_json['parameters'] = ['victim', 1]
-
-time.sleep(1)
-socket_client.emit(send_job_event, job_json)
-
-# Send one job to the server
-# response = requests.post(send_job_url, json=job_json).json()
-# print(response)
-# if 'message' in response:
-#     print(response['message'])
-#     socket_client.disconnect()
-#     print('FIM!!')
-#     exit()
+#
+# time.sleep(4)
+# socket_client.emit(send_job_event, job_json)
+#
+# job_json['action'] = 'deliver_physical'
+# job_json['parameters'] = ['victim', 1]
+#
+# time.sleep(1)
+# socket_client.emit(send_job_event, job_json)

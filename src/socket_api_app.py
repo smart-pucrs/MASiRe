@@ -283,12 +283,13 @@ def finish_step():
 
 @app.route('/restart', methods=['POST'])
 def restart():
-    match_result = request.get_json(force=True)
+    response = request.get_json(force=True)
 
     for token in controller.connected_agents:
+        controller.connected_agents[token].agent_variables = response['agents'][token]
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
-             'match_result': match_result[token], 'type': 'end'})
+             'match_result': response['match_result'][token], 'type': 'end'})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
