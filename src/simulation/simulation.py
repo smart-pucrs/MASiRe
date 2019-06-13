@@ -79,6 +79,10 @@ class Simulation:
         :return: A list containing every agent's action result,
         marking it with a success or failure flag.
         """
+        action_results = self.world.execute_actions(actions, self.step)
+        self.step += 1
+        self.pre_events = self.do_pre_step()
+
         if self.pre_events is None:
             total_floods = self.world.generator.total_floods
             total_victims = self.world.generator.total_victims
@@ -97,10 +101,7 @@ class Simulation:
 
             return 'Simulation Ended'
 
-        action_results = self.world.execute_actions(actions, self.step)
         results = {'action_results': action_results, 'events': self.pre_events}
-        self.step += 1
-        self.pre_events = self.do_pre_step()
         return results
 
     def start_new_match(self):
