@@ -14,7 +14,8 @@ class Cdm:
         """
         self.virtual_items = {}
         self.physical_items = {}
-        self.location = location  
+        self.total_items = {}
+        self.location = location
 
     def add_physical_items(self, items, agent_id):
         if agent_id not in self.physical_items.keys():
@@ -31,5 +32,17 @@ class Cdm:
             self.virtual_items[agent_id].append(item)
 
     def reset_events(self):
+        for token in self.virtual_items:
+            if token not in self.total_items:
+                self.total_items[token] = []
+
+            self.total_items[token].extend(self.virtual_items[token])
+
+        for token in self.physical_items:
+            if token not in self.total_items:
+                self.total_items[token] = []
+
+            self.total_items[token].extend(self.physical_items[token])
+
         self.virtual_items = {}
         self.physical_items = {}

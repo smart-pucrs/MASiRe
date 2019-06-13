@@ -69,9 +69,10 @@ def handle_arguments():
     step_time = args.step_t
     first_conn_time = args.first_t
     matches = args.matches
+    delay = args.delay
 
     return [config_file_location, base_url, simulation_port, api_port], \
-           [base_url, api_port, simulation_port, step_time, first_conn_time, matches], \
+           [base_url, api_port, simulation_port, step_time, first_conn_time, matches, delay], \
            pyversion, args.g
 
 
@@ -86,6 +87,7 @@ def create_parser():
     parser.add_argument('-step_t', required=False, type=int, default=1)
     parser.add_argument('-first_t', required=False, type=int, default=5)
     parser.add_argument('-matches', required=False, type=int, default=2)
+    parser.add_argument('-delay', required=False, type=int, default=3)
     return parser
 
 

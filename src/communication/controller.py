@@ -3,7 +3,7 @@ import time
 
 class Controller:
 
-    def __init__(self, qtd_agents, first_conn_time, matches):
+    def __init__(self, qtd_agents, first_conn_time, matches, delay):
         self.connected_agents = {}
         self.agent_job = {}
         self.first_timer = None
@@ -17,6 +17,7 @@ class Controller:
         self.matches = int(matches)
         self.current_match = 1
         self.match_result = None
+        self.delay = delay
 
     def reset_agent_job(self):
         self.agent_job.clear()

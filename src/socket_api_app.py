@@ -11,12 +11,12 @@ from flask_socketio import SocketIO
 from communication.temporary_agents import JobSenderAgent, ConnectedAgent
 from communication.controller import Controller
 
-base_url, port, simulation_port, step_time, first_conn_time, matches, qtd_agents = sys.argv[1:]
+base_url, port, simulation_port, step_time, first_conn_time, matches, qtd_agents, delay = sys.argv[1:]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 socket = SocketIO(app=app)
-controller = Controller(qtd_agents, first_conn_time, matches)
+controller = Controller(qtd_agents, first_conn_time, matches, delay)
 
 job_queue = Queue()
 socket_clients = {}
@@ -118,6 +118,9 @@ def validate_agent():
 @socket.on('send_job')
 def register_job(message):
     """Save the job ."""
+
+    if 'token' not in message:
+        pass
 
     identifier = controller.connected_agents[message['token']].agent_info['name']
     room = socket_clients[identifier]
@@ -236,8 +239,7 @@ def finish_step():
     try:
         simulation_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json=jobs).json()
 
-        if 'events' not in simulation_response:
-            controller.match_result = simulation_response
+        if isinstance(simulation_response, str):
             return jsonify(1)
 
         else:
@@ -281,38 +283,41 @@ def finish_step():
 
 @app.route('/restart', methods=['POST'])
 def restart():
-    agents_percepts = request.get_json(force=True)
+    match_result = request.get_json(force=True)
 
     for token in controller.connected_agents:
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
-             'match_result': controller.match_result[token], 'type': 'end',
-             'agents_percepts': agents_percepts[token]})
+             'match_result': match_result[token], 'type': 'end'})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
         socket.emit(simulation_result_event, response, room=room)
 
     controller.start_new_match()
-    multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
+    multiprocessing.Process(target=counter, args=(controller.delay, job_queue), daemon=True).start()
     return jsonify(0)
 
 
-@app.route('/simulation_ended')
+@app.route('/simulation_ended', methods=['POST'])
 def notify_agents():
     controller.terminated = True
+    simulation_report = request.get_json(force=True)
 
     for token in controller.connected_agents:
-        response = json.dumps(
-            {'message': f'The match {controller.current_match} ended.',
-             'match_result': controller.match_result[token], 'type': 'end'})
-
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
-        socket.emit(simulation_result_event, response, room=room)
 
-    response = json.dumps({'message': 'Simulation finished.', 'type': 'bye'})
-    socket.emit(simulation_result_event, response, broadcast=True)
+        match_result = json.dumps(
+            {'message': f'The match {controller.current_match} ended.',
+             'match_result': simulation_report['match'][token], 'type': 'end'})
+
+        simulation_result = json.dumps(
+            {'message': 'Simulation finished.',
+             'simulation_report': simulation_report['report'][token], 'type': 'bye'})
+
+        socket.emit(simulation_result_event, match_result, room=room)
+        socket.emit(simulation_result_event, simulation_result, room=room)
 
     return jsonify(0)
 
@@ -326,10 +331,11 @@ def counter(sec, ready_queue):
         code = requests.get(f'http://{base_url}:{port}/finish_step').json()
         if code == 1:
             if controller.check_matches():
+                response = requests.get(f'http://{base_url}:{simulation_port}/simulation_report').json()
                 try:
                     requests.get(f'http://{base_url}:{simulation_port}/finish')
                 except requests.exceptions.ConnectionError:
-                    requests.get(f'http://{base_url}:{port}/simulation_ended')
+                    requests.post(f'http://{base_url}:{port}/simulation_ended', json=response)
                     pass
             else:
                 try:

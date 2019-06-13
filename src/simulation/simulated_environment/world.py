@@ -208,3 +208,19 @@ class World:
             agents_percepts[token] = self.agents[token].variables_json()
 
         return agents_percepts
+
+    def get_simulation_result(self):
+        agents_results = {}
+        for token in self.agents:
+            agent_result = dict(total_victims=0, total_water_samples=0, total_photos=0)
+            for event in self.cdm.total_items[token]:
+                if isinstance(event, Victim):
+                    agent_result['total_victims'] += 1
+                elif isinstance(event, WaterSample):
+                    agent_result['total_water_samples'] += 1
+                elif isinstance(event, Photo):
+                    agent_result['total_photos'] += 1
+
+            agents_results[token] = agent_result
+
+        return agents_results

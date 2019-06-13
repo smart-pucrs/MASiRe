@@ -56,7 +56,7 @@ def do_actions():
     result = copy.deepcopy(simulation.do_step(actions))
 
     if isinstance(result, str):
-        return jsonify(simulation.match_result())
+        return jsonify(result)
 
     if result['action_results']:
         for agent in result['action_results']:
@@ -84,10 +84,19 @@ def restart():
     global simulation
     global initial_percepts
 
+    match_result = simulation.match_result()
     simulation.start_new_match()
-    agents_percepts = simulation.agents_percepts()
 
-    return jsonify(agents_percepts)
+    return jsonify(match_result)
+
+
+@app.route('/simulation_report', methods=['GET'])
+def simulation_report():
+    global simulation
+
+    result = {'match': simulation.match_result(), 'report': simulation.simulation_report()}
+
+    return jsonify(result)
 
 
 @app.route('/finish', methods=['GET'])
