@@ -191,3 +191,20 @@ class World:
             agents_results[token] = agent_result
 
         return agents_results
+
+    def reset_agents(self):
+        counter = 0
+        for token in self.agents:
+            agent = self.agents[token]
+            role = self.free_roles[counter]
+            self.agents[token] = Agent(token, self.roles[role], role, self.cdm.location, agent.agent_info)
+
+            counter += 1
+
+    def agents_percepts(self):
+        agents_percepts = {}
+
+        for token in self.agents:
+            agents_percepts[token] = self.agents[token].variables_json()
+
+        return agents_percepts

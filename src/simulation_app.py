@@ -38,11 +38,13 @@ def register_agent():
         return jsonify(message='This endpoint can not be accessed.')
 
     agent_info = request.get_json(force=True)
-    agent = simulation.create_agent(agent_info['token'], agent_info['agent_info']).json()
+    agent = simulation.create_agent(agent_info['token'], agent_info['agent_info'])
+    agent_constants = agent.constants_json()
+    agent_variables = agent.variables_json()
 
     map_percepts = initial_percepts[0].copy()
 
-    return jsonify({'agent': agent, 'map_percepts': map_percepts})
+    return jsonify({'agent_variables': agent_variables, 'agent_constants': agent_constants, 'map_percepts': map_percepts})
 
 
 @app.route('/do_actions', methods=['POST'])
@@ -72,7 +74,7 @@ def do_actions():
             agent[1]['route'] = locations
 
     result['events'] = [event.json() for event in result['events']]
-    result['step'] = simulation.step
+    result['step'] = simulation.step - 1
 
     return jsonify(result)
 
@@ -83,9 +85,9 @@ def restart():
     global initial_percepts
 
     simulation.start_new_match()
-    initial_percepts = simulation.initial_percepts()
+    agents_percepts = simulation.agents_percepts()
 
-    return jsonify(0)
+    return jsonify(agents_percepts)
 
 
 @app.route('/finish', methods=['GET'])

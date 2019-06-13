@@ -102,18 +102,12 @@ def validate_agent():
             return jsonify(agent_response)
 
         controller.connected_agents[token].connected = True
-        controller.connected_agents[token].simulation_agent = simulation_response['agent']
-
-        agent_percepts = {'role': simulation_response['agent']['role'],
-                          'abilities': simulation_response['agent']['abilities'],
-                          'max_charge': simulation_response['agent']['max_charge'],
-                          'physical_capacity': simulation_response['agent']['physical_capacity'],
-                          'virtual_capacity': simulation_response['agent']['virtual_capacity'],
-                          'speed': simulation_response['agent']['speed']}
+        controller.connected_agents[token].agent_constants = simulation_response['agent_constants']
+        controller.connected_agents[token].agent_variables = simulation_response['agent_variables']
 
         agent_response['agent_connected'] = True
         agent_response['map_percepts'] = simulation_response['map_percepts']
-        agent_response['agent_percepts'] = agent_percepts
+        agent_response['agent_percepts'] = simulation_response['agent_constants']
         agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
     else:
         agent_response['message'] = 'Token not registered.'
@@ -200,9 +194,10 @@ def finish_step():
         return jsonify('This endpoint can not be accessed.')
 
     if controller.step_time is None:
-        initial_percepts = dict(type='percepts', environment=dict(events=controller.initial_percepts, step=0))
+        initial_percepts = {'type': 'percepts', 'environment': {'events': json.loads(json.dumps(controller.initial_percepts, sort_keys=True)), 'step': 0}}
+
         for token in controller.connected_agents:
-            initial_percepts['agent'] = controller.connected_agents[token].simulation_agent
+            initial_percepts['agent'] = controller.connected_agents[token].agent_variables
 
             identifier = controller.connected_agents[token].agent_info['name']
             room = socket_clients[identifier]
@@ -210,6 +205,7 @@ def finish_step():
 
         controller.step_time = True
         multiprocessing.Process(target=counter, args=(step_time, job_queue), daemon=True).start()
+
         return jsonify(0)
 
     jobs = []
@@ -258,7 +254,7 @@ def finish_step():
                     message = item[2]
                     info['message'] = message
 
-                controller.connected_agents[token].simulation_agent = agent
+                controller.connected_agents[token].agent_variables = agent
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit('job_result', json.dumps(info), room=room)
@@ -267,7 +263,7 @@ def finish_step():
                     'step': simulation_response['step']}, 'message': 'agent don\'t send a action'}
 
             for token in idle_agents:
-                agent = controller.connected_agents[token].simulation_agent
+                agent = controller.connected_agents[token].agent_variables
                 agent['last_action_result'] = False
                 agent['last_action'] = 'pass'
                 info['agent'] = agent
@@ -283,8 +279,10 @@ def finish_step():
     return jsonify(0)
 
 
-@app.route('/restart', methods=['GET'])
+@app.route('/restart', methods=['POST'])
 def restart():
+    agents_percepts = request.get_json(force=True)
+
     for token in controller.connected_agents:
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
@@ -293,6 +291,8 @@ def restart():
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
         socket.emit(simulation_result_event, response, room=room)
+
+        socket.emit(job_result_event, json.dumps(agents_percepts[token]), room=room)
 
     controller.start_new_match()
     multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()
@@ -334,8 +334,8 @@ def counter(sec, ready_queue):
                     pass
             else:
                 try:
-                    requests.get(f'http://{base_url}:{simulation_port}/restart')
-                    requests.get(f'http://{base_url}:{port}/restart')
+                    response = requests.get(f'http://{base_url}:{simulation_port}/restart').json()
+                    requests.post(f'http://{base_url}:{port}/restart', json=response)
                 except requests.exceptions.ConnectionError:
                     pass
     except Exception as e:

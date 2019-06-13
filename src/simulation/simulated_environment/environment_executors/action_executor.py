@@ -41,21 +41,22 @@ class ActionExecutor:
         for obj in actions:
             token = obj['token']
             action = (obj['action'], *obj['parameters'])
-            result = self.execute(self.world.agents[token], action, cdm_location, step)
+            agent = self.world.agents[token]
+            result = self.execute(agent, action, cdm_location, step)
 
-            agent_info_copy = copy.deepcopy(self.world.agents[obj['token']].agent_info)
-            agent_copy = copy.deepcopy(self.world.agents[obj['token']].json())
+            agent_info_copy = copy.deepcopy(agent.agent_info)
+            agent_copy = copy.deepcopy(agent.variables_json())
             parameters = action[1] if len(action) == 2 else []
 
             self.logger.register_agent_action(
-                token=agent_copy['token'],
-                role=agent_copy['role'],
+                token=agent.token,
+                role=agent.role,
                 result=True if result is None else result,
                 name=agent_info_copy,
                 action=action[0],
                 parameters=parameters
             )
-            action_results.append((obj['token'], agent_copy, result))
+            action_results.append((token, agent_copy, result))
 
         return action_results
 
@@ -239,7 +240,7 @@ class ActionExecutor:
 
             elif action_name == 'get_social_asset':
                 pass
-                
+
 
             elif action_name == 'analyze_photo':
                 if len(parameters) > 0:

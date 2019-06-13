@@ -13,7 +13,7 @@ class Simulation:
         :param config: A json file sent by the communication core
         containing all configuration information about the simulation.
         """
-        self.step = 0
+        self.step = 1
         self.pre_events = None
         self.logger = Logger(config['map']['id'])
         seed = config['map']['randomSeed']
@@ -99,15 +99,22 @@ class Simulation:
 
         action_results = self.world.execute_actions(actions, self.step)
         results = {'action_results': action_results, 'events': self.pre_events}
-        self.step += 1
         self.pre_events = self.do_pre_step()
+        self.step += 1
         return results
 
     def start_new_match(self):
         self.world.reset_events()
+        self.world.reset_agents()
         self.world.cdm.reset_events()
-        self.step = 0
+        self.pre_events = []
+        self.step = 1
 
     def match_result(self):
         return self.world.get_agents_results()
+
+    def agents_percepts(self):
+        return self.world.agents_percepts()
+
+
 

@@ -16,7 +16,7 @@ class Agent:
         """
         self.token = agent_token
         self.last_action = None
-        self.last_action_result = False
+        self.last_action_result = True
         self.location = cdm_location
         self.route = []
         self.physical_storage_vector = []
@@ -170,4 +170,34 @@ class Agent:
         del copy['agent_info']
         copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
         copy['route'] = [{'lat': position[0], 'lon': position[1]} for position in copy['route']]
+        return copy
+
+    def variables_json(self):
+        copy = self.__dict__.copy()
+        del copy['agent_info']
+        del copy['abilities']
+        del copy['max_charge']
+        del copy['physical_capacity']
+        del copy['role']
+        del copy['speed']
+        del copy['virtual_capacity']
+        del copy['token']
+        copy['location'] = {'lat': copy['location'][0], 'lon': copy['location'][1]}
+        copy['route'] = [{'lat': position[0], 'lon': position[1]} for position in copy['route']]
+        return copy
+
+    def constants_json(self):
+        copy = self.__dict__.copy()
+        del copy['agent_info']
+        del copy['actual_battery']
+        del copy['is_active']
+        del copy['physical_storage']
+        del copy['physical_storage_vector']
+        del copy['virtual_storage']
+        del copy['virtual_storage_vector']
+        del copy['last_action']
+        del copy['last_action_result']
+        del copy['location']
+        del copy['route']
+        del copy['social_assets']
         return copy
