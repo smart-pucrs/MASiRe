@@ -15,7 +15,7 @@ class Agent:
         which covers its skills and limitations.
         """
         self.token = agent_token
-        self.last_action = None
+        self.last_action = 'pass'
         self.last_action_result = True
         self.location = cdm_location
         self.route = []

@@ -286,13 +286,12 @@ def restart():
     for token in controller.connected_agents:
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
-             'match_result': controller.match_result[token], 'type': 'end'})
+             'match_result': controller.match_result[token], 'type': 'end',
+             'agents_percepts': agents_percepts[token]})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
         socket.emit(simulation_result_event, response, room=room)
-
-        socket.emit(job_result_event, json.dumps(agents_percepts[token]), room=room)
 
     controller.start_new_match()
     multiprocessing.Process(target=counter, args=(first_conn_time, job_queue), daemon=True).start()

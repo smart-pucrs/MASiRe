@@ -74,7 +74,7 @@ def do_actions():
             agent[1]['route'] = locations
 
     result['events'] = [event.json() for event in result['events']]
-    result['step'] = simulation.step - 1
+    result['step'] = simulation.step
 
     return jsonify(result)
 
