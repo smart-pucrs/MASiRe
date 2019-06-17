@@ -5,7 +5,7 @@ class Controller:
 
     def __init__(self, qtd_agents, first_conn_time, matches, delay):
         self.connected_agents = {}
-        self.agent_job = {}
+        self.agent_action = {}
         self.first_timer = None
         self.step_time = None
         self.terminated = False
@@ -19,8 +19,8 @@ class Controller:
         self.match_result = None
         self.delay = delay
 
-    def reset_agent_job(self):
-        self.agent_job.clear()
+    def reset_agent_action(self):
+        self.agent_action.clear()
 
     def check_population(self):
         return len(self.connected_agents) < self.qtd_agents
@@ -37,13 +37,13 @@ class Controller:
                 return True
         return False
 
-    def check_agents_job(self):
-        return len(self.agent_job) == self.qtd_agents
+    def check_agents_action(self):
+        return len(self.agent_action) == self.qtd_agents
 
     def dif(self):
         idle_agents = []
         for agent in self.connected_agents:
-            if not (agent in self.agent_job):
+            if not (agent in self.agent_action):
                 idle_agents.append(agent)
         return idle_agents
 

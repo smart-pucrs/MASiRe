@@ -1,5 +1,5 @@
 
-class JobSenderAgent:
+class ActionSenderAgent:
     def __init__(self):
         self.action_name = None
         self.action_param = None
