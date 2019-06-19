@@ -145,7 +145,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                # agent.location = cdm_location
+                agent.location = cdm_location
 
                 if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -215,7 +215,7 @@ class ActionExecutor:
                     for photo in event['photos']:
 
                         # ================= TEST CODE HERE ==================
-                        # agent.location = photo.location
+                        agent.location = photo.location
 
                         if photo.active and self.check_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)

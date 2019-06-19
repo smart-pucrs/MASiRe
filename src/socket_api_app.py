@@ -124,6 +124,7 @@ def validate_agent():
 def register_action(message):
     """Save the action ."""
     agent_response = {'status': False, 'message': ''}
+    message = json.loads(message)
 
     if 'token' not in message:
         return
