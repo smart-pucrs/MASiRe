@@ -211,6 +211,7 @@ class World:
 
     def get_simulation_result(self):
         agents_results = {}
+
         for token in self.agents:
             agent_result = dict(total_victims=0, total_water_samples=0, total_photos=0)
             if token in self.cdm.total_items:
@@ -221,6 +222,16 @@ class World:
                         agent_result['total_water_samples'] += 1
                     elif isinstance(event, Photo):
                         agent_result['total_photos'] += 1
+
+            if token in self.cdm.physical_items:
+                for event in self.cdm.physical_items[token]:
+                    if isinstance(event, WaterSample):
+                        agent_result['total_water_samples'] += 1
+                    else:
+                        agent_result['total_victims'] += 1
+
+            if token in self.cdm.virtual_items:
+                agent_result['total_photos'] += len(self.cdm.virtual_items[token])
 
             agents_results[token] = agent_result
 
