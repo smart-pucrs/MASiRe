@@ -68,10 +68,6 @@ def do_actions():
 
             agent[1]['social_assets'] = \
                 [asset.json() for asset in agent[1]['social_assets']]
-            locations = []
-            for location in agent[1]['route']:
-                locations.append({'lat': location[0], 'lon': location[1]})
-            agent[1]['route'] = locations
 
     result['events'] = [event.json() for event in result['events']]
     result['step'] = simulation.step
@@ -84,8 +80,11 @@ def restart():
     global simulation
     global initial_percepts
 
-    response = {'match_result': simulation.match_result(), 'agents': simulation.agents_percepts()}
+    match_result = simulation.match_result()
     simulation.start_new_match()
+    agents_percepts = simulation.agents_percepts()
+
+    response = {'match_result': match_result, 'agents': agents_percepts}
 
     return jsonify(response)
 
