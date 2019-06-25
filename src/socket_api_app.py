@@ -111,9 +111,19 @@ def validate_agent():
 
             agent_response['status'] = True
             agent_response['type'] = 'initial_percepts'
+            temp = str(simulation_response['map_percepts']['proximity'])
+            if 'e' in temp:
+                proximity = str(simulation_response['map_percepts']['proximity'])
+                proximity = proximity.split('e')
+                precision = (int(proximity[1]) * -1) - 1
+                proximity = '0.' + '0' * precision + proximity[0]
+
+                simulation_response['map_percepts']['proximity'] = proximity
+
             agent_response['map_percepts'] = simulation_response['map_percepts']
             agent_response['agent_percepts'] = simulation_response['agent_constants']
             agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
+            print(agent_response['map_percepts'])
         else:
             agent_response['message'] = 'Token not registered.'
 
@@ -259,6 +269,7 @@ def finish_step():
                 identifier = controller.connected_agents[token].agent_info['name']
                 room = socket_clients[identifier]
                 socket.emit(action_result_event, json.dumps(info), room=room)
+                print("------> ", agent['last_action'], agent['last_action_result'])
 
             info = {'type': 'percepts', 'environment': {'events': simulation_response['events'],
                     'step': simulation_response['step']}, 'message': 'agent don\'t send a action'}

@@ -19,7 +19,7 @@ class Generator:
         self.total_floods: int = 0
         self.total_social_assets: int = 0
         self.config = config
-        self.router = Route(config['map']['map'])
+        self.router = Route(config['map']['map'], config['map']['proximity'])
         self.victim_counter: int = 0
         random.seed(seed)
 
