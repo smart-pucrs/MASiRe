@@ -7,9 +7,10 @@ from directory_path import dir as root
 
 class Route:
 
-    def __init__(self, map_name):
+    def __init__(self, map_name, proximity):
         map_file_location = root / map_name
         self.router = Router("car", str(map_file_location))
+        self.proximity = proximity
 
     def get_closest_node(self, lat, lon):
         """
@@ -141,11 +142,11 @@ class Route:
 
         points = []
         while True:
-            if start - .0005 * speed < end:
+            if start - self.proximity * speed < end:
                 points.append(end)
                 break
             else:
-                start -= .0005 * speed
+                start -= self.proximity * speed
 
             if list_of_nodes:
                 node = self.get_closest_node(start, end)
@@ -164,11 +165,11 @@ class Route:
 
         points = []
         while True:
-            if start + .0005 * speed > end:
+            if start + self.proximity * speed > end:
                 points.append(end)
                 break
             else:
-                start += .0005 * speed
+                start += self.proximity * speed
 
             if list_of_nodes:
                 node = self.get_closest_node(start, end)
