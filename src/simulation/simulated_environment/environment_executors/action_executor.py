@@ -94,10 +94,20 @@ class ActionExecutor:
                         location = cdm_location
                     else:
                         raise Failed_unknown_facility('Unknown facility')
+                elif len(parameters) == 2:
+                    try:
+                        location = [float(parameters[0][1:-1]), float(parameters[1][1:-1])]
+                    except RuntimeError:
+                        raise Failed_wrong_param('The parameters must be floats')
                 else:
                     raise Failed_wrong_param('More than 1 or less than than 1 parameters were given')
 
-                if self.check_location(agent.location, location):
+                if agent.location == location:
+                    agent.route, distance = [], 0
+                    return
+                elif self.check_location(agent.location, location):
+                    agent.last_action_result = True
+                    agent.location = location
                     agent.route, distance = [], 0
                     return
 
@@ -119,22 +129,23 @@ class ActionExecutor:
 
                 agent.last_action_result = True
                 agent.discharge()
-                dict_location = agent.route.pop(0)
-                agent.location = [dict_location['lat'], dict_location['lon']]
+                agent.location = agent.route.pop(0)
+                if not agent.route:
+                    agent.location = location
 
             elif action_name == 'deliver_physical':
                 if len(parameters) < 1 or len(parameters) > 2:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                # agent.location = cdm_location
 
                 if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=parameters[1])
+                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=int(parameters[1]))
 
                     agent.last_action_result = True
                 else:
@@ -145,7 +156,7 @@ class ActionExecutor:
                     raise Failed_wrong_param('Less than 1 or more than 2 parameters were given.')
 
                 # ================= TEST CODE HERE ==================
-                agent.location = cdm_location
+                # agent.location = cdm_location
 
                 if self.check_location(agent.location, cdm_location):
                     if len(parameters) == 1:
@@ -180,7 +191,7 @@ class ActionExecutor:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = victim.location
+                        # agent.location = victim.location
 
                         if victim.active and self.check_location(victim.location, agent.location):
                             agent.add_physical_item(victim)
@@ -215,7 +226,7 @@ class ActionExecutor:
                     for photo in event['photos']:
 
                         # ================= TEST CODE HERE ==================
-                        agent.location = photo.location
+                        # agent.location = photo.location
 
                         if photo.active and self.check_location(photo.location, agent.location):
                             agent.add_virtual_item(photo)
@@ -240,7 +251,6 @@ class ActionExecutor:
 
             elif action_name == 'get_social_asset':
                 pass
-
 
             elif action_name == 'analyze_photo':
                 if len(parameters) > 0:
