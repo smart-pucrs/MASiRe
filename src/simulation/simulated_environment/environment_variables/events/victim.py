@@ -1,3 +1,4 @@
+import json
 class Victim:
 
     def __init__(self, size: int, lifetime: int, location: list, photo: bool):
@@ -34,3 +35,9 @@ class Victim:
         copy = self.__dict__.copy()
         del copy['type']
         return copy
+
+    ###################### TEMPORARY CODE #########################
+    def __repr__(self):
+        copy = self.__dict__.copy()
+        del copy['in_photo']
+        return json.dumps(copy)

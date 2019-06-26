@@ -62,17 +62,20 @@ class Generator:
             if random.randint(0, 99) <= flood_probability:
                 event['flood'] = self.generate_flood()
                 locations = []
+
                 for node in flood.list_of_nodes:
                     locations.append(self.router.get_node_coord(node))
-                json_event['flood'] = event['flood'].json_file(locations)
+
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes, False)
-                json_event['victims'] = [victim.json_file() for victim in event['victims']]
                 event['water_samples']: list = self.generate_water_samples(nodes)
-                json_event['water_samples'] = [water_sample.json_file() for water_sample in event['water_samples']]
                 event['photos']: list = self.generate_photos(nodes)
-                json_event['photos'] = [photo.json_file() for photo in event['photos']]
                 event['social_assets']: list = self.generate_social_assets()
+
+                json_event['flood'] = event['flood'].json_file(locations)
+                json_event['victims'] = [victim.json_file() for victim in event['victims']]
+                json_event['water_samples'] = [water_sample.json_file() for water_sample in event['water_samples']]
+                json_event['photos'] = [photo.json_file() for photo in event['photos']]
                 json_event['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
 
                 self.total_floods += 1
@@ -175,7 +178,8 @@ class Generator:
 
             victim_size: int = random.randint(victim_min_size, victim_max_size)
             victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
-            victim_location: list = list(self.router.get_node_coord(random.choice(nodes)))
+            temp = random.choice(nodes)
+            victim_location: list = list(self.router.get_node_coord(temp))
 
             victims[i] = Victim(victim_size, victim_lifetime, victim_location, photo_call)
             i += 1

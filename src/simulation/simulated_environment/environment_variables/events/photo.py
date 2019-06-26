@@ -1,3 +1,4 @@
+import json
 class Photo:
 
     def __init__(self, size: int, victims: list, location: list):
@@ -32,3 +33,9 @@ class Photo:
         del copy['type']
         copy['victims'] = [victim.json_file() for victim in copy['victims']]
         return copy
+
+    ###################### TEMPORARY CODE #########################
+    def __repr__(self):
+        copy = self.__dict__.copy()
+        copy['victims'] = [v.json_file() for v in copy['victims']]
+        return json.dumps(copy)

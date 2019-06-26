@@ -37,7 +37,6 @@ class World:
 
     def percepts(self, step):
         events = []
-
         for step in range(step):
             event = list(self.events[step].values())
 
@@ -45,8 +44,9 @@ class World:
                 if not element:
                     continue
 
-                if isinstance(element, list):
+                elif isinstance(element, list):
                     events.extend([e for e in element if e.active and not isinstance(e, SocialAsset)])
+
                 else:
                     if element.active:
                         events.append(element)

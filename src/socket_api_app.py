@@ -123,7 +123,6 @@ def validate_agent():
             agent_response['map_percepts'] = simulation_response['map_percepts']
             agent_response['agent_percepts'] = simulation_response['agent_constants']
             agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
-            print(agent_response['map_percepts'])
         else:
             agent_response['message'] = 'Token not registered.'
 

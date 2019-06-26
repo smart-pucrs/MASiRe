@@ -187,7 +187,7 @@ class ActionExecutor:
                 if len(parameters) > 0:
                     raise Failed_wrong_param('Parameters were given.')
 
-                for event in self.world.events:
+                for event in self.world.events[:step]:
                     for victim in event['victims']:
 
                         # ================= TEST CODE HERE ==================
@@ -262,6 +262,7 @@ class ActionExecutor:
                 for photo in agent.virtual_storage_vector:
                     for victim in photo.victims:
                         victim.active = True
+                        self.world.events[step]['victims'].append(victim)
 
                 agent.last_action_result = True
                 agent.virtual_storage_vector.clear()
