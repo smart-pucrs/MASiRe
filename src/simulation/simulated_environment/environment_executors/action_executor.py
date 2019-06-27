@@ -93,18 +93,16 @@ class ActionExecutor:
                     if parameters[0] == 'cdm':
                         location = cdm_location
                     else:
-                        raise Failed_unknown_facility('Unknown facility')
+                        raise Failed_unknown_facility('Unknown facility.')
                 elif len(parameters) == 2:
-                    try:
-                        location = [float(parameters[0][1:-1]), float(parameters[1][1:-1])]
-                    except RuntimeError:
-                        raise Failed_wrong_param('The parameters must be floats')
+                    location = parameters
                 else:
-                    raise Failed_wrong_param('More than 1 or less than than 1 parameters were given')
+                    raise Failed_wrong_param('More than 1 or less than than 1 parameters were given.')
 
                 if agent.location == location:
                     agent.route, distance = [], 0
                     return
+
                 elif self.check_location(agent.location, location):
                     agent.last_action_result = True
                     agent.location = location
@@ -145,7 +143,7 @@ class ActionExecutor:
                         self.agent_delivery(agent=agent, kind='physical', item=parameters[0])
 
                     elif len(parameters) == 2:
-                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=int(parameters[1]))
+                        self.agent_delivery(agent=agent, kind='physical', item=parameters[0], amount=parameters[1])
 
                     agent.last_action_result = True
                 else:
@@ -184,8 +182,8 @@ class ActionExecutor:
                     raise Failed_location('The agent is not located at the CDM.')
 
             elif action_name == 'rescue_victim':
-                if len(parameters) > 0:
-                    raise Failed_wrong_param('Parameters were given.')
+                if len(parameters) != 1:
+                    raise Failed_wrong_param('Wrong parameters amount were given.')
 
                 for event in self.world.events[:step]:
                     for victim in event['victims']:
@@ -193,7 +191,7 @@ class ActionExecutor:
                         # ================= TEST CODE HERE ==================
                         # agent.location = victim.location
 
-                        if victim.active and self.check_location(victim.location, agent.location):
+                        if victim.active and self.check_location(victim.location, agent.location) and parameters[0] == victim.id:
                             agent.add_physical_item(victim)
                             victim.active = False
                             agent.last_action_result = True
@@ -202,15 +200,15 @@ class ActionExecutor:
                 raise Failed_unknown_item('No victim by the given location is known.')
 
             elif action_name == 'collect_water':
-                if len(parameters) > 0:
-                    raise Failed_wrong_param('Parameters were given.')
+                if len(parameters) != 1:
+                    raise Failed_wrong_param('Wrong parameters amount were given.')
 
-                for event in self.world.events:
+                for event in self.world.events[:step]:
                     for water_sample in event['water_samples']:
                         # ================= TEST CODE HERE ==================
                         # agent.location = water_sample.location
 
-                        if water_sample.active and self.check_location(water_sample.location, agent.location):
+                        if water_sample.active and self.check_location(water_sample.location, agent.location) and parameters[0] == water_sample.id:
                             agent.add_physical_item(water_sample)
                             water_sample.active = False
                             agent.last_action_result = True
@@ -219,8 +217,8 @@ class ActionExecutor:
                 raise Failed_location('The agent is not in a location with a water sample.')
 
             elif action_name == 'photograph':
-                if len(parameters) > 0:
-                    raise Failed_wrong_param('Parameters were given.')
+                if len(parameters) != 1:
+                    raise Failed_wrong_param('Wrong parameters amount were given.')
 
                 for event in self.world.events:
                     for photo in event['photos']:
@@ -228,7 +226,7 @@ class ActionExecutor:
                         # ================= TEST CODE HERE ==================
                         # agent.location = photo.location
 
-                        if photo.active and self.check_location(photo.location, agent.location):
+                        if photo.active and self.check_location(photo.location, agent.location) and parameters[0] == photo.id:
                             agent.add_virtual_item(photo)
                             photo.active = False
                             agent.last_action_result = True
@@ -371,7 +369,7 @@ class ActionExecutor:
         print("ROUTE ->>> ", agent.route)
 
     def check_location(self, x, y):
-        proximity = self.config['map']['proximity']
+        proximity = self.route.proximity
 
         if x[0] < y[0]:
             if x[0] + proximity >= y[0]:

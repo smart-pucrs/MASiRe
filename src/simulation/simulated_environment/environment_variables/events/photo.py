@@ -1,7 +1,7 @@
 import json
 class Photo:
 
-    def __init__(self, size: int, victims: list, location: list):
+    def __init__(self, id: int, size: int, victims: list, location: list):
         """
         [Object <Consumable> that represents a photography,
         resultant of a 'photograph' action over a flood instance.]
@@ -13,6 +13,7 @@ class Photo:
         instance was taken.
         """
 
+        self.id = id
         self.type: str = 'photo'
         self.size: int = size
         self.victims: list = victims

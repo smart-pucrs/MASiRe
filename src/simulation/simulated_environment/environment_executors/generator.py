@@ -78,7 +78,6 @@ class Generator:
                 json_event['photos'] = [photo.json_file() for photo in event['photos']]
                 json_event['social_assets'] = [social_asset.json_file() for social_asset in event['social_assets']]
 
-                self.total_floods += 1
             step = {str(i): json_event}
             file.write(json.dumps(step, indent=4))
             file.flush()
@@ -131,7 +130,10 @@ class Generator:
             else:
                 list_of_nodes: list = self.router.nodes_in_radius(dimensions['location'], dimensions['length'])
 
-        return Flood(period, dimensions, list_of_nodes)
+        flood = Flood(self.total_floods, period, dimensions, list_of_nodes)
+        self.total_floods += 1
+
+        return flood
 
     def generate_photos(self, nodes: list) -> list:
         size: int = random.randint(
@@ -139,8 +141,6 @@ class Generator:
             self.config['generate']['photo']['maxAmount']
         )
         photos: list = [0] * size
-
-        self.total_photos += size
 
         victim_probability: int = self.config['generate']['photo']['victimProbability']
         photo_size: int = self.config['generate']['photo']['size']
@@ -153,7 +153,8 @@ class Generator:
             if random.randint(0, 100) <= victim_probability:
                 photo_victims = self.generate_victims(nodes, True)
 
-            photos[i] = Photo(photo_size, photo_victims, photo_location)
+            photos[i] = Photo(self.total_photos, photo_size, photo_victims, photo_location)
+            self.total_photos += 1
             i += 1
         return photos
 
@@ -181,7 +182,8 @@ class Generator:
             temp = random.choice(nodes)
             victim_location: list = list(self.router.get_node_coord(temp))
 
-            victims[i] = Victim(victim_size, victim_lifetime, victim_location, photo_call)
+            victims[i] = Victim(self.total_victims, victim_size, victim_lifetime, victim_location, photo_call)
+            self.total_victims += 1
             i += 1
         return victims
 
@@ -198,7 +200,8 @@ class Generator:
         i: int = 0
         while i < size:
             water_sample_location: list = list(self.router.get_node_coord(random.choice(nodes)))
-            water_samples[i] = WaterSample(water_sample_size, water_sample_location)
+            water_samples[i] = WaterSample(self.total_water_samples, water_sample_size, water_sample_location)
+            self.total_water_samples += 1
             i += 1
         return water_samples
 

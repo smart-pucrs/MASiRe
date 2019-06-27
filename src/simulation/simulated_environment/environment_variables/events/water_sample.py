@@ -1,6 +1,7 @@
+import json
 class WaterSample:
 
-    def __init__(self, size: int, location: list):
+    def __init__(self, id: int, size: int, location: list):
         """
         [Object <Consumable> that represents a water sample
         collected at a flood instance.]
@@ -11,6 +12,7 @@ class WaterSample:
         instance was collected.
         """
 
+        self.id = id
         self.type: str = 'water_sample'
         self.size: int = size
         self.location: list = location
@@ -27,3 +29,8 @@ class WaterSample:
         del copy['active']
         del copy['type']
         return copy
+
+    ################### TEMPORARY CODE ####################
+    def __repr__(self):
+        copy = self.__dict__.copy()
+        return json.dumps(copy)

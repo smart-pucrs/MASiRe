@@ -1,7 +1,7 @@
 import json
 class Victim:
 
-    def __init__(self, size: int, lifetime: int, location: list, photo: bool):
+    def __init__(self, id: int, size: int, lifetime: int, location: list, photo: bool):
         """
              [Object <Consumable> that represents a victim instance revealed
              by a photography instance analysis.]
@@ -13,7 +13,7 @@ class Victim:
              :param node: Representation of the location where the victim
              was found.
          """
-
+        self.id = id
         self.type: str = 'victim'
         self.size: int = size
         self.lifetime: int = lifetime

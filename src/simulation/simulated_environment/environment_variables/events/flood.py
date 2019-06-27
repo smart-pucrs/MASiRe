@@ -2,7 +2,7 @@ class Flood:
 
     # still missing location attribute
 
-    def __init__(self, period: int, dimensions: dict, list_of_nodes: list):
+    def __init__(self, id: int, period: int, dimensions: dict, list_of_nodes: list):
         """
         [Object that represents a flood.]
 
@@ -13,6 +13,7 @@ class Flood:
         :param list_of_nodes: A list with the nodes what the flood reaches
         """
 
+        self.id = id
         self.type: str = 'flood'
         self.active: bool = False
         self.period: int = period

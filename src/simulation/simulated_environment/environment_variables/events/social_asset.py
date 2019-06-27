@@ -1,6 +1,6 @@
 
 class SocialAsset:
-    def __init__(self, size: int, location: list, profession: str):
+    def __init__(self, id: int, size: int, location: list, profession: str):
         """
              [Object <Consumable> that represents a social asset instance.]
 
@@ -10,6 +10,7 @@ class SocialAsset:
              was found.
          """
 
+        self.id = id
         self.type: str = 'social_asset'
         self.size: int = size
         self.active: bool = False
