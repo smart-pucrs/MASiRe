@@ -42,6 +42,7 @@ def disconnect():
 
 @socket.on('register')
 def handle_message(message):
+    print(json.loads(message)['name'])
     identifier = json.loads(message)['name']
     socket_clients[identifier] = request.sid
 
@@ -123,6 +124,7 @@ def validate_agent():
             agent_response['map_percepts'] = simulation_response['map_percepts']
             agent_response['agent_percepts'] = simulation_response['agent_constants']
             agent_response['time'] = float(first_conn_time) - (time.time() - controller.first_timer) + 1
+
         else:
             agent_response['message'] = 'Token not registered.'
 
@@ -273,6 +275,7 @@ def finish_step():
             info = {'type': 'percepts', 'environment': {'events': simulation_response['events'],
                     'step': simulation_response['step']}, 'message': 'agent don\'t send a action'}
 
+
             for token in idle_agents:
                 agent = controller.connected_agents[token].agent_variables
                 agent['last_action_result'] = False
@@ -292,13 +295,13 @@ def finish_step():
 
 @app.route('/restart', methods=['POST'])
 def restart():
-    response = request.get_json(force=True)
+    match_report = request.get_json(force=True)
 
     for token in controller.connected_agents:
-        controller.connected_agents[token].agent_variables = response['agents'][token]
+        controller.connected_agents[token].agent_variables = match_report['agents'][token]
         response = json.dumps(
             {'message': f'The match {controller.current_match} ended.',
-             'match_result': response['match_result'][token], 'type': 'end'})
+             'match_result': match_report['match_result'][token], 'type': 'end'})
 
         identifier = controller.connected_agents[token].agent_info['name']
         room = socket_clients[identifier]
