@@ -1,0 +1,7 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+script:
+  - travis_wait pytest src/tests/integration/test_agents_actions.py src/tests/integration/test_social_assets_actions.py src/tests/unity/

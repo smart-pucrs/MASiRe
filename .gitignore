@@ -223,13 +223,9 @@ pip-selfcheck.json
 # Project specific
 client/node_modules/
 results.txt
-files/*/
-config.json
+*/*.osm
 misc.xml
 .idea
-files/
-files
-files/config.json
 .idea/
 .idea/misc.xml
 
