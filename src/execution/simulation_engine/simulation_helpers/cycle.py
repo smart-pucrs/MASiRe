@@ -11,6 +11,7 @@ class Cycle:
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
         generator = Generator(config, self.map)
+        self.map_percepts = config['map']
         self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
         self.max_victims = generator.victim_id
@@ -1525,3 +1526,10 @@ class Cycle:
                     photo.analyzed = True
                     for victim in photo.victims:
                         victim.active = True
+
+    def get_map_percepts(self):
+        """Get the constants information about the map.
+
+        :return dict: constants attributes of the map in config file"""
+
+        return self.map_percepts

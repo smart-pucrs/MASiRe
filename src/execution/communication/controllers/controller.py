@@ -81,7 +81,9 @@ class Controller:
         :param request: The request object received on the API containing all the data and JSON.
         :return tuple: First position with the status and the second position with the message."""
         try:
-            obj = json.loads(request.get_json(force=True))
+            obj = request.get_json(force=True)
+            if isinstance(obj, str):
+                obj = json.loads(obj)
 
             if not self.started:
                 return 5, 'Simulation has not started.'
@@ -162,7 +164,9 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = json.loads(request.get_json(force=True))
+            obj = request.get_json(force=True)
+            if isinstance(obj, str):
+                obj = json.loads(obj)
 
             if not self.started:
                 return 5, 'Simulation has not started.'

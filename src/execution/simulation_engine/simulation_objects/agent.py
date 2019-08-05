@@ -1,5 +1,5 @@
 from simulation_engine.exceptions.exceptions import *
-
+import copy
 
 class Agent:
     """Class that represents the Agent inside the simulation."""
@@ -182,3 +182,41 @@ class Agent:
         self.physical_storage_vector.clear()
         self.virtual_storage_vector.clear()
         self.social_assets.clear()
+
+    def get_constant_attributes(self):
+        agent_copy = self.__dict__.copy()
+
+        del agent_copy['is_active']
+        del agent_copy['carried']
+        del agent_copy['location']
+        del agent_copy['last_action']
+        del agent_copy['last_action_result']
+        del agent_copy['actual_battery']
+        del agent_copy['route']
+        del agent_copy['destination_distance']
+        del agent_copy['physical_storage']
+        del agent_copy['physical_storage_vector']
+        del agent_copy['virtual_storage']
+        del agent_copy['virtual_storage_vector']
+        del agent_copy['social_assets']
+
+        return agent_copy
+
+    def get_variable_attributes(self):
+        agent_copy = self.__dict__.copy()
+
+        del agent_copy['token']
+        del agent_copy['type']
+        del agent_copy['min_size']
+        del agent_copy['role']
+        del agent_copy['abilities']
+        del agent_copy['resources']
+        del agent_copy['max_charge']
+        del agent_copy['speed']
+        del agent_copy['physical_capacity']
+        del agent_copy['virtual_capacity']
+
+        return agent_copy
+
+    def __repr__(self):
+        return str(self.__dict__.copy())

@@ -61,7 +61,7 @@ class AgentsManager:
         role = self.roles.pop(0)
         self.agents[token] = Agent(token, self.cdm_location, *role)
 
-        return True
+        return self.agents[token]
 
     def disconnect(self, token):
         """Disconnect the agent if it was connected.

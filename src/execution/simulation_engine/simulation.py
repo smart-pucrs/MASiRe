@@ -116,6 +116,13 @@ class Simulation:
 
         return actions_results, step
 
+    def get_map_percepts(self):
+        """Get the constants information about the map.
+
+        :return dict: constants attributes of the map in config file"""
+
+        return self.cycler.get_map_percepts()
+
     def log(self):
         """Save information about each step, the map, victims, flood, water samples, photos, every event related to the
         simulation.

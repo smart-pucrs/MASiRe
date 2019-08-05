@@ -57,7 +57,7 @@ def start_connections():
 
         if not valid:
             return jsonify(message=f'This endpoint can not be accessed. {message}')
-
+        print(message)
         if message['back'] != 1:
             controller.set_started()
 
@@ -224,7 +224,7 @@ def connect_registered_agent(msg):
 
     Note: The agent must be registered to connect the socket."""
 
-    response = {'status': 0, 'result': False, 'message': 'Error.'}
+    response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
 
     status, message = controller.do_agent_socket_connection(request, msg)
 
@@ -237,6 +237,7 @@ def connect_registered_agent(msg):
                 response['status'] = 1
                 response['result'] = True
                 response['message'] = 'Agent successfully connected.'
+                response.update(sim_response)
 
                 if controller.agents_amount == len(controller.manager.agents_sockets_manager.get_tokens()):
                     every_agent_registered.put(True)
@@ -464,6 +465,15 @@ def disconnect_registered_asset(msg):
             response['message'] = 'Simulation is not online.'
 
     return json.dumps(response, sort_keys=False)
+
+
+def send_initial_percepts(token, info):
+    """Send the initial percepts for the agent informed.
+
+    The message contain the agent and map percepts."""
+
+    room = controller.manager.get(token, 'socket')
+    socket.emit('initial_percepts', info, room=room)
 
 
 def notify_actors(event, response):
