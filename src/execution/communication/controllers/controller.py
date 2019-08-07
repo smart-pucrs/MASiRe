@@ -419,7 +419,7 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = json.loads(request)
+            obj = json.loads(request) if isinstance(request, str) else json.loads(request.get_json(force=True))
 
             if not self.started:
                 return 5, 'Simulation has not started.'
