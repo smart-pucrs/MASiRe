@@ -218,5 +218,5 @@ class Agent:
 
         return agent_copy
 
-    def __repr__(self):
-        return str(self.__dict__.copy())
+    # def __repr__(self):
+    #     return str(self.__dict__.copy())
