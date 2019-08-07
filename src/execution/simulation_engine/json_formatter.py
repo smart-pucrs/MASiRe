@@ -39,7 +39,7 @@ class JsonFormatter:
             json_actors = [*json_agents, *json_assets]
             json_events = self.jsonify_events(response[2])
 
-            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Simulation restarted.'}
+            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Simulation restarted.', 'step': response[3]}
 
         except Exception as e:
             return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
@@ -52,8 +52,12 @@ class JsonFormatter:
 
         try:
             response = self.copycat.connect_agent(token)
+
             if response:
-                return {'status': 1, 'message': 'Agent connected.'}
+                response['status'] = 1
+                response['message'] = 'Agent connected.'
+
+                return response
 
             else:
                 return {'status': 0, 'message': 'Agent could not connect.'}
@@ -132,7 +136,8 @@ class JsonFormatter:
             json_actors = [*json_agents, *json_assets]
             json_events = self.jsonify_events(response[2])
 
-            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Simulation started.'}
+            return {'status': 1, 'actors': json_actors, 'event': json_events,
+                    'message': 'Simulation started.', 'step': response[3]}
 
         except Exception as e:
             return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
@@ -160,7 +165,7 @@ class JsonFormatter:
 
             json_events = self.jsonify_events(response[1])
 
-            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Step completed.'}
+            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Step completed.', 'step': response[2]}
 
         except Exception as e:
             return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during step: "{str(e)}"'}

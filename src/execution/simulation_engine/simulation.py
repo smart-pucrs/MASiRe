@@ -65,10 +65,10 @@ class Simulation:
 
         self.cycler.activate_step()
 
-        return agents, social_assets, step
+        return agents, social_assets, step, self.cycler.current_step
 
     def restart(self, config_file):
-        """Restart the simulation by regenerating all the simulation adn reseting all the log variables.
+        """Restart the simulation by regenerating all the simulation and reseting all the log variables.
 
         :return tuple: First position holding the agents, second position the social assets and the third holding
         the current step."""
@@ -110,11 +110,11 @@ class Simulation:
 
         if self.cycler.check_steps():
             self.terminated = True
-            return actions_results, step
+            return actions_results, step, self.cycler.current_step
 
         self.cycler.activate_step()
 
-        return actions_results, step
+        return actions_results, step, self.cycler.current_step
 
     def get_map_percepts(self):
         """Get the constants information about the map.

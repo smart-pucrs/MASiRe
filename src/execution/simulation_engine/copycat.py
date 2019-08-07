@@ -40,7 +40,7 @@ class CopyCat:
         :param token: The identifier of the agent.
         :return bool: True if the agent was connected else False."""
 
-        response = {'agent_percepts': self.simulation.connect_agent(token),
+        response = {'agent_percepts': self.simulation.connect_agent(token).get_constant_attributes(),
                     'map_percepts': self.simulation.get_map_percepts()}
 
         return copy.deepcopy(response)

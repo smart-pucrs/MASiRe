@@ -57,7 +57,7 @@ def start_connections():
 
         if not valid:
             return jsonify(message=f'This endpoint can not be accessed. {message}')
-        print(message)
+
         if message['back'] != 1:
             controller.set_started()
 
@@ -237,12 +237,15 @@ def connect_registered_agent(msg):
                 response['status'] = 1
                 response['result'] = True
                 response['message'] = 'Agent successfully connected.'
-                response.update(sim_response)
+
+                response.update(sim_response)  ## Temporary Code
 
                 if controller.agents_amount == len(controller.manager.agents_sockets_manager.get_tokens()):
                     every_agent_registered.put(True)
 
                 one_agent_registered_queue.put(True)
+
+                send_initial_percepts(message, response) ## Temporary Code
 
             else:
                 response['status'] = sim_response['status']
@@ -324,7 +327,6 @@ def finish_step():
         controller.manager.clear_workers()
 
         if sim_response['status'] == 0:
-            print(sim_response['message'])
             print('An internal error occurred. Shutting down...')
             requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True})
             multiprocessing.Process(target=auto_destruction, daemon=True).start()
@@ -375,6 +377,33 @@ def step_controller(ready_queue):
     os.kill(os.getpid(), signal.SIGTERM)
 
 
+@socket.on('send_action')
+def send_action_temp(msg):
+    """Receive all the actions from the agents or social assets.
+
+        Note: The actions are stored and only used when the step is finished and the simulation process it."""
+
+    response = {'status': 1, 'result': True, 'message': 'Error.'}
+    status, message = controller.do_action(msg)
+
+    if status != 1:
+        response['status'] = status
+        response['result'] = False
+
+    else:
+        every_socket = controller.manager.get_all('socket')
+        tokens_connected_size = len([*every_socket[0], *every_socket[1]])
+        agent_workers_size = len(controller.manager.get_workers('agent'))
+        social_asset_workers_size = len(controller.manager.get_workers('social_asset'))
+
+        if tokens_connected_size == agent_workers_size + social_asset_workers_size:
+            actions_queue.put(True)
+
+    response['message'] = message
+    print('Response: ', response['result'])
+    print('Action: ', msg)
+
+
 @app.route('/send_action', methods=['POST'])
 def send_action():
     """Receive all the actions from the agents or social assets.
@@ -382,7 +411,6 @@ def send_action():
     Note: The actions are stored and only used when the step is finished and the simulation process it."""
 
     response = {'status': 1, 'result': True, 'message': 'Error.'}
-
     status, message = controller.do_action(request)
 
     if status != 1:
@@ -503,6 +531,8 @@ def notify_actors(event, response):
         room_response_list.append((room, json.dumps(info)))
 
     for room, response in room_response_list:
+        if event == 'simulation_started':
+            event = 'action_results'
         socket.emit(event, response, room=room)
 
 

@@ -1,10 +1,9 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 10,
+    "steps": 20,
     "maps": [
-      "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm",
-      "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm", "files/map0.osm"
+      "files/map0.osm"
     ],
     "minLon": -51.2163800,
     "maxLon": -51.2076000,
@@ -73,7 +72,7 @@
       "resources": ["battery", "strength", "memory"],
       "size": 30,
       "amount": 1,
-      "speed": 10,
+      "speed": 10,z
       "physicalCapacity": 50,
       "virtualCapacity": 4096,
       "battery": 50
@@ -170,23 +169,23 @@
     "photo": {
       "minSize": 8,
       "maxSize": 128,
-      "minAmount": 0,
-      "maxAmount": 8,
+      "minAmount": 1,
+      "maxAmount": 1,
       "victimProbability": 10
     },
     "victim": {
       "minSize": 55,
       "maxSize": 120,
-      "minAmount": 0,
-      "maxAmount": 10,
+      "minAmount": 1,
+      "maxAmount": 1,
       "minLifetime": 15,
       "maxLifetime": 30
     },
     "waterSample": {
       "minSize": 1,
       "maxSize": 12,
-      "minAmount": 0,
-      "maxAmount": 5
+      "minAmount": 1,
+      "maxAmount": 1
     }
   }
 }
