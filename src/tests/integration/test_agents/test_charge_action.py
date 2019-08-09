@@ -19,26 +19,23 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(*msg):
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': ['cdm']}))
-
-
 @socket.on('action_results')
 def action_result(msg):
     msg = json.loads(msg)
 
     responses.append(msg['agent']['last_action_result'])
+    if msg['environment']['step'] == 1:
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': ['cdm']}))
 
-    if not msg['agent']['route']:
+    elif not msg['agent']['route']:
         if msg['agent']['last_action'] == 'charge':
             socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
         else:
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'charge', 'parameters': []}))
+            socket.emit('send_action', json.dumps({'token': token, 'action': 'charge', 'parameters': []}))
 
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': ['cdm']}))
 
 
 @socket.on('simulation_ended')

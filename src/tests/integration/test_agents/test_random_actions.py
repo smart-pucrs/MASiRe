@@ -22,18 +22,19 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    action = random.choice(actions)
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': action, 'parameters': []}))
-
-
 @socket.on('action_results')
 def action_result(msg):
+    msg = json.loads(msg)
     try:
-        action = random.choice(actions)
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': action, 'parameters': []}))
-        responses.append(True)
+        if msg['environment']['step'] == 1:
+            action = random.choice(actions)
+            requests.post('http://127.0.0.1:12345/send_action',
+                          json=json.dumps({'token': token, 'action': action, 'parameters': []}))
+
+        else:
+            action = random.choice(actions)
+            socket.emit('send_action', json.dumps({'token': token, 'action': action, 'parameters': []}))
+            responses.append(True)
 
     except:
         responses.append(False)

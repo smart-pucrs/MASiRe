@@ -8,6 +8,7 @@ responses = []
 
 socket = socketio.Client()
 token = None
+photo_loc = None
 
 
 def connect_agent():
@@ -18,24 +19,18 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    photo_loc = get_photo_loc(msg)
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': photo_loc}))
-
-
 def get_photo_loc(msg):
-    msg = json.loads(msg)
-    my_location = msg['agent']['location']
+    my_location = [msg['agent']['location']['lat'], msg['agent']['location']['lon']]
     min_distance = 999999999
-    photo_loc = None
-    for photo in msg['event']['photos']:
-        actual_distance = calculate_distance(my_location, photo['location'])
-        if actual_distance < min_distance:
-            min_distance = actual_distance
-            photo_loc = photo['location']
+    photo_location = None
+    for event in msg['environment']['events']:
+        if event['type'] == 'photo':
+            actual_distance = calculate_distance(my_location, [event['location']['lat'], event['location']['lon']])
+            if actual_distance < min_distance:
+                min_distance = actual_distance
+                photo_location = [event['location']['lat'], event['location']['lon']]
 
-    return photo_loc
+    return photo_location
 
 
 def calculate_distance(x, y):
@@ -44,19 +39,24 @@ def calculate_distance(x, y):
 
 @socket.on('action_results')
 def action_result(msg):
+    global photo_loc
     msg = json.loads(msg)
 
     responses.append(msg['agent']['last_action_result'])
 
-    if not msg['agent']['route']:
+    if msg['environment']['step'] == 1:
+        photo_loc = get_photo_loc(msg)
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': photo_loc}))
+
+    elif not msg['agent']['route']:
         if msg['agent']['last_action'] == 'takePhoto':
             socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
         else:
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'takePhoto', 'parameters': []}))
+            socket.emit('send_action', json.dumps({'token': token, 'action': 'takePhoto', 'parameters': []}))
 
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': photo_loc}))
 
 
 @socket.on('simulation_ended')

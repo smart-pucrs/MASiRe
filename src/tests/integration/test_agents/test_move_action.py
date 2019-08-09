@@ -9,6 +9,7 @@ responses = []
 
 socket = socketio.Client()
 token = None
+farther_obj = None
 
 
 def connect_agent():
@@ -19,24 +20,16 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    farther_obj = get_farther_loc(msg)
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': farther_obj}))
-
-
 def get_farther_loc(msg):
-    msg = json.loads(msg)
-    my_location = msg['agent']['location']
+    my_location = [msg['agent']['location']['lat'], msg['agent']['location']['lon']]
     max_distance = 0
     obj_loc = None
-    for event in msg['event']:
-        if event != 'flood':
-            for obj in msg['event'][event]:
-                actual_distance = calculate_distance(obj['location'], my_location)
-                if actual_distance > max_distance:
-                    max_distance = actual_distance
-                    obj_loc = obj['location']
+    for event in msg['environment']['events']:
+        if event['type'] != 'flood':
+            actual_distance = calculate_distance([event['location']['lat'], event['location']['lon']], my_location)
+            if actual_distance > max_distance:
+                max_distance = actual_distance
+                obj_loc = [event['location']['lat'], event['location']['lon']]
 
     return obj_loc
 
@@ -47,14 +40,19 @@ def calculate_distance(x, y):
 
 @socket.on('action_results')
 def action_result(msg):
+    global farther_obj
     msg = json.loads(msg)
 
     responses.append(msg['agent']['last_action_result'])
 
+    if msg['environment']['step'] == 1:
+        farther_obj = get_farther_loc(msg)
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': farther_obj}))
+
     if not msg['agent']['route']:
         socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': farther_obj}))
 
 
 @socket.on('simulation_ended')

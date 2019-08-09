@@ -10,6 +10,7 @@ responses = []
 
 socket = socketio.Client()
 token = None
+water_loc = None
 
 
 def connect_agent():
@@ -20,24 +21,18 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    water_loc = get_water_loc(msg)
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': water_loc}))
-
-
 def get_water_loc(msg):
-    msg = json.loads(msg)
-    my_location = msg['agent']['location']
+    my_location = [msg['agent']['location']['lat'], msg['agent']['location']['lon']]
     min_distance = 999999999
-    water_loc = None
-    for water_sample in msg['event']['water_samples']:
-        actual_distance = calculate_distance(my_location, water_sample['location'])
-        if actual_distance < min_distance:
-            min_distance = actual_distance
-            water_loc = water_sample['location']
+    water_location = None
+    for event in msg['environment']['events']:
+        if event['type'] == 'water_sample':
+            actual_distance = calculate_distance(my_location, [event['location']['lat'], event['location']['lon']])
+            if actual_distance < min_distance:
+                min_distance = actual_distance
+                water_location = [event['location']['lat'], event['location']['lon']]
 
-    return water_loc
+    return water_location
 
 
 def calculate_distance(x, y):
@@ -46,19 +41,24 @@ def calculate_distance(x, y):
 
 @socket.on('action_results')
 def action_result(msg):
+    global water_loc
+    print(msg)
     msg = json.loads(msg)
-
     responses.append(msg['agent']['last_action_result'])
 
-    if not msg['agent']['route']:
+    if msg['environment']['step'] == 1:
+        water_loc = get_water_loc(msg)
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': water_loc}))
+
+    elif not msg['agent']['route']:
         if msg['agent']['last_action'] == 'collectWater':
             socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
         else:
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'collectWater', 'parameters': []}))
+            socket.emit('send_action', json.dumps({'token': token, 'action': 'collectWater', 'parameters': []}))
 
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'move', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': water_loc}))
 
 
 @socket.on('simulation_ended')

@@ -22,19 +22,17 @@ def connect_agent():
     socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'pass', 'parameters': []}))
-
-
 @socket.on('action_results')
 def action_result(msg):
     global counter
+    msg = json.loads(msg)
 
+    if msg['environment']['step'] == 1:
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'pass', 'parameters': []}))
     if counter == max_iter:
         socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'pass', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'pass', 'parameters': []}))
         counter += 1
 
 
