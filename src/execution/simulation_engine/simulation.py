@@ -53,11 +53,10 @@ class Simulation:
         the current step."""
 
         self.cycler.activate_step()
+        self.cycler.current_step += 1
         agents = self.cycler.get_active_agents_info()
         social_assets = self.cycler.get_active_assets_info()
         step = self.cycler.get_step()
-
-        self.cycler.current_step += 1
 
         if self.cycler.check_steps():
             self.terminated = True

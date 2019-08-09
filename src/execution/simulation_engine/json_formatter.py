@@ -37,12 +37,14 @@ class JsonFormatter:
             json_assets = self.jsonify_assets(response[1])
 
             json_actors = [*json_agents, *json_assets]
-            json_events = self.jsonify_events(response[2])
+            environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
 
-            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Simulation restarted.', 'step': response[3]}
+            return {'status': 1, 'actors': json_actors, 'environment': environment,
+                    'message': 'Simulation restarted.', 'step': response[3]}
 
         except Exception as e:
-            return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
+            return {'status': 0, 'actors': [], 'environment': {},
+                    'message': f'An error occurred during restart: "{str(e)}"'}
 
     def connect_agent(self, token):
         """Connect the agent to the simulation and returns a JSON response.
@@ -130,17 +132,18 @@ class JsonFormatter:
 
         try:
             response = self.copycat.start()
+            message = 'Simulation started.'
             json_agents = self.jsonify_agents(response[0])
             json_assets = self.jsonify_assets(response[1])
+            json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
+            json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
+            environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
 
-            json_actors = [*json_agents, *json_assets]
-            json_events = self.jsonify_events(response[2])
-
-            return {'status': 1, 'actors': json_actors, 'event': json_events,
-                    'message': 'Simulation started.', 'step': response[3]}
+            return {'status': 1, 'actors': json_actors, 'environment': environment,
+                    'message': message}
 
         except Exception as e:
-            return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
+            return {'status': 0, 'actors': [], 'environment': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
 
     def do_step(self, token_action_list):
         """Do a step on the simulation.
@@ -154,7 +157,7 @@ class JsonFormatter:
         try:
             response = self.copycat.do_step(token_action_list)
             if response is None:
-                return {'status': 1, 'actors': [], 'event': {}, 'message': 'Simulation finished.'}
+                return {'status': 1, 'actors': [], 'environment': {}, 'message': 'Simulation finished.'}
 
             json_actors = []
             for obj in response[0]:
@@ -164,11 +167,12 @@ class JsonFormatter:
                     json_actors.append({'social_asset': self.jsonify_asset(obj['social_asset']), 'message': obj['message']})
 
             json_events = self.jsonify_events(response[1])
+            environment = {'events': json_events, 'step': response[2]}
 
-            return {'status': 1, 'actors': json_actors, 'event': json_events, 'message': 'Step completed.', 'step': response[2]}
+            return {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Step completed.'}
 
         except Exception as e:
-            return {'status': 0, 'actors': [], 'event': {}, 'message': f'An error occurred during step: "{str(e)}"'}
+            return {'status': 0, 'actors': [], 'environment': {}, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):
         """Write all the saved logs to a file on the root of the project, the file will be inside a folder structure
@@ -239,29 +243,29 @@ class JsonFormatter:
 
         json_virtual_items = self.jsonify_delivered_items(agent.virtual_storage_vector)
 
-        json_route = [list(location) for location in agent.route]
+        json_route = [self.format_location(location) for location in agent.route]
 
         return {
             'token': agent.token,
             'active': agent.is_active,
             'last_action': agent.last_action,
             'last_action_result': agent.last_action_result,
-            'role': agent.role,
-            'location': list(agent.location),
+            # 'role': agent.role,
+            'location': self.format_location(agent.location),
             'route': json_route,
             'destination_distance': agent.destination_distance,
-            'abilities': agent.abilities,
-            'resources': agent.resources,
+            # 'abilities': agent.abilities,
+            # 'resources': agent.resources,
             'battery': agent.actual_battery,
-            'max_charge': agent.max_charge,
-            'speed': agent.speed,
-            'size': agent.size,
+            # 'max_charge': agent.max_charge,
+            # 'speed': agent.speed,
+            # 'size': agent.size,
             'social_assets_vector': self.jsonify_assets(agent.social_assets),
             'physical_storage': agent.physical_storage,
-            'physical_capacity': agent.physical_capacity,
+            # 'physical_capacity': agent.physical_capacity,
             'physical_storage_vector': json_physical_items,
             'virtual_storage': agent.virtual_storage,
-            'virtual_capacity': agent.virtual_capacity,
+            # 'virtual_capacity': agent.virtual_capacity,
             'virtual_storage_vector': json_virtual_items
         }
 
@@ -277,32 +281,40 @@ class JsonFormatter:
 
         json_virtual_items = self.jsonify_delivered_items(asset.virtual_storage_vector)
 
-        json_route = [list(location) for location in asset.route]
+        json_route = [self.format_location(location) for location in asset.route]
 
         return {
             'token': asset.token,
             'active': asset.is_active,
             'last_action': asset.last_action,
             'last_action_result': asset.last_action_result,
-            'profession': asset.profession,
-            'location': list(asset.location),
+            # 'profession': asset.profession,
+            'location': self.format_location(asset.location),
             'route': json_route,
             'destination_distance': asset.destination_distance,
-            'abilities': asset.abilities,
-            'resources': asset.resources,
-            'speed': asset.speed,
-            'size': asset.size,
+            # 'abilities': asset.abilities,
+            # 'resources': asset.resources,
+            # 'speed': asset.speed,
+            # 'size': asset.size,
             'social_assets_vector': self.jsonify_assets(asset.social_assets),
             'physical_storage': asset.physical_storage,
-            'physical_capacity': asset.physical_capacity,
+            # 'physical_capacity': asset.physical_capacity,
             'physical_storage_vector': json_physical_items,
             'virtual_storage': asset.virtual_storage,
-            'virtual_capacity': asset.virtual_capacity,
+            # 'virtual_capacity': asset.virtual_capacity,
             'virtual_storage_vector': json_virtual_items
         }
 
     @staticmethod
-    def jsonify_events(events_list):
+    def format_location(location):
+        """Format the attribute location to a dict with the coordinates (Agent protocol)
+
+        :param location: List with the lat and lon coordinate
+        :return: Dictionary with the coordinates
+        """
+        return {'lat': location[0], 'lon': location[1]}
+
+    def jsonify_events(self, events_list):
         """Transform the event into a JSON object.
 
         It will transform all the victims and the victims inside the photos, the water samples, everything related to
@@ -311,66 +323,131 @@ class JsonFormatter:
         :param events_list: Dictionary with flood, victims, photos and water sampples.
         :return dict: Dictionary with all the elements converted to JSON."""
 
-        if events_list['flood'] is None:
-            return {'flood': '', 'victims': [], 'water_samples': [], 'photos': []}
+        formatted_list = []
 
-        json_flood = {
-            'identifier': events_list['flood'].identifier,
-            'type': 'flood',
-            'location': list(events_list['flood'].dimensions['location']),
-            'shape': events_list['flood'].dimensions['shape']
-        }
+        for event in events_list:
+            if not event:
+                pass
 
-        if events_list['flood'].dimensions['shape'] == 'circle':
-            json_flood['radius'] = events_list['flood'].dimensions['radius']
+            if event.type == 'flood':
+                flood = {
+                    'identifier': event.identifier,
+                    'type': 'flood',
+                    'location': self.format_location(event.dimensions['location']),
+                    'shape': event.dimensions['shape']
+                }
 
-        json_victims = []
-        for victim in events_list['victims']:
-            json_victim = {
-                'identifier': victim.identifier,
-                'type': 'victim',
-                'location': list(victim.location),
-                'size': victim.size,
-                'lifetime': victim.lifetime
-            }
-            json_victims.append(json_victim)
+                if event.dimensions['shape'] == 'circle':
+                    flood['radius'] = event.dimensions['radius']
 
-        json_water_samples = []
-        for water_sample in events_list['water_samples']:
-            json_water_sample = {
-                'identifier': water_sample.identifier,
-                'type': 'water_sample',
-                'location': list(water_sample.location),
-                'size': water_sample.size
-            }
-            json_water_samples.append(json_water_sample)
+                formatted_list.append(flood)
 
-        json_photos = []
-        for photo in events_list['photos']:
-            json_photo_victims = []
-            for victim in photo.victims:
-                if victim.active:
-                    json_victim = {
-                        'identifier': victim.identifier,
-                        'type': 'victim',
-                        'location': list(victim.location),
-                        'size': victim.size,
-                        'lifetime': victim.lifetime
-                    }
-                    json_photo_victims.append(json_victim)
+            elif event.type == 'victim':
+                victim = {
+                    'identifier': event.identifier,
+                    'type': 'victim',
+                    'location': self.format_location(event.location),
+                    'size': event.size,
+                    'lifetime': event.lifetime
+                }
 
-            json_photo = {
-                'identifier': photo.identifier,
-                'type': 'photo',
-                'location': list(photo.location),
-                'size': photo.size,
-                'analyzed': photo.analyzed,
-                'victims': json_photo_victims
-            }
+                formatted_list.append(victim)
 
-            json_photos.append(json_photo)
+            elif event.type == 'photo':
+                photo_victims = []
+                for victim in event.victims:
+                    if victim.active:
+                        json_victim = {
+                            'identifier': victim.identifier,
+                            'type': 'victim',
+                            'location': self.format_location(victim.location),
+                            'size': victim.size,
+                            'lifetime': victim.lifetime
+                        }
+                        photo_victims.append(json_victim)
 
-        return {'flood': json_flood, 'victims': json_victims, 'water_samples': json_water_samples, 'photos': json_photos}
+                photo = {
+                    'identifier': event.identifier,
+                    'type': 'photo',
+                    'location': self.format_location(event.location),
+                    'size': event.size,
+                    # 'analyzed': event.analyzed,
+                    'victims': photo_victims
+                }
+
+                formatted_list.append(photo)
+
+            else:
+                water_sample = {
+                    'identifier': event.identifier,
+                    'type': 'water_sample',
+                    'location': self.format_location(event.location),
+                    'size': event.size
+                }
+
+                formatted_list.append(water_sample)
+
+        # if events_list['flood'] is None:
+        #     return {'flood': '', 'victims': [], 'water_samples': [], 'photos': []}
+        #
+        # json_flood = {
+        #     'identifier': events_list['flood'].identifier,
+        #     'type': 'flood',
+        #     'location': list(events_list['flood'].dimensions['location']),
+        #     'shape': events_list['flood'].dimensions['shape']
+        # }
+        #
+        # if events_list['flood'].dimensions['shape'] == 'circle':
+        #     json_flood['radius'] = events_list['flood'].dimensions['radius']
+        #
+        # json_victims = []
+        # for victim in events_list['victims']:
+        #     json_victim = {
+        #         'identifier': victim.identifier,
+        #         'type': 'victim',
+        #         'location': list(victim.location),
+        #         'size': victim.size,
+        #         'lifetime': victim.lifetime
+        #     }
+        #     json_victims.append(json_victim)
+        #
+        # json_water_samples = []
+        # for water_sample in events_list['water_samples']:
+        #     json_water_sample = {
+        #         'identifier': water_sample.identifier,
+        #         'type': 'water_sample',
+        #         'location': list(water_sample.location),
+        #         'size': water_sample.size
+        #     }
+        #     json_water_samples.append(json_water_sample)
+        #
+        # json_photos = []
+        # for photo in events_list['photos']:
+        #     json_photo_victims = []
+        #     for victim in photo.victims:
+        #         if victim.active:
+        #             json_victim = {
+        #                 'identifier': victim.identifier,
+        #                 'type': 'victim',
+        #                 'location': list(victim.location),
+        #                 'size': victim.size,
+        #                 'lifetime': victim.lifetime
+        #             }
+        #             json_photo_victims.append(json_victim)
+        #
+        #     json_photo = {
+        #         'identifier': photo.identifier,
+        #         'type': 'photo',
+        #         'location': list(photo.location),
+        #         'size': photo.size,
+        #         'analyzed': photo.analyzed,
+        #         'victims': json_photo_victims
+        #     }
+        #
+        #     json_photos.append(json_photo)
+        #
+        # return {'flood': json_flood, 'victims': json_victims, 'water_samples': json_water_samples, 'photos': json_photos}
+        return formatted_list
 
     def jsonify_delivered_items(self, items):
         """Transform all the items to JSON.
@@ -387,7 +464,7 @@ class JsonFormatter:
                 json_item = {
                     'identifier': item.identifier,
                     'type': 'victim',
-                    'location': list(item.location),
+                    'location': self.format_location(item.location),
                     'size': item.size,
                     'lifetime': item.lifetime
                 }
@@ -399,7 +476,7 @@ class JsonFormatter:
                     json_victim = {
                         'identifier': victim.identifier,
                         'type': 'victim',
-                        'location': list(victim.location),
+                        'location': self.format_location(victim.location),
                         'size': victim.size,
                         'lifetime': victim.lifetime
                     }
@@ -408,7 +485,7 @@ class JsonFormatter:
                 json_item = {
                     'identifier': item.identifier,
                     'type': 'photo',
-                    'location': list(item.location),
+                    'location': self.format_location(item.location),
                     'size': item.size,
                     'victims': json_photo_victims
                 }
@@ -417,7 +494,7 @@ class JsonFormatter:
                 json_item = {
                     'identifier': item.identifier,
                     'type': 'water_sample',
-                    'location': list(item.location),
+                    'location': self.format_location(item.location),
                     'size': item.size
                 }
 

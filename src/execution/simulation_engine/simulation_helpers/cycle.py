@@ -63,7 +63,28 @@ class Cycle:
         return self.social_assets_manager.get_active_info()
 
     def get_step(self):
-        return self.steps[self.current_step]
+        events = []
+        for step in self.steps[0:self.current_step]:
+            if step['flood']:
+                if step['flood'].active:
+                    events.append(step['flood'])
+
+                if step['victims']:
+                    for victim in step['victims']:
+                        if victim.active:
+                            events.append(victim)
+
+                if step['photos']:
+                    for photo in step['photos']:
+                        if photo.active:
+                            events.append(photo)
+
+                if step['water_samples']:
+                    for water_sample in step['water_samples']:
+                        if water_sample.active:
+                            events.append(water_sample)
+
+        return events
 
     def get_previous_steps(self):
         previous_steps = []
@@ -1239,6 +1260,7 @@ class Cycle:
             raise FailedInsufficientBattery('Not enough battery to complete this step.')
 
         elif self.map.check_location(agent.location, destination):
+            self.agents_manager.edit(token, 'location', destination)
             self.agents_manager.edit(token, 'route', [])
             self.agents_manager.edit(token, 'destination_distance', 0)
             self.agents_manager.edit(token, 'last_action_result', True)
