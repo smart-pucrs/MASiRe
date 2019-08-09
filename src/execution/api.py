@@ -19,7 +19,6 @@ from communication.helpers import json_formatter
 
 base_url, api_port, simulation_port, step_time, first_step_time, method, secret, agents_amount, assets_amount = sys.argv[1:]
 
-
 app = Flask(__name__)
 socket = SocketIO(app=app)
 
@@ -258,7 +257,7 @@ def connect_registered_agent(msg):
     else:
         response['status'] = status
         response['message'] = message
-
+    print('CONNECT : ', response)
     return json.dumps(response, sort_keys=False)
 
 
@@ -286,6 +285,9 @@ def connect_registered_asset(msg):
                 response['message'] = sim_response['social_asset']
                 one_agent_registered_queue.put(True)
 
+                response.update(sim_response)  ## Temporary Code
+                send_initial_percepts(message, response) ## Temporary Code
+
             else:
                 response['status'] = sim_response['status']
                 response['message'] = sim_response['message']
@@ -297,7 +299,7 @@ def connect_registered_asset(msg):
     else:
         response['status'] = status
         response['message'] = message
-
+    print('CONNECT ASSET : ', response)
     return json.dumps(response, sort_keys=False)
 
 
@@ -504,6 +506,7 @@ def notify_actors(event, response):
     for room, response in room_response_list:
         if event == 'simulation_started':
             event = 'action_results'
+        print(f'RESPONSE[{room}]: ', response)
         socket.emit(event, response, room=room)
 
 

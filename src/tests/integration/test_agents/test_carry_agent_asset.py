@@ -30,28 +30,28 @@ def connect_actors():
     carried_socket.emit('connect_registered_asset', data=json.dumps({'token': carried_token}))
 
 
-@carrying_socket.on('simulation_started')
-def carry_simulation_started(msg):
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'carry', 'parameters': [carried_token]}))
-
-
-@carried_socket.on('simulation_started')
-def carried_simulation_started(msg):
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': carried_token, 'action': 'getCarried', 'parameters': [token]}))
-
-
 @carrying_socket.on('action_results')
 def carry_action_results(msg):
     msg = json.loads(msg)
-    responses.append(msg['agent']['last_action_result'])
-    carrying_socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
+
+    if msg['environment']['step'] == 1:
+        carrying_socket.emit('send_action', json.dumps({'token': token, 'action': 'carry', 'parameters': [carried_token]}))
+
+    else:
+        responses.append(msg['agent']['last_action_result'])
+        carrying_socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
 
 @carried_socket.on('action_results')
 def carried_action_results(msg):
     msg = json.loads(msg)
-    responses.append(msg['social_asset']['last_action_result'])
-    carried_socket.emit('disconnect_registered_asset', data=json.dumps({'token': token}), callback=quit_program)
+
+    if msg['environment']['step'] == 1:
+        carried_socket.emit('send_action', json.dumps({'token': carried_token, 'action': 'getCarried', 'parameters': [token]}))
+
+    else:
+        responses.append(msg['social_asset']['last_action_result'])
+        carried_socket.emit('disconnect_registered_asset', data=json.dumps({'token': token}), callback=quit_program)
 
 
 def quit_program(*args):

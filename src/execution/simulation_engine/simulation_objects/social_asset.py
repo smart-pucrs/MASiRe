@@ -11,8 +11,8 @@ class SocialAsset:
         self.carried = False
         self.min_size = size
         self.location = location
-        self.last_action = None
-        self.last_action_result = False
+        self.last_action = 'pass'
+        self.last_action_result = True
         self.profession = profession
         self.abilities = abilities
         self.resources = resources
