@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 20,
+    "steps": 10,
     "maps": [
       "files/map0.osm"
     ],
@@ -72,7 +72,7 @@
       "resources": ["battery", "strength", "memory"],
       "size": 30,
       "amount": 1,
-      "speed": 10,z
+      "speed": 10,
       "physicalCapacity": 50,
       "virtualCapacity": 4096,
       "battery": 50
@@ -158,7 +158,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 50,
+      "probability": 0,
       "minPeriod": 10,
       "maxPeriod": 20,
       "circle": {
@@ -167,15 +167,15 @@
       }
     },
     "photo": {
-      "minSize": 8,
-      "maxSize": 128,
+      "minSize": 10,
+      "maxSize": 15,
       "minAmount": 1,
       "maxAmount": 1,
       "victimProbability": 10
     },
     "victim": {
-      "minSize": 55,
-      "maxSize": 120,
+      "minSize": 10,
+      "maxSize": 15,
       "minAmount": 1,
       "maxAmount": 1,
       "minLifetime": 15,
