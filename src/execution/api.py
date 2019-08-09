@@ -400,35 +400,6 @@ def send_action_temp(msg):
             actions_queue.put(True)
 
     response['message'] = message
-    print('Response: ', response['result'])
-    print('Action: ', msg)
-
-
-@app.route('/send_action', methods=['POST'])
-def send_action():
-    """Receive all the actions from the agents or social assets.
-
-    Note: The actions are stored and only used when the step is finished and the simulation process it."""
-
-    response = {'status': 1, 'result': True, 'message': 'Error.'}
-    status, message = controller.do_action(request)
-
-    if status != 1:
-        response['status'] = status
-        response['result'] = False
-
-    else:
-        every_socket = controller.manager.get_all('socket')
-        tokens_connected_size = len([*every_socket[0], *every_socket[1]])
-        agent_workers_size = len(controller.manager.get_workers('agent'))
-        social_asset_workers_size = len(controller.manager.get_workers('social_asset'))
-
-        if tokens_connected_size == agent_workers_size + social_asset_workers_size:
-            actions_queue.put(True)
-
-    response['message'] = message
-
-    return jsonify(response)
 
 
 @socket.on('disconnect_registered_agent')
@@ -516,7 +487,7 @@ def notify_actors(event, response):
     room_response_list = []
     for token in tokens:
         if event == 'simulation_started':
-            info = json_formatter.simulation_started_format(response, token)
+            info = json_formatter.action_results_format(response, token)
 
         elif event == 'simulation_ended':
             info = json_formatter.simulation_ended_format(response)
