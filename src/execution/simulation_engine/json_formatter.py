@@ -529,7 +529,7 @@ class JsonFormatter:
         json_action_token_by_step = []
         for step, action_token_list in action_token_by_step:
             json_token_action = []
-            for action, token in action_token_list:
+            for token, action in action_token_list:
                 json_token_action.append({'token': token, 'action': action})
 
             json_action_token_by_step.append({'step': step, 'token_action': json_token_action})
