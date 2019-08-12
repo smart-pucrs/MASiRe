@@ -257,7 +257,7 @@ def connect_registered_agent(msg):
     else:
         response['status'] = status
         response['message'] = message
-    print('CONNECT : ', response)
+
     return json.dumps(response, sort_keys=False)
 
 
@@ -299,7 +299,7 @@ def connect_registered_asset(msg):
     else:
         response['status'] = status
         response['message'] = message
-    print('CONNECT ASSET : ', response)
+
     return json.dumps(response, sort_keys=False)
 
 
@@ -506,7 +506,7 @@ def notify_actors(event, response):
     for room, response in room_response_list:
         if event == 'simulation_started':
             event = 'action_results'
-        print(f'RESPONSE[{room}]: ', response)
+
         socket.emit(event, response, room=room)
 
 

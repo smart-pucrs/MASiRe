@@ -156,6 +156,7 @@ class JsonFormatter:
 
         try:
             response = self.copycat.do_step(token_action_list)
+
             if response is None:
                 return {'status': 1, 'actors': [], 'environment': {}, 'message': 'Simulation finished.'}
 
@@ -187,7 +188,11 @@ class JsonFormatter:
         minute = '{:0>2d}'.format(minute)
 
         for log in logs:
-            json_items = self.jsonify_delivered_items(logs[log]['environment']['delivered_items'])
+            delivered_items = []
+            for item_log in logs[log]['environment']['delivered_items']:
+                delivered_items.extend(item_log['items'])
+            json_items = self.jsonify_delivered_items(delivered_items)
+
             json_agents = self.jsonify_agents(logs[log]['agents']['agents'])
             json_active_agents = self.jsonify_agents(logs[log]['agents']['active_agents'])
             json_action_token_by_step = self.jsonify_action_token_by_step(logs[log]['actions']['action_token_by_step'])
