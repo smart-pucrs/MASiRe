@@ -1516,6 +1516,7 @@ class Cycle:
             self.agents_manager.add(token, closer_asset)
             self.agents_manager.edit(token, 'last_action_result', True)
 
+
     def _search_social_asset_asset(self, token, parameters):
         if not self.social_assets_manager.get_tokens():
             raise FailedNoSocialAsset('No social asset connected.')
@@ -1571,10 +1572,10 @@ class Cycle:
                 if event['token'] == token:
                     if event['kind'] == 'victim':
                         report[token]['total_victims'] += len(event['items'])
-                    elif event['kind']['total_photos'] == 'photo':
-                        report[token] += len(event['items'])
-                    elif event['kind']['total_water_samples'] == 'water_sample':
-                        report[token] += len(event['items'])
+                    elif event['kind'] == 'photo':
+                        report[token]['total_photos'] += len(event['items'])
+                    elif event['kind'] == 'water_sample':
+                        report[token]['total_water_samples'] += len(event['items'])
 
         self.match_history.append(report)
 
