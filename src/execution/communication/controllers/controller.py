@@ -279,7 +279,7 @@ class Controller:
             if self.manager.get(obj['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(obj['token'], request.sid, 'socket'):
+            if not self.manager.add(obj['token'], agent.agent_info['name'], 'socket'):
                 return 0, 'Error while adding token.'
 
             return 1, obj['token']
