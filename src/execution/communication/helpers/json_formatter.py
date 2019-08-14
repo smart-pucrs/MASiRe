@@ -47,7 +47,7 @@ def simulation_ended_format(response):
 
     :param response: Response from the engine."""
 
-    info = {'status': 0, 'result': False, 'environment': {}, 'message': ''}
+    info = {'status': 0, 'result': False, 'message': '', 'type': 'bye'}
 
     if response:
         if response['status']:
@@ -107,8 +107,19 @@ def action_results_format(response, token):
         return event_error_format('Empty simulation response. ')
 
 
+def match_result_format(response, token):
+    """Build the response for the token given in the parameters.
+
+    :param response: Response from the engine.
+    :param token: Current token.
+    """
+
+    return {'type': 'end', 'report': response[token]}
+
+
 def event_error_format(message):
     """Build a typical error response for the agents. When this function is called, it is very probably that an internal
     error occurred."""
 
     return {'status': 0, 'result': False, 'environment': {}, 'message': f'{message}Possible internal error.'}
+

@@ -126,9 +126,10 @@ def restart():
         return jsonify(message='This endpoint can not be accessed.')
 
     can_restart = formatter.log()
-
+    print('[RESTART]: ', can_restart)
     if can_restart['status'] == 1:
         response = formatter.restart()
+        response['report'] = can_restart['report']
     else:
         response = can_restart
 

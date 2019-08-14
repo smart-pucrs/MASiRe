@@ -22,14 +22,14 @@ class CopyCat:
         self.config['map']['maps'].pop(0)
 
         if not self.config['map']['maps']:
-            return 0
-        return 1
+            return 0, self.simulation.cycler.match_report()
+        return 1, self.simulation.cycler.match_report()
 
     def restart(self):
-        """Restart the simulation and returns the copy of the response.
+        """Restart the simulation, returns the copy of the response and the report of the agents.
 
-        :return tuple: First position holding the agents, second position the social assets and the third holding
-        the current step."""
+        :return tuple, dict: First position holding the agents, second position the social assets, the third holding
+        the current step and a dictionary with the report of the agents."""
 
         response = self.simulation.restart(self.config)
         return copy.deepcopy(response)

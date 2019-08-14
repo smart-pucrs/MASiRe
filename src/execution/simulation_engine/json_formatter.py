@@ -17,10 +17,12 @@ class JsonFormatter:
 
         :return dict: Dictionary with status (0|1) if it is possible do to another round and the appropriate message."""
 
-        if not self.copycat.log():
-            return {'status': 0, 'message': 'No more maps available for matches.'}
+        status, response = self.copycat.log()
+
+        if not status:
+            return {'status': 0, 'message': 'No more maps available for matches.', 'report': response}
         else:
-            return {'status': 1, 'message': 'New match generated.'}
+            return {'status': 1, 'message': 'New match generated.', 'report': response}
 
     def restart(self):
         """Restart the simulation and returns a JSON response.
@@ -33,14 +35,16 @@ class JsonFormatter:
 
         try:
             response = self.copycat.restart()
+            message = 'Simulation restarted.'
             json_agents = self.jsonify_agents(response[0])
             json_assets = self.jsonify_assets(response[1])
+            json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
+            json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
 
-            json_actors = [*json_agents, *json_assets]
             environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
 
             return {'status': 1, 'actors': json_actors, 'environment': environment,
-                    'message': 'Simulation restarted.', 'step': response[3]}
+                    'message': message, 'step': response[3]}
 
         except Exception as e:
             return {'status': 0, 'actors': [], 'environment': {},
@@ -392,66 +396,6 @@ class JsonFormatter:
 
                 formatted_list.append(water_sample)
 
-        # if events_list['flood'] is None:
-        #     return {'flood': '', 'victims': [], 'water_samples': [], 'photos': []}
-        #
-        # json_flood = {
-        #     'identifier': events_list['flood'].identifier,
-        #     'type': 'flood',
-        #     'location': list(events_list['flood'].dimensions['location']),
-        #     'shape': events_list['flood'].dimensions['shape']
-        # }
-        #
-        # if events_list['flood'].dimensions['shape'] == 'circle':
-        #     json_flood['radius'] = events_list['flood'].dimensions['radius']
-        #
-        # json_victims = []
-        # for victim in events_list['victims']:
-        #     json_victim = {
-        #         'identifier': victim.identifier,
-        #         'type': 'victim',
-        #         'location': list(victim.location),
-        #         'size': victim.size,
-        #         'lifetime': victim.lifetime
-        #     }
-        #     json_victims.append(json_victim)
-        #
-        # json_water_samples = []
-        # for water_sample in events_list['water_samples']:
-        #     json_water_sample = {
-        #         'identifier': water_sample.identifier,
-        #         'type': 'water_sample',
-        #         'location': list(water_sample.location),
-        #         'size': water_sample.size
-        #     }
-        #     json_water_samples.append(json_water_sample)
-        #
-        # json_photos = []
-        # for photo in events_list['photos']:
-        #     json_photo_victims = []
-        #     for victim in photo.victims:
-        #         if victim.active:
-        #             json_victim = {
-        #                 'identifier': victim.identifier,
-        #                 'type': 'victim',
-        #                 'location': list(victim.location),
-        #                 'size': victim.size,
-        #                 'lifetime': victim.lifetime
-        #             }
-        #             json_photo_victims.append(json_victim)
-        #
-        #     json_photo = {
-        #         'identifier': photo.identifier,
-        #         'type': 'photo',
-        #         'location': list(photo.location),
-        #         'size': photo.size,
-        #         'analyzed': photo.analyzed,
-        #         'victims': json_photo_victims
-        #     }
-        #
-        #     json_photos.append(json_photo)
-        #
-        # return {'flood': json_flood, 'victims': json_victims, 'water_samples': json_water_samples, 'photos': json_photos}
         return formatted_list
 
     def jsonify_delivered_items(self, items):

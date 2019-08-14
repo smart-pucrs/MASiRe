@@ -22,6 +22,7 @@ class Cycle:
         self.cdm_location = (config['map']['centerLat'], config['map']['centerLon'])
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'])
+        self.match_history = []
 
     def restart(self, config_file):
         self.map.restart(config_file['map']['maps'][0], config_file['map']['proximity'])
@@ -748,7 +749,7 @@ class Cycle:
 
             self.delivered_items.append({
                 'token': token,
-                'kind': 'physical',
+                'kind': parameters[0],
                 'items': delivered_items,
                 'step': self.current_step
             })
@@ -823,7 +824,7 @@ class Cycle:
 
             self.delivered_items.append({
                 'token': token,
-                'kind': 'physical',
+                'kind': parameters[0],
                 'items': delivered_items,
                 'step': self.current_step})
 
@@ -897,7 +898,7 @@ class Cycle:
 
             self.delivered_items.append({
                 'token': token,
-                'kind': 'physical',
+                'kind': parameters[0],
                 'items': delivered_items,
                 'step': self.current_step})
 
@@ -971,7 +972,7 @@ class Cycle:
 
             self.delivered_items.append({
                 'token': token,
-                'kind': 'physical',
+                'kind': parameters[0],
                 'items': delivered_items,
                 'step': self.current_step})
 
@@ -1555,3 +1556,47 @@ class Cycle:
         :return dict: constants attributes of the map in config file"""
 
         return self.map_percepts
+
+    def match_report(self):
+        """Generate a report with the completed event of each agent in the simulation
+
+        :return dict: Dictionary with the tokens and the reports
+        """
+        report = {}
+
+        for token in self.agents_manager.get_tokens():
+            report[token] = {'total_victims': 0, 'total_photos': 0, 'total_water_samples': 0}
+
+            for event in self.delivered_items:
+                if event['token'] == token:
+                    if event['kind'] == 'victim':
+                        report[token]['total_victims'] += len(event['items'])
+                    elif event['kind']['total_photos'] == 'photo':
+                        report[token] += len(event['items'])
+                    elif event['kind']['total_water_samples'] == 'water_sample':
+                        report[token] += len(event['items'])
+
+        self.match_history.append(report)
+
+        return report
+
+    def simulation_report(self):
+        """Generate a report with all match of each agent
+
+        :return dict: Dictionary with the tokens and the reports
+        """
+
+        report = {}
+
+        for token in self.agents_manager.get_tokens():
+            report[token] = {}
+
+            report[token] = {'total_victims': 0, 'total_photos': 0, 'total_water_samples': 0}
+
+            for match in self.match_history:
+                if token in match:
+                    report[token]['total_victims'] += match[token]['total_victims']
+                    report[token]['total_photos'] += match[token]['total_photos']
+                    report[token]['total_water_samples'] += match[token]['total_water_samples']
+
+        return report
