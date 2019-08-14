@@ -340,9 +340,10 @@ def finish_step():
             notify_actors('match_result', sim_response['report'])
 
             if sim_response['status'] == 0:
-                notify_actors('simulation_ended', {'status': 1, 'message': 'Simulation ended all matches.'})
+                report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
-                requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True})
+                print('[TESTE]: ', report)
+                notify_actors('simulation_ended', {'status': 1, 'message': 'Simulation ended all matches.', 'report': report})
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
             else:
@@ -497,7 +498,7 @@ def notify_actors(event, response):
             event = 'action_results'
 
         elif event == 'simulation_ended':
-            info = json_formatter.simulation_ended_format(response)
+            info = json_formatter.simulation_ended_format(response, token)
 
         elif event == 'action_results':
             info = json_formatter.action_results_format(response, token)

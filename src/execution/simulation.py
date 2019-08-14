@@ -157,7 +157,7 @@ def finish():
     elif 'api' in message and not message['api']:
         request.environ.get('werkzeug.server.shutdown')()
 
-    return jsonify('')
+    return jsonify(formatter.copycat.simulation.cycler.simulation_report())
 
 
 def auto_destruction():

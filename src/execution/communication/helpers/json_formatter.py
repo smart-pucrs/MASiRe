@@ -42,12 +42,14 @@ def simulation_started_format(response, token):
         return event_error_format('Empty simulation response. ')
 
 
-def simulation_ended_format(response):
+def simulation_ended_format(response, token):
     """Build the response for the token given in the parameters.
 
-    :param response: Response from the engine."""
+    :param response: Response from the engine.
+    :param token: Current token
+    """
 
-    info = {'status': 0, 'result': False, 'message': '', 'type': 'bye'}
+    info = {'status': 0, 'result': False, 'message': '', 'type': 'bye', 'simulation_report': {}}
 
     if response:
         if response['status']:
@@ -55,6 +57,7 @@ def simulation_ended_format(response):
             info['result'] = True
 
         info['message'] = response['message']
+        info['simulation_report'] = response['report'][token]
 
         return info
 

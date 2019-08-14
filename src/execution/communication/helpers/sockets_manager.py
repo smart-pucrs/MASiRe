@@ -13,7 +13,7 @@ class SocketsManager:
 
         :param token: The generated token for the actor.
         :param socket_id: The socket id captured during the connection."""
-        print('Token -> ', token)
+
         self.socket_clients[token] = socket_id
 
     def get_socket(self, token):
