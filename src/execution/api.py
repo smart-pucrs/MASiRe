@@ -245,6 +245,7 @@ def connect_registered_agent(msg):
                 one_agent_registered_queue.put(True)
 
                 send_initial_percepts(message, response) ## Temporary Code
+                print("Connected: Token = ", message)
 
             else:
                 response['status'] = sim_response['status']
@@ -336,6 +337,8 @@ def finish_step():
         if sim_response['message'] == 'Simulation finished.':
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
+            notify_actors('match_result', sim_response['report'])
+
             if sim_response['status'] == 0:
                 notify_actors('simulation_ended', {'status': 1, 'message': 'Simulation ended all matches.'})
 
@@ -402,6 +405,7 @@ def send_action_temp(msg):
             actions_queue.put(True)
 
     response['message'] = message
+    print("Action: ", msg)
 
 
 @socket.on('disconnect_registered_agent')
@@ -474,7 +478,7 @@ def send_initial_percepts(token, info):
     The message contain the agent and map percepts."""
 
     room = controller.manager.get(token, 'socket')
-    socket.emit('initial_percepts', info, room=room)
+    socket.emit(room, info)
 
 
 def notify_actors(event, response):
@@ -490,12 +494,16 @@ def notify_actors(event, response):
     for token in tokens:
         if event == 'simulation_started':
             info = json_formatter.action_results_format(response, token)
+            event = 'action_results'
 
         elif event == 'simulation_ended':
             info = json_formatter.simulation_ended_format(response)
 
         elif event == 'action_results':
             info = json_formatter.action_results_format(response, token)
+
+        elif event == 'match_result':
+            info = json_formatter.match_result_format(response, token)
 
         else:
             exit('Wrong event name. Possible internal errors.')
@@ -504,10 +512,8 @@ def notify_actors(event, response):
         room_response_list.append((room, json.dumps(info)))
 
     for room, response in room_response_list:
-        if event == 'simulation_started':
-            event = 'action_results'
-
-        socket.emit(event, response, room=room)
+        #socket.emit(event, response, room=room)
+        socket.emit(room, response)
 
 
 @app.route('/terminate', methods=['GET'])
