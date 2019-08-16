@@ -106,6 +106,15 @@ class FailedUnknownToken(Exception):
         return 'FailedUnknownToken: ' + self.message
 
 
+class FailedSocialAssetRequest(Exception):
+
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return 'FailedSocialAssetRequest: ' + self.message
+
+
 class FailedNoMatch(Exception):
 
     def __init__(self, message):
