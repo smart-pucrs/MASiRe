@@ -81,13 +81,13 @@ class JsonFormatter:
         try:
             response = self.copycat.connect_social_asset(token)
             if response is not None:
-                return {'status': 1, 'social_asset': self.jsonify_asset(response), 'message': 'Social asset connected.'}
+                return {'status': 1, 'agent': self.jsonify_asset(response), 'message': 'Social asset connected.'}
 
             else:
-                return {'status': 0, 'social_asset': {}, 'message': 'Social asset could not connect.'}
+                return {'status': 0, 'agent': {}, 'message': 'Social asset could not connect.'}
 
         except Exception as e:
-            return {'status': 0, 'social_asset': {}, 'message': f'An error occurred during connection: {str(e)}.'}
+            return {'status': 0, 'agent': {}, 'message': f'An error occurred during connection: {str(e)}.'}
 
     def disconnect_agent(self, token):
         """Disconnect the agent to the simulation and returns a JSON response.
@@ -174,9 +174,14 @@ class JsonFormatter:
             json_events = self.jsonify_events(response[1])
             environment = {'events': json_events, 'step': response[2]}
 
+            if response[3]:
+                return {'status': 2, 'call_request': response[3], 'actors': json_actors,
+                        'environment': environment, 'message': 'Step completed.'}
+
             return {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Step completed.'}
 
         except Exception as e:
+            print(str(e))
             return {'status': 0, 'actors': [], 'environment': {}, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):
@@ -254,6 +259,8 @@ class JsonFormatter:
 
         json_route = [self.format_location(location) for location in agent.route]
 
+        json_social_assets = self.jsonify_social_assets(agent.social_assets)
+
         return {
             'token': agent.token,
             'active': agent.is_active,
@@ -269,13 +276,13 @@ class JsonFormatter:
             # 'max_charge': agent.max_charge,
             # 'speed': agent.speed,
             # 'size': agent.size,
-            'social_assets_vector': self.jsonify_assets(agent.social_assets),
             'physical_storage': agent.physical_storage,
             # 'physical_capacity': agent.physical_capacity,
             'physical_storage_vector': json_physical_items,
             'virtual_storage': agent.virtual_storage,
             # 'virtual_capacity': agent.virtual_capacity,
-            'virtual_storage_vector': json_virtual_items
+            'virtual_storage_vector': json_virtual_items,
+            'social_assets': json_social_assets
         }
 
     def jsonify_asset(self, asset):
@@ -305,7 +312,6 @@ class JsonFormatter:
             # 'resources': asset.resources,
             # 'speed': asset.speed,
             # 'size': asset.size,
-            'social_assets_vector': self.jsonify_assets(asset.social_assets),
             'physical_storage': asset.physical_storage,
             # 'physical_capacity': asset.physical_capacity,
             'physical_storage_vector': json_physical_items,
@@ -462,6 +468,22 @@ class JsonFormatter:
             json_items.append(json_item)
 
         return json_items
+
+    def jsonify_social_assets(self, social_assets):
+        """ Transform the list of social assets into a more readable structure
+
+        :param social_assets: List of the social assets to formatted
+        :return: List of dictionaries with the profession and location
+        """
+        formatted_list = []
+
+        for social_asset in social_assets:
+            formatted_list.append({
+                'profession': social_asset.profession,
+                'location': self.format_location(social_asset.location)
+            })
+
+        return formatted_list
 
     @staticmethod
     def jsonify_action_token_by_step(action_token_by_step):
