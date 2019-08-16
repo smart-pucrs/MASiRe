@@ -3,7 +3,7 @@ from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.generator.generator import Generator
 from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
-
+from math import sqrt
 
 class Cycle:
     def __init__(self, config):
@@ -43,7 +43,7 @@ class Cycle:
         return self.agents_manager.connect(token)
 
     def connect_social_asset(self, token):
-        return self.social_assets_manager.connect(token)
+        return self.agents_manager.connect_social_asset(token)
 
     def disconnect_agent(self, token):
         return self.agents_manager.disconnect(token)
@@ -156,10 +156,12 @@ class Cycle:
     def execute_actions(self, token_action_dict):
         agents_tokens = self.agents_manager.get_tokens()
         assets_tokens = self.social_assets_manager.get_tokens()
+        requests = 0
 
         special_actions = ['carry', 'getCarried', 'deliverPhysical', 'deliverVirtual', 'receivePhysical',
                            'receiveVirtual']
         special_action_tokens = []
+        requests_action = ['requestSocialAsset']
 
         action_results = []
         for token_action_param in token_action_dict:
@@ -170,7 +172,12 @@ class Cycle:
                 continue
 
             if token in agents_tokens:
-                action_results.append(self._execute_agent_action(token, action, parameters))
+                result = self._execute_agent_action(token, action, parameters)
+
+                if action in requests_action and not result['message']:
+                    requests += 1
+
+                action_results.append(result)
                 agents_tokens.remove(token)
 
             else:
@@ -204,7 +211,7 @@ class Cycle:
         for token in assets_tokens:
             action_results.append(self._execute_asset_action(token, 'inactive', []))
 
-        return action_results
+        return action_results, requests
 
     def _execute_agent_special_action(self, token, action_name, parameters, special_action_tokens):
         self.agents_manager.edit(token, 'last_action', action_name)
@@ -1080,6 +1087,9 @@ class Cycle:
             elif action_name == 'searchSocialAsset':
                 self._search_social_asset_agent(token, parameters)
 
+            elif action_name == 'socialAssetRequest':
+                self._request_social_asset(token, parameters)
+
         except FailedNoSocialAsset as e:
             error_message = e.message
 
@@ -1110,11 +1120,31 @@ class Cycle:
         except FailedUnknownItem as e:
             error_message = e.message
 
+        except FailedSocialAssetRequest as e:
+            error_message = e.message
+
         except Exception as e:
             error_message = 'Unknown error: ' + str(e)
 
         finally:
             return {'agent': self.agents_manager.get(token), 'message': error_message}
+
+    def _request_social_asset(self, token, parameters):
+        if len(parameters) != 1:
+            raise FailedWrongParam('Wrong amount of parameters were given.')
+
+        for event in self.steps[0:self.current_step]:
+            if event:
+                for social_asset in event['social_assets']:
+                    if social_asset.id == parameters[0]:
+                        if social_asset.active:
+                            self.agents_manager.edit(token, 'last_action_result', True)
+
+                            return
+
+                        raise FailedSocialAssetRequest('The social asset given is not active.')
+
+        raise FailedSocialAssetRequest('The id given dont exits at the current step.')
 
     def _execute_asset_action(self, token, action_name, parameters):
         self.social_assets_manager.edit(token, 'last_action', action_name)
@@ -1491,56 +1521,33 @@ class Cycle:
         self.social_assets_manager.clear_virtual_storage(token)
 
     def _search_social_asset_agent(self, token, parameters):
-        if not self.social_assets_manager.get_tokens():
-            raise FailedNoSocialAsset('No social asset connected.')
-
         if len(parameters) != 1:
             raise FailedWrongParam('Wrong amount of parameters given.')
 
-        closer_asset = None
-        distance = 999999
-        for asset_token in self.social_assets_manager.get_tokens():
-            asset = self.social_assets_manager.get(asset_token)
-            if asset.is_active:
-                if parameters[0] == asset.profession:
-                    current_dist = self.map.euclidean_distance(self.agents_manager.get(token).location,
-                                                               asset.location)
-                    if current_dist <= distance:
-                        distance = current_dist
-                        closer_asset = asset
+        social_assets = []
+        agent = self.agents_manager.get(token)
+        for event in self.steps[0:self.current_step]:
+            if event:
+                for social_asset in event['social_assets']:
+                    if self.check_location(agent.location, social_asset.location, parameters[0]):
+                        social_assets.append(social_asset)
 
-        if closer_asset is None:
-            raise FailedNoSocialAsset('No social asset found for the needed purposes.')
-
-        else:
-            self.agents_manager.add(token, closer_asset)
-            self.agents_manager.edit(token, 'last_action_result', True)
-
+        self.agents_manager.edit(token, 'social_assets', social_assets)
+        self.agents_manager.edit(token, 'last_action_result', True)
 
     def _search_social_asset_asset(self, token, parameters):
-        if not self.social_assets_manager.get_tokens():
-            raise FailedNoSocialAsset('No social asset connected.')
-
         if len(parameters) != 1:
             raise FailedWrongParam('Wrong amount of parameters given.')
 
-        closer_asset = None
-        distance = 999999
-        for asset_token in self.social_assets_manager.get_tokens():
-            asset = self.social_assets_manager.get(asset_token)
-            if asset.is_active:
-                if parameters[0] == asset.profession and token != asset.token:
-                    current_dist = self.map.euclidean_distance(self.social_assets_manager.get(token).location, asset.location)
-                    if current_dist <= distance:
-                        distance = current_dist
-                        closer_asset = asset
+        social_assets = []
+        agent = self.agents_manager.get(token)
+        for event in self.steps[0:self.current_step]:
+            if event:
+                for social_asset in event['social_assets']:
+                    if self.check_location(agent.location, social_asset.location, parameters[0]):
+                        social_assets.append(social_asset)
 
-        if closer_asset is None:
-            raise FailedNoSocialAsset('No social asset found for the needed purposes.')
-
-        else:
-            self.social_assets_manager.add(token, closer_asset)
-            self.social_assets_manager.edit(token, 'last_action_result', True)
+        self.agents_manager.edit(token, 'social_assets', social_assets)
 
     def _update_photos_state(self, identifiers):
         for i in range(self.current_step):
@@ -1550,6 +1557,19 @@ class Cycle:
                     photo.analyzed = True
                     for victim in photo.victims:
                         victim.active = True
+
+    @staticmethod
+    def check_location(l1, l2, radius):
+        """Verify if the first location it's close to the second location by the given radius
+
+        :param l1: The main location to compare
+        :param l2: The target location to compare
+        :param radius: The radius to compare
+        :return: True if is close, otherwise False
+        """
+        distance = sqrt((l1[0] - l2[0]) ** 2 + (l1[1] - l2[1]) ** 2)
+
+        return distance <= radius
 
     def get_map_percepts(self):
         """Get the constants information about the map.
