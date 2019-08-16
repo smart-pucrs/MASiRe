@@ -260,7 +260,7 @@ class Checker:
 
     def test_actions_key(self):
         keys = ['pass', 'move', 'charge', 'rescueVictim', 'collectWater', 'takePhoto', 'analyzePhoto', 'searchSocialAsset',
-                'deliverPhysical', 'deliverVirtual', 'carry', 'getCarried', 'receivePhysical', 'receiveVirtual']
+                'deliverPhysical', 'deliverVirtual', 'carry', 'getCarried', 'receivePhysical', 'receiveVirtual', 'requestSocialAsset']
 
         sub_keys = ['abilities', 'resources']
 
@@ -291,7 +291,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['flood', 'photo', 'victim', 'waterSample']
+        keys = ['flood', 'photo', 'victim', 'waterSample', 'socialAsset']
 
         generate = json.load(open(self.config, 'r'))['generate']
 

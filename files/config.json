@@ -131,6 +131,11 @@
       "abilities": [],
       "resources": []
     },
+    "requestSocialAsset": {
+      "abilities": [],
+      "resources": []
+    }
+    ,
     "deliverPhysical": {
       "abilities": ["carry", "physicalCapacity"],
       "resources": []
@@ -158,8 +163,8 @@
   },
   "generate": {
     "flood": {
-      "probability": 0,
-      "minPeriod": 10,
+      "probability": 100,
+      "minPeriod": 20,
       "maxPeriod": 20,
       "circle": {
         "minRadius": 0.05,
@@ -186,6 +191,29 @@
       "maxSize": 12,
       "minAmount": 1,
       "maxAmount": 1
-    }
+    },"socialAsset": {
+      "minAmount": 2,
+      "maxAmount": 5,
+      "professions": {
+        "doctor": {
+          "abilities": ["move", "carry", "physicalCapacity"],
+          "resources": ["strength"],
+          "speed": 11,
+          "energy": 20
+        },
+        "teacher": {
+          "abilities": ["move"],
+          "resources": [],
+          "speed": 11,
+          "energy": 20
+        },
+        "nurse": {
+          "abilities": ["move", "carry", "physicalCapacity"],
+          "resources": ["strength"],
+          "speed": 11,
+          "energy": 20
+        }
+      }
+  }
   }
 }
