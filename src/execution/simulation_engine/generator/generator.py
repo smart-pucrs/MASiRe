@@ -3,7 +3,7 @@ from simulation_engine.simulation_objects.flood import Flood
 from simulation_engine.simulation_objects.photo import Photo
 from simulation_engine.simulation_objects.victim import Victim
 from simulation_engine.simulation_objects.water_sample import WaterSample
-
+from simulation_engine.simulation_objects.social_asset import SocialAsset
 
 class Generator:
     """Class that generate all the events step, by step or separated if needed."""
@@ -17,6 +17,7 @@ class Generator:
         self.photo_victim_id: int = 0
         self.photo_id: int = 0
         self.water_sample_id: int = 0
+        self.social_asset_id = 0
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self) -> list:
@@ -36,7 +37,8 @@ class Generator:
             'flood': flood,
             'victims': self.generate_victims(nodes),
             'water_samples': self.generate_water_samples(nodes),
-            'photos': self.generate_photos(nodes)
+            'photos': self.generate_photos(nodes),
+            'social_assets': self.generate_social_assets()
         }
 
         events[0] = event
@@ -51,6 +53,7 @@ class Generator:
                 event['victims']: list = self.generate_victims(nodes)
                 event['water_samples']: list = self.generate_water_samples(nodes)
                 event['photos']: list = self.generate_photos(nodes)
+                event['social_assets'] = self.generate_social_assets()
 
             events[i] = event
             i += 1
@@ -205,3 +208,29 @@ class Generator:
             i += 1
 
         return water_samples
+
+    def generate_social_assets(self) -> list:
+        """Generate list of social assets.
+
+        :return list: List with all the generated social assets."""
+
+        amount: int = random.randint(self.generate_variables['socialAsset']['minAmount'],
+                                     self.generate_variables['socialAsset']['maxAmount'])
+
+        professions = list(self.generate_variables['socialAsset']['professions'].keys())
+        social_assets: list = [0] * amount
+        i: int = 0
+        while i < amount:
+            profession: str = random.choice(professions)
+
+            location_lat: float = random.uniform(self.map_variables['minLat'], self.map_variables['minLat'])
+            location_lon: float = random.uniform(self.map_variables['minLon'], self.map_variables['minLon'])
+            location: tuple = self.map.align_coords(location_lat, location_lon)
+
+            attributes = self.generate_variables['socialAsset']['professions'][profession]
+
+            social_assets[i] = SocialAsset(profession, location, attributes['abilities'], attributes['resources'],
+                                           attributes['energy'], attributes['speed'])
+            i += 1
+
+        return social_assets
