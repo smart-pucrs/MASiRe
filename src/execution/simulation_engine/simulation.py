@@ -21,13 +21,13 @@ class Simulation:
 
         return self.cycler.connect_agent(token)
 
-    def connect_social_asset(self, token):
+    def connect_social_asset(self, main_token, token):
         """Connect the social asset to the simulation.
 
         :param token: The identifier of the social asset.
         :return bool: True if the social asset was connected else False."""
 
-        return self.cycler.connect_social_asset(token)
+        return self.cycler.connect_social_asset(main_token, token)
 
     def disconnect_agent(self, token):
         """Disconnect the agent from the simulation.

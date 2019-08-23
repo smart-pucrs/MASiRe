@@ -10,6 +10,9 @@ class Cycle:
         self.map = Map(config['map']['maps'][0], config['map']['proximity'])
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
+        self.cdm_location = (config['map']['centerLat'], config['map']['centerLon'])
+        self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
+        self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'])
         generator = Generator(config, self.map)
         self.map_percepts = config['map']
         self.steps = generator.generate_events()
@@ -19,9 +22,6 @@ class Cycle:
         self.max_water_samples = generator.water_sample_id
         self.delivered_items = []
         self.current_step = 0
-        self.cdm_location = (config['map']['centerLat'], config['map']['centerLon'])
-        self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
-        self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'])
         self.match_history = []
 
     def restart(self, config_file):
@@ -42,8 +42,18 @@ class Cycle:
     def connect_agent(self, token):
         return self.agents_manager.connect(token)
 
-    def connect_social_asset(self, token):
-        return self.agents_manager.connect_social_asset(token)
+    def connect_social_asset(self, main_token, token):
+        social_asset_id = self.social_assets_manager.requests[main_token]
+        social_asset = None
+        for event in self.steps[0:self.current_step]:
+            if event['flood']:
+                for temp in event['social_assets']:
+                    if temp.identifier == social_asset_id:
+                        social_asset = temp
+                        break
+
+        del self.social_assets_manager.requests[main_token]
+        return self.social_assets_manager.connect(token, social_asset.identifier, social_asset.profession)
 
     def disconnect_agent(self, token):
         return self.agents_manager.disconnect(token)
@@ -113,6 +123,9 @@ class Cycle:
         for photo in self.steps[self.current_step]['photos']:
             photo.active = True
 
+        for social_asset in self.steps[self.current_step]['social_assets']:
+            social_asset.active = True
+
     def check_steps(self):
         return self.current_step == self.max_steps
 
@@ -156,7 +169,7 @@ class Cycle:
     def execute_actions(self, token_action_dict):
         agents_tokens = self.agents_manager.get_tokens()
         assets_tokens = self.social_assets_manager.get_tokens()
-        requests = 0
+        requests = []
 
         special_actions = ['carry', 'getCarried', 'deliverPhysical', 'deliverVirtual', 'receivePhysical',
                            'receiveVirtual']
@@ -175,7 +188,7 @@ class Cycle:
                 result = self._execute_agent_action(token, action, parameters)
 
                 if action in requests_action and not result['message']:
-                    requests += 1
+                    requests.append(token)
 
                 action_results.append(result)
                 agents_tokens.remove(token)
@@ -1087,7 +1100,7 @@ class Cycle:
             elif action_name == 'searchSocialAsset':
                 self._search_social_asset_agent(token, parameters)
 
-            elif action_name == 'socialAssetRequest':
+            elif action_name == 'requestSocialAsset':
                 self._request_social_asset(token, parameters)
 
         except FailedNoSocialAsset as e:
@@ -1136,9 +1149,10 @@ class Cycle:
         for event in self.steps[0:self.current_step]:
             if event:
                 for social_asset in event['social_assets']:
-                    if social_asset.id == parameters[0]:
+                    if social_asset.identifier == parameters[0]:
                         if social_asset.active:
-                            self.agents_manager.edit(token, 'last_action_result', True)
+                            social_asset.active = False
+                            self.social_assets_manager.requests[token] = parameters[0]
 
                             return
 
@@ -1529,8 +1543,9 @@ class Cycle:
         for event in self.steps[0:self.current_step]:
             if event:
                 for social_asset in event['social_assets']:
-                    if self.check_location(agent.location, social_asset.location, parameters[0]):
-                        social_assets.append(social_asset)
+                    if social_asset.active:
+                        if self.check_location(agent.location, social_asset.location, parameters[0]):
+                            social_assets.append(social_asset)
 
         self.agents_manager.edit(token, 'social_assets', social_assets)
         self.agents_manager.edit(token, 'last_action_result', True)
@@ -1584,8 +1599,9 @@ class Cycle:
         :return dict: Dictionary with the tokens and the reports
         """
         report = {}
+        tokens = [*self.agents_manager.get_tokens(), *self.social_assets_manager.get_tokens()]
 
-        for token in self.agents_manager.get_tokens():
+        for token in tokens:
             report[token] = {'total_victims': 0, 'total_photos': 0, 'total_water_samples': 0}
 
             for event in self.delivered_items:
@@ -1606,18 +1622,21 @@ class Cycle:
 
         :return dict: Dictionary with the tokens and the reports
         """
+        try:
+            report = {}
+            tokens = [*self.agents_manager.get_tokens(), *self.social_assets_manager.get_tokens()]
 
-        report = {}
+            for token in tokens:
+                report[token] = {}
 
-        for token in self.agents_manager.get_tokens():
-            report[token] = {}
+                report[token] = {'total_victims': 0, 'total_photos': 0, 'total_water_samples': 0}
 
-            report[token] = {'total_victims': 0, 'total_photos': 0, 'total_water_samples': 0}
+                for match in self.match_history:
+                    if token in match:
+                        report[token]['total_victims'] += match[token]['total_victims']
+                        report[token]['total_photos'] += match[token]['total_photos']
+                        report[token]['total_water_samples'] += match[token]['total_water_samples']
 
-            for match in self.match_history:
-                if token in match:
-                    report[token]['total_victims'] += match[token]['total_victims']
-                    report[token]['total_photos'] += match[token]['total_photos']
-                    report[token]['total_water_samples'] += match[token]['total_water_samples']
-
+        except Exception as e:
+            return None
         return report

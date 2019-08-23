@@ -45,13 +45,13 @@ class CopyCat:
 
         return copy.deepcopy(response)
 
-    def connect_social_asset(self, token):
+    def connect_social_asset(self, main_token, token):
         """Connect the social asset and returns the copy of the response.
 
         :param token: The identifier of the social asset.
         :return bool: True if the social asset was connected else False."""
 
-        response = self.simulation.connect_social_asset(token)
+        response = self.simulation.connect_social_asset(main_token, token)
         return copy.deepcopy(response)
 
     def disconnect_agent(self, token):

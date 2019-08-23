@@ -2,19 +2,20 @@ import jwt
 import json
 import time
 from communication.controllers.manager import Manager
+from communication.helpers.asset_request_manager import AssetRequestManager
 
 
 class Controller:
     """Class that will hold the agents, social assets and sockets and also do the validations for the endpoints."""
 
-    def __init__(self, agents_amount, social_assets_amount, time_limit, internal_secret):
+    def __init__(self, agents_amount, time_limit, internal_secret):
         self.manager = Manager()
+        self.asset_request_manager = AssetRequestManager()
         self.start_time = None
         self.time_limit = int(time_limit)
         self.started = False
         self.terminated = False
         self.agents_amount = int(agents_amount)
-        self.social_assets_amount = int(social_assets_amount)
         self.secret = internal_secret
         self.processing_actions = False
 
@@ -133,11 +134,27 @@ class Controller:
             if self.terminated:
                 return 5, 'Simulation already terminated.'
 
-            if len(self.manager.get_all('social_asset')) == self.social_assets_amount:
-                return 5, 'All possible social assets already connected.'
+            print(self.processing_asset_request(), self.asset_request_manager.processing(), self.asset_request_manager.processing_requests)
+            if not self.processing_asset_request():
+                return 5, 'There is no social asset request.'
 
             if not isinstance(obj, dict):
                 return 4, 'Object is not a dictionary.'
+
+            if 'main_token' not in obj:
+                return 3, 'The key "main_token" is not in the message.'
+
+            if 'step' not in obj:
+                return 3, 'The key "main_token" is not in the message.'
+
+            main_token = obj['main_token']
+            step = obj['step']
+
+            if not self.asset_request_manager.check_token_request(main_token):
+                return 5, 'There is no social asset request for this token.'
+
+            if not self.asset_request_manager.check_step(step):
+                return 5, 'Wrong step.'
 
             token = jwt.encode(obj, 'secret', algorithm='HS256').decode('utf-8')
 
@@ -145,6 +162,9 @@ class Controller:
                 return 5, 'Social asset already connected.'
 
             if not self.manager.add(token, obj, 'social_asset'):
+                return 0, 'Error while adding token.'
+
+            if not self.asset_request_manager.add_asset_token(main_token, token):
                 return 0, 'Error while adding token.'
 
             return 1, token
@@ -218,6 +238,9 @@ class Controller:
             if self.terminated:
                 return 5, 'Simulation already terminated.'
 
+            if not self.processing_asset_request():
+                return 5, 'There is no social asset request.'
+
             if not isinstance(obj, dict):
                 return 4, 'Object is not a dictionary.'
 
@@ -242,7 +265,7 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_agent_socket_connection(self, request, msg):
+    def do_agent_socket_connection(self, msg):
         """Do the socket connect of the agent.
 
         After several validations, the socket is added to the manager.
@@ -290,7 +313,7 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_social_asset_socket_connection(self, request, msg):
+    def do_social_asset_socket_connection(self, msg):
         """Do the socket connect of the social asset.
 
         After several validations, the socket is added to the manager.
@@ -311,6 +334,9 @@ class Controller:
             if not isinstance(obj, dict):
                 return 4, 'Object is not a dictionary.'
 
+            if not self.processing_asset_request():
+                return 5, 'There is no social asset request.'
+
             if 'token' not in obj:
                 return 3, 'Object does not contain "token" as key.'
 
@@ -324,10 +350,12 @@ class Controller:
             if self.manager.get(obj['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(obj['token'], request.sid, 'socket'):
+            if not self.manager.add(obj['token'], social_asset.asset_info, 'socket'):
                 return 0, 'Error while adding token.'
 
-            return 1, obj['token']
+            main_token = self.asset_request_manager.get_main_token(obj['token'])
+
+            return 1, (main_token, obj['token'])
 
         except json.JSONDecodeError:
             return 2, 'Object format is not JSON.'
@@ -494,3 +522,12 @@ class Controller:
                 return False
 
         return True
+
+    def check_requests(self):
+        self.asset_request_manager.check_requests()
+
+    def processing_asset_request(self):
+        return self.asset_request_manager.processing()
+
+    def format_actions_result(self):
+        self.asset_request_manager.format_actions_result()

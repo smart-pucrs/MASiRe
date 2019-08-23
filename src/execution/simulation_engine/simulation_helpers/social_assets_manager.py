@@ -11,63 +11,29 @@ class SocialAssetsManager:
 
     def __init__(self, map_info, social_assets_info):
         self.social_assets = {}
+        self.cdm_location = [map_info['centerLat'], map_info['centerLon']]
         random.seed(map_info['randomSeed'])
-        self.capacities = self.generate_objects(map_info, social_assets_info)
+        self.requests = {}
+        self.social_assets_info = social_assets_info
 
     def restart(self, map_info, social_assets_info):
-        """Restart the class by erasing all the social assets and recreating them with the same tokens.
-
-        :param map_info: Information about the current map.
-        :param social_assets_info: The information of the professions available."""
-
-        tokens = list(self.social_assets.keys())
         self.social_assets.clear()
-        self.capacities = self.generate_objects(map_info, social_assets_info)
-        for token in tokens:
-            self.connect(token)
 
-    @staticmethod
-    def generate_objects(map_info, social_assets_info):
-        """Generate professions for the social assets.
+    def connect(self, token, id, profession):
+        abilities = self.social_assets_info[profession]['abilities']
+        resources = self.social_assets_info[profession]['resources']
+        location = self.cdm_location
+        size = random.randint(self.social_assets_info[profession]['minSize'],
+                              self.social_assets_info[profession]['maxSize'])
+        speed = self.social_assets_info[profession]['speed']
+        physical_capacity = self.social_assets_info[profession]['physicalCapacity']
+        virtual_capacity = self.social_assets_info[profession]['virtualCapacity']
 
-        :param map_info: Information about the current map.
-        :param social_assets_info: The information of the professions available.
-        :return list: List of all the professions ready to be used by the social assets."""
+        social_asset = SocialAsset(id, token, abilities, resources, location,
+                                   profession, size, speed, physical_capacity, virtual_capacity)
 
-        min_lon = map_info['minLon']
-        max_lon = map_info['maxLon']
-        min_lat = map_info['minLat']
-        max_lat = map_info['maxLat']
+        self.social_assets[token] = social_asset
 
-        capacities = []
-        for profession in social_assets_info:
-            location = random.uniform(min_lon, max_lon), random.uniform(min_lat, max_lat)
-            size = random.randint(social_assets_info[profession]['minSize'], social_assets_info[profession]['maxSize'])
-            speed = social_assets_info[profession]['speed']
-            physical_capacity = social_assets_info[profession]['physicalCapacity']
-            virtual_capacity = social_assets_info[profession]['virtualCapacity']
-            abilities = social_assets_info[profession]['abilities']
-            resources = social_assets_info[profession]['resources']
-
-            temp_capacities = Capacities(abilities, resources, location,
-                                         profession, size, speed, physical_capacity, virtual_capacity)
-
-            for i in range(social_assets_info[profession]['amount']):
-                capacities.append(temp_capacities)
-
-        return capacities
-
-    def connect(self, token):
-        """Connect the social asset if there are professions still available.
-
-        :param token: The identifier of the social asset.
-        :return bool: True if the social asset was added else False."""
-
-        if not self.capacities:
-            return None
-
-        asset_info = self.capacities.pop(0)
-        self.social_assets[token] = SocialAsset(token, *asset_info)
         return self.social_assets[token]
 
     def disconnect(self, token):
