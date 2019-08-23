@@ -81,13 +81,11 @@ class Starter:
         with open(config_file, 'r') as configuration_file:
             json_file = json.load(configuration_file)
             agents_amount = sum([json_file['agents'][role]['amount'] for role in json_file['agents']])
-            assets_amount = sum([json_file['socialAssets'][prof]['amount'] for prof in json_file['socialAssets']])
 
         simulation_arguments = self.parser.get_simulation_arguments()
 
         api_arguments = self.parser.get_api_arguments()
         api_arguments.append(agents_amount)
-        api_arguments.append(assets_amount)
 
         return api_arguments, simulation_arguments, self.parser.get_argument('pyv')
 

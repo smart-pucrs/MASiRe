@@ -152,7 +152,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        sub_keys = ['abilities', 'resources', 'minSize', 'maxSize', 'amount', 'speed', 'physicalCapacity', 'virtualCapacity']
+        sub_keys = ['abilities', 'resources', 'minSize', 'maxSize', 'speed', 'physicalCapacity', 'virtualCapacity']
 
         social_assets = json.load(open(self.config, 'r'))['socialAssets']
 
@@ -187,9 +187,6 @@ class Checker:
 
             if social_assets[key]['minSize'] <= 0:
                 return 0, f'SocialAssets: Sub key MinSize from {str(key).title()} can not be zero or negative.'
-
-            if not isinstance(social_assets[key]['amount'], int):
-                return 0, f'SocialAssets: Sub key Amount from {str(key).title()} is not a valid type.'
 
             if not isinstance(social_assets[key]['speed'], int):
                 return 0, f'SocialAssets: Sub key Speed from {str(key).title()} is not a valid type.'

@@ -18,7 +18,6 @@
     "doctor": {
       "abilities": ["move", "carry", "physicalCapacity"],
       "resources": ["strength"],
-      "amount": 0,
       "minSize": 80,
       "maxSize": 100,
       "speed": 11,
@@ -28,7 +27,6 @@
     "teacher": {
       "abilities": ["move"],
       "resources": [],
-      "amount": 0,
       "minSize": 66,
       "maxSize": 70,
       "speed": 10,
@@ -38,7 +36,6 @@
     "nurse": {
       "abilities": ["move", "carry", "physicalCapacity"],
       "resources": ["strength"],
-      "amount": 0,
       "minSize": 70,
       "maxSize": 86,
       "speed": 15,
@@ -48,7 +45,6 @@
     "pharmacist": {
       "abilities": ["move", "carry", "physicalCapacity"],
       "resources": ["strength"],
-      "amount": 0,
       "minSize": 60,
       "maxSize": 86,
       "speed": 14,
@@ -58,7 +54,6 @@
     "photographer": {
       "abilities": ["move", "virtualCapacity"],
       "resources": ["memory"],
-      "amount": 0,
       "minSize": 65,
       "maxSize": 73,
       "speed": 20,
@@ -163,7 +158,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 100,
+      "probability": 20,
       "minPeriod": 20,
       "maxPeriod": 20,
       "circle": {
@@ -172,15 +167,15 @@
       }
     },
     "photo": {
-      "minSize": 10,
-      "maxSize": 15,
+      "minSize": 1,
+      "maxSize": 1,
       "minAmount": 1,
       "maxAmount": 1,
       "victimProbability": 10
     },
     "victim": {
-      "minSize": 10,
-      "maxSize": 15,
+      "minSize": 1,
+      "maxSize": 1,
       "minAmount": 1,
       "maxAmount": 1,
       "minLifetime": 15,
@@ -188,32 +183,14 @@
     },
     "waterSample": {
       "minSize": 1,
-      "maxSize": 12,
+      "maxSize": 1,
       "minAmount": 1,
       "maxAmount": 1
-    },"socialAsset": {
+    },
+    "socialAsset": {
       "minAmount": 2,
       "maxAmount": 5,
-      "professions": {
-        "doctor": {
-          "abilities": ["move", "carry", "physicalCapacity"],
-          "resources": ["strength"],
-          "speed": 11,
-          "energy": 20
-        },
-        "teacher": {
-          "abilities": ["move"],
-          "resources": [],
-          "speed": 11,
-          "energy": 20
-        },
-        "nurse": {
-          "abilities": ["move", "carry", "physicalCapacity"],
-          "resources": ["strength"],
-          "speed": 11,
-          "energy": 20
-        }
-      }
-  }
+      "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
+    }
   }
 }
