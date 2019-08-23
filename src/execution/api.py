@@ -17,15 +17,17 @@ from flask import Flask, request, jsonify
 from communication.controllers.controller import Controller
 from communication.helpers import json_formatter
 
-base_url, api_port, simulation_port, step_time, first_step_time, method, secret, agents_amount, assets_amount = sys.argv[1:]
+base_url, api_port, simulation_port, step_time, first_step_time, method, secret, agents_amount = sys.argv[1:]
+timeout = 15
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
 
-controller = Controller(agents_amount, assets_amount, first_step_time, secret)
+controller = Controller(agents_amount, first_step_time, secret)
 every_agent_registered = Queue()
 one_agent_registered_queue = Queue()
 actions_queue = Queue()
+request_queue = Queue()
 
 
 @app.route('/start_connections', methods=['POST'])
@@ -132,7 +134,7 @@ def start_step_cycle():
 
     notify_actors('simulation_started', sim_response)
 
-    multiprocessing.Process(target=step_controller, args=(actions_queue,), daemon=True).start()
+    multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
     return jsonify('')
 
@@ -225,7 +227,7 @@ def connect_registered_agent(msg):
 
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
 
-    status, message = controller.do_agent_socket_connection(request, msg)
+    status, message = controller.do_agent_socket_connection(msg)
 
     if status == 1:
         try:
@@ -237,15 +239,14 @@ def connect_registered_agent(msg):
                 response['result'] = True
                 response['message'] = 'Agent successfully connected.'
 
-                response.update(sim_response)  ## Temporary Code
+                response.update(sim_response)
 
                 if controller.agents_amount == len(controller.manager.agents_sockets_manager.get_tokens()):
                     every_agent_registered.put(True)
 
                 one_agent_registered_queue.put(True)
 
-                send_initial_percepts(message, response) ## Temporary Code
-                print("Connected: Token = ", message)
+                send_initial_percepts(message, response)
 
             else:
                 response['status'] = sim_response['status']
@@ -273,12 +274,15 @@ def connect_registered_asset(msg):
 
     response = {'status': 0, 'result': False, 'message': 'Error.'}
 
-    status, message = controller.do_social_asset_socket_connection(request, msg)
+    status, message = controller.do_social_asset_socket_connection(msg)
 
     if status == 1:
         try:
+            main_token = message[0]
+            token = message[1]
+
             sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_asset',
-                                         json={'token': message, 'secret': secret}).json()
+                                         json={'main_token': main_token, 'token': token, 'secret': secret}).json()
 
             if sim_response['status'] == 1:
                 response['status'] = 1
@@ -286,8 +290,11 @@ def connect_registered_asset(msg):
                 response['message'] = sim_response['social_asset']
                 one_agent_registered_queue.put(True)
 
-                response.update(sim_response)  ## Temporary Code
-                send_initial_percepts(message, response) ## Temporary Code
+                if controller.check_requests():
+                    request_queue.put(True)
+
+                response.update(sim_response)
+                send_initial_percepts(message, response)
 
             else:
                 response['status'] = sim_response['status']
@@ -342,7 +349,6 @@ def finish_step():
             if sim_response['status'] == 0:
                 report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
-                print('[TESTE]: ', report)
                 notify_actors('simulation_ended', {'status': 1, 'message': 'Simulation ended all matches.', 'report': report})
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
@@ -350,13 +356,18 @@ def finish_step():
                 notify_actors('simulation_started', sim_response)
 
                 controller.set_processing_actions()
-                multiprocessing.Process(target=step_controller, args=(actions_queue,), daemon=True).start()
+                multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
         else:
-            notify_actors('action_results', sim_response)
-
             controller.set_processing_actions()
-            multiprocessing.Process(target=step_controller, args=(actions_queue,), daemon=True).start()
+            if sim_response['status'] == 2:
+                controller.asset_request_manager.start_new_asset_request(sim_response)
+                multiprocessing.Process(target=step_controller, args=(request_queue, 2), daemon=True).start()
+
+            else:
+                notify_actors('action_results', sim_response)
+
+                multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
     except requests.exceptions.ConnectionError:
         pass
@@ -364,19 +375,41 @@ def finish_step():
     return jsonify(0)
 
 
-def step_controller(ready_queue):
+@app.route('/handle_response', methods=['GET'])
+def handle_response():
+    controller.format_actions_result()
+    notify_actors('action_results', controller.asset_request_manager.response)
+    controller.asset_request_manager.reset()
+
+    multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
+
+    return jsonify(0)
+
+
+def step_controller(ready_queue, status):
     """Wait for all the agents to send their actions or the time to end either one will cause the method to call
     finish_step."""
 
-    try:
-        if int(agents_amount) > 0:
-            ready_queue.get(block=True, timeout=int(step_time))
+    if status == 2:
+        try:
+            ready_queue.get(block=True, timeout=int(timeout))
 
-    except queue.Empty:
-        pass
+        except queue.Empty:
+            pass
+    else:
+        try:
+            if int(agents_amount) > 0:
+                ready_queue.get(block=True, timeout=int(step_time))
+
+        except queue.Empty:
+            pass
 
     try:
-        requests.get(f'http://{base_url}:{api_port}/finish_step', json={'secret': secret})
+        if status == 2:
+            requests.get(f'http://{base_url}:{api_port}/handle_response', json={'secret': secret})
+        else:
+            requests.get(f'http://{base_url}:{api_port}/finish_step', json={'secret': secret})
+
     except requests.exceptions.ConnectionError:
         pass
 
@@ -513,7 +546,6 @@ def notify_actors(event, response):
         room_response_list.append((room, json.dumps(info)))
 
     for room, response in room_response_list:
-        #socket.emit(event, response, room=room)
         socket.emit(room, response)
 
 
