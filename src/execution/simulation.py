@@ -63,7 +63,7 @@ def register_asset():
     if secret != message['secret']:
         return jsonify(message='This endpoint can not be accessed.')
 
-    return jsonify(formatter.connect_social_asset(message['token']))
+    return jsonify(formatter.connect_social_asset(message['main_token'], message['token']))
 
 
 @app.route('/delete_agent', methods=['PUT'])
@@ -126,7 +126,7 @@ def restart():
         return jsonify(message='This endpoint can not be accessed.')
 
     can_restart = formatter.log()
-    print('[RESTART]: ', can_restart)
+
     if can_restart['status'] == 1:
         response = formatter.restart()
         response['report'] = can_restart['report']
