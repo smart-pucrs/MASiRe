@@ -263,7 +263,7 @@ class JsonFormatter:
 
         json_route = [self.format_location(location) for location in agent.route]
 
-        # json_social_assets = self.jsonify_social_assets(agent.social_assets)
+        json_social_assets = self.jsonify_social_assets(agent.social_assets)
 
         return {
             'token': agent.token,
@@ -286,7 +286,7 @@ class JsonFormatter:
             'virtual_storage': agent.virtual_storage,
             # 'virtual_capacity': agent.virtual_capacity,
             'virtual_storage_vector': json_virtual_items,
-            'social_assets': agent.social_assets   # json_social_assets
+            'social_assets': json_social_assets
         }
 
     def jsonify_asset(self, asset):
@@ -472,22 +472,23 @@ class JsonFormatter:
             json_items.append(json_item)
 
         return json_items
-    #
-    # def jsonify_social_assets(self, social_assets):
-    #     """ Transform the list of social assets into a more readable structure
-    #
-    #     :param social_assets: List of the social assets to formatted
-    #     :return: List of dictionaries with the profession and location
-    #     """
-    #     formatted_list = []
-    #
-    #     for social_asset in social_assets:
-    #         formatted_list.append({
-    #             'profession': social_asset.profession,
-    #             'location': self.format_location(social_asset.location)
-    #         })
-    #
-    #     return formatted_list
+
+    def jsonify_social_assets(self, social_assets):
+        """ Transform the list of social assets into a more readable structure
+
+        :param social_assets: List of the social assets to formatted
+        :return: List of dictionaries with the profession and location
+        """
+        formatted_list = []
+
+        for social_asset in social_assets:
+            formatted_list.append({
+                'id': social_asset.identifier,
+                'profession': social_asset.profession,
+                'location': self.format_location(social_asset.location)
+            })
+
+        return formatted_list
 
     @staticmethod
     def jsonify_action_token_by_step(action_token_by_step):

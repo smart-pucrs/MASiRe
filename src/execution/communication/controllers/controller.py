@@ -1,6 +1,7 @@
 import jwt
 import json
 import time
+import traceback
 from communication.controllers.manager import Manager
 from communication.helpers.asset_request_manager import AssetRequestManager
 
@@ -83,8 +84,6 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
         try:
             obj = request.get_json(force=True)
-            if isinstance(obj, str):
-                obj = json.loads(obj)
 
             if not self.started:
                 return 5, 'Simulation has not started.'
@@ -126,7 +125,7 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = json.loads(request.get_json(force=True))
+            obj = request.get_json(force=True)
 
             if not self.started:
                 return 5, 'Simulation has not started.'
@@ -134,7 +133,6 @@ class Controller:
             if self.terminated:
                 return 5, 'Simulation already terminated.'
 
-            print(self.processing_asset_request(), self.asset_request_manager.processing(), self.asset_request_manager.processing_requests)
             if not self.processing_asset_request():
                 return 5, 'There is no social asset request.'
 
@@ -149,6 +147,7 @@ class Controller:
 
             main_token = obj['main_token']
             step = obj['step']
+            agent_info = {'name': obj['name']}
 
             if not self.asset_request_manager.check_token_request(main_token):
                 return 5, 'There is no social asset request for this token.'
@@ -156,12 +155,12 @@ class Controller:
             if not self.asset_request_manager.check_step(step):
                 return 5, 'Wrong step.'
 
-            token = jwt.encode(obj, 'secret', algorithm='HS256').decode('utf-8')
+            token = jwt.encode(agent_info, 'secret', algorithm='HS256').decode('utf-8')
 
             if self.manager.get(token, 'social_asset') is not None:
                 return 5, 'Social asset already connected.'
 
-            if not self.manager.add(token, obj, 'social_asset'):
+            if not self.manager.add(token, agent_info, 'social_asset'):
                 return 0, 'Error while adding token.'
 
             if not self.asset_request_manager.add_asset_token(main_token, token):
@@ -230,7 +229,7 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = json.loads(request.get_json(force=True))
+            obj = request.get_json(force=True)
 
             if not self.started:
                 return 5, 'Simulation has not started.'
@@ -341,6 +340,7 @@ class Controller:
                 return 3, 'Object does not contain "token" as key.'
 
             social_asset = self.manager.get(obj['token'], 'social_asset')
+
             if social_asset is None:
                 return 5, 'Social asset was not connected.'
 
@@ -350,7 +350,7 @@ class Controller:
             if self.manager.get(obj['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(obj['token'], social_asset.asset_info, 'socket'):
+            if not self.manager.add(obj['token'], social_asset.asset_info['name'], 'socket'):
                 return 0, 'Error while adding token.'
 
             main_token = self.asset_request_manager.get_main_token(obj['token'])

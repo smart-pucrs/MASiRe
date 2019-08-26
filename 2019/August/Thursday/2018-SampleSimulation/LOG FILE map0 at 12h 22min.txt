@@ -1,0 +1,265 @@
+{
+    "environment": {
+        "current_step": 10,
+        "max_steps": 10,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 1,
+        "total_victims_in_photos": 0,
+        "victims_saved": 0,
+        "victims_dead": 0,
+        "total_photos": 1,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 1
+    },
+    "agents": {
+        "active_agents_amount": 1,
+        "agents_amount": 1,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "actions": {
+        "amount_of_actions_executed": 10,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 1
+            },
+            {
+                "step": 2,
+                "actions_amount": 1
+            },
+            {
+                "step": 3,
+                "actions_amount": 1
+            },
+            {
+                "step": 4,
+                "actions_amount": 1
+            },
+            {
+                "step": 5,
+                "actions_amount": 1
+            },
+            {
+                "step": 6,
+                "actions_amount": 1
+            },
+            {
+                "step": 7,
+                "actions_amount": 1
+            },
+            {
+                "step": 8,
+                "actions_amount": 1
+            },
+            {
+                "step": 9,
+                "actions_amount": 1
+            },
+            {
+                "step": 10,
+                "actions_amount": 1
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidGVzdCJ9.kJTslgPNnNEEmE4__SFNXyC76yBvksNRfoeD5FHGWWQ",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

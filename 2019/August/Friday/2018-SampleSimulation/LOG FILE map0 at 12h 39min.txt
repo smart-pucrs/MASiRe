@@ -1,0 +1,566 @@
+{
+    "environment": {
+        "current_step": 10,
+        "max_steps": 10,
+        "delivered_items": [
+            {
+                "identifier": 0,
+                "type": "victim",
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "size": 14,
+                "lifetime": 13
+            },
+            {
+                "identifier": 2,
+                "type": "victim",
+                "location": {
+                    "lat": -30.1118512,
+                    "lon": -51.208495
+                },
+                "size": 15,
+                "lifetime": 20
+            }
+        ],
+        "floods_amount": 10,
+        "total_victims": 11,
+        "total_victims_in_photos": 1,
+        "victims_saved": 2,
+        "victims_dead": 0,
+        "total_photos": 10,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 10,
+        "total_water_samples": 10,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 10
+    },
+    "agents": {
+        "active_agents_amount": 1,
+        "agents_amount": 1,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "deliverPhysical",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "teacher",
+                        "location": [
+                            -30.11266328916304,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "profession": "photographer",
+                        "location": [
+                            -30.10886594295846,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "profession": "photographer",
+                        "location": [
+                            -30.11257216953044,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "profession": "teacher",
+                        "location": [
+                            -30.108634749523308,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "profession": "nurse",
+                        "location": [
+                            -30.10940182153545,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "profession": "teacher",
+                        "location": [
+                            -30.112236833965497,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 6,
+                        "profession": "teacher",
+                        "location": [
+                            -30.111852644593892,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 7,
+                        "profession": "doctor",
+                        "location": [
+                            -30.110173149732308,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 8,
+                        "profession": "nurse",
+                        "location": [
+                            -30.112274653143615,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 9,
+                        "profession": "nurse",
+                        "location": [
+                            -30.11218873403132,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 10,
+                        "profession": "photographer",
+                        "location": [
+                            -30.11055535238725,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 11,
+                        "profession": "doctor",
+                        "location": [
+                            -30.11216236763397,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 12,
+                        "profession": "pharmacist",
+                        "location": [
+                            -30.11129752687364,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 13,
+                        "profession": "photographer",
+                        "location": [
+                            -30.110938798413475,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 14,
+                        "profession": "teacher",
+                        "location": [
+                            -30.111495384673983,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 15,
+                        "profession": "photographer",
+                        "location": [
+                            -30.111635025587056,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 16,
+                        "profession": "pharmacist",
+                        "location": [
+                            -30.112514985464053,
+                            -51.21638
+                        ]
+                    }
+                ]
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "deliverPhysical",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "teacher",
+                        "location": [
+                            -30.11266328916304,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "profession": "photographer",
+                        "location": [
+                            -30.10886594295846,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "profession": "photographer",
+                        "location": [
+                            -30.11257216953044,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "profession": "teacher",
+                        "location": [
+                            -30.108634749523308,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "profession": "nurse",
+                        "location": [
+                            -30.10940182153545,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "profession": "teacher",
+                        "location": [
+                            -30.112236833965497,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 6,
+                        "profession": "teacher",
+                        "location": [
+                            -30.111852644593892,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 7,
+                        "profession": "doctor",
+                        "location": [
+                            -30.110173149732308,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 8,
+                        "profession": "nurse",
+                        "location": [
+                            -30.112274653143615,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 9,
+                        "profession": "nurse",
+                        "location": [
+                            -30.11218873403132,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 10,
+                        "profession": "photographer",
+                        "location": [
+                            -30.11055535238725,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 11,
+                        "profession": "doctor",
+                        "location": [
+                            -30.11216236763397,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 12,
+                        "profession": "pharmacist",
+                        "location": [
+                            -30.11129752687364,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 13,
+                        "profession": "photographer",
+                        "location": [
+                            -30.110938798413475,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 14,
+                        "profession": "teacher",
+                        "location": [
+                            -30.111495384673983,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 15,
+                        "profession": "photographer",
+                        "location": [
+                            -30.111635025587056,
+                            -51.21638
+                        ]
+                    },
+                    {
+                        "id": 16,
+                        "profession": "pharmacist",
+                        "location": [
+                            -30.112514985464053,
+                            -51.21638
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 10,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 1
+            },
+            {
+                "step": 2,
+                "actions_amount": 1
+            },
+            {
+                "step": 3,
+                "actions_amount": 1
+            },
+            {
+                "step": 4,
+                "actions_amount": 1
+            },
+            {
+                "step": 5,
+                "actions_amount": 1
+            },
+            {
+                "step": 6,
+                "actions_amount": 1
+            },
+            {
+                "step": 7,
+                "actions_amount": 1
+            },
+            {
+                "step": 8,
+                "actions_amount": 1
+            },
+            {
+                "step": 9,
+                "actions_amount": 1
+            },
+            {
+                "step": 10,
+                "actions_amount": 1
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "searchSocialAsset"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "deliverPhysical"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "searchSocialAsset"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "deliverPhysical"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

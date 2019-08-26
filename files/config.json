@@ -66,7 +66,7 @@
       "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 1,
+      "amount": 2,
       "speed": 10,
       "physicalCapacity": 50,
       "virtualCapacity": 4096,

@@ -24,7 +24,7 @@ def simulation_started_format(response, token):
                     if 'role' in actor:
                         info['agent'] = actor
                     else:
-                        info['social_asset'] = actor
+                        info['agent'] = actor
                     found_index = idx
                     break
 
@@ -90,7 +90,7 @@ def action_results_format(response, token):
                         break
                 else:
                     if actor['social_asset']['token'] == token:
-                        info['social_asset'] = actor['social_asset']
+                        info['agent'] = actor['social_asset']
                         info['message'] = actor['message']
                         found_index = idx
                         break

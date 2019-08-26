@@ -12,13 +12,13 @@ import signal
 import requests
 import multiprocessing
 from multiprocessing import Queue
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room, leave_room
 from flask import Flask, request, jsonify
 from communication.controllers.controller import Controller
 from communication.helpers import json_formatter
 
 base_url, api_port, simulation_port, step_time, first_step_time, method, secret, agents_amount = sys.argv[1:]
-timeout = 15
+timeout = 4
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
@@ -148,8 +148,14 @@ def connect_agent():
 
     response = {'status': 1, 'result': True, 'message': 'Error.'}
 
-    status, message = controller.do_agent_connection(request)
+    obj = request.get_json(force=True)
 
+    if 'main_token' in obj:
+        status, message = controller.do_social_asset_connection(request)
+    else:
+        status, message = controller.do_agent_connection(request)
+
+    print('Status', status, ' Message: ', message)
     if status != 1:
         response['status'] = status
         response['result'] = False
@@ -187,7 +193,10 @@ def register_agent():
 
     response = {'status': 1, 'result': True, 'message': 'Error.'}
 
-    status, message = controller.do_agent_registration(request)
+    if controller.processing_asset_request():
+        status, message = controller.do_social_asset_registration(request)
+    else:
+        status, message = controller.do_agent_registration(request)
 
     if status != 1:
         response['status'] = status
@@ -226,31 +235,57 @@ def connect_registered_agent(msg):
     Note: The agent must be registered to connect the socket."""
 
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
+    social_asset_request = False
 
-    status, message = controller.do_agent_socket_connection(msg)
+    if controller.processing_asset_request():
+        social_asset_request = True
+        status, message = controller.do_social_asset_socket_connection(msg)
+    else:
+        status, message = controller.do_agent_socket_connection(msg)
 
     if status == 1:
         try:
-            sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
-                                         json={'token': message, 'secret': secret}).json()
+            if social_asset_request:
+                main_token = message[0]
+                token = message[1]
+                sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_asset',
+                                             json={'main_token': main_token, 'token': token, 'secret': secret}).json()
 
-            if sim_response['status'] == 1:
-                response['status'] = 1
-                response['result'] = True
-                response['message'] = 'Agent successfully connected.'
+                if sim_response['status'] == 1:
+                    response['status'] = 1
+                    response['result'] = True
+                    response['message'] = sim_response['social_asset']
 
-                response.update(sim_response)
+                    if controller.check_requests():
+                        request_queue.put(True)
 
-                if controller.agents_amount == len(controller.manager.agents_sockets_manager.get_tokens()):
-                    every_agent_registered.put(True)
+                    response.update(sim_response)
+                    send_initial_percepts(token, response)
 
-                one_agent_registered_queue.put(True)
-
-                send_initial_percepts(message, response)
-
+                else:
+                    response['status'] = sim_response['status']
+                    response['message'] = sim_response['message']
             else:
-                response['status'] = sim_response['status']
-                response['message'] = sim_response['message']
+                sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_agent',
+                                             json={'token': message, 'secret': secret}).json()
+
+                if sim_response['status'] == 1:
+                    response['status'] = 1
+                    response['result'] = True
+                    response['message'] = 'Agent successfully connected.'
+
+                    response.update(sim_response)
+
+                    if controller.agents_amount == len(controller.manager.agents_sockets_manager.get_tokens()):
+                        every_agent_registered.put(True)
+
+                    one_agent_registered_queue.put(True)
+
+                    send_initial_percepts(message, response)
+
+                else:
+                    response['status'] = sim_response['status']
+                    response['message'] = sim_response['message']
 
         except requests.exceptions.ConnectionError:
             response['status'] = 6
@@ -294,7 +329,7 @@ def connect_registered_asset(msg):
                     request_queue.put(True)
 
                 response.update(sim_response)
-                send_initial_percepts(message, response)
+                send_initial_percepts(token, response)
 
             else:
                 response['status'] = sim_response['status']
@@ -309,6 +344,12 @@ def connect_registered_asset(msg):
         response['message'] = message
 
     return json.dumps(response, sort_keys=False)
+
+
+@socket.on('join')
+def on_join(data):
+    join_room(data['room'])
+    print('Room ', data['room'], ' se conectou.')
 
 
 @app.route('/finish_step', methods=['GET'])
@@ -512,7 +553,8 @@ def send_initial_percepts(token, info):
     The message contain the agent and map percepts."""
 
     room = controller.manager.get(token, 'socket')
-    socket.emit(room, info)
+    print('[Initial_percepts]: Room=', room, ' Token=', token)
+    socket.emit('initial_percepts', info, room=room)
 
 
 def notify_actors(event, response):
@@ -546,8 +588,9 @@ def notify_actors(event, response):
         room_response_list.append((room, json.dumps(info)))
 
     for room, response in room_response_list:
+        # socket.emit(event, response, room=room)
         socket.emit(room, response)
-
+        
 
 @app.route('/terminate', methods=['GET'])
 def terminate():
