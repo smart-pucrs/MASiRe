@@ -155,7 +155,6 @@ def connect_agent():
     else:
         status, message = controller.do_agent_connection(request)
 
-    print('Status', status, ' Message: ', message)
     if status != 1:
         response['status'] = status
         response['result'] = False
@@ -254,7 +253,7 @@ def connect_registered_agent(msg):
                 if sim_response['status'] == 1:
                     response['status'] = 1
                     response['result'] = True
-                    response['message'] = sim_response['social_asset']
+                    response['message'] = 'Social asset successfully connected'
 
                     if controller.check_requests():
                         request_queue.put(True)
@@ -554,7 +553,8 @@ def send_initial_percepts(token, info):
 
     room = controller.manager.get(token, 'socket')
     print('[Initial_percepts]: Room=', room, ' Token=', token)
-    socket.emit('initial_percepts', info, room=room)
+    # socket.emit('initial_percepts', info, room=room)
+    socket.emit(room, info)
 
 
 def notify_actors(event, response):

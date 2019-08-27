@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 10,
+    "steps": 20,
     "maps": [
       "files/map0.osm"
     ],
@@ -48,7 +48,7 @@
       "minSize": 60,
       "maxSize": 86,
       "speed": 14,
-      "physicalCapacity": 0,
+      "physicalCapacity": 50,
       "virtualCapacity": 0
     },
     "photographer": {

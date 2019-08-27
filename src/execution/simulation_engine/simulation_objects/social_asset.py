@@ -164,3 +164,6 @@ class SocialAsset:
         self.route.clear()
         self.physical_storage_vector.clear()
         self.virtual_storage_vector.clear()
+
+    def __repr__(self):
+        return str(self.__dict__.copy())

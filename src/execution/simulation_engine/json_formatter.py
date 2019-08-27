@@ -37,8 +37,8 @@ class JsonFormatter:
         try:
             response = self.copycat.restart()
             message = 'Simulation restarted.'
-            json_agents = self.jsonify_agents(response[0])
-            json_assets = self.jsonify_assets(response[1])
+            json_agents = self.jsonify_agent_variables(response[0])
+            json_assets = self.jsonify_asset_variables(response[1])
             json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
             json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
 
@@ -61,6 +61,7 @@ class JsonFormatter:
             response = self.copycat.connect_agent(token)
 
             if response:
+                response['agent_percepts'] = self.jsonify_agent_constants(response['agent_percepts'])
                 response['status'] = 1
                 response['message'] = 'Agent connected.'
 
@@ -82,10 +83,14 @@ class JsonFormatter:
         try:
             response = self.copycat.connect_social_asset(main_token, token)
             if response is not None:
-                return {'status': 1, 'social_asset': self.jsonify_asset(response), 'message': 'Social asset connected.'}
+                response['agent_percepts'] = self.jsonify_asset_constants(response['agent_percepts'])
+                response['status'] = 1
+                response['message'] = 'Social asset connected.'
+
+                return response
 
             else:
-                return {'status': 0, 'social_asset': {}, 'message': 'Social asset could not connect.'}
+                return {'status': 0, 'agent': {}, 'message': 'Social asset could not connect.'}
 
         except Exception as e:
             return {'status': 0, 'agent': {}, 'message': f'An error occurred during connection: {str(e)}.'}
@@ -138,10 +143,9 @@ class JsonFormatter:
         try:
             response = self.copycat.start()
             message = 'Simulation started.'
-            json_agents = self.jsonify_agents(response[0])
-            json_assets = self.jsonify_assets(response[1])
-            json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
-            json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
+            json_agents = self.jsonify_agent_variables(response[0])
+            json_assets = self.jsonify_asset_variables(response[1])
+            json_actors = [{'agent': agent, 'message': message} for agent in [*json_agents, *json_assets]]
             environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
 
             return {'status': 1, 'actors': json_actors, 'environment': environment,
@@ -168,9 +172,9 @@ class JsonFormatter:
             json_actors = []
             for obj in response[0]:
                 if 'agent' in obj:
-                    json_actors.append({'agent': self.jsonify_agent(obj['agent']), 'message': obj['message']})
+                    json_actors.append({'agent': self.jsonify_agent_variables(obj['agent']), 'message': obj['message']})
                 else:
-                    json_actors.append({'social_asset': self.jsonify_asset(obj['social_asset']), 'message': obj['message']})
+                    json_actors.append({'agent': self.jsonify_asset_variables(obj['social_asset']), 'message': obj['message']})
 
             json_events = self.jsonify_events(response[1])
             environment = {'events': json_events, 'step': response[2]}
@@ -202,10 +206,10 @@ class JsonFormatter:
                 delivered_items.extend(item_log['items'])
             json_items = self.jsonify_delivered_items(delivered_items)
 
-            json_agents = self.jsonify_agents(logs[log]['agents']['agents'])
-            json_assets = self.jsonify_assets(logs[log]['assets']['assets'])
-            json_active_agents = self.jsonify_agents(logs[log]['agents']['active_agents'])
-            json_active_assets = self.jsonify_assets(logs[log]['assets']['active_assets'])
+            json_agents = self.jsonify_agents_variables(logs[log]['agents']['agents'])
+            json_assets = self.jsonify_assets_variables(logs[log]['assets']['assets'])
+            json_active_agents = self.jsonify_agents_variables(logs[log]['agents']['active_agents'])
+            json_active_assets = self.jsonify_assets_variables(logs[log]['assets']['active_assets'])
             json_action_token_by_step = self.jsonify_action_token_by_step(logs[log]['actions']['action_token_by_step'])
             json_acts_by_step = self.jsonify_amount_of_actions_by_step(logs[log]['actions']['amount_of_actions_by_step'])
             json_actions_by_step = self.jsonify_actions_by_step(logs[log]['actions']['actions_by_step'])
@@ -225,7 +229,7 @@ class JsonFormatter:
                 file.write(json.dumps(logs[log], sort_keys=False, indent=4))
                 file.write('\n\n' + '=' * 120 + '\n\n')
 
-    def jsonify_agents(self, agents_list):
+    def jsonify_agents_variables(self, agents_list):
         """Transform a list of agents objects into JSON objects.
 
         :param agents_list: List of the agents objects.
@@ -233,11 +237,11 @@ class JsonFormatter:
 
         json_agents = []
         for agent in agents_list:
-            json_agents.append(self.jsonify_agent(agent))
+            json_agents.append(self.jsonify_agent_variables(agent))
 
         return json_agents
 
-    def jsonify_assets(self, assets_list):
+    def jsonify_assets_variables(self, assets_list):
         """Transform a list of social assets objects into JSON objects.
 
         :param assets_list: List of the social assets objects.
@@ -245,12 +249,12 @@ class JsonFormatter:
 
         json_assets = []
         for asset in assets_list:
-            json_assets.append(self.jsonify_asset(asset))
+            json_assets.append(self.jsonify_asset_variables(asset))
 
         return json_assets
 
-    def jsonify_agent(self, agent):
-        """Transform a single agent into a JSON object.
+    def jsonify_agent_variables(self, agent):
+        """Transform a single agent variables into a JSON object.
 
         The keys of the dict were organized from priority and relation to make easier for the user to read it.
 
@@ -270,27 +274,40 @@ class JsonFormatter:
             'active': agent.is_active,
             'last_action': agent.last_action,
             'last_action_result': agent.last_action_result,
-            # 'role': agent.role,
             'location': self.format_location(agent.location),
             'route': json_route,
             'destination_distance': agent.destination_distance,
-            # 'abilities': agent.abilities,
-            # 'resources': agent.resources,
             'battery': agent.actual_battery,
-            # 'max_charge': agent.max_charge,
-            # 'speed': agent.speed,
-            # 'size': agent.size,
             'physical_storage': agent.physical_storage,
-            # 'physical_capacity': agent.physical_capacity,
             'physical_storage_vector': json_physical_items,
             'virtual_storage': agent.virtual_storage,
-            # 'virtual_capacity': agent.virtual_capacity,
             'virtual_storage_vector': json_virtual_items,
             'social_assets': json_social_assets
         }
 
-    def jsonify_asset(self, asset):
-        """Transform a single social asset into a JSON object.
+    def jsonify_agent_constants(self, agent):
+        """Transform a single agent constants variables into a JSON object.
+
+        The keys of the dict were organized from priority and relation to make easier for the user to read it.
+
+        :param agent: The agent object saved in the simulation.
+        :return dict: Dictionary with all the information from the agent."""
+
+        return {
+            'token': agent.token,
+            'role': agent.role,
+            'abilities': agent.abilities,
+            'resources': agent.resources,
+            'max_charge': agent.max_charge,
+            'speed': agent.speed,
+            'size': agent.size,
+            'physical_capacity': agent.physical_capacity,
+            'virtual_capacity': agent.virtual_capacity,
+        }
+
+
+    def jsonify_asset_variables(self, asset):
+        """Transform a single social asset variables into a JSON object.
 
         The keys of the dict were organized from priority and relation to make easier for the user to read it.
 
@@ -308,20 +325,32 @@ class JsonFormatter:
             'active': asset.is_active,
             'last_action': asset.last_action,
             'last_action_result': asset.last_action_result,
-            # 'profession': asset.profession,
             'location': self.format_location(asset.location),
             'route': json_route,
             'destination_distance': asset.destination_distance,
-            # 'abilities': asset.abilities,
-            # 'resources': asset.resources,
-            # 'speed': asset.speed,
-            # 'size': asset.size,
             'physical_storage': asset.physical_storage,
-            # 'physical_capacity': asset.physical_capacity,
             'physical_storage_vector': json_physical_items,
             'virtual_storage': asset.virtual_storage,
-            # 'virtual_capacity': asset.virtual_capacity,
             'virtual_storage_vector': json_virtual_items
+        }
+
+    def jsonify_asset_constants(self, asset):
+        """Transform a single social asset constant into a JSON object.
+
+        The keys of the dict were organized from priority and relation to make easier for the user to read it.
+
+        :param asset: The social asset object saved in the simulation.
+        :return dict: Dictionary with all the information from the social asset."""
+
+        return {
+            'token': asset.token,
+            'profession': asset.profession,
+            'abilities': asset.abilities,
+            'resources': asset.resources,
+            'speed': asset.speed,
+            'size': asset.size,
+            'physical_capacity': asset.physical_capacity,
+            'virtual_capacity': asset.virtual_capacity,
         }
 
     @staticmethod
@@ -458,10 +487,10 @@ class JsonFormatter:
                 }
 
             elif item.type == 'social_asset':
-                json_item = self.jsonify_asset(item)
+                json_item = self.jsonify_asset_variables(item)
 
             elif item.type == 'agent':
-                json_item = self.jsonify_agent(item)
+                json_item = self.jsonify_agent_variables(item)
 
             else:
                 json_item = {

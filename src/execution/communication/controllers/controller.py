@@ -333,9 +333,6 @@ class Controller:
             if not isinstance(obj, dict):
                 return 4, 'Object is not a dictionary.'
 
-            if not self.processing_asset_request():
-                return 5, 'There is no social asset request.'
-
             if 'token' not in obj:
                 return 3, 'Object does not contain "token" as key.'
 

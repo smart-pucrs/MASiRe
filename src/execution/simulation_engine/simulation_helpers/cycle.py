@@ -1357,6 +1357,7 @@ class Cycle:
         asset = self.social_assets_manager.get(token)
 
         if self.map.check_location(asset.location, destination):
+            self.social_assets_manager.edit(token, 'location', destination)
             self.social_assets_manager.edit(token, 'route', [])
             self.social_assets_manager.edit(token, 'destination_distance', 0)
             self.social_assets_manager.edit(token, 'last_action_result', True)

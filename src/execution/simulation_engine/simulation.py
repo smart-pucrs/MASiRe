@@ -102,6 +102,7 @@ class Simulation:
             return None
 
         actions_results, call_requests = self.cycler.execute_actions(token_action_list)
+        print('[Action results]: ', actions_results)
         step = self.cycler.get_step()
 
         self.cycler.current_step += 1

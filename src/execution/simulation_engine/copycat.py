@@ -40,7 +40,7 @@ class CopyCat:
         :param token: The identifier of the agent.
         :return bool: True if the agent was connected else False."""
 
-        response = {'agent_percepts': self.simulation.connect_agent(token).get_constant_attributes(),
+        response = {'agent_percepts': self.simulation.connect_agent(token),
                     'map_percepts': self.simulation.get_map_percepts()}
 
         return copy.deepcopy(response)
@@ -51,7 +51,9 @@ class CopyCat:
         :param token: The identifier of the social asset.
         :return bool: True if the social asset was connected else False."""
 
-        response = self.simulation.connect_social_asset(main_token, token)
+        response = {'agent_percepts': self.simulation.connect_social_asset(main_token, token),
+                    'map_percepts': self.simulation.get_map_percepts()}
+
         return copy.deepcopy(response)
 
     def disconnect_agent(self, token):

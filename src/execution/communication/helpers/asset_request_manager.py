@@ -19,7 +19,6 @@ class AssetRequestManager:
         self.current_step = response['environment']['step'] - 1
         self.response = response
         self.processing_requests = True
-        print(self.processing())
 
     def reset(self):
         """
@@ -101,5 +100,4 @@ class AssetRequestManager:
         self.response['actors'] = agents_responses
 
     def processing(self):
-        print('----> ', self.main_tokens, self.assets_tokens)
         return self.processing_requests
