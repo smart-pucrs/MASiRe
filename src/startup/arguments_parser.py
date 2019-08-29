@@ -142,7 +142,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.ap, args.sp, args.step_t, args.first_t, args.mtd, secret]
+        return [args.url, args.ap, args.sp, args.step_t, args.first_t, args.mtd, args.log, secret]
 
     def get_arguments(self):
         """Return all the arguments.

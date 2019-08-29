@@ -1,4 +1,5 @@
 from simulation_engine.simulation_helpers.cycle import Cycle
+from simulation_engine.simulation_helpers.logger import Logger
 
 
 class Simulation:
@@ -72,6 +73,8 @@ class Simulation:
         :return tuple: First position holding the agents, second position the social assets and the third holding
         the current step."""
 
+        Logger.log('NORMAL', 'Restart the simulation.')
+
         self.cycler.restart(config_file)
         self.terminated = False
         self.actions_amount = 0
@@ -90,6 +93,8 @@ class Simulation:
         :return tuple|None: If not terminated the first position holds the results from the actions sent and the second,
         the current step, else None."""
 
+        Logger.log('NORMAL', f'Process step {self.cycler.current_step}.')
+
         actions = [token_action_param['action'] for token_action_param in token_action_list]
         tokens = [token_action_param['token'] for token_action_param in token_action_list]
 
@@ -102,7 +107,6 @@ class Simulation:
             return None
 
         actions_results, call_requests = self.cycler.execute_actions(token_action_list)
-        print('[Action results]: ', actions_results)
         step = self.cycler.get_step()
 
         self.cycler.current_step += 1

@@ -185,11 +185,11 @@
         "assets": []
     },
     "actions": {
-        "amount_of_actions_executed": 38,
+        "amount_of_actions_executed": 40,
         "amount_of_actions_by_step": [
             {
                 "step": 1,
-                "actions_amount": 0
+                "actions_amount": 2
             },
             {
                 "step": 2,
@@ -271,7 +271,10 @@
         "actions_by_step": [
             {
                 "step": 1,
-                "actions": []
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
             },
             {
                 "step": 2,
@@ -410,7 +413,16 @@
         "action_token_by_step": [
             {
                 "step": 1,
-                "token_action": []
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
             },
             {
                 "step": 2,
