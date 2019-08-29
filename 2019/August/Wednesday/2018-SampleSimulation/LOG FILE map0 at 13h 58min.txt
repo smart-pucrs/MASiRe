@@ -1,0 +1,667 @@
+{
+    "environment": {
+        "current_step": 20,
+        "max_steps": 20,
+        "delivered_items": [],
+        "floods_amount": 4,
+        "total_victims": 5,
+        "total_victims_in_photos": 1,
+        "victims_saved": 0,
+        "victims_dead": 0,
+        "total_photos": 4,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 4,
+        "total_water_samples": 4,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 4
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 1,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.108812023355213,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.1117224175246,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 3,
+                        "profession": "nurse",
+                        "location": {
+                            "lat": -30.11230736618813,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.10925608151705,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 1,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.108812023355213,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.1117224175246,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 3,
+                        "profession": "nurse",
+                        "location": {
+                            "lat": -30.11230736618813,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.10925608151705,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 38,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 0
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            },
+            {
+                "step": 6,
+                "actions_amount": 2
+            },
+            {
+                "step": 7,
+                "actions_amount": 2
+            },
+            {
+                "step": 8,
+                "actions_amount": 2
+            },
+            {
+                "step": 9,
+                "actions_amount": 2
+            },
+            {
+                "step": 10,
+                "actions_amount": 2
+            },
+            {
+                "step": 11,
+                "actions_amount": 2
+            },
+            {
+                "step": 12,
+                "actions_amount": 2
+            },
+            {
+                "step": 13,
+                "actions_amount": 2
+            },
+            {
+                "step": 14,
+                "actions_amount": 2
+            },
+            {
+                "step": 15,
+                "actions_amount": 2
+            },
+            {
+                "step": 16,
+                "actions_amount": 2
+            },
+            {
+                "step": 17,
+                "actions_amount": 2
+            },
+            {
+                "step": 18,
+                "actions_amount": 2
+            },
+            {
+                "step": 19,
+                "actions_amount": 2
+            },
+            {
+                "step": 20,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": []
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "searchSocialAsset",
+                    "pass"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "requestSocialAsset",
+                    "pass"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": []
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "searchSocialAsset"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "requestSocialAsset"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 13,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 14,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 15,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 16,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 17,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 18,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 19,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 20,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
