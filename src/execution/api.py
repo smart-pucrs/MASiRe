@@ -54,7 +54,7 @@ def start_connections():
 
     Note: This endpoint must be called from the simulation, it is not recommended to the user to call it on his own."""
 
-    Logger.log('NORMAL', 'Start connections')
+    Logger.log(Logger.TAG_NORMAL, 'Start connections')
 
     try:
         valid, message = controller.do_internal_verification(request)
@@ -155,27 +155,27 @@ def connect_agent():
     agent = False
 
     if 'main_token' in obj:
-        Logger.log('NORMAL', 'Try to connect a social asset.')
+        Logger.log(Logger.TAG_NORMAL, 'Try to connect a social asset.')
         status, message = controller.do_social_asset_connection(request)
 
     else:
-        Logger.log('NORMAL', 'Try to connect a agent.')
+        Logger.log(Logger.TAG_NORMAL, 'Try to connect a agent.')
         status, message = controller.do_agent_connection(request)
         agent = True
 
     if status != 1:
         if agent:
-            Logger.log('ERROR', f'Error to connect the agent: {message}')
+            Logger.log(Logger.TAG_ERROR, f'Error to connect the agent: {message}')
         else:
-            Logger.log('ERROR', f'Error to connect the social asset: {message}')
+            Logger.log(Logger.TAG_ERROR, f'Error to connect the social asset: {message}')
 
         response['status'] = status
         response['result'] = False
     else:
         if agent:
-            Logger.log('NORMAL', 'Agent connected.')
+            Logger.log(Logger.TAG_NORMAL, 'Agent connected.')
         else:
-            Logger.log('NORMAL', 'Social asset connected.')
+            Logger.log(Logger.TAG_NORMAL, 'Social asset connected.')
 
     response['message'] = message
 
@@ -212,27 +212,27 @@ def register_agent():
     agent = False
 
     if controller.processing_asset_request():
-        Logger.log('NORMAL', 'Try to register the agent.')
+        Logger.log(Logger.TAG_NORMAL, 'Try to register the agent.')
         status, message = controller.do_social_asset_registration(request)
 
     else:
-        Logger.log('NORMAL', 'Try to register the social asset.')
+        Logger.log(Logger.TAG_NORMAL, 'Try to register the social asset.')
         status, message = controller.do_agent_registration(request)
 
     if status != 1:
         if agent:
-            Logger.log('ERROR', f'Error to register the agent: {message}')
+            Logger.log(Logger.TAG_ERROR, f'Error to register the agent: {message}')
         else:
-            Logger.log('ERROR', f'Error to register the social asset: {message}')
+            Logger.log(Logger.TAG_ERROR, f'Error to register the social asset: {message}')
 
         response['status'] = status
         response['result'] = False
 
     else:
         if agent:
-            Logger.log('NORMAL', 'Agent registered.')
+            Logger.log(Logger.TAG_NORMAL, 'Agent registered.')
         else:
-            Logger.log('NORMAL', 'Social asset registered.')
+            Logger.log(Logger.TAG_NORMAL, 'Social asset registered.')
 
     response['message'] = message
 
@@ -265,17 +265,17 @@ def connect_registered_agent(msg):
     If no errors found, the agent information is sent to the engine and it will create its own object of the agent.
 
     Note: The agent must be registered to connect the socket."""
-
+    
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
     social_asset_request = False
 
     if controller.processing_asset_request():
         social_asset_request = True
-        Logger.log('NORMAL', 'Try to connect the socket of the social asset.')
-        status, message = controller.do_social_asset_socket_connection(msg)
+        Logger.log(Logger.TAG_NORMAL, 'Try to connect the socket of the social asset.')
+        status, message = controller.do_social_asset_socket_connection(request, msg)
     else:
-        Logger.log('NORMAL', 'Try to connect the socket of the agent.')
-        status, message = controller.do_agent_socket_connection(msg)
+        Logger.log(Logger.TAG_NORMAL, 'Try to connect the socket of the agent.')
+        status, message = controller.do_agent_socket_connection(request, msg)
 
     if status == 1:
         try:
@@ -286,7 +286,7 @@ def connect_registered_agent(msg):
                                              json={'main_token': main_token, 'token': token, 'secret': secret}).json()
 
                 if sim_response['status'] == 1:
-                    Logger.log('NORMAL', 'Social asset socket connected.')
+                    Logger.log(Logger.TAG_NORMAL, 'Social asset socket connected.')
 
                     response['status'] = 1
                     response['result'] = True
@@ -299,7 +299,7 @@ def connect_registered_agent(msg):
                     send_initial_percepts(token, response)
 
                 else:
-                    Logger.log('ERROR', f'Error to connect the social asset socket: {message}')
+                    Logger.log(Logger.TAG_ERROR, f'Error to connect the social asset socket: {message}')
 
                     response['status'] = sim_response['status']
                     response['message'] = sim_response['message']
@@ -308,7 +308,7 @@ def connect_registered_agent(msg):
                                              json={'token': message, 'secret': secret}).json()
 
                 if sim_response['status'] == 1:
-                    Logger.log('NORMAL', 'Agent socket connected.')
+                    Logger.log(Logger.TAG_NORMAL, 'Agent socket connected.')
 
                     response['status'] = 1
                     response['result'] = True
@@ -324,7 +324,7 @@ def connect_registered_agent(msg):
                     send_initial_percepts(message, response)
 
                 else:
-                    Logger.log('ERROR', f'Error to connect the agent socket: {message}')
+                    Logger.log(Logger.TAG_ERROR, f'Error to connect the agent socket: {message}')
 
                     response['status'] = sim_response['status']
                     response['message'] = sim_response['message']
@@ -334,7 +334,7 @@ def connect_registered_agent(msg):
             response['message'] = 'Simulation is not online.'
 
     else:
-        Logger.log('ERROR', f'Unknown error: {message}')
+        Logger.log(Logger.TAG_ERROR, f'Unknown error: {message}')
 
         response['status'] = status
         response['message'] = message
@@ -408,7 +408,7 @@ def finish_step():
     Note: When the engine is processing the actions, the agents or social assets can not send any action.
     Note: This endpoint must be called from the simulation, it is not recommended to the user to call it on his own."""
 
-    Logger.log('NORMAL', 'Preparing the actions to send.')
+    Logger.log(Logger.TAG_NORMAL, 'Preparing the actions to send.')
 
     valid, message = controller.do_internal_verification(request)
 
@@ -419,37 +419,37 @@ def finish_step():
         controller.set_processing_actions()
         tokens_actions_list = [*controller.manager.get_actions('agent'), *controller.manager.get_actions('social_asset')]
 
-        Logger.log('NORMAL', 'Send the actions for the simulation.')
+        Logger.log(Logger.TAG_NORMAL, 'Send the actions for the simulation.')
 
         sim_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json={'actions': tokens_actions_list, 'secret': secret}).json()
 
-        Logger.log('NORMAL', 'Receive the actions results from the simulation.')
+        Logger.log(Logger.TAG_NORMAL, 'Receive the actions results from the simulation.')
 
         controller.manager.clear_workers()
 
         if sim_response['status'] == 0:
-            Logger.log('CRITICAL', 'An internal error occurred. Shutting down...')
+            Logger.log(Logger.TAG_CRITICAL, 'An internal error occurred. Shutting down...')
 
-            requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'NORMAL': True})
+            requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True})
             multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
         if sim_response['message'] == 'Simulation finished.':
-            Logger.log('NORMAL', 'End of the simulation, preparer to restart.')
+            Logger.log(Logger.TAG_NORMAL, 'End of the simulation, preparer to restart.')
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
             notify_actors('match_result', sim_response['report'])
 
             if sim_response['status'] == 0:
-                Logger.log('NORMAL', 'No more map to run, finishing the simulation...')
+                Logger.log(Logger.TAG_NORMAL, 'No more map to run, finishing the simulation...')
 
-                report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'NORMAL': True}).json()
+                report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True}).json()
 
                 notify_actors('simulation_ended', {'status': 1, 'message': 'Simulation ended all matches.', 'report': report})
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
             else:
-                Logger.log('NORMAL', 'Restart the simulation.')
+                Logger.log(Logger.TAG_NORMAL, 'Restart the simulation.')
 
                 notify_actors('simulation_started', sim_response)
 
@@ -460,7 +460,7 @@ def finish_step():
 
             controller.set_processing_actions()
             if sim_response['status'] == 2:
-                Logger.log('NORMAL', 'Open connections for the social assets.')
+                Logger.log(Logger.TAG_NORMAL, 'Open connections for the social assets.')
 
                 controller.asset_request_manager.start_new_asset_request(sim_response)
                 multiprocessing.Process(target=step_controller, args=(request_queue, 2), daemon=True).start()
@@ -468,12 +468,12 @@ def finish_step():
             else:
                 notify_actors('action_results', sim_response)
 
-                Logger.log('NORMAL', 'Wait all the agent send yours actions.')
+                Logger.log(Logger.TAG_NORMAL, 'Wait all the agent send yours actions.')
 
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
     except requests.exceptions.ConnectionError:
-        Logger.log('CRITICAL', 'Error to process the agents actions.')
+        Logger.log(Logger.TAG_CRITICAL, 'Error to process the agents actions.')
 
         pass
 
@@ -482,7 +482,7 @@ def finish_step():
 
 @app.route('/handle_response', methods=['GET'])
 def handle_response():
-    Logger.log('NORMAL', 'Handle the agent response after try to connect the social asset.')
+    Logger.log(Logger.TAG_NORMAL, 'Handle the agent response after try to connect the social asset.')
 
     controller.format_actions_result()
     notify_actors('action_results', controller.asset_request_manager.response)
@@ -523,6 +523,11 @@ def step_controller(ready_queue, status):
     os.kill(os.getpid(), signal.SIGTERM)
 
 
+@socket.on('connect')
+def connect():
+    socket.emit('message', 'Hi Client!')
+
+
 @socket.on('send_action')
 def send_action_temp(msg):
     """Receive all the actions from the agents or social assets.
@@ -533,13 +538,13 @@ def send_action_temp(msg):
     status, message = controller.do_action(msg)
 
     if status != 1:
-        Logger.log('ERROR', 'Error to storage the action received.')
+        Logger.log(Logger.TAG_ERROR, 'Error to storage the action received.')
 
         response['status'] = status
         response['result'] = False
 
     else:
-        Logger.log('NORMAL', 'Action received.')
+        Logger.log(Logger.TAG_NORMAL, 'Action received.')
 
         every_socket = controller.manager.get_all('socket')
         tokens_connected_size = len([*every_socket[0], *every_socket[1]])
@@ -547,7 +552,7 @@ def send_action_temp(msg):
         social_asset_workers_size = len(controller.manager.get_workers('social_asset'))
 
         if tokens_connected_size == agent_workers_size + social_asset_workers_size:
-            Logger.log('NORMAL', 'All actions received.')
+            Logger.log(Logger.TAG_NORMAL, 'All actions received.')
 
             actions_queue.put(True)
 
@@ -583,7 +588,7 @@ def disconnect_registered_agent(msg):
         except requests.exceptions.ConnectionError:
             response['message'] = 'Simulation is not online.'
 
-    Logger.log('NORMAL', f'Disconnect a agent, message: {message}')
+    Logger.log(Logger.TAG_NORMAL, f'Disconnect a agent, message: {message}')
 
     return json.dumps(response, sort_keys=False)
 
@@ -626,8 +631,8 @@ def send_initial_percepts(token, info):
     The message contain the agent and map percepts."""
 
     room = controller.manager.get(token, 'socket')
-    # socket.emit('initial_percepts', info, room=room)
-    socket.emit(room, info)
+    socket.emit('initial_percepts', info, room=room)
+    # socket.emit(room, info)
 
 
 def notify_actors(event, response):
@@ -638,7 +643,7 @@ def notify_actors(event, response):
     Note: If an unknown event name is given, the simulation will stop because it was almost certainly caused by
     internal errors."""
 
-    Logger.log('NORMAL', 'Notifying the agents.')
+    Logger.log(Logger.TAG_NORMAL, 'Notifying the agents.')
 
     tokens = [*controller.manager.agents_sockets_manager.get_tokens(), *controller.manager.assets_sockets_manager.get_tokens()]
     room_response_list = []
@@ -657,14 +662,14 @@ def notify_actors(event, response):
             info = json_formatter.match_result_format(response, token)
 
         else:
-            Logger.log('ERROR', 'Wrong event name. Possible internal errors.')
+            Logger.log(Logger.TAG_ERROR, 'Wrong event name. Possible internal errors.')
 
         room = controller.manager.get(token, 'socket')
         room_response_list.append((room, json.dumps(info)))
 
     for room, response in room_response_list:
-        # socket.emit(event, response, room=room)
-        socket.emit(room, response)
+        socket.emit(event, response, room=room)
+        # socket.emit(room, response)
         
 
 @app.route('/terminate', methods=['GET'])

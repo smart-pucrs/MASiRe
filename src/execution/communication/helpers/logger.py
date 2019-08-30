@@ -1,5 +1,8 @@
 class Logger:
     __instance = None
+    TAG_NORMAL = 'NORMAL'
+    TAG_ERROR = 'ERROR'
+    TAG_CRITICAL = 'CRITICAL'
 
     def __init__(self):
         if Logger.__instance is not None:
