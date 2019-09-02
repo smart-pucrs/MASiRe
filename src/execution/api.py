@@ -182,100 +182,24 @@ def connect_agent():
     return jsonify(response)
 
 
-@app.route('/connect_asset', methods=['POST'])
-def connect_asset():
-    """Connect the social asset.
-
-    If the social asset is successfully connected, the simulation will return its token, any errors, it will return
-    the error message and the corresponding status."""
-
-    response = {'status': 1, 'result': True, 'message': 'Error.'}
-
-    status, message = controller.do_social_asset_connection(request)
-
-    if status != 1:
-        response['status'] = status
-        response['result'] = False
-
-    response['message'] = message
-
-    return jsonify(response)
-
-
-@app.route('/register_agent', methods=['POST'])
-def register_agent():
-    """Register the agent.
-
-    Note: The agent must be connected to register itself."""
-
-    response = {'status': 1, 'result': True, 'message': 'Error.'}
-    agent = False
-
-    if controller.processing_asset_request():
-        Logger.log(Logger.TAG_NORMAL, 'Try to register the agent.')
-        status, message = controller.do_social_asset_registration(request)
-
-    else:
-        Logger.log(Logger.TAG_NORMAL, 'Try to register the social asset.')
-        status, message = controller.do_agent_registration(request)
-
-    if status != 1:
-        if agent:
-            Logger.log(Logger.TAG_ERROR, f'Error to register the agent: {message}')
-        else:
-            Logger.log(Logger.TAG_ERROR, f'Error to register the social asset: {message}')
-
-        response['status'] = status
-        response['result'] = False
-
-    else:
-        if agent:
-            Logger.log(Logger.TAG_NORMAL, 'Agent registered.')
-        else:
-            Logger.log(Logger.TAG_NORMAL, 'Social asset registered.')
-
-    response['message'] = message
-
-    return jsonify(response)
-
-
-@app.route('/register_asset', methods=['POST'])
-def register_asset():
-    """Register the social asset.
-
-    Note: The social asset must be connected to register itself."""
-
-    response = {'status': 1, 'result': True, 'message': 'Error.'}
-
-    status, message = controller.do_social_asset_registration(request)
-
-    if status != 1:
-        response['status'] = status
-        response['result'] = False
-
-    response['message'] = message
-
-    return jsonify(response)
-
-
-@socket.on('connect_registered_agent')
-def connect_registered_agent(msg):
+@socket.on('register_agent')
+def register_agent(msg):
     """Connect the socket of the agent.
 
     If no errors found, the agent information is sent to the engine and it will create its own object of the agent.
 
     Note: The agent must be registered to connect the socket."""
-    
+
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
     social_asset_request = False
 
     if controller.processing_asset_request():
         social_asset_request = True
-        Logger.log(Logger.TAG_NORMAL, 'Try to connect the socket of the social asset.')
-        status, message = controller.do_social_asset_socket_connection(request, msg)
+        Logger.log(Logger.TAG_NORMAL, 'Try to register and connect the social asset socket.')
+        status, message = controller.do_social_asset_registration(request, msg)
     else:
-        Logger.log(Logger.TAG_NORMAL, 'Try to connect the socket of the agent.')
-        status, message = controller.do_agent_socket_connection(request, msg)
+        Logger.log(Logger.TAG_NORMAL, 'Try to register and connect the agent socket.')
+        status, message = controller.do_agent_registration(request, msg)
 
     if status == 1:
         try:
@@ -339,60 +263,7 @@ def connect_registered_agent(msg):
         response['status'] = status
         response['message'] = message
 
-    return json.dumps(response, sort_keys=False)
-
-
-@socket.on('connect_registered_asset')
-def connect_registered_asset(msg):
-    """Connect the socket of the social asset.
-
-    If no errors found, the social asset information is sent to the engine and it will create its own object
-    of the social asset. If the engine does not throw any errors, than the object created is returned.
-
-    Note: The social asset must be registered to connect the socket."""
-
-    response = {'status': 0, 'result': False, 'message': 'Error.'}
-
-    status, message = controller.do_social_asset_socket_connection(msg)
-
-    if status == 1:
-        try:
-            main_token = message[0]
-            token = message[1]
-
-            sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_asset',
-                                         json={'main_token': main_token, 'token': token, 'secret': secret}).json()
-
-            if sim_response['status'] == 1:
-                response['status'] = 1
-                response['result'] = True
-                response['message'] = sim_response['social_asset']
-                one_agent_registered_queue.put(True)
-
-                if controller.check_requests():
-                    request_queue.put(True)
-
-                response.update(sim_response)
-                send_initial_percepts(token, response)
-
-            else:
-                response['status'] = sim_response['status']
-                response['message'] = sim_response['message']
-
-        except requests.exceptions.ConnectionError:
-            response['status'] = 6
-            response['message'] = 'Simulation is not online.'
-
-    else:
-        response['status'] = status
-        response['message'] = message
-
-    return json.dumps(response, sort_keys=False)
-
-
-@socket.on('join')
-def on_join(data):
-    pass
+    return jsonify(0)
 
 
 @app.route('/finish_step', methods=['GET'])

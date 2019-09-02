@@ -250,108 +250,11 @@ class Controller:
             if social_asset is None:
                 return 5, 'Social asset was not connected.'
 
-            if social_asset.registered:
-                return 5, 'Social asset already registered.'
-
             if not self.manager.edit(obj['token'], 'registered', True, 'social_asset'):
                 return 0, 'Error while editing token.'
 
-            return 1, 'Social asset registered.'
-
-        except json.JSONDecodeError:
-            return 2, 'Object format is not JSON.'
-
-        except Exception as e:
-            return 0, f'Unknown error: {str(e)}'
-
-    def do_agent_socket_connection(self, request, msg):
-        """Do the socket connect of the agent.
-
-        After several validations, the socket is added to the manager.
-
-        :param request: The request object received on the API containing all the data and JSON.
-        :param msg: Message sent to the API through socket by the agent.
-        :return tuple: First position with the status and the second position with the message."""
-
-        try:
-            obj = json.loads(msg)
-
-            if not self.started:
-                return 5, 'Simulation has not started.'
-
-            if self.terminated:
-                return 5, 'Simulation already terminated.'
-
-            if self.start_time + self.time_limit <= time.time():
-                return 5, 'Connection time ended.'
-
-            if not isinstance(obj, dict):
-                return 4, 'Object is not a dictionary.'
-
-            if 'token' not in obj:
-                return 3, 'Object does not contain "token" as key.'
-
-            agent = self.manager.get(obj['token'], 'agent')
-            if agent is None:
-                return 5, 'Agent was not connected.'
-
-            if not agent.registered:
-                return 5, 'Agent was not registered.'
-
             if self.manager.get(obj['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
-
-            # if not self.manager.add(obj['token'], agent.agent_info['name'], 'socket'):
-            #     return 0, 'Error while adding token.'
-
-            if not self.manager.add(obj['token'], request.sid, 'socket'):
-                return 0, 'Error while adding token.'
-
-            return 1, obj['token']
-
-        except json.JSONDecodeError:
-            return 2, 'Object format is not JSON.'
-
-        except Exception as e:
-            return 0, f'Unknown error: {str(e)}'
-
-    def do_social_asset_socket_connection(self, request, msg):
-        """Do the socket connect of the social asset.
-
-        After several validations, the socket is added to the manager.
-
-        :param request: The request object received on the API containing all the data and JSON.
-        :param msg: Message sent to the API through socket by the social asset.
-        :return tuple: First position with the status and the second position with the message."""
-
-        try:
-            obj = json.loads(msg)
-
-            if not self.started:
-                return 5, 'Simulation has not started.'
-
-            if self.terminated:
-                return 5, 'Simulation already terminated.'
-
-            if not isinstance(obj, dict):
-                return 4, 'Object is not a dictionary.'
-
-            if 'token' not in obj:
-                return 3, 'Object does not contain "token" as key.'
-
-            social_asset = self.manager.get(obj['token'], 'social_asset')
-
-            if social_asset is None:
-                return 5, 'Social asset was not connected.'
-
-            if not social_asset.registered:
-                return 5, 'Social asset was not registered.'
-
-            if self.manager.get(obj['token'], 'socket') is not None:
-                return 5, 'Socket already registered.'
-
-            # if not self.manager.add(obj['token'], social_asset.asset_info['name'], 'socket'):
-            #     return 0, 'Error while adding token.'
 
             if not self.manager.add(obj['token'], request.sid, 'socket'):
                 return 0, 'Error while adding token.'
