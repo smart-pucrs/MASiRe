@@ -200,8 +200,7 @@ class Controller:
                 return 3, 'Object does not contain "token" as key.'
 
             agent = self.manager.get(msg['token'], 'agent')
-            for a in self.manager.get_all('agent'):
-                print('-> ', a.token, msg['token'])
+
             if agent is None:
                 return 5, 'Agent was not connected.'
 
