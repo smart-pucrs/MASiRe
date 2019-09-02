@@ -394,11 +394,6 @@ def step_controller(ready_queue, status):
     os.kill(os.getpid(), signal.SIGTERM)
 
 
-@socket.on('connect')
-def connect():
-    socket.emit('message', 'Hi Client!')
-
-
 @socket.on('send_action')
 def send_action_temp(msg):
     """Receive all the actions from the agents or social assets.
@@ -503,7 +498,6 @@ def send_initial_percepts(token, info):
 
     room = controller.manager.get(token, 'socket')
     socket.emit('initial_percepts', info, room=room)
-    # socket.emit(room, info)
 
 
 def notify_actors(event, response):
@@ -540,7 +534,6 @@ def notify_actors(event, response):
 
     for room, response in room_response_list:
         socket.emit(event, response, room=room)
-        # socket.emit(room, response)
         
 
 @app.route('/terminate', methods=['GET'])
