@@ -174,19 +174,16 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_agent_registration(self, request):
+    def do_agent_registration(self, request, msg):
         """Do the registration of the agent.
 
         After several validations, agent is edited as registered on the manager.
 
         :param request: The request object received on the API containing all the data and JSON.
+        :param msg: The message with the token to connect the agent.
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = request.get_json(force=True)
-            if isinstance(obj, str):
-                obj = json.loads(obj)
-
             if not self.started:
                 return 5, 'Simulation has not started.'
 
@@ -196,23 +193,28 @@ class Controller:
             if self.start_time + self.time_limit <= time.time():
                 return 5, 'Connection time ended.'
 
-            if not isinstance(obj, dict):
+            if not isinstance(msg, dict):
                 return 4, 'Object is not a dictionary.'
 
-            if 'token' not in obj:
+            if 'token' not in msg:
                 return 3, 'Object does not contain "token" as key.'
 
-            agent = self.manager.get(obj['token'], 'agent')
+            agent = self.manager.get(msg['token'], 'agent')
+            for a in self.manager.get_all('agent'):
+                print('-> ', a.token, msg['token'])
             if agent is None:
                 return 5, 'Agent was not connected.'
 
-            if agent.registered:
-                return 5, 'Agent already registered.'
-
-            if not self.manager.edit(obj['token'], 'registered', True, 'agent'):
+            if not self.manager.edit(msg['token'], 'registered', True, 'agent'):
                 return 0, 'Error while editing token.'
 
-            return 1, 'Agent registered.'
+            if self.manager.get(msg['token'], 'socket') is not None:
+                return 5, 'Socket already registered.'
+
+            if not self.manager.add(msg['token'], request.sid, 'socket'):
+                return 0, 'Error while adding token.'
+
+            return 1, msg['token']
 
         except json.JSONDecodeError:
             return 2, 'Object format is not JSON.'
@@ -220,16 +222,17 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_social_asset_registration(self, request):
+    def do_social_asset_registration(self, request, msg):
         """Do the registration of the social asset.
 
         After several validations, social asset is edited as registered on the manager.
 
         :param request: The request object received on the API containing all the data and JSON.
+        :param msg: The message with the token to connect the agent.
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = request.get_json(force=True)
+            obj = msg
 
             if not self.started:
                 return 5, 'Simulation has not started.'
