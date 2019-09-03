@@ -1153,8 +1153,14 @@ class Cycle:
                         if social_asset.active:
                             social_asset.active = False
                             self.social_assets_manager.requests[token] = parameters[0]
+                            agent = self.agents_manager.get(token)
+                            for asset in agent.social_assets:
+                                if asset.identifier == parameters[0]:
+                                    agent.social_assets.remove(asset)
 
-                            return
+                                    return
+
+                            raise FailedSocialAssetRequest('The agent dont know this social asset.')
 
                         raise FailedSocialAssetRequest('The social asset given is not active.')
 
@@ -1545,6 +1551,7 @@ class Cycle:
             if event:
                 for social_asset in event['social_assets']:
                     if social_asset.active:
+                        print('SocialAsset: ', social_asset)
                         if self.check_location(agent.location, social_asset.location, parameters[0]):
                             social_assets.append(social_asset)
 
