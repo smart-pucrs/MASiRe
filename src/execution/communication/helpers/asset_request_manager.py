@@ -20,6 +20,8 @@ class AssetRequestManager:
         self.response = response
         self.processing_requests = True
 
+        print('\n     Social asset Requests: ', self.main_tokens, self.current_step)
+
     def reset(self):
         """
         Reset all values of the old request.

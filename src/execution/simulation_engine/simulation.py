@@ -92,7 +92,7 @@ class Simulation:
         :param token_action_list: The actions sent by each agent or social asset.
         :return tuple|None: If not terminated the first position holds the results from the actions sent and the second,
         the current step, else None."""
-
+        # print('[ACTIONS]: ', token_action_list)
         Logger.log(Logger.TAG_NORMAL, f'Process step {self.cycler.current_step}.')
 
         actions = [token_action_param['action'] for token_action_param in token_action_list]
@@ -111,6 +111,8 @@ class Simulation:
 
         self.cycler.current_step += 1
         self.cycler.update_steps()
+
+        # print('[Results]: ', actions_results, step, self.cycler.current_step, call_requests)
 
         if self.cycler.check_steps():
             self.terminated = True

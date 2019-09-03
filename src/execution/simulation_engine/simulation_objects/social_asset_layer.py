@@ -4,3 +4,6 @@ class SocialAssetLayer:
         self.location = location
         self.profession = profession
         self.active = False
+
+    def __repr__(self):
+        return str(self.__dict__)

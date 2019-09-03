@@ -1,21 +1,14 @@
 from flask import Flask, render_template
-import socketio
-import requests
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
-socket = socketio.Client()
+server = SocketIO(app)
 
 
-@app.route("/")
+@app.route('/')
 def home():
-    return render_template("index.html")
-
-
-@socket.on('connect')
-def connect():
-    print('Connected!')
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
-    socket.connect('http://127.0.0.1:12345')
-    app.run(debug=True)
+    server.run(app=app, host='127.0.0.1', port=8000)

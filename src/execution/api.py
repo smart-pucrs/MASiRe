@@ -19,7 +19,7 @@ from communication.helpers import json_formatter
 from communication.helpers.logger import Logger
 
 base_url, api_port, simulation_port, step_time, first_step_time, method, log, secret, agents_amount = sys.argv[1:]
-timeout = 4
+timeout = 3
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
@@ -153,7 +153,7 @@ def connect_agent():
 
     obj = request.get_json(force=True)
     agent = False
-
+    print('[AGENT]: ', obj['name'])
     if 'main_token' in obj:
         Logger.log(Logger.TAG_NORMAL, 'Try to connect a social asset.')
         status, message = controller.do_social_asset_connection(request)
@@ -181,15 +181,27 @@ def connect_agent():
 
     return jsonify(response)
 
+rooms = []
+@socket.on('connect')
+def connect():
+    print('[SID]: ', request.sid)
+    rooms.append(request.sid)
+
+
+@socket.on('message')
+def message(msg):
+    print('[MESSAGE]: ', msg)
+
 
 @socket.on('register_agent')
 def register_agent(msg):
+    print('asdasd')
     """Connect the socket of the agent.
 
     If no errors found, the agent information is sent to the engine and it will create its own object of the agent.
 
     Note: The agent must be registered to connect the socket."""
-
+    print('\n                 REGISTER_AGENT: ', msg)
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
     social_asset_request = False
 
@@ -329,7 +341,14 @@ def finish_step():
 
         else:
 
+            for room in rooms:
+                socket.emit('message', f'Test: {room}', room=room)
+
             controller.set_processing_actions()
+
+            # Test
+            socket.emit('monitor', sim_response['environment'])
+
             if sim_response['status'] == 2:
                 Logger.log(Logger.TAG_NORMAL, 'Open connections for the social assets.')
 
