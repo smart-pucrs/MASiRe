@@ -66,6 +66,21 @@ def register_asset():
     return jsonify(formatter.connect_social_asset(message['main_token'], message['token']))
 
 
+@app.route('/finish_social_asset_connections', methods=['POST'])
+def finish_social_asset_connections():
+    """Register a social asset in the engine."""
+
+    message = request.get_json(force=True)
+
+    if 'secret' not in message:
+        return jsonify(message='This endpoint can not be accessed.')
+
+    if secret != message['secret']:
+        return jsonify(message='This endpoint can not be accessed.')
+
+    return jsonify(formatter.finish_social_asset_connections(message['tokens']))
+
+
 @app.route('/delete_agent', methods=['PUT'])
 def delete_agent():
     """Delete a registered agent from the engine."""

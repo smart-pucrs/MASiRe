@@ -118,6 +118,25 @@ class JsonFormatter:
 
             return {'status': 0, 'agent': {}, 'message': f'An error occurred during connection: {str(e)}.'}
 
+    def finish_social_asset_connections(self, tokens):
+        Logger.log(Logger.TAG_NORMAL, 'Finishing social assets connections.')
+
+        try:
+            response = self.copycat.finish_social_asset_connections(tokens)
+            if response is not None:
+                json_actors = []
+                for agent in response:
+                    json_actors.append({'agent': self.jsonify_asset_variables(agent), 'message': 'Social asset connected'})
+
+            return {'status': 1, 'actors': json_actors, 'message': 'Finish social asset connections'}
+
+        except Exception as e:
+            Logger.log(Logger.TAG_ERROR, f'Unknown error {str(e)}.')
+
+            return {'status': 0, 'actors': [], 'message': f'An error occurred during connection: {str(e)}.'}
+
+
+
     def disconnect_agent(self, token):
         """Disconnect the agent to the simulation and returns a JSON response.
 

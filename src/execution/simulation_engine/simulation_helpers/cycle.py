@@ -166,6 +166,14 @@ class Cycle:
                             else:
                                 victim.lifetime -= 1
 
+    def get_agents(self, tokens):
+        result = []
+
+        for token in tokens:
+            result.append(self.social_assets_manager.get(token))
+
+        return result
+
     def execute_actions(self, token_action_dict):
         agents_tokens = self.agents_manager.get_tokens()
         assets_tokens = self.social_assets_manager.get_tokens()
@@ -1551,7 +1559,6 @@ class Cycle:
             if event:
                 for social_asset in event['social_assets']:
                     if social_asset.active:
-                        print('SocialAsset: ', social_asset)
                         if self.check_location(agent.location, social_asset.location, parameters[0]):
                             social_assets.append(social_asset)
 

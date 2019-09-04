@@ -181,27 +181,30 @@ def connect_agent():
 
     return jsonify(response)
 
-rooms = []
+
 @socket.on('connect')
 def connect():
-    print('[SID]: ', request.sid)
-    rooms.append(request.sid)
+    Logger.log(Logger.TAG_CONNECT, request.sid)
+
+
+@socket.on('disconnect')
+def disconnect():
+    Logger.log(Logger.TAG_DISCONNECT, request.sid)
 
 
 @socket.on('message')
 def message(msg):
-    print('[MESSAGE]: ', msg)
+    Logger.log(Logger.TAG_MESSAGE, msg)
 
 
 @socket.on('register_agent')
 def register_agent(msg):
-    print('asdasd')
     """Connect the socket of the agent.
 
     If no errors found, the agent information is sent to the engine and it will create its own object of the agent.
 
     Note: The agent must be registered to connect the socket."""
-    print('\n                 REGISTER_AGENT: ', msg)
+
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
     social_asset_request = False
 
@@ -340,14 +343,7 @@ def finish_step():
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
         else:
-
-            for room in rooms:
-                socket.emit('message', f'Test: {room}', room=room)
-
             controller.set_processing_actions()
-
-            # Test
-            socket.emit('monitor', sim_response['environment'])
 
             if sim_response['status'] == 2:
                 Logger.log(Logger.TAG_NORMAL, 'Open connections for the social assets.')
@@ -374,8 +370,13 @@ def finish_step():
 def handle_response():
     Logger.log(Logger.TAG_NORMAL, 'Handle the agent response after try to connect the social asset.')
 
-    controller.format_actions_result()
-    notify_actors('action_results', controller.asset_request_manager.response)
+    tokens = controller.get_social_assets_tokens()
+
+    sim_response = requests.post(f'http://{base_url}:{simulation_port}/finish_social_asset_connections',
+                                 json={'tokens': tokens, 'secret': secret}).json()
+
+    response = controller.format_actions_result(sim_response)
+    notify_actors('action_results', response)
     controller.asset_request_manager.reset()
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
@@ -435,8 +436,11 @@ def send_action_temp(msg):
         tokens_connected_size = len([*every_socket[0], *every_socket[1]])
         agent_workers_size = len(controller.manager.get_workers('agent'))
         social_asset_workers_size = len(controller.manager.get_workers('social_asset'))
+        workers = agent_workers_size + social_asset_workers_size
 
-        if tokens_connected_size == agent_workers_size + social_asset_workers_size:
+        Logger.log(Logger.TAG_NORMAL, f'{workers} of {tokens_connected_size}')
+
+        if tokens_connected_size == workers:
             Logger.log(Logger.TAG_NORMAL, 'All actions received.')
 
             actions_queue.put(True)

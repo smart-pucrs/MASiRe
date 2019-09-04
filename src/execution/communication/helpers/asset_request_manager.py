@@ -20,8 +20,6 @@ class AssetRequestManager:
         self.response = response
         self.processing_requests = True
 
-        print('\n     Social asset Requests: ', self.main_tokens, self.current_step)
-
     def reset(self):
         """
         Reset all values of the old request.
@@ -90,7 +88,7 @@ class AssetRequestManager:
 
         return None
 
-    def format_actions_result(self):
+    def format_actions_result(self, assets_response):
         agents_responses = self.response['actors']
         for agent in agents_responses:
             token = agent['agent']['token']
@@ -99,7 +97,20 @@ class AssetRequestManager:
                     agent['agent']['last_action_result'] = True
                 else:
                     agent['agent']['message'] = 'The Social asset did not connect.'
+
+        agents_responses.extend(assets_response['actors'])
         self.response['actors'] = agents_responses
+
+        return self.response
 
     def processing(self):
         return self.processing_requests
+
+    def get_social_assets_tokens(self):
+        tokens = []
+
+        for main_token in self.main_tokens:
+            if self.main_tokens[main_token] is not None:
+                tokens.append(self.main_tokens[main_token])
+
+        return tokens

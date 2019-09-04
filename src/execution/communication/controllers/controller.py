@@ -123,7 +123,6 @@ class Controller:
 
         :param request: The request object received on the API containing all the data and JSON.
         :return tuple: First position with the status and the second position with the message."""
-        print('\n      DO_SOCIAL_ASSET_CONNECTION: ', self.asset_request_manager.main_tokens)
         try:
             obj = request.get_json(force=True)
 
@@ -437,5 +436,8 @@ class Controller:
     def processing_asset_request(self):
         return self.asset_request_manager.processing()
 
-    def format_actions_result(self):
-        self.asset_request_manager.format_actions_result()
+    def format_actions_result(self, assets_response):
+        return self.asset_request_manager.format_actions_result(assets_response)
+
+    def get_social_assets_tokens(self):
+        return self.asset_request_manager.get_social_assets_tokens()
