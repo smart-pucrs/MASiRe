@@ -30,8 +30,8 @@ class Simulation:
 
         return self.cycler.connect_social_asset(main_token, token)
 
-    def get_agents_by_tokens(self, tokens):
-        return self.cycler.get_agents(tokens)
+    def get_social_assets_by_tokens(self, tokens):
+        return self.cycler.get_social_assets(tokens)
 
     def disconnect_agent(self, token):
         """Disconnect the agent from the simulation.

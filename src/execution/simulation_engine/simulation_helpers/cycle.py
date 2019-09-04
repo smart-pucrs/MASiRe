@@ -166,11 +166,13 @@ class Cycle:
                             else:
                                 victim.lifetime -= 1
 
-    def get_agents(self, tokens):
+    def get_social_assets(self, tokens):
         result = []
 
         for token in tokens:
-            result.append(self.social_assets_manager.get(token))
+            agent = self.social_assets_manager.get(token)
+            if agent is not None:
+                result.append(agent)
 
         return result
 

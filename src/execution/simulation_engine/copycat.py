@@ -57,10 +57,9 @@ class CopyCat:
         return copy.deepcopy(response)
 
     def finish_social_asset_connections(self, tokens):
-        response = self.simulation.get_agents_by_tokens(tokens)
+        response = self.simulation.get_social_assets_by_tokens(tokens)
 
         return copy.deepcopy(response)
-
 
     def disconnect_agent(self, token):
         """Disconnect the agent and returns the copy of the response.
