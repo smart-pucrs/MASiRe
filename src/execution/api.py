@@ -430,7 +430,6 @@ def send_action_temp(msg):
         response['result'] = False
 
     else:
-        Logger.log(Logger.TAG_NORMAL, 'Action received.')
 
         every_socket = controller.manager.get_all('socket')
         tokens_connected_size = len([*every_socket[0], *every_socket[1]])
@@ -438,7 +437,8 @@ def send_action_temp(msg):
         social_asset_workers_size = len(controller.manager.get_workers('social_asset'))
         workers = agent_workers_size + social_asset_workers_size
 
-        Logger.log(Logger.TAG_NORMAL, f'{workers} of {tokens_connected_size}')
+
+        Logger.log(Logger.TAG_NORMAL, f'Action received: {workers} of {tokens_connected_size}.')
 
         if tokens_connected_size == workers:
             Logger.log(Logger.TAG_NORMAL, 'All actions received.')

@@ -431,7 +431,7 @@ class Controller:
         return True
 
     def check_requests(self):
-        self.asset_request_manager.check_requests()
+        return self.asset_request_manager.check_requests()
 
     def processing_asset_request(self):
         return self.asset_request_manager.processing()
