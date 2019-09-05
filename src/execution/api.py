@@ -22,14 +22,13 @@ base_url, api_port, simulation_port, step_time, first_step_time, method, log, se
 timeout = 3
 
 app = Flask(__name__)
-socket = SocketIO(app=app)
+socket = SocketIO(app=app, engineio_logger=True)
 
 controller = Controller(agents_amount, first_step_time, secret)
 every_agent_registered = Queue()
 one_agent_registered_queue = Queue()
 actions_queue = Queue()
 request_queue = Queue()
-
 
 @app.route('/start_connections', methods=['POST'])
 def start_connections():
