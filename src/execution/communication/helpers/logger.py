@@ -6,6 +6,8 @@ class Logger:
     TAG_CONNECT = 'CONNECT'
     TAG_DISCONNECT = 'DISCONNECT'
     TAG_MESSAGE = 'MESSAGE'
+    TAG_LOG = 'LOG'
+    TAG_API = 'API'
 
     def __init__(self):
         if Logger.__instance is not None:
@@ -21,5 +23,29 @@ class Logger:
         return Logger.__instance
 
     @staticmethod
-    def log(tag, message):
-        print(f'[ API ][ {tag} ] ## {message}')
+    def normal(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_NORMAL} ] ## {message}')
+
+    @staticmethod
+    def error(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_ERROR} ] ## {message}')
+
+    @staticmethod
+    def critical(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_CRITICAL} ] ## {message}')
+
+    @staticmethod
+    def connect(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_CONNECT} ] ## {message}')
+
+    @staticmethod
+    def disconnect(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_DISCONNECT} ] ## {message}')
+
+    @staticmethod
+    def message(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_MESSAGE} ] ## {message}')
+
+    @staticmethod
+    def log(message):
+        print(f'[ {Logger.TAG_API} ][ {Logger.TAG_LOG} ] ## {message}')

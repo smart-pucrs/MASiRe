@@ -3,6 +3,7 @@ class Logger:
     TAG_NORMAL = 'NORMAL'
     TAG_ERROR = 'ERROR'
     TAG_CRITICAL = 'CRITICAL'
+    TAG_SIMULATOR = 'SIMULATOR'
 
     def __init__(self):
         if Logger.__instance is not None:
@@ -19,4 +20,16 @@ class Logger:
 
     @staticmethod
     def log(tag, message):
-        print(f'[ SIMULATION ][ {tag} ] ## {message}')
+        print(f'[ API ][ {tag} ] ## {message}')
+
+    @staticmethod
+    def normal(message):
+        print(f'[ {Logger.TAG_SIMULATOR} ][ {Logger.TAG_NORMAL} ] ## {message}')
+
+    @staticmethod
+    def error(message):
+        print(f'[ {Logger.TAG_SIMULATOR} ][ {Logger.TAG_ERROR} ] ## {message}')
+
+    @staticmethod
+    def critical(message):
+        print(f'[ {Logger.TAG_SIMULATOR} ][ {Logger.TAG_CRITICAL} ] ## {message}')
