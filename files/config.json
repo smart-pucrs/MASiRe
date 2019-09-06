@@ -188,8 +188,8 @@
       "maxAmount": 1
     },
     "socialAsset": {
-      "minAmount": 3,
-      "maxAmount": 3,
+      "minAmount": 1,
+      "maxAmount": 1,
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
     }
   }

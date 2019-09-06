@@ -23,10 +23,11 @@ class Parser:
         self.parser.add_argument('-ap', required=False, type=str, default='12345')
         self.parser.add_argument('-pyv', required=False, type=str, default='')
         self.parser.add_argument('-g', required=False, type=bool, default=False)
-        self.parser.add_argument('-step_t', required=False, type=int, default=2)
+        self.parser.add_argument('-step_t', required=False, type=int, default=5)
         self.parser.add_argument('-first_t', required=False, type=int, default=5)
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
+        self.parser.add_argument('-monitor', required=False, type=str, default='8000')
         self.parser.add_argument('-secret', required=False, type=str, default='')
 
     def check_arguments(self):
@@ -109,6 +110,23 @@ class Parser:
                     return args.__dict__[arg]
 
         return None
+
+    def get_monitor_arguments(self):
+        """Return all the arguments necessary for the Monitor.
+
+        :returns list: List of arguments"""
+
+        args = self.parser.parse_args()
+
+        if not args.secret:
+            secret = self.secret
+        else:
+            secret = args.secret
+
+        if args.url == 'localhost':
+            args.url = '127.0.0.1'
+
+        return [args.url, args.monitor, secret]
 
     def get_simulation_arguments(self):
         """Return all the arguments necessary for the Simulation.

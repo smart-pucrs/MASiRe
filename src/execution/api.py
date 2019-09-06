@@ -343,7 +343,7 @@ def finish_step():
 
         else:
             controller.set_processing_actions()
-
+            socket.emit('monitor', sim_response)
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')
 
