@@ -22,13 +22,14 @@ base_url, api_port, simulation_port, step_time, first_step_time, method, log, se
 timeout = 3
 
 app = Flask(__name__)
-socket = SocketIO(app=app, engineio_logger=True)
+socket = SocketIO(app=app)
 
 controller = Controller(agents_amount, first_step_time, secret)
 every_agent_registered = Queue()
 one_agent_registered_queue = Queue()
 actions_queue = Queue()
 request_queue = Queue()
+
 
 @app.route('/start_connections', methods=['POST'])
 def start_connections():
@@ -388,7 +389,6 @@ def step_controller(ready_queue, status):
 
     if status == 2:
         try:
-            print('     TIMEOUT: ', timeout)
             ready_queue.get(block=True, timeout=int(timeout))
 
         except queue.Empty:
@@ -396,7 +396,6 @@ def step_controller(ready_queue, status):
     else:
         try:
             if int(agents_amount) > 0:
-                print('     STEP TIME: ', timeout)
                 ready_queue.get(block=True, timeout=int(step_time))
 
         except queue.Empty:
@@ -589,7 +588,6 @@ def auto_destruction():
     except requests.exceptions.ConnectionError:
         pass
 
-    Logger.log('FINISH')
     os.kill(os.getpid(), signal.SIGTERM)
 
 
