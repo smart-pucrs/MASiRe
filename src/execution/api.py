@@ -344,6 +344,7 @@ def finish_step():
         else:
             controller.set_processing_actions()
             socket.emit('monitor', sim_response)
+
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')
 
@@ -352,7 +353,6 @@ def finish_step():
 
             else:
                 notify_actors('action_results', sim_response)
-
                 Logger.normal('Wait all the agent send yours actions.')
 
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()

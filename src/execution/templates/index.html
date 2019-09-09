@@ -1,86 +1,37 @@
 <html>
 
-<head>
+    <head>
 
-  <title>Quick Start - Leaflet</title>
+        <title>Quick Start - Leaflet</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico">
+        <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico">
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin="">
-  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-    crossorigin=""></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="">
+        <link rel="stylesheet" href="/static/style.css">
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-</head>
+        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script>
 
-<body>
+    </head> 
+    <body>
 
-  <div id="simulation_box">
-    <h5 id="step">NULL</h5>
-    <h5 id="agentAmount">NULL</h5>
-  </div>
+        <div id="mapid"></div>
 
-  <div id="mapid" style="width: 100%; height: 600px; position: relative;"></div>
+        <div id="simulation-box">
+            <h5 id="step">NULL</h5>
+            <p id="step-speed">NULL</p>
+            
+            <ul id="agents-list"></ul>
+        </div>
 
-  <script>
+        
+        <script type="text/javascript" src="/static/script.js?v=2"></script>
 
-    var mymap = L.map('mapid').setView([-30.110815, -51.21199], 14);
-
-    var markerGroup = L.layerGroup().addTo(mymap);
-
-    var markers = []
-
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-      maxZoom: 18,
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox.streets'
-    }).addTo(mymap);
-
-    L.marker([51.5, -0.09]).addTo(mymap);
-
-    var socket = io.connect('http://127.0.0.1:12345');
-    socket.on('connect', function () {
-      console.log('connected');
-    });
-
-    socket.on('monitor', function (data) {
-      console.log(data);
-
-      document.getElementById("step").innerHTML = "Step: " + data['environment']['step'];
-      
-      document.getElementById("agentAmount").innerHTML = "Agent amount: " + data['actors'].length;
-
-      var events = data['environment']['events'];
-
-      for(i in events){ 
-        var marker = L.marker(events[i]['location']).addTo(markerGroup);
-      }
-
-      /*
-      var greenIcon = L.icon({
-        iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png',
-        shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png',
-
-        iconSize: [38, 95], // size of the icon
-        shadowSize: [50, 64], // size of the shadow
-        iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-        shadowAnchor: [4, 62],  // the same for the shadow
-        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
-      });
-
-      L.marker([-30.110815, -51.21199], { icon: greenIcon }).addTo(mymap);
-      });
-      */
-    });
-  </script>
-</body>
+    </body>
 
 </html>
