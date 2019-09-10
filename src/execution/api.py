@@ -197,6 +197,20 @@ def message(msg):
     Logger.message(msg)
 
 
+@app.route('/simulation_info', methods=['GET'])
+def simulation_info():
+    data = {
+        'simulation_url': 'http://' + base_url + ':' + simulation_port,
+        'api_url': 'http://' + base_url + ':' + api_port,
+        'max_agents': agents_amount,
+        'first_step_time': first_step_time,
+        'step_time': step_time,
+        'social_asset_timeout': timeout
+    }
+
+    return jsonify(data)
+
+
 @socket.on('register_agent')
 def register_agent(msg):
     """Connect the socket of the agent.
@@ -324,6 +338,7 @@ def finish_step():
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
             notify_actors('match_result', sim_response['report'])
+            socket.emit('monitor', sim_response['message'])
 
             if sim_response['status'] == 0:
                 Logger.normal('No more map to run, finishing the simulation...')
@@ -343,7 +358,7 @@ def finish_step():
 
         else:
             controller.set_processing_actions()
-            socket.emit('monitor', sim_response)
+            print(socket.emit('monitor', sim_response))
 
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')

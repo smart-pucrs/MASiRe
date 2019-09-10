@@ -28,6 +28,7 @@ class Parser:
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
         self.parser.add_argument('-monitor', required=False, type=str, default='8000')
+        self.parser.add_argument('-path_replay', required=False, type=str, default='replays')
         self.parser.add_argument('-secret', required=False, type=str, default='')
 
     def check_arguments(self):
@@ -126,7 +127,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.monitor, secret]
+        return [args.url, args.monitor, args.ap, args.path_replay, secret]
 
     def get_simulation_arguments(self):
         """Return all the arguments necessary for the Simulation.
