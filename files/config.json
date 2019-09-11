@@ -10,15 +10,6 @@
       "maxLat": -30.1086200,
       "centerLat": -30.110815,
       "centerLon": -51.21199
-    },
-    {
-      "osm": "files/map0.osm",
-      "minLon": -51.2163800,
-      "maxLon": -51.2076000,
-      "minLat": -30.1130100,
-      "maxLat": -30.1086200,
-      "centerLat": -30.110815,
-      "centerLon": -51.21199
     }],
     "proximity": 5,
     "randomSeed": 2018

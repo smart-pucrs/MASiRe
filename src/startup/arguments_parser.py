@@ -127,7 +127,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.monitor, args.ap, args.path_replay, secret]
+        return [args.url, args.monitor, args.ap, args.path_replay, args.conf, secret]
 
     def get_simulation_arguments(self):
         """Return all the arguments necessary for the Simulation.

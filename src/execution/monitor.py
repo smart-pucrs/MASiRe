@@ -1,19 +1,23 @@
+import pathlib
 import sys
 import socketio
 import time
 import requests
 import json
 import os
+import signal
 
 from datetime import date
-from flask import Flask, render_template, jsonify, request, send_file
-from flask_socketio import SocketIO
+from flask import Flask, render_template, jsonify, send_file
 
-base_url, monitor_port, api_port, path_replay, secret = sys.argv[1:]
+base_url, monitor_port, api_port, path_replay, config, secret = sys.argv[1:]
 app = Flask(__name__)
 socket = socketio.Client()
 
 step = 0
+maps = None
+has_next = True
+current_match = 0
 simulation_info = {}
 simulation_steps = []
 
@@ -26,13 +30,32 @@ def connect():
 
 @socket.on('monitor')
 def monitor(data):
-    if isinstance(data, str):
+    # ------- STATUS -------
+    # -1: ERROR
+    #  0: SIMULATION FINISH
+    #  1: SIMULATION RESTART
+    #  2: STEP DATA
+    # ----------------------
+    global simulation_steps
+
+    if data['status'] == -1:
+        print('[ MONITOR ][ ERROR ] ## A error occurrence, finishing the monitor.')
+        os.kill(os.getpid(), signal.SIGTERM)
+
+    elif data['status'] == 0:
+        print('[ MONITOR ][ FINISH ] ## Finishing the monitor.')
         if path_replay != 'None':
             write_replay(path_replay)
 
-    else:
-        simulation_steps.append(data)
+    elif data['status'] == 1:
+        if path_replay != 'None':
+            write_replay(path_replay)
 
+        print('[ MONITOR ][ RESTART ] ## restart the monitor.')
+
+    else:
+        simulation_steps.append(data['sim_data'])
+        
 
 @app.route('/')
 def home():
@@ -41,13 +64,23 @@ def home():
 
 @app.route('/next', methods=['GET'])
 def next():
-    global step, simulation_info
+    global step
+
+    print(step)
 
     data = {'status': False, 'step_data': None, 'step': None, 'message': ''}
 
     try:
+        print(step, len(simulation_steps))
         data['step_data'] = simulation_steps[step]
-        step += 1
+        
+        if step < len(simulation_steps) - 1:
+            step += 1
+            print('STEP: ', step)
+
+        else:
+            data['message'] = 'There is no more steps.'            
+
         data['step'] = step
         data['total_steps'] = len(simulation_steps)
         data['status'] = True
@@ -63,14 +96,20 @@ def next():
 
 @app.route('/prev', methods=['GET'])
 def prev():
-    global step, simulation_info
+    global step
 
-    data = {'status': Fals, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
+    data = {'status': False, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
 
     try:
         data['step_data'] = simulation_steps[step]
-        step -= 1
-        data['step'] = step
+        
+        if step > 0:
+            step -= 1
+        else:
+            data['message'] = 'Already in the first step.'
+
+        data['step_data'] = simulation_steps[step]
+        data['step'] = step 
         data['total_steps'] = len(simulation_steps)
         data['status'] = True
 
@@ -85,7 +124,22 @@ def prev():
 
 @app.route('/init', methods=['GET'])
 def init_monitor():
+    global maps, simulation_info
+
+    try:
+        config_location = os.getcwd() + '/' + config
+        maps = json.load(open(config_location, 'r'))['map']['maps']
+
+        first_map = maps.pop(0)
+        del first_map['osm']
+
+        simulation_info['map'] = first_map
+
+    except Exception as e:
+        print(f'[ MONITOR ][ ERROR ] ## Error when load the config file. Error: {str(e)}')
+
     return jsonify(simulation_info)
+
 
 @app.route('/victim_icon', methods=['GET'])
 def victim_icon():

@@ -153,7 +153,7 @@ def connect_agent():
 
     obj = request.get_json(force=True)
     agent = False
-    print('[AGENT]: ', obj['name'])
+
     if 'main_token' in obj:
         Logger.normal('Try to connect a social asset.')
         status, message = controller.do_social_asset_connection(request)
@@ -319,15 +319,13 @@ def finish_step():
         tokens_actions_list = [*controller.manager.get_actions('agent'), *controller.manager.get_actions('social_asset')]
 
         Logger.normal('Send the actions for the simulation.')
-
         sim_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json={'actions': tokens_actions_list, 'secret': secret}).json()
-
         Logger.normal('Receive the actions results from the simulation.')
-
         controller.manager.clear_workers()
 
         if sim_response['status'] == 0:
             Logger.critical('An internal error occurred. Shutting down...')
+            socket.emit('monitor', {'status': -1})
 
             requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True})
             multiprocessing.Process(target=auto_destruction, daemon=True).start()
@@ -338,10 +336,10 @@ def finish_step():
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
             notify_actors('match_result', sim_response['report'])
-            socket.emit('monitor', sim_response['message'])
 
             if sim_response['status'] == 0:
                 Logger.normal('No more map to run, finishing the simulation...')
+                socket.emit('monitor', {'status': 0, 'sim_data': sim_response})
 
                 report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
@@ -350,6 +348,7 @@ def finish_step():
 
             else:
                 Logger.normal('Restart the simulation.')
+                socket.emit('monitor', {'status': 1, 'sim_data': sim_response})
 
                 notify_actors('simulation_started', sim_response)
 
@@ -358,7 +357,7 @@ def finish_step():
 
         else:
             controller.set_processing_actions()
-            print(socket.emit('monitor', sim_response))
+            socket.emit('monitor', {'status': 2, 'sim_data': sim_response})
 
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')

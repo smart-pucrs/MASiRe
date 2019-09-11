@@ -1,23 +1,12 @@
-var mymap = L.map('mapid').setView([-30.110815, -51.21199], 14);
-var markerGroup = L.layerGroup().addTo(mymap);
+var mymap = null;
+var markerGroup = null;
 var stepSpeed = 1000;
 var updateStateFunctionId = null;
 var logId = '#log';
 var btnLogId = '#btn-log';
 var btnPauseId = '#btn-pause';
 var currentStep = 1;
-var playing = false;
-
-
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.streets'
-}).addTo(mymap);
-L.marker([51.5, -0.09]).addTo(mymap);
-
+var playing = true;
 
 var floodIcon = L.icon({
     iconUrl: 'flood_icon',
@@ -54,6 +43,7 @@ function updateData() {
     
     $.getJSON($SCRIPT_ROOT + '/next',
         function (data) {
+            console.log('DAta: ', data);
             process_simulation_data(data);
         });
 }
@@ -84,7 +74,7 @@ function process_simulation_data(data) {
 
     markerGroup.clearLayers();
 
-    $('#step').text(data['step'] + ' of ' + data['total_steps']);
+    $('#step').text((data['step'] + 1) + ' of ' + data['total_steps']);
 
     let events = data['step_data']['environment']['events'];
     let event_type;
@@ -136,6 +126,22 @@ function init(){
         $('#first-step-time').text(data['first_step_time']);
         $('#step-time').text(data['step_time']);
         $('#social-asset-timeout').text(data['social_asset_timeout']);
+
+        console.log(data)
+
+        let lat = parseFloat(data['map']['centerLat']);
+        let lon = parseFloat(data['map']['centerLon']);
+
+        mymap = L.map('mapid').setView([lat,lon], 18);
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 19,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        markerGroup = L.layerGroup().addTo(mymap);
     }
 }
 
@@ -172,7 +178,7 @@ function setLog(){
 function log(tag, message){
     var oldText = $(logId).val();
     var formattedText = oldText + '\n[ ' + tag + ' ] ## ' + message;
-    $(logId).text(formattedText);
+    $(logId).focus().val(formattedText);
 }
 
 function logNormal(message){
@@ -186,6 +192,8 @@ function logError(message){
 function logCritical(message){
     log('CRITICAL', message);
 }
+
+updateStateFunctionId = setInterval(updateData, stepSpeed);
 
 window.onload = function(){
     this.init();

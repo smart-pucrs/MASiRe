@@ -1,83 +1,91 @@
 <html>
 
-    <head>
+<head>
 
-        <title>Disaster Simulator</title>
+    <title>Disaster Simulator</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico">
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="">
-        <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="">
+    <link rel="stylesheet" href="static/style.css">
 
-        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-        <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script>
-
-    </head> 
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script> 
+</head> 
     <body>
+        <div id="board">
+            <div id="mapid"></div>
 
-        <div id="mapid"></div>
+            <div id="simulation-box">
+                <h3 class="title">Simulation information</h3>
+        
+                <div id="simulation-info">
+                    <div class="key-value">
+                        <label>Simulation url: </label>
+                        <label id="simulation-url"></label >
+                    </div>
+                    <div class="key-value">
+                        <label>Api url: </label>
+                        <label id="api-url"></label >
+                    </div>
+                    <div class="key-value">
+                        <label>Max agent amount: </label>
+                        <label id="max-agents"></label >
+                    </div>
+                    <div class="key-value">
+                        <label>First step time: </label>
+                        <label id="first-step-time"></label >
+                    </div>
+                    <div class="key-value">
+                        <label>Time per step: </label>
+                        <label id="step-time"></label >
+                    </div>
+                    <div class="key-value">
+                        <label>Social asset timeout: </label>
+                        <label id="social-asset-timeout"></label >
+                    </div>
+                </div>
+        
+                <h3 class="title">Current information</h3>
+                  
+                <div id="current-info">
+                    <div class="key-value">
+                        <label>Step: </label>
+                        <label id="step">NULL</label >
+                    </div>
+                    <div class="key-value">
+                        <label>Active agents: </label>
+                        <label id="active-agents">NULL</label >
+                    </div>
+                </div>
+        
+                <br>
+                <div id="simulation-controller">
+                    <button id="btn-prev" onclick="prev()"> << </button>
+                    <button id="btn-pause" onclick="pause()">Pause</button>
+                    <button id="btn-next" onclick="next()"> >> </button>
+                </div>
+                <br>
 
-        <div id="simulation-box">
-            <div id="simulation-info">
-                <h3>Simulation info</h3>
-                
-                <div class="key-value">
-                    <h5>Simulation url: </h5>
-                    <h6 id="simulation-url"></h6>
-                </div>
-                <div class="key-value">
-                    <h5>Api url: </h5>
-                    <h6 id="api-url"></h6>
-                </div>
-                <div class="key-value">
-                    <h5>Max agent amount: </h5>
-                    <h6 id="max-agents"></h6>
-                </div>
-                <div class="key-value">
-                    <h5>First step time: </h5>
-                    <h6 id="first-step-time"></h6>
-                </div>
-                <div class="key-value">
-                    <h5>Time per step: </h5>
-                    <h6 id="step-time"></h6>
-                </div>
-                <div class="key-value">
-                    <h5>Social asset timeout: </h5>
-                    <h6 id="social-asset-timeout"></h6>
+                <div id="log-box">
+                    <button id="btn-log" onclick="setLog()">Hide log</button>
+                    <br>
+                    <textarea id="log"></textarea>
                 </div>
             </div>
-
-            <div id="current-info">
-                <h3>Current info</h3>
-                
-                <div class="key-value">
-                    <h5>Step: </h5>
-                    <h6 id="step">NULL</h6>
-                </div>
-                <div class="key-value">
-                    <h5>Active agents: </h5>
-                    <h6 id="active-agents">NULL</h6>
-                </div>
-                
-                <button id="btn-prev" onclick="prev()">Prev</button>
-                <button id="btn-pause" onclick="pause()">Play</button>
-                <button id="btn-next" onclick="next()">Next</button>
-            </div>
-            <h5 id="step">NULL</h5>
-            <h5 id="step-speed">NULL</h5>
-            
-
-            <button id="btn-log" onclick="setLog()">Hide log</button>
-            <br>
-            <textarea id="log"></textarea>
         </div>
-
-        <script type="text/javascript" src="/static/script.js?v=2"></script>
+    
+        <script type="text/javascript" src="static/script.js?v=2"></script>
 
     </body>
 
