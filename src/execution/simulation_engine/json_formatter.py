@@ -40,8 +40,8 @@ class JsonFormatter:
         try:
             response = self.copycat.restart()
             message = 'Simulation restarted.'
-            json_agents = self.jsonify_agent_variables(response[0])
-            json_assets = self.jsonify_asset_variables(response[1])
+            json_agents = self.jsonify_agents_variables(response[0])
+            json_assets = self.jsonify_assets_variables(response[1])
             json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
             json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
 
@@ -136,8 +136,6 @@ class JsonFormatter:
             Logger.error(f'Unknown error {str(e)}.')
 
             return {'status': 0, 'actors': [], 'message': f'An error occurred during connection: {str(e)}.'}
-
-
 
     def disconnect_agent(self, token):
         """Disconnect the agent to the simulation and returns a JSON response.

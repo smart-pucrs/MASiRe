@@ -27,6 +27,10 @@ class Checker:
         if not test[0]:
             return test
 
+        test = self.test_specific_map_key()
+        if not test[0]:
+            return test
+
         test = self.test_social_assets_key()
         if not test[0]:
             return test
@@ -86,8 +90,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['id', 'steps', 'maps', 'minLon', 'maxLon', 'minLat', 'maxLat', 'centerLat', 'centerLon', 'proximity',
-                'randomSeed']
+        keys = ['id', 'steps', 'maps', 'proximity', 'randomSeed']
 
         map = json.load(open(self.config, 'r'))['map']
         for key in keys:
@@ -113,28 +116,6 @@ class Checker:
         if not map['maps']:
             return 0, 'Map: Maps is empty.'
 
-        for key in ['minLat', 'minLon', 'maxLat', 'maxLon']:
-            if not isinstance(map[key], float) and not isinstance(map[key], int):
-                return 0, f'Map: Key {key} is not a valid type.'
-
-        if map['minLon'] > map['maxLon']:
-            return 0, f'Map: MinLon can not be bigger than MaxLon.'
-
-        if map['minLat'] > map['maxLat']:
-            return 0, f'Map: MinLat can not be bigger than MaxLat.'
-
-        if not isinstance(map['centerLat'], float) and not isinstance(map['centerLat'], int):
-            return 0, 'Map: CenterLat is not a valid type.'
-
-        if map['minLat'] > map['centerLat'] or map['centerLat'] > map['maxLat']:
-            return 0, 'Map: CenterLat can not be over the limits of minLat or maxLat.'
-
-        if not isinstance(map['centerLon'], float) and not isinstance(map['centerLon'], int):
-            return 0, 'Map: CenterLon is not a valid type.'
-
-        if map['minLon'] > map['centerLon'] or map['centerLon'] > map['maxLon']:
-            return 0, 'Map: CenterLon can not be over the limits of minLat or maxLat.'
-
         if not isinstance(map['proximity'], int):
             return 0, 'Map: Proximity is not a valid type.'
 
@@ -143,6 +124,44 @@ class Checker:
 
         if map['proximity'] <= 0:
             return 0, 'Map: Proximity can not be zero or negative.'
+
+        return 1, 'Map: Ok.'
+
+    def test_specific_map_key(self):
+        """Test the keys and objects inside the map obj.
+
+                :returns int: Status where 1 is Ok and 0 is Not ok.
+                :returns str: Appropriate message for the user understand his error."""
+
+        keys = ['osm', 'minLat', 'maxLat', 'minLon', 'maxLon', 'centerLat', 'centerLon']
+
+        maps = json.load(open(self.config, 'r'))['map']['maps']
+        for map in maps:
+            for key in keys:
+                if key not in list(map.keys()):
+                    return 0, f'Map: {key} is missing.'
+
+            for key in ['minLat', 'minLon', 'maxLat', 'maxLon']:
+                if not isinstance(map[key], float) and not isinstance(map[key], int):
+                    return 0, f'Map: Key {key} is not a valid type.'
+
+            if map['minLon'] > map['maxLon']:
+                return 0, f'Map: MinLon can not be bigger than MaxLon.'
+
+            if map['minLat'] > map['maxLat']:
+                return 0, f'Map: MinLat can not be bigger than MaxLat.'
+
+            if not isinstance(map['centerLat'], float) and not isinstance(map['centerLat'], int):
+                return 0, 'Map: CenterLat is not a valid type.'
+
+            if map['minLat'] > map['centerLat'] or map['centerLat'] > map['maxLat']:
+                return 0, 'Map: CenterLat can not be over the limits of minLat or maxLat.'
+
+            if not isinstance(map['centerLon'], float) and not isinstance(map['centerLon'], int):
+                return 0, 'Map: CenterLon is not a valid type.'
+
+            if map['minLon'] > map['centerLon'] or map['centerLon'] > map['maxLon']:
+                return 0, 'Map: CenterLon can not be over the limits of minLat or maxLat.'
 
         return 1, 'Map: Ok.'
 

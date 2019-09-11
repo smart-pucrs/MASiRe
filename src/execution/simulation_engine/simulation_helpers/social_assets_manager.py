@@ -11,7 +11,7 @@ class SocialAssetsManager:
 
     def __init__(self, map_info, social_assets_info):
         self.social_assets = {}
-        self.cdm_location = [map_info['centerLat'], map_info['centerLon']]
+        self.cdm_location = [map_info['maps'][0]['centerLat'], map_info['maps'][0]['centerLon']]
         random.seed(map_info['randomSeed'])
         self.requests = {}
         self.social_assets_info = social_assets_info

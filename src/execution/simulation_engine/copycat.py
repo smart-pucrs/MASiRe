@@ -18,7 +18,7 @@ class CopyCat:
 
         :return int: 1 if can be restarted else 0."""
 
-        self.logs[self.config['map']['maps'][0]] = self.simulation.log()
+        self.logs[self.config['map']['maps'][0]['osm']] = self.simulation.log()
         self.config['map']['maps'].pop(0)
 
         if not self.config['map']['maps']:

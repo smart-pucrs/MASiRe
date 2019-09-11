@@ -7,10 +7,10 @@ from math import sqrt
 
 class Cycle:
     def __init__(self, config):
-        self.map = Map(config['map']['maps'][0], config['map']['proximity'])
+        self.map = Map(config['map']['maps'][0]['osm'], config['map']['proximity'])
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
-        self.cdm_location = (config['map']['centerLat'], config['map']['centerLon'])
+        self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'])
         generator = Generator(config, self.map)
@@ -25,8 +25,9 @@ class Cycle:
         self.match_history = []
 
     def restart(self, config_file):
-        self.map.restart(config_file['map']['maps'][0], config_file['map']['proximity'])
+        self.map.restart(config_file['map']['maps'][0]['osm'], config_file['map']['proximity'])
         generator = Generator(config_file, self.map)
+        self.map_percepts = config_file['map']
         self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
         self.max_victims = generator.victim_id
@@ -35,7 +36,7 @@ class Cycle:
         self.delivered_items = []
         self.current_step = 0
         self.max_steps = config_file['map']['steps']
-        self.cdm_location = (config_file['map']['centerLat'], config_file['map']['centerLon'])
+        self.cdm_location = (config_file['map']['maps'][0]['centerLat'], config_file['map']['maps'][0]['centerLon'])
         self.agents_manager.restart(config_file['agents'], self.cdm_location)
         self.social_assets_manager.restart(config_file['map'], config_file['socialAssets'])
 
@@ -1608,7 +1609,13 @@ class Cycle:
 
         :return dict: constants attributes of the map in config file"""
 
-        return self.map_percepts
+        percepts = {'proximity': self.map_percepts['proximity'], 'minLat': self.map_percepts['maps'][0]['minLat'],
+                    'maxLat': self.map_percepts['maps'][0]['maxLat'], 'minLon': self.map_percepts['maps'][0]['minLon'],
+                    'maxLon': self.map_percepts['maps'][0]['maxLon'],
+                    'centerLat': self.map_percepts['maps'][0]['centerLat'],
+                    'centerLon': self.map_percepts['maps'][0]['centerLon']}
+
+        return percepts
 
     def match_report(self):
         """Generate a report with the completed event of each agent in the simulation

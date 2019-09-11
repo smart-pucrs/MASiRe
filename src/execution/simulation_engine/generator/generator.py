@@ -11,7 +11,8 @@ class Generator:
     """Class that generate all the events step, by step or separated if needed."""
 
     def __init__(self, config, map):
-        self.map_variables: dict = config['map']
+        self.general_map_variables: dict = config['map']
+        self.current_map_variables: dict = config['map']['maps'][0]
         self.generate_variables: dict = config['generate']
         self.map = map
         self.flood_id: int = 0
@@ -30,7 +31,7 @@ class Generator:
 
         :return list: All the steps containing either a dictionary with the event or a dictionary with a None flood."""
 
-        steps_number: int = self.map_variables['steps']
+        steps_number: int = self.general_map_variables['steps']
         events = [0] * steps_number
 
         flood = self.generate_flood()
@@ -88,8 +89,8 @@ class Generator:
                                self.generate_variables['flood']['rectangle']['maxLength'])
             )
 
-        flood_lat: float = random.uniform(self.map_variables['minLat'], self.map_variables['maxLat'])
-        flood_lon: float = random.uniform(self.map_variables['minLon'], self.map_variables['maxLon'])
+        flood_lat: float = random.uniform(self.current_map_variables['minLat'], self.current_map_variables['maxLat'])
+        flood_lon: float = random.uniform(self.current_map_variables['minLon'], self.current_map_variables['maxLon'])
 
         dimensions['location']: tuple = self.map.align_coords(flood_lat, flood_lon)
 
@@ -217,10 +218,10 @@ class Generator:
 
         social_assets: list = [0] * amount
 
-        min_lat: float = self.map_variables['minLat']
-        max_lat: float = self.map_variables['maxLat']
-        min_lon: float = self.map_variables['minLon']
-        max_lon: float = self.map_variables['minLon']
+        min_lat: float = self.current_map_variables['minLat']
+        max_lat: float = self.current_map_variables['maxLat']
+        min_lon: float = self.current_map_variables['minLon']
+        max_lon: float = self.current_map_variables['minLon']
 
         i: int = 0
         while i < amount:

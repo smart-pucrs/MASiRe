@@ -26,7 +26,7 @@ def connect():
 
 @socket.on('monitor')
 def monitor(data):
-    if (isinstance(data, str)):
+    if isinstance(data, str):
         if path_replay != 'None':
             write_replay(path_replay)
 
@@ -65,7 +65,7 @@ def next():
 def prev():
     global step, simulation_info
 
-    data = {'status': False, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
+    data = {'status': Fals, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
 
     try:
         data['step_data'] = simulation_steps[step]
@@ -116,16 +116,18 @@ def write_replay(path):
     json_steps = {}
     step_id = 0
 
-    abs_path = os.getcwd() + '/src/execution/' + path
+    abs_path = os.getcwd() + '/' + path
 
     for json_step in simulation_steps:
         json_steps[step_id] = json_step
         step_id += 1
     
-    current_date = date.today().strftime('%d/%m/%Y')
+    current_date = date.today().strftime('%d-%m-%Y')
     hours = time.strftime("%H:%M:%S")
 
-    with open(str(abs_path + '/' + f'REPLAY of {current_date} at {hours}.txt'), 'w+') as file:
+    file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
+
+    with open(str(abs_path + '/' + file_name), 'w+') as file:
         file.write(json.dumps(json_steps, sort_keys=False, indent=4))
 
 
