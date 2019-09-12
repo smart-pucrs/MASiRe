@@ -33,6 +33,7 @@ class Starter:
         self.check_arguments()
         self.create_environment()
         arguments = self.get_arguments()
+        print(arguments)
         self.start_processes(*arguments)
 
     def check_configuration_file(self):

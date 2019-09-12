@@ -28,7 +28,8 @@ class Parser:
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
         self.parser.add_argument('-monitor', required=False, type=str, default='8000')
-        self.parser.add_argument('-path_replay', required=False, type=str, default='replays')
+        self.parser.add_argument('-record', required=False, type=bool, default=True)
+        self.parser.add_argument('-sa_timeout', required=False, type=int, default=5)
         self.parser.add_argument('-secret', required=False, type=str, default='')
 
     def check_arguments(self):
@@ -127,7 +128,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.monitor, args.ap, args.path_replay, args.conf, secret]
+        return [args.url, args.monitor, args.ap, args.record, args.conf, secret]
 
     def get_simulation_arguments(self):
         """Return all the arguments necessary for the Simulation.
@@ -161,7 +162,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.ap, args.sp, args.step_t, args.first_t, args.mtd, args.log, secret]
+        return [args.url, args.ap, args.sp, args.step_t, args.first_t, args.mtd, args.log, args.sa_timeout, secret]
 
     def get_arguments(self):
         """Return all the arguments.

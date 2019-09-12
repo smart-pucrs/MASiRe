@@ -1,4 +1,3 @@
-import pathlib
 import sys
 import socketio
 import time
@@ -8,15 +7,22 @@ import os
 import signal
 
 from datetime import date
-from flask import Flask, render_template, jsonify, send_file
+from flask import Flask, render_template, jsonify
 
-base_url, monitor_port, api_port, path_replay, config, secret = sys.argv[1:]
+arguments = sys.argv[1:]
+
+if len(arguments) == 3:
+    replay, base_url, monitor_port = arguments
+    replay_mode = True
+else:
+    base_url, monitor_port, api_port, record, config, secret = sys.argv[1:]
+    replay_mode = False
+
 app = Flask(__name__)
 socket = socketio.Client()
 
 step = 0
 maps = None
-has_next = True
 current_match = 0
 simulation_info = {}
 simulation_steps = []
@@ -44,12 +50,12 @@ def monitor(data):
 
     elif data['status'] == 0:
         print('[ MONITOR ][ FINISH ] ## Finishing the monitor.')
-        if path_replay != 'None':
-            write_replay(path_replay)
+        if record == 'True':
+            write_replay()
 
     elif data['status'] == 1:
-        if path_replay != 'None':
-            write_replay(path_replay)
+        if record == 'True':
+            write_replay()
 
         print('[ MONITOR ][ RESTART ] ## restart the monitor.')
 
@@ -66,17 +72,13 @@ def home():
 def next():
     global step
 
-    print(step)
-
     data = {'status': False, 'step_data': None, 'step': None, 'message': ''}
 
     try:
-        print(step, len(simulation_steps))
         data['step_data'] = simulation_steps[step]
         
         if step < len(simulation_steps) - 1:
             step += 1
-            print('STEP: ', step)
 
         else:
             data['message'] = 'There is no more steps.'            
@@ -127,13 +129,14 @@ def init_monitor():
     global maps, simulation_info
 
     try:
-        config_location = os.getcwd() + '/' + config
-        maps = json.load(open(config_location, 'r'))['map']['maps']
+        if not replay_mode:
+            config_location = os.getcwd() + '/' + config
+            maps = json.load(open(config_location, 'r'))['map']['maps']
 
-        first_map = maps.pop(0)
-        del first_map['osm']
+            first_map = maps.pop(0)
+            del first_map['osm']
 
-        simulation_info['map'] = first_map
+            simulation_info['map'] = first_map
 
     except Exception as e:
         print(f'[ MONITOR ][ ERROR ] ## Error when load the config file. Error: {str(e)}')
@@ -141,51 +144,46 @@ def init_monitor():
     return jsonify(simulation_info)
 
 
-@app.route('/victim_icon', methods=['GET'])
-def victim_icon():
-    return send_file('templates/images/victim_icon.png')
-
-
-@app.route('/flood_icon', methods=['GET'])
-def flood_icon():
-    return send_file('templates/images/flood_icon.png')
-
-
-@app.route('/water_sample_icon', methods=['GET'])
-def water_sample_icon():
-    return send_file('templates/images/water_sample_icon.png')
-
-
-@app.route('/photo_icon', methods=['GET'])
-def photo_icon():
-    return send_file('templates/images/photo_icon.png')
-
-
-@app.route('/agent_icon', methods=['GET'])
-def agent_icon():
-    return send_file('templates/images/agent_icon.png')
-
-
-def write_replay(path):
-    json_steps = {}
-    step_id = 0
-
-    abs_path = os.getcwd() + '/' + path
+def write_replay():
+    json_steps = {'simulation_info': simulation_info,
+                  'steps_data': []}
 
     for json_step in simulation_steps:
-        json_steps[step_id] = json_step
-        step_id += 1
-    
+        json_steps['steps_data'].append(json_step)
+
     current_date = date.today().strftime('%d-%m-%Y')
     hours = time.strftime("%H:%M:%S")
-
     file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
 
-    with open(str(abs_path + '/' + file_name), 'w+') as file:
+    abs_path = os.getcwd() + '/replays/'
+
+    with open(str(abs_path + file_name), 'w+') as file:
         file.write(json.dumps(json_steps, sort_keys=False, indent=4))
 
 
+def init_replay_mode():
+    global simulation_steps, simulation_info
+
+    replay_path = os.getcwd() + '/replays/' + replay
+
+    try:
+        with open(replay_path, 'r') as file:
+            data = json.loads(file.read())
+
+        simulation_info = data['simulation_info']
+        for step_data in data['steps_data']:
+            simulation_steps.append(step_data)
+    
+    except Exception as e:
+        print(str(e))
+
+
 if __name__ == "__main__":
-    time.sleep(.5)
-    socket.connect(f'http://{base_url}:{api_port}')
+    if replay_mode:
+        init_replay_mode()
+
+    else:
+        time.sleep(.5)
+        socket.connect(f'http://{base_url}:{api_port}')
+
     app.run(host=base_url, port=int(monitor_port))

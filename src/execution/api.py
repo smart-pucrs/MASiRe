@@ -18,8 +18,7 @@ from communication.controllers.controller import Controller
 from communication.helpers import json_formatter
 from communication.helpers.logger import Logger
 
-base_url, api_port, simulation_port, step_time, first_step_time, method, log, secret, agents_amount = sys.argv[1:]
-timeout = 3
+base_url, api_port, simulation_port, step_time, first_step_time, method, log, social_assets_timeout, secret, agents_amount = sys.argv[1:]
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
@@ -205,7 +204,7 @@ def simulation_info():
         'max_agents': agents_amount,
         'first_step_time': first_step_time,
         'step_time': step_time,
-        'social_asset_timeout': timeout
+        'social_asset_timeout': social_assets_timeout
     }
 
     return jsonify(data)
@@ -403,7 +402,7 @@ def step_controller(ready_queue, status):
 
     if status == 2:
         try:
-            ready_queue.get(block=True, timeout=int(timeout))
+            ready_queue.get(block=True, timeout=int(social_assets_timeout))
 
         except queue.Empty:
             pass

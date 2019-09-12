@@ -9,31 +9,31 @@ var currentStep = 1;
 var playing = true;
 
 var floodIcon = L.icon({
-    iconUrl: 'flood_icon',
+    iconUrl: '/static/images/flood_icon.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var photoIcon = L.icon({
-    iconUrl: 'photo_icon',
+    iconUrl: '/static/images/photo_icon.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var victimIcon = L.icon({
-    iconUrl: 'victim_icon',
+    iconUrl: '/static/images/victim_icon.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var waterSampleIcon = L.icon({
-    iconUrl: 'water_sample_icon',
+    iconUrl: '/static/images/water_sample_icon.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var agentIcon = L.icon({
-    iconUrl: 'agent_icon',
+    iconUrl: '/static/images/agent_icon.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
