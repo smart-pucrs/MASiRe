@@ -1,5 +1,6 @@
 var mymap = null;
-var markerGroup = null;
+var variablesMarkerGroup = null;
+var constantsMarkerGroup = null;
 var stepSpeed = 1000;
 var updateStateFunctionId = null;
 var logId = '#log';
@@ -7,72 +8,159 @@ var btnLogId = '#btn-log';
 var btnPauseId = '#btn-pause';
 var currentStep = 1;
 var playing = true;
+var iconLength = [28, 35];
+var iconAncor = [17, 18];
 
 var floodIcon = L.icon({
     iconUrl: '/static/images/flood.png',
-    iconSize: [25, 23],
-    iconAnchor: [15, 13]
+    iconSize: iconLength,
+    iconAnchor: iconAncor
 });
 
 var photoIcon = L.icon({
     iconUrl: '/static/images/photo.png',
-    iconSize: [25, 23],
-    iconAnchor: [15, 13]
+    iconSize: iconLength,
+    iconAnchor: iconAncor
 });
 
-var victimIcon = L.icon({
+var victimIcon0 = L.icon({
     iconUrl: '/static/images/victim_0.png',
-    iconSize: [25, 23],
-    iconAnchor: [15, 13]
+    iconSize: iconLength,
+    iconAnchor: iconAncor
+});
+
+var victimIcon1 = L.icon({
+    iconUrl: '/static/images/victim_1.png',
+    iconSize: iconLength,
+    iconAnchor: iconAncor
+});
+
+var victimIcon2 = L.icon({
+    iconUrl: '/static/images/victim_2.png',
+    iconSize: iconLength,
+    iconAnchor: iconAncor
+});
+
+var victimIcon3 = L.icon({
+    iconUrl: '/static/images/victim_3.png',
+    iconSize: iconLength,
+    iconAnchor: iconAncor
 });
 
 var waterSampleIcon = L.icon({
     iconUrl: '/static/images/water_sample.png',
-    iconSize: [25, 23],
-    iconAnchor: [15, 13]
+    iconSize: iconLength,
+    iconAnchor: iconAncor
 });
 
 var agentIcon = L.icon({
     iconUrl: '/static/images/car.png',
-    iconSize: [25, 23],
+    iconSize: [40, 45],
     iconAnchor: [15, 13]
+});
+
+var centralIcon = L.icon({
+    iconUrl: '/static/images/central.png',
+    iconSize: [40, 50],
+    iconAnchor: [20, 25]
 });
 
 function updateData() {
     logNormal('Request the step data from the simulation.');
     
-    $.getJSON($SCRIPT_ROOT + '/next',
+    $.getJSON($SCRIPT_ROOT + '/next_step',
         function (data) {
-            console.log('DAta: ', data);
-            process_simulation_data(data);
+            if (data['status'] == 0){
+                logError('Error to update the step data: ' + data['message']);
+            }else{
+                process_simulation_data(data);
+            }     
         });
 }
 
-function next(){
+function nextStep(){
     logNormal('Button Next clicked.');
-    
     updateData();
 }
 
-function prev(){
+function prevStep(){
     logNormal('Button Prev clicked.');
 
-    $.getJSON($SCRIPT_ROOT + '/prev',
+    $.getJSON($SCRIPT_ROOT + '/prev_step',
         function (data) {
-            process_simulation_data(data);
+            if (data['status']){
+                process_simulation_data(data);
+            
+            }else{
+                logError('Error to get the previous step: ' + data['message']);
+            }     
         });
+}
+
+function nextMatch(){
+    logNormal('Button NextMatch clicked.');
+    
+    $.getJSON($SCRIPT_ROOT + '/next_match',
+        function (data) {
+            if (data['status']){
+                setMapConfig(data['map']);
+                process_simulation_data(data);
+
+            }else{
+                logError('Error to get the next match: ' + data['message']);
+            }     
+        });
+}
+
+function prevMatch(){
+    logNormal('Button PrevMatch clicked.');
+    
+    $.getJSON($SCRIPT_ROOT + '/prev_match',
+        function (data) {
+            if (data['status']){
+                setMapConfig(data['map']);
+                process_simulation_data(data);
+                
+            }else{
+                logError('Error to get the previous match: ' + data['message']);
+            }     
+        });
+}
+
+function setMapConfig(config){
+    if (mymap != null){
+        mymap.remove();
+    }
+
+    mymap = L.map('mapid');
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 19,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+    variablesMarkerGroup = L.layerGroup().addTo(mymap);
+    constantsMarkerGroup = L.layerGroup().addTo(mymap);
+
+    let lat = parseFloat(config['centerLat']);
+    let lon = parseFloat(config['centerLon']);
+    console.log(lat, lon);
+    mymap.setView([lat, lon], 17);
+
+    L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
+    let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
+
+    L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e) {
+        console.info(e);
+    }).addTo(constantsMarkerGroup);    
 }
 
 function process_simulation_data(data) {
     logNormal('Processing simulation data');
 
-    if (!data['status']){
-        logError('Error to update the step: ' + data['message']);
-        
-        return;
-    }
-
-    markerGroup.clearLayers();
+    variablesMarkerGroup.clearLayers();
 
     $('#step').text((data['step'] + 1) + ' of ' + data['total_steps']);
 
@@ -82,21 +170,30 @@ function process_simulation_data(data) {
         event_type = events[i]['type'];
 
         if (event_type == 'flood') {
-            L.marker(events[i]['location'], { icon: floodIcon }).addTo(markerGroup);
+            L.marker(events[i]['location'], { icon: floodIcon }).addTo(variablesMarkerGroup);
 
             L.circle(events[i]['location'], {
                 color: 'blue',
                 fillColor: 'blue',
                 fillOpacity: 0.2,
                 radius: events[i]['radius'] * 1000
-            }).addTo(markerGroup);
+            }).addTo(variablesMarkerGroup);
 
         } else if (event_type == 'victim') {
-            L.marker(events[i]['location'], { icon: victimIcon }).addTo(markerGroup);
+            if (events[i]['lifetime']  == 0){
+                L.marker(events[i]['location'], { icon: victimIcon3 }).addTo(variablesMarkerGroup);
+            }
+            else if (events[i]['lifetime'] < 5){
+                L.marker(events[i]['location'], { icon: victimIcon2 }).addTo(variablesMarkerGroup);
+            }else if (events[i]['lifetime'] < 10){
+                L.marker(events[i]['location'], { icon: victimIcon1 }).addTo(variablesMarkerGroup);
+            }else{
+                L.marker(events[i]['location'], { icon: victimIcon0 }).addTo(variablesMarkerGroup);
+            }
         } else if (event_type == 'photo') {
-            L.marker(events[i]['location'], { icon: photoIcon }).addTo(markerGroup);
+            L.marker(events[i]['location'], { icon: photoIcon }).addTo(variablesMarkerGroup);
         } else {
-            L.marker(events[i]['location'], { icon: waterSampleIcon }).addTo(markerGroup);
+            L.marker(events[i]['location'], { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
         }
 
     let actors = data['step_data']['actors'];
@@ -106,7 +203,7 @@ function process_simulation_data(data) {
     for (i in actors) {
         agent = actors[i]['agent'];
 
-        L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentIcon }).addTo(markerGroup);
+        L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentIcon }).addTo(variablesMarkerGroup);
         }
     }
 }
@@ -140,19 +237,7 @@ function init(){
 
         console.log(data)
 
-        let lat = parseFloat(map_info['centerLat']);
-        let lon = parseFloat(map_info['centerLon']);
-
-        mymap = L.map('mapid').setView([lat,lon], 17);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            maxZoom: 19,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox.streets'
-        }).addTo(mymap);
-
-        markerGroup = L.layerGroup().addTo(mymap);
+        setMapConfig(map_info);
     }
 }
 

@@ -23,6 +23,7 @@ socket = socketio.Client()
 
 step = 0
 current_match = 0
+monitor_match = 0
 simulation_info = {
     'simulation_info': None,
     'matchs': []
@@ -43,7 +44,7 @@ def monitor(data):
     #  1: SIMULATION RESTART
     #  2: STEP DATA
     # ----------------------
-    global simulation_info
+    global simulation_info, current_match
 
     if data['status'] == -1:
         print('[ MONITOR ][ ERROR ] ## A error occurrence, finishing the monitor.')
@@ -55,7 +56,7 @@ def monitor(data):
             write_replay()
 
     elif data['status'] == 1:
-        pass
+        current_match += 1
 
     else:
         simulation_info['matchs'][current_match]['steps_data'].append(data['sim_data'])
@@ -66,15 +67,15 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/next', methods=['GET'])
-def next():
+@app.route('/next_step', methods=['GET'])
+def next_step():
     global step
 
     data = {'status': False, 'step_data': None, 'step': None, 'message': ''}
 
     try:
-        data['step_data'] = simulation_info['matchs'][current_match]['steps_data'][step]
-        total_steps = len(simulation_info['matchs'][current_match]['steps_data'])
+        data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
+        total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
 
         if step < total_steps - 1:
             step += 1
@@ -95,15 +96,75 @@ def next():
     return jsonify(data)
 
 
-@app.route('/prev', methods=['GET'])
-def prev():
+@app.route('/next_match', methods=['GET'])
+def next_match():
+    global step, monitor_match
+
+    data = {'status': False, 'step_data': None, 'map': None, 'message': ''}
+
+    try:
+        if monitor_match == len(simulation_info['matchs']) - 1:
+            data['message'] = 'There is no more matchs.'
+
+            return jsonify(data)
+
+        monitor_match += 1
+        step = 0
+
+        data['status'] = True
+        total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
+        data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
+        data['total_steps'] = total_steps
+        data['map'] = simulation_info['matchs'][monitor_match]['map'] 
+
+    except IndexError as e:
+        data['message'] = str(e)
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/prev_match', methods=['GET'])
+def prev_match():
+    global step, monitor_match
+
+    data = {'status': False, 'step_data': None, 'step': 0, 'message': ''}
+
+    try:
+        if monitor_match == 0:
+            data['message'] = 'This match is already the first.'
+
+            return jsonify(data)
+
+        monitor_match -= 1
+        step = 0
+
+        data['step'] = step
+        data['status'] = True
+        total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
+        data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
+        data['total_steps'] = total_steps
+        data['map'] = simulation_info['matchs'][monitor_match]['map'] 
+
+    except IndexError as e:
+        data['message'] = str(e)
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+@app.route('/prev_step', methods=['GET'])
+def prev_step():
     global step
 
     data = {'status': False, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
 
     try:
-        data['step_data'] = simulation_info['matchs'][current_match]['steps_data'][step]
-        total_steps = len(simulation_info['matchs'][current_match]['steps_data'])
+        data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
+        total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
         
         if step > 0:
             step -= 1
@@ -133,7 +194,7 @@ def init_monitor():
         data['status'] = 1
         data['simulation_info'] = simulation_info['simulation_info']
         data['total_matchs'] = len(simulation_info['matchs'])
-        data['map'] = simulation_info['matchs'][current_match]['map']
+        data['map'] = simulation_info['matchs'][monitor_match]['map']
 
     except Exception as e:
         print(f'[ MONITOR ][ ERROR ] ## Unknown error: {str(e)}')

@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 5,
+    "steps": 50,
     "maps": [{
       "osm": "files/map0.osm",
       "minLon": -51.2163800,
@@ -167,7 +167,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 20,
+      "probability": 30,
       "minPeriod": 20,
       "maxPeriod": 20,
       "circle": {
@@ -179,14 +179,14 @@
       "minSize": 1,
       "maxSize": 1,
       "minAmount": 1,
-      "maxAmount": 1,
+      "maxAmount": 5,
       "victimProbability": 10
     },
     "victim": {
       "minSize": 1,
       "maxSize": 1,
       "minAmount": 1,
-      "maxAmount": 1,
+      "maxAmount": 5,
       "minLifetime": 15,
       "maxLifetime": 30
     },
@@ -194,7 +194,7 @@
       "minSize": 1,
       "maxSize": 1,
       "minAmount": 1,
-      "maxAmount": 1
+      "maxAmount": 5
     },
     "socialAsset": {
       "minAmount": 1,

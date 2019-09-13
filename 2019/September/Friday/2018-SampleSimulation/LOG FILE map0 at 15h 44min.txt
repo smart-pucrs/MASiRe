@@ -32,9 +32,9 @@
         "agents_amount": 2,
         "active_agents": [
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                 "active": true,
-                "last_action": "deliverPhysical",
+                "last_action": "pass",
                 "last_action_result": true,
                 "location": {
                     "lat": -30.110815,
@@ -50,9 +50,9 @@
                 "social_assets": []
             },
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                 "active": true,
-                "last_action": "pass",
+                "last_action": "deliverPhysical",
                 "last_action_result": true,
                 "location": {
                     "lat": -30.110815,
@@ -70,9 +70,9 @@
         ],
         "agents": [
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                 "active": true,
-                "last_action": "deliverPhysical",
+                "last_action": "pass",
                 "last_action_result": true,
                 "location": {
                     "lat": -30.110815,
@@ -88,9 +88,9 @@
                 "social_assets": []
             },
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                 "active": true,
-                "last_action": "pass",
+                "last_action": "deliverPhysical",
                 "last_action_result": true,
                 "location": {
                     "lat": -30.110815,

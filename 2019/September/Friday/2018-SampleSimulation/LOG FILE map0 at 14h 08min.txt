@@ -2,18 +2,7 @@
     "environment": {
         "current_step": 5,
         "max_steps": 5,
-        "delivered_items": [
-            {
-                "identifier": 0,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1098256,
-                    "lon": -51.2115133
-                },
-                "size": 1,
-                "lifetime": 18
-            }
-        ],
+        "delivered_items": [],
         "floods_amount": 1,
         "total_victims": 2,
         "total_victims_in_photos": 1,
@@ -34,17 +23,28 @@
             {
                 "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                 "active": true,
-                "last_action": "deliverPhysical",
+                "last_action": "rescueVictim",
                 "last_action_result": true,
                 "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
                 },
                 "route": [],
                 "destination_distance": 0,
                 "battery": 50,
-                "physical_storage": 50,
-                "physical_storage_vector": [],
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
                 "social_assets": []
@@ -65,24 +65,44 @@
                 "physical_storage_vector": [],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
-                "social_assets": []
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
             }
         ],
         "agents": [
             {
                 "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                 "active": true,
-                "last_action": "deliverPhysical",
+                "last_action": "rescueVictim",
                 "last_action_result": true,
                 "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
                 },
                 "route": [],
                 "destination_distance": 0,
                 "battery": 50,
-                "physical_storage": 50,
-                "physical_storage_vector": [],
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
                 "social_assets": []
@@ -103,18 +123,61 @@
                 "physical_storage_vector": [],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
-                "social_assets": []
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
             }
         ]
     },
     "assets": {
-        "active_assets_amount": 0,
-        "assets_amount": 0,
-        "active_assets": [],
-        "assets": []
+        "active_assets_amount": 1,
+        "assets_amount": 1,
+        "active_assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ],
+        "assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ]
     },
     "actions": {
-        "amount_of_actions_executed": 10,
+        "amount_of_actions_executed": 12,
         "amount_of_actions_by_step": [
             {
                 "step": 1,
@@ -148,28 +211,28 @@
             {
                 "step": 2,
                 "actions": [
-                    "rescueVictim",
-                    "pass"
+                    "searchSocialAsset",
+                    "searchSocialAsset"
                 ]
             },
             {
                 "step": 3,
                 "actions": [
-                    "move",
+                    "rescueVictim",
                     "pass"
                 ]
             },
             {
                 "step": 4,
                 "actions": [
-                    "deliverPhysical",
+                    "move",
                     "pass"
                 ]
             },
             {
                 "step": 5,
                 "actions": [
-                    "move",
+                    "deliverPhysical",
                     "pass"
                 ]
             }
@@ -193,11 +256,11 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
+                        "action": "searchSocialAsset"
                     },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
+                        "action": "searchSocialAsset"
                     }
                 ]
             },
@@ -206,7 +269,7 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
+                        "action": "rescueVictim"
                     },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
@@ -219,7 +282,7 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
+                        "action": "move"
                     },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
@@ -232,7 +295,7 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
+                        "action": "deliverPhysical"
                     },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",

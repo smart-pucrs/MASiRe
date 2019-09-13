@@ -70,9 +70,9 @@
         
                 <br>
                 <div id="simulation-controller">
-                    <button id="btn-prev" onclick="prev()"> << </button>
+                    <button id="btn-prev" onclick="prevStep()"> << </button>
                     <button id="btn-pause" onclick="pause()">Pause</button>
-                    <button id="btn-next" onclick="next()"> >> </button>
+                    <button id="btn-next" onclick="nextStep()"> >> </button>
                 </div>
                 <br>
 
@@ -84,6 +84,8 @@
             </div>
 
             <div id="matchs">
+                <button id="btn-previous-match" onclick="prevMatch()">Previous match</button>
+                <button id="btn-next-match" onclick="nextMatch()">Next match</button>
             </div>
     
         <script type="text/javascript" src="static/script.js?v=2"></script>
