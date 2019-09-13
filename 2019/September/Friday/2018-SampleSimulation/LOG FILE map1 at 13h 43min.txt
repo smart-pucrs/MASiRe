@@ -1,0 +1,211 @@
+{
+    "environment": {
+        "current_step": 5,
+        "max_steps": 5,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 2,
+        "total_victims_in_photos": 1,
+        "victims_saved": 1,
+        "victims_dead": 0,
+        "total_photos": 1,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 1
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.780357,
+                    "lon": -51.131166
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7780968,
+                            "lon": -51.1281765
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.780357,
+                    "lon": -51.131166
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7780968,
+                            "lon": -51.1281765
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 8,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 0
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": []
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "searchSocialAsset",
+                    "searchSocialAsset"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "pass",
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "pass",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass",
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": []
+            },
+            {
+                "step": 2,
+                "token_action": []
+            },
+            {
+                "step": 3,
+                "token_action": []
+            },
+            {
+                "step": 4,
+                "token_action": []
+            },
+            {
+                "step": 5,
+                "token_action": []
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

@@ -441,3 +441,10 @@ class Controller:
 
     def get_social_assets_tokens(self):
         return self.asset_request_manager.get_social_assets_tokens()
+
+    def clear_social_assets(self, tokens):
+        for token in tokens:
+            self.disconnect_social_asset(token)
+
+    def disconnect_social_asset(self, token):
+        self.manager.remove(token, 'social_asset')

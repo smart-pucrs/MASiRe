@@ -59,16 +59,15 @@ class Simulation:
         self.cycler.activate_step()
         self.cycler.current_step += 1
         agents = self.cycler.get_active_agents_info()
-        social_assets = self.cycler.get_active_assets_info()
         step = self.cycler.get_step()
 
         if self.cycler.check_steps():
             self.terminated = True
-            return agents, social_assets, step
+            return agents, step
 
         self.cycler.activate_step()
 
-        return agents, social_assets, step, self.cycler.current_step
+        return agents, step, self.cycler.current_step
 
     def restart(self, config_file):
         """Restart the simulation by regenerating all the simulation and reseting all the log variables.
@@ -76,16 +75,19 @@ class Simulation:
         :return tuple: First position holding the agents, second position the social assets and the third holding
         the current step."""
 
-        Logger.log(Logger.TAG_NORMAL, 'Restart the simulation.')
+        Logger.normal('Restart the simulation.')
 
+        social_assets_tokens = self.cycler.get_assets_tokens()
+        report = self.cycler.match_report()
         self.cycler.restart(config_file)
         self.terminated = False
         self.actions_amount = 0
         self.actions_by_step.clear()
         self.actions_amount_by_step.clear()
         self.action_token_by_step.clear()
+        new_map_percepts = self.cycler.get_map_percepts()
 
-        return self.start()
+        return (*self.start(), report, new_map_percepts, social_assets_tokens)
 
     def do_step(self, token_action_list):
         """Do one step against the simulation.
@@ -96,7 +98,7 @@ class Simulation:
         :return tuple|None: If not terminated the first position holds the results from the actions sent and the second,
         the current step, else None."""
 
-        Logger.log(Logger.TAG_NORMAL, f'Process step {self.cycler.current_step}.')
+        Logger.normal(f'Process step {self.cycler.current_step}.')
 
         actions = [token_action_param['action'] for token_action_param in token_action_list]
         tokens = [token_action_param['token'] for token_action_param in token_action_list]
@@ -129,6 +131,12 @@ class Simulation:
         :return dict: constants attributes of the map in config file"""
 
         return self.cycler.get_map_percepts()
+
+    def match_report(self):
+        return self.cycler.match_report()
+
+    def simulation_report(self):
+        return self.cycler.simulation_report()
 
     def log(self):
         """Save information about each step, the map, victims, flood, water samples, photos, every event related to the

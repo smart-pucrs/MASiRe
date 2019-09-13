@@ -1,27 +1,56 @@
 {
     "environment": {
-        "current_step": 20,
-        "max_steps": 20,
+        "current_step": 5,
+        "max_steps": 5,
         "delivered_items": [],
-        "floods_amount": 4,
-        "total_victims": 5,
+        "floods_amount": 1,
+        "total_victims": 2,
         "total_victims_in_photos": 1,
-        "victims_saved": 0,
+        "victims_saved": 1,
         "victims_dead": 0,
-        "total_photos": 4,
+        "total_photos": 1,
         "photos_taken": 0,
         "photos_analyzed": 0,
-        "photos_ignored": 4,
-        "total_water_samples": 4,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
         "water_samples_collected": 0,
-        "water_samples_ignored": 4
+        "water_samples_ignored": 1
     },
     "agents": {
-        "active_agents_amount": 1,
-        "agents_amount": 1,
+        "active_agents_amount": 2,
+        "agents_amount": 2,
         "active_agents": [
             {
                 "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                 "active": true,
                 "last_action": "pass",
                 "last_action_result": true,
@@ -52,6 +81,35 @@
             {
                 "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                 "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
                 "last_action": "pass",
                 "last_action_result": true,
                 "location": {
@@ -79,230 +137,115 @@
         ]
     },
     "assets": {
-        "active_assets_amount": 0,
-        "assets_amount": 0,
-        "active_assets": [],
-        "assets": []
+        "active_assets_amount": 1,
+        "assets_amount": 1,
+        "active_assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ],
+        "assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ]
     },
     "actions": {
-        "amount_of_actions_executed": 20,
+        "amount_of_actions_executed": 12,
         "amount_of_actions_by_step": [
             {
                 "step": 1,
-                "actions_amount": 1
+                "actions_amount": 0
             },
             {
                 "step": 2,
-                "actions_amount": 1
+                "actions_amount": 2
             },
             {
                 "step": 3,
-                "actions_amount": 1
+                "actions_amount": 2
             },
             {
                 "step": 4,
-                "actions_amount": 1
+                "actions_amount": 2
             },
             {
                 "step": 5,
-                "actions_amount": 1
-            },
-            {
-                "step": 6,
-                "actions_amount": 1
-            },
-            {
-                "step": 7,
-                "actions_amount": 1
-            },
-            {
-                "step": 8,
-                "actions_amount": 1
-            },
-            {
-                "step": 9,
-                "actions_amount": 1
-            },
-            {
-                "step": 10,
-                "actions_amount": 1
-            },
-            {
-                "step": 11,
-                "actions_amount": 1
-            },
-            {
-                "step": 12,
-                "actions_amount": 1
-            },
-            {
-                "step": 13,
-                "actions_amount": 1
-            },
-            {
-                "step": 14,
-                "actions_amount": 1
-            },
-            {
-                "step": 15,
-                "actions_amount": 1
-            },
-            {
-                "step": 16,
-                "actions_amount": 1
-            },
-            {
-                "step": 17,
-                "actions_amount": 1
-            },
-            {
-                "step": 18,
-                "actions_amount": 1
-            },
-            {
-                "step": 19,
-                "actions_amount": 1
-            },
-            {
-                "step": 20,
-                "actions_amount": 1
+                "actions_amount": 2
             }
         ],
         "actions_by_step": [
             {
                 "step": 1,
-                "actions": [
-                    "pass"
-                ]
+                "actions": []
             },
             {
                 "step": 2,
                 "actions": [
+                    "searchSocialAsset",
                     "searchSocialAsset"
                 ]
             },
             {
                 "step": 3,
                 "actions": [
-                    "pass"
+                    "pass",
+                    "move"
                 ]
             },
             {
                 "step": 4,
                 "actions": [
-                    "pass"
+                    "pass",
+                    "rescueVictim"
                 ]
             },
             {
                 "step": 5,
                 "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 6,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 7,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 8,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 9,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 10,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 11,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 12,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 13,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 14,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 15,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 16,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 17,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 18,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 19,
-                "actions": [
-                    "pass"
-                ]
-            },
-            {
-                "step": 20,
-                "actions": [
-                    "pass"
+                    "pass",
+                    "move"
                 ]
             }
         ],
         "action_token_by_step": [
             {
                 "step": 1,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
+                "token_action": []
             },
             {
                 "step": 2,
                 "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "searchSocialAsset"
+                    },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                         "action": "searchSocialAsset"
@@ -313,8 +256,12 @@
                 "step": 3,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                         "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
                     }
                 ]
             },
@@ -322,8 +269,12 @@
                 "step": 4,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                         "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
                     }
                 ]
             },
@@ -331,143 +282,12 @@
                 "step": 5,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
                         "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 6,
-                "token_action": [
+                    },
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 7,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 8,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 9,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 10,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 11,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 12,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 13,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 14,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 15,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 16,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 17,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 18,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 19,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
-                    }
-                ]
-            },
-            {
-                "step": 20,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "pass"
+                        "action": "move"
                     }
                 ]
             }

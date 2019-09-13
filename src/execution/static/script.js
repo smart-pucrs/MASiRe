@@ -9,31 +9,31 @@ var currentStep = 1;
 var playing = true;
 
 var floodIcon = L.icon({
-    iconUrl: '/static/images/flood_icon.png',
+    iconUrl: '/static/images/flood.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var photoIcon = L.icon({
-    iconUrl: '/static/images/photo_icon.png',
+    iconUrl: '/static/images/photo.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var victimIcon = L.icon({
-    iconUrl: '/static/images/victim_icon.png',
+    iconUrl: '/static/images/victim_0.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var waterSampleIcon = L.icon({
-    iconUrl: '/static/images/water_sample_icon.png',
+    iconUrl: '/static/images/water_sample.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
 
 var agentIcon = L.icon({
-    iconUrl: '/static/images/agent_icon.png',
+    iconUrl: '/static/images/car.png',
     iconSize: [25, 23],
     iconAnchor: [15, 13]
 });
@@ -120,19 +120,30 @@ function init(){
         });
 
     function initInfo(data){
-        $('#simulation-url').text(data['simulation_url']);
-        $('#api-url').text(data['api_url']);
-        $('#max-agents').text(data['max_agents']);
-        $('#first-step-time').text(data['first_step_time']);
-        $('#step-time').text(data['step_time']);
-        $('#social-asset-timeout').text(data['social_asset_timeout']);
+        if (data['status'] == 0){
+            logCritical(data['message']);
+            
+            return;
+        }
+
+        sim_info = data['simulation_info']
+        map_info = data['map']
+
+        addMatchs(data['total_matchs']);
+
+        $('#simulation-url').text(sim_info['simulation_url']);
+        $('#api-url').text(sim_info['api_url']);
+        $('#max-agents').text(sim_info['max_agents']);
+        $('#first-step-time').text(sim_info['first_step_time']);
+        $('#step-time').text(sim_info['step_time']);
+        $('#social-asset-timeout').text(sim_info['social_asset_timeout']);
 
         console.log(data)
 
-        let lat = parseFloat(data['map']['centerLat']);
-        let lon = parseFloat(data['map']['centerLon']);
+        let lat = parseFloat(map_info['centerLat']);
+        let lon = parseFloat(map_info['centerLon']);
 
-        mymap = L.map('mapid').setView([lat,lon], 18);
+        mymap = L.map('mapid').setView([lat,lon], 17);
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 19,
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -142,6 +153,14 @@ function init(){
         }).addTo(mymap);
 
         markerGroup = L.layerGroup().addTo(mymap);
+    }
+}
+
+function addMatchs(amount){
+    if ($('#matchs').children().length == 0){
+        for (i=1; i<=amount; i++){
+            $('#matchs').append("<button class='btn-match'>"+"Match "+i+"</button>")
+        }
     }
 }
 

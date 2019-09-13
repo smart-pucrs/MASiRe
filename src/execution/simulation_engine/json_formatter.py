@@ -19,12 +19,10 @@ class JsonFormatter:
 
         :return dict: Dictionary with status (0|1) if it is possible do to another round and the appropriate message."""
 
-        status, response = self.copycat.log()
-
-        if not status:
-            return {'status': 0, 'message': 'No more maps available for matches.', 'report': response}
+        if not self.copycat.log():
+            return {'status': 0, 'message': 'No more maps available for matches.'}
         else:
-            return {'status': 1, 'message': 'New match generated.', 'report': response}
+            return {'status': 1, 'message': 'New match generated.'}
 
     def restart(self):
         """Restart the simulation and returns a JSON response.
@@ -38,19 +36,21 @@ class JsonFormatter:
         Logger.normal('Try to restart the simulation.')
 
         try:
-            response = self.copycat.restart()
+            agents, step, current_step, report, new_map_percepts, assets_tokens = self.copycat.restart()
             message = 'Simulation restarted.'
-            json_agents = self.jsonify_agents_variables(response[0])
-            json_assets = self.jsonify_assets_variables(response[1])
-            json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
-            json_actors.extend([{'social_asset': asset, 'message': message} for asset in json_assets])
 
-            environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
+            json_agents_init = [self.jsonify_agent_constants(agent) for agent in agents]
+            initial_percepts = {'agents': json_agents_init, 'map_percepts': new_map_percepts}
+
+            json_agents = self.jsonify_agents_variables(agents)
+            json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
+            environment = {'events': self.jsonify_events(step), 'step': current_step}
+            percepts = {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Simulation restarted.'}
 
             Logger.normal('Simulation restarted.')
 
-            return {'status': 1, 'actors': json_actors, 'environment': environment,
-                    'message': message, 'step': response[3]}
+            return {'status': 1, 'initial_percepts': initial_percepts, 'assets_tokens': assets_tokens,
+                    'report': report, 'percepts': percepts, 'message': message}
 
         except Exception as e:
             Logger.critical(f'Error to restart the simulation, Error: {str(e)}.')
@@ -117,6 +117,30 @@ class JsonFormatter:
             Logger.error(f'Unknown error: {str(e)}.')
 
             return {'status': 0, 'agent': {}, 'message': f'An error occurred during connection: {str(e)}.'}
+
+    def match_report(self):
+        Logger.normal('Generate match report.')
+
+        report = self.copycat.match_report()
+
+        return {'status': 0, 'report': report}
+
+    def simulation_report(self):
+        Logger.normal('Generate simulation report.')
+
+        try:
+            response = self.copycat.simulation_report()
+
+            if isinstance(response, str):
+                Logger.error('Error to generate simulation report.')
+                return {'status': 0, 'message': response}
+
+            response['status'] = 1
+
+            return response
+
+        except Exception as e:
+            return {'status': 0, 'message': str(e)}
 
     def finish_social_asset_connections(self, tokens):
         Logger.normal('Finishing social assets connections.')
@@ -203,12 +227,12 @@ class JsonFormatter:
         try:
             response = self.copycat.start()
             message = 'Simulation started.'
-            json_agents = self.jsonify_agents_variables(response[0])
-            json_assets = self.jsonify_assets_variables(response[1])
-            json_actors = [{'agent': agent, 'message': message} for agent in [*json_agents, *json_assets]]
-            environment = {'events': self.jsonify_events(response[2]), 'step': response[3]}
 
-            Logger.normal('Simulation started.')
+            json_agents = self.jsonify_agents_variables(response[0])
+            json_actors = [{'agent': agent, 'message': message} for agent in [*json_agents]]
+            environment = {'events': self.jsonify_events(response[1]), 'step': response[2]}
+
+            Logger.normal(message)
 
             return {'status': 1, 'actors': json_actors, 'environment': environment,
                     'message': message}

@@ -144,9 +144,8 @@ def restart():
 
     if can_restart['status'] == 1:
         response = formatter.restart()
-        response['report'] = can_restart['report']
     else:
-        response = can_restart
+        response = formatter.match_report()
 
     return jsonify(response)
 
@@ -172,7 +171,7 @@ def finish():
     elif 'api' in message and not message['api']:
         request.environ.get('werkzeug.server.shutdown')()
 
-    return jsonify(formatter.copycat.simulation.cycler.simulation_report())
+    return jsonify(formatter.simulation_report())
 
 
 def auto_destruction():

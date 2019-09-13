@@ -22,8 +22,9 @@ class CopyCat:
         self.config['map']['maps'].pop(0)
 
         if not self.config['map']['maps']:
-            return 0, self.simulation.cycler.match_report()
-        return 1, self.simulation.cycler.match_report()
+            return 0
+
+        return 1
 
     def restart(self):
         """Restart the simulation, returns the copy of the response and the report of the agents.
@@ -112,3 +113,9 @@ class CopyCat:
             copy.deepcopy(self.config['map']['id']),
             copy.deepcopy(self.logs)
         ]
+
+    def match_report(self):
+        return self.simulation.match_report()
+
+    def simulation_report(self):
+        return self.simulation.simulation_report()

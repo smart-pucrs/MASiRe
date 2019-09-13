@@ -1,0 +1,321 @@
+{
+    "environment": {
+        "current_step": 5,
+        "max_steps": 5,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 2,
+        "total_victims_in_photos": 1,
+        "victims_saved": 1,
+        "victims_dead": 0,
+        "total_photos": 1,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 1
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": [
+                    {
+                        "id": 0,
+                        "profession": "photographer",
+                        "location": {
+                            "lat": -30.110032145032346,
+                            "lon": -51.21638
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 1,
+        "assets_amount": 1,
+        "active_assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ],
+        "assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                "active": true,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": []
+            }
+        ]
+    },
+    "actions": {
+        "amount_of_actions_executed": 12,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 2
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 3
+            },
+            {
+                "step": 5,
+                "actions_amount": 3
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "pass",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "searchSocialAsset",
+                    "searchSocialAsset"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "pass",
+                    "requestSocialAsset"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "pass",
+                    "rescueVictim",
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass",
+                    "move",
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "searchSocialAsset"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "searchSocialAsset"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "requestSocialAsset"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

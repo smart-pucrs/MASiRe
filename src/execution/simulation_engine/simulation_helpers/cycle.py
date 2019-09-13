@@ -38,7 +38,7 @@ class Cycle:
         self.max_steps = config_file['map']['steps']
         self.cdm_location = (config_file['map']['maps'][0]['centerLat'], config_file['map']['maps'][0]['centerLon'])
         self.agents_manager.restart(config_file['agents'], self.cdm_location)
-        self.social_assets_manager.restart(config_file['map'], config_file['socialAssets'])
+        self.social_assets_manager = SocialAssetsManager(config_file['map'], config_file['socialAssets'])
 
     def connect_agent(self, token):
         return self.agents_manager.connect(token)
@@ -70,6 +70,9 @@ class Cycle:
 
     def get_assets_info(self):
         return self.social_assets_manager.get_info()
+
+    def get_assets_tokens(self):
+        return self.social_assets_manager.get_tokens()
 
     def get_active_assets_info(self):
         return self.social_assets_manager.get_active_info()
@@ -1662,5 +1665,6 @@ class Cycle:
                         report[token]['total_water_samples'] += match[token]['total_water_samples']
 
         except Exception as e:
-            return None
+            return str(e)
+
         return report

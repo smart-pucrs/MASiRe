@@ -22,16 +22,17 @@ app = Flask(__name__)
 socket = socketio.Client()
 
 step = 0
-maps = None
 current_match = 0
-simulation_info = {}
-simulation_steps = []
+simulation_info = {
+    'simulation_info': None,
+    'matchs': []
+}
 
 
 @socket.on('connect')
 def connect():
     global simulation_info
-    simulation_info = requests.get(f'http://{base_url}:{api_port}/simulation_info').json() 
+    simulation_info['simulation_info'] = requests.get(f'http://{base_url}:{api_port}/simulation_info').json() 
 
 
 @socket.on('monitor')
@@ -42,7 +43,7 @@ def monitor(data):
     #  1: SIMULATION RESTART
     #  2: STEP DATA
     # ----------------------
-    global simulation_steps
+    global simulation_info
 
     if data['status'] == -1:
         print('[ MONITOR ][ ERROR ] ## A error occurrence, finishing the monitor.')
@@ -54,13 +55,10 @@ def monitor(data):
             write_replay()
 
     elif data['status'] == 1:
-        if record == 'True':
-            write_replay()
-
-        print('[ MONITOR ][ RESTART ] ## restart the monitor.')
+        pass
 
     else:
-        simulation_steps.append(data['sim_data'])
+        simulation_info['matchs'][current_match]['steps_data'].append(data['sim_data'])
         
 
 @app.route('/')
@@ -75,16 +73,17 @@ def next():
     data = {'status': False, 'step_data': None, 'step': None, 'message': ''}
 
     try:
-        data['step_data'] = simulation_steps[step]
-        
-        if step < len(simulation_steps) - 1:
+        data['step_data'] = simulation_info['matchs'][current_match]['steps_data'][step]
+        total_steps = len(simulation_info['matchs'][current_match]['steps_data'])
+
+        if step < total_steps - 1:
             step += 1
 
         else:
             data['message'] = 'There is no more steps.'            
 
         data['step'] = step
-        data['total_steps'] = len(simulation_steps)
+        data['total_steps'] = total_steps
         data['status'] = True
 
     except IndexError as e:
@@ -103,16 +102,16 @@ def prev():
     data = {'status': False, 'step_data': None, 'step': None, 'total_steps': None, 'message': ''}
 
     try:
-        data['step_data'] = simulation_steps[step]
+        data['step_data'] = simulation_info['matchs'][current_match]['steps_data'][step]
+        total_steps = len(simulation_info['matchs'][current_match]['steps_data'])
         
         if step > 0:
             step -= 1
         else:
             data['message'] = 'Already in the first step.'
 
-        data['step_data'] = simulation_steps[step]
         data['step'] = step 
-        data['total_steps'] = len(simulation_steps)
+        data['total_steps'] = total_steps
         data['status'] = True
 
     except IndexError as e:
@@ -126,31 +125,24 @@ def prev():
 
 @app.route('/init', methods=['GET'])
 def init_monitor():
-    global maps, simulation_info
+    global simulation_info
+
+    data = {'status': 0, 'simulation_info': None, 'total_matchs': 0, 'map': None, 'message': ''}
 
     try:
-        if not replay_mode:
-            config_location = os.getcwd() + '/' + config
-            maps = json.load(open(config_location, 'r'))['map']['maps']
-
-            first_map = maps.pop(0)
-            del first_map['osm']
-
-            simulation_info['map'] = first_map
+        data['status'] = 1
+        data['simulation_info'] = simulation_info['simulation_info']
+        data['total_matchs'] = len(simulation_info['matchs'])
+        data['map'] = simulation_info['matchs'][current_match]['map']
 
     except Exception as e:
-        print(f'[ MONITOR ][ ERROR ] ## Error when load the config file. Error: {str(e)}')
+        print(f'[ MONITOR ][ ERROR ] ## Unknown error: {str(e)}')
+        data['message'] = f'Unknown error: {str(e)}'
 
-    return jsonify(simulation_info)
+    return jsonify(data)
 
 
 def write_replay():
-    json_steps = {'simulation_info': simulation_info,
-                  'steps_data': []}
-
-    for json_step in simulation_steps:
-        json_steps['steps_data'].append(json_step)
-
     current_date = date.today().strftime('%d-%m-%Y')
     hours = time.strftime("%H:%M:%S")
     file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
@@ -158,24 +150,32 @@ def write_replay():
     abs_path = os.getcwd() + '/replays/'
 
     with open(str(abs_path + file_name), 'w+') as file:
-        file.write(json.dumps(json_steps, sort_keys=False, indent=4))
+        file.write(json.dumps(simulation_info, sort_keys=False, indent=4))
 
 
 def init_replay_mode():
-    global simulation_steps, simulation_info
+    global simulation_info
 
     replay_path = os.getcwd() + '/replays/' + replay
 
     try:
         with open(replay_path, 'r') as file:
-            data = json.loads(file.read())
-
-        simulation_info = data['simulation_info']
-        for step_data in data['steps_data']:
-            simulation_steps.append(step_data)
+            simulation_info = json.loads(file.read())
     
     except Exception as e:
-        print(str(e))
+        print(f'[ MONITOR ][ ERROR ] ## Unknown error: {str(e)}')
+
+
+def init_live_mode():
+    try:
+        config_location = os.getcwd() + '/' + config
+        maps = json.load(open(config_location, 'r'))['map']['maps']
+
+        for map_info in maps:
+            simulation_info['matchs'].append({'map': map_info, 'steps_data': []})
+
+    except Exception as e:
+        print(f'[ MONITOR ][ ERROR ] ## Unknown error: {str(e)}')
 
 
 if __name__ == "__main__":
@@ -185,5 +185,6 @@ if __name__ == "__main__":
     else:
         time.sleep(.5)
         socket.connect(f'http://{base_url}:{api_port}')
+        init_live_mode()
 
     app.run(host=base_url, port=int(monitor_port))
