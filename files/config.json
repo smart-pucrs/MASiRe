@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 50,
+    "steps": 25,
     "maps": [{
       "osm": "files/map0.osm",
       "minLon": -51.2163800,
@@ -75,8 +75,8 @@
       "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 20,
-      "speed": 2,
+      "amount": 1,
+      "speed": 10,
       "physicalCapacity": 50,
       "virtualCapacity": 4096,
       "battery": 50
@@ -167,7 +167,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 30,
+      "probability": 0,
       "minPeriod": 20,
       "maxPeriod": 20,
       "circle": {
@@ -178,23 +178,23 @@
     "photo": {
       "minSize": 1,
       "maxSize": 1,
-      "minAmount": 5,
-      "maxAmount": 8,
-      "victimProbability": 40
+      "minAmount": 2,
+      "maxAmount": 2,
+      "victimProbability": 100
     },
     "victim": {
       "minSize": 1,
       "maxSize": 1,
-      "minAmount": 3,
-      "maxAmount": 5,
+      "minAmount": 1,
+      "maxAmount": 1,
       "minLifetime": 15,
       "maxLifetime": 30
     },
     "waterSample": {
       "minSize": 1,
       "maxSize": 1,
-      "minAmount": 4,
-      "maxAmount": 8
+      "minAmount": 1,
+      "maxAmount": 1
     },
     "socialAsset": {
       "minAmount": 1,
