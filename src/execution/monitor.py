@@ -8,6 +8,7 @@ import signal
 
 from datetime import date
 from flask import Flask, render_template, jsonify
+from socketio.exceptions import ConnectionError as SocketError
 
 arguments = sys.argv[1:]
 
@@ -100,7 +101,7 @@ def next_step():
 def next_match():
     global step, monitor_match
 
-    data = {'status': False, 'step_data': None, 'map': None, 'message': ''}
+    data = {'status': False, 'step_data': None, 'map': None, 'total_matchs': 0, 'message': ''}
 
     try:
         if monitor_match == len(simulation_info['matchs']) - 1:
@@ -115,6 +116,8 @@ def next_match():
         total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
         data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
         data['total_steps'] = total_steps
+        data['current_match'] = monitor_match + 1
+        data['total_matchs'] = len(simulation_info['matchs'])
         data['map'] = simulation_info['matchs'][monitor_match]['map'] 
 
     except IndexError as e:
@@ -130,7 +133,7 @@ def next_match():
 def prev_match():
     global step, monitor_match
 
-    data = {'status': False, 'step_data': None, 'step': 0, 'message': ''}
+    data = {'status': False, 'step_data': None, 'step': 0, 'total_matchs': 0, 'message': ''}
 
     try:
         if monitor_match == 0:
@@ -146,6 +149,8 @@ def prev_match():
         total_steps = len(simulation_info['matchs'][monitor_match]['steps_data'])
         data['step_data'] = simulation_info['matchs'][monitor_match]['steps_data'][step]
         data['total_steps'] = total_steps
+        data['current_match'] = monitor_match + 1
+        data['total_matchs'] = len(simulation_info['matchs'])
         data['map'] = simulation_info['matchs'][monitor_match]['map'] 
 
     except IndexError as e:
@@ -188,12 +193,13 @@ def prev_step():
 def init_monitor():
     global simulation_info
 
-    data = {'status': 0, 'simulation_info': None, 'total_matchs': 0, 'map': None, 'message': ''}
+    data = {'status': 0, 'simulation_info': None, 'current_match': None, 'total_matchs': 0, 'map': None, 'message': ''}
 
     try:
         data['status'] = 1
         data['simulation_info'] = simulation_info['simulation_info']
         data['total_matchs'] = len(simulation_info['matchs'])
+        data['current_match'] = monitor_match + 1
         data['map'] = simulation_info['matchs'][monitor_match]['map']
 
     except Exception as e:
@@ -218,12 +224,14 @@ def init_replay_mode():
     global simulation_info
 
     replay_path = os.getcwd() + '/replays/' + replay
-
+    print(replay_path)
     try:
         with open(replay_path, 'r') as file:
             simulation_info = json.loads(file.read())
     
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f'[ MONITOR ][ ERROR ] ## Unknown error: {str(e)}')
 
 
@@ -244,8 +252,16 @@ if __name__ == "__main__":
         init_replay_mode()
 
     else:
-        time.sleep(.5)
-        socket.connect(f'http://{base_url}:{api_port}')
+        while True:
+            try:
+                socket.connect(f'http://{base_url}:{api_port}')
+                break
+
+            except SocketError as error:
+                print('[ MONITOR ][ ERROR ] ## Error to connect the monitor socket to API.')
+                print('[ MONITOR ][ ERROR ] ## Try to connect again...')
+                time.sleep(2)
+
         init_live_mode()
 
     app.run(host=base_url, port=int(monitor_port))

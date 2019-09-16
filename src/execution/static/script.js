@@ -1,12 +1,11 @@
 var mymap = null;
 var variablesMarkerGroup = null;
 var constantsMarkerGroup = null;
-var stepSpeed = 1000;
 var updateStateFunctionId = null;
+var stepSpeed = 1000;
 var logId = '#log';
 var btnLogId = '#btn-log';
 var btnPauseId = '#btn-pause';
-var currentStep = 1;
 var playing = true;
 var iconLength = [28, 35];
 var iconAncor = [17, 18];
@@ -103,6 +102,8 @@ function nextMatch(){
     $.getJSON($SCRIPT_ROOT + '/next_match',
         function (data) {
             if (data['status']){
+                console.log(data);
+                setMatchInfo(data['current_match'], data['total_macths']);
                 setMapConfig(data['map']);
                 process_simulation_data(data);
 
@@ -118,6 +119,8 @@ function prevMatch(){
     $.getJSON($SCRIPT_ROOT + '/prev_match',
         function (data) {
             if (data['status']){
+                console.log(data);
+                setMatchInfo(data['current_match'], data['total_macths']);
                 setMapConfig(data['map']);
                 process_simulation_data(data);
                 
@@ -125,6 +128,10 @@ function prevMatch(){
                 logError('Error to get the previous match: ' + data['message']);
             }     
         });
+}
+
+function setMatchInfo(match, tMatch){
+    $('#current-match').text(match + ' of ' + tMatch);
 }
 
 function setMapConfig(config){
@@ -146,7 +153,7 @@ function setMapConfig(config){
 
     let lat = parseFloat(config['centerLat']);
     let lon = parseFloat(config['centerLon']);
-    console.log(lat, lon);
+    
     mymap.setView([lat, lon], 17);
 
     L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
@@ -154,7 +161,10 @@ function setMapConfig(config){
 
     L.rectangle(bounds, {color: 'blue', weight: 1}).on('click', function (e) {
         console.info(e);
-    }).addTo(constantsMarkerGroup);    
+    }).addTo(constantsMarkerGroup);
+    console.log(config);
+
+    $('#current-map').text(config['osm']);
 }
 
 function process_simulation_data(data) {
@@ -212,41 +222,27 @@ function init(){
     logNormal('Initializing variables.');
 
     $.getJSON($SCRIPT_ROOT + '/init',
-        function (data) {
-            initInfo(data);
-        });
+        function (data){
+            if (data['status'] == 0){
+                logCritical(data['message']);
+                
+                return;
+            }
+            console.log(data);
 
-    function initInfo(data){
-        if (data['status'] == 0){
-            logCritical(data['message']);
-            
-            return;
-        }
+            sim_info = data['simulation_info']
+            map_info = data['map']
 
-        sim_info = data['simulation_info']
-        map_info = data['map']
+            $('#simulation-url').text(sim_info['simulation_url']);
+            $('#api-url').text(sim_info['api_url']);
+            $('#max-agents').text(sim_info['max_agents']);
+            $('#first-step-time').text(sim_info['first_step_time']);
+            $('#step-time').text(sim_info['step_time']);
+            $('#social-asset-timeout').text(sim_info['social_asset_timeout']);
 
-        addMatchs(data['total_matchs']);
-
-        $('#simulation-url').text(sim_info['simulation_url']);
-        $('#api-url').text(sim_info['api_url']);
-        $('#max-agents').text(sim_info['max_agents']);
-        $('#first-step-time').text(sim_info['first_step_time']);
-        $('#step-time').text(sim_info['step_time']);
-        $('#social-asset-timeout').text(sim_info['social_asset_timeout']);
-
-        console.log(data)
-
-        setMapConfig(map_info);
-    }
-}
-
-function addMatchs(amount){
-    if ($('#matchs').children().length == 0){
-        for (i=1; i<=amount; i++){
-            $('#matchs').append("<button class='btn-match'>"+"Match "+i+"</button>")
-        }
-    }
+            setMatchInfo(data['current_match'], data['total_matchs']);
+            setMapConfig(map_info);
+    });    
 }
 
 function pause(){

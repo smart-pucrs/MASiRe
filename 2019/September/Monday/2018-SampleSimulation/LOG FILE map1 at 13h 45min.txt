@@ -1,0 +1,1032 @@
+{
+    "environment": {
+        "current_step": 50,
+        "max_steps": 50,
+        "delivered_items": [
+            {
+                "identifier": 0,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 3
+            },
+            {
+                "identifier": 1,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 0
+            },
+            {
+                "identifier": 2,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 10
+            },
+            {
+                "identifier": 3,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 1
+            },
+            {
+                "identifier": 20,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7697699,
+                    "lon": -51.1292956
+                },
+                "size": 1,
+                "lifetime": 1
+            },
+            {
+                "identifier": 21,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7690909,
+                    "lon": -51.1307623
+                },
+                "size": 1,
+                "lifetime": 4
+            },
+            {
+                "identifier": 99,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7784396,
+                    "lon": -51.1409497
+                },
+                "size": 1,
+                "lifetime": 5
+            },
+            {
+                "identifier": 113,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7736523,
+                    "lon": -51.1477502
+                },
+                "size": 1,
+                "lifetime": 9
+            }
+        ],
+        "floods_amount": 15,
+        "total_victims": 218,
+        "total_victims_in_photos": 159,
+        "victims_saved": 27,
+        "victims_dead": 13,
+        "total_photos": 96,
+        "photos_taken": 65,
+        "photos_analyzed": 0,
+        "photos_ignored": 96,
+        "total_water_samples": 88,
+        "water_samples_collected": 60,
+        "water_samples_ignored": 28
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.779356999999997,
+                    "lon": -51.132166
+                },
+                "route": [
+                    {
+                        "lat": -29.778356999999996,
+                        "lon": -51.133165999999996
+                    },
+                    {
+                        "lat": -29.777356999999995,
+                        "lon": -51.13416599999999
+                    },
+                    {
+                        "lat": -29.776356999999994,
+                        "lon": -51.13516599999999
+                    },
+                    {
+                        "lat": -29.775356999999993,
+                        "lon": -51.1360965
+                    },
+                    {
+                        "lat": -29.7747034,
+                        "lon": -51.1360965
+                    }
+                ],
+                "destination_distance": 0.7538177721974286,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.779356999999997,
+                    "lon": -51.132166
+                },
+                "route": [
+                    {
+                        "lat": -29.778356999999996,
+                        "lon": -51.133165999999996
+                    },
+                    {
+                        "lat": -29.777356999999995,
+                        "lon": -51.13416599999999
+                    },
+                    {
+                        "lat": -29.776356999999994,
+                        "lon": -51.13516599999999
+                    },
+                    {
+                        "lat": -29.775356999999993,
+                        "lon": -51.1360965
+                    },
+                    {
+                        "lat": -29.7747034,
+                        "lon": -51.1360965
+                    }
+                ],
+                "destination_distance": 0.7538177721974286,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.779356999999997,
+                    "lon": -51.132166
+                },
+                "route": [
+                    {
+                        "lat": -29.778356999999996,
+                        "lon": -51.133165999999996
+                    },
+                    {
+                        "lat": -29.777356999999995,
+                        "lon": -51.13416599999999
+                    },
+                    {
+                        "lat": -29.776356999999994,
+                        "lon": -51.13516599999999
+                    },
+                    {
+                        "lat": -29.775356999999993,
+                        "lon": -51.1360965
+                    },
+                    {
+                        "lat": -29.7747034,
+                        "lon": -51.1360965
+                    }
+                ],
+                "destination_distance": 0.7538177721974286,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.779356999999997,
+                    "lon": -51.132166
+                },
+                "route": [
+                    {
+                        "lat": -29.778356999999996,
+                        "lon": -51.133165999999996
+                    },
+                    {
+                        "lat": -29.777356999999995,
+                        "lon": -51.13416599999999
+                    },
+                    {
+                        "lat": -29.776356999999994,
+                        "lon": -51.13516599999999
+                    },
+                    {
+                        "lat": -29.775356999999993,
+                        "lon": -51.1360965
+                    },
+                    {
+                        "lat": -29.7747034,
+                        "lon": -51.1360965
+                    }
+                ],
+                "destination_distance": 0.7538177721974286,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 100,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 2
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            },
+            {
+                "step": 6,
+                "actions_amount": 2
+            },
+            {
+                "step": 7,
+                "actions_amount": 2
+            },
+            {
+                "step": 8,
+                "actions_amount": 2
+            },
+            {
+                "step": 9,
+                "actions_amount": 2
+            },
+            {
+                "step": 10,
+                "actions_amount": 2
+            },
+            {
+                "step": 11,
+                "actions_amount": 2
+            },
+            {
+                "step": 12,
+                "actions_amount": 2
+            },
+            {
+                "step": 13,
+                "actions_amount": 2
+            },
+            {
+                "step": 14,
+                "actions_amount": 2
+            },
+            {
+                "step": 15,
+                "actions_amount": 2
+            },
+            {
+                "step": 16,
+                "actions_amount": 2
+            },
+            {
+                "step": 17,
+                "actions_amount": 2
+            },
+            {
+                "step": 18,
+                "actions_amount": 2
+            },
+            {
+                "step": 19,
+                "actions_amount": 2
+            },
+            {
+                "step": 20,
+                "actions_amount": 2
+            },
+            {
+                "step": 21,
+                "actions_amount": 2
+            },
+            {
+                "step": 22,
+                "actions_amount": 2
+            },
+            {
+                "step": 23,
+                "actions_amount": 2
+            },
+            {
+                "step": 24,
+                "actions_amount": 2
+            },
+            {
+                "step": 25,
+                "actions_amount": 2
+            },
+            {
+                "step": 26,
+                "actions_amount": 2
+            },
+            {
+                "step": 27,
+                "actions_amount": 2
+            },
+            {
+                "step": 28,
+                "actions_amount": 2
+            },
+            {
+                "step": 29,
+                "actions_amount": 2
+            },
+            {
+                "step": 30,
+                "actions_amount": 2
+            },
+            {
+                "step": 31,
+                "actions_amount": 2
+            },
+            {
+                "step": 32,
+                "actions_amount": 2
+            },
+            {
+                "step": 33,
+                "actions_amount": 2
+            },
+            {
+                "step": 34,
+                "actions_amount": 2
+            },
+            {
+                "step": 35,
+                "actions_amount": 2
+            },
+            {
+                "step": 36,
+                "actions_amount": 2
+            },
+            {
+                "step": 37,
+                "actions_amount": 2
+            },
+            {
+                "step": 38,
+                "actions_amount": 2
+            },
+            {
+                "step": 39,
+                "actions_amount": 2
+            },
+            {
+                "step": 40,
+                "actions_amount": 2
+            },
+            {
+                "step": 41,
+                "actions_amount": 2
+            },
+            {
+                "step": 42,
+                "actions_amount": 2
+            },
+            {
+                "step": 43,
+                "actions_amount": 2
+            },
+            {
+                "step": 44,
+                "actions_amount": 2
+            },
+            {
+                "step": 45,
+                "actions_amount": 2
+            },
+            {
+                "step": 46,
+                "actions_amount": 2
+            },
+            {
+                "step": 47,
+                "actions_amount": 2
+            },
+            {
+                "step": 48,
+                "actions_amount": 2
+            },
+            {
+                "step": 49,
+                "actions_amount": 2
+            },
+            {
+                "step": 50,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 21,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 22,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 23,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 24,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 25,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 26,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 27,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 28,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 29,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 30,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 31,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 32,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 33,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 34,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 35,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 36,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 37,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 38,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 39,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 40,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 41,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 42,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 43,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 44,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 45,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 46,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 47,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 48,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 49,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 50,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": []
+            },
+            {
+                "step": 2,
+                "token_action": []
+            },
+            {
+                "step": 3,
+                "token_action": []
+            },
+            {
+                "step": 4,
+                "token_action": []
+            },
+            {
+                "step": 5,
+                "token_action": []
+            },
+            {
+                "step": 6,
+                "token_action": []
+            },
+            {
+                "step": 7,
+                "token_action": []
+            },
+            {
+                "step": 8,
+                "token_action": []
+            },
+            {
+                "step": 9,
+                "token_action": []
+            },
+            {
+                "step": 10,
+                "token_action": []
+            },
+            {
+                "step": 11,
+                "token_action": []
+            },
+            {
+                "step": 12,
+                "token_action": []
+            },
+            {
+                "step": 13,
+                "token_action": []
+            },
+            {
+                "step": 14,
+                "token_action": []
+            },
+            {
+                "step": 15,
+                "token_action": []
+            },
+            {
+                "step": 16,
+                "token_action": []
+            },
+            {
+                "step": 17,
+                "token_action": []
+            },
+            {
+                "step": 18,
+                "token_action": []
+            },
+            {
+                "step": 19,
+                "token_action": []
+            },
+            {
+                "step": 20,
+                "token_action": []
+            },
+            {
+                "step": 21,
+                "token_action": []
+            },
+            {
+                "step": 22,
+                "token_action": []
+            },
+            {
+                "step": 23,
+                "token_action": []
+            },
+            {
+                "step": 24,
+                "token_action": []
+            },
+            {
+                "step": 25,
+                "token_action": []
+            },
+            {
+                "step": 26,
+                "token_action": []
+            },
+            {
+                "step": 27,
+                "token_action": []
+            },
+            {
+                "step": 28,
+                "token_action": []
+            },
+            {
+                "step": 29,
+                "token_action": []
+            },
+            {
+                "step": 30,
+                "token_action": []
+            },
+            {
+                "step": 31,
+                "token_action": []
+            },
+            {
+                "step": 32,
+                "token_action": []
+            },
+            {
+                "step": 33,
+                "token_action": []
+            },
+            {
+                "step": 34,
+                "token_action": []
+            },
+            {
+                "step": 35,
+                "token_action": []
+            },
+            {
+                "step": 36,
+                "token_action": []
+            },
+            {
+                "step": 37,
+                "token_action": []
+            },
+            {
+                "step": 38,
+                "token_action": []
+            },
+            {
+                "step": 39,
+                "token_action": []
+            },
+            {
+                "step": 40,
+                "token_action": []
+            },
+            {
+                "step": 41,
+                "token_action": []
+            },
+            {
+                "step": 42,
+                "token_action": []
+            },
+            {
+                "step": 43,
+                "token_action": []
+            },
+            {
+                "step": 44,
+                "token_action": []
+            },
+            {
+                "step": 45,
+                "token_action": []
+            },
+            {
+                "step": 46,
+                "token_action": []
+            },
+            {
+                "step": 47,
+                "token_action": []
+            },
+            {
+                "step": 48,
+                "token_action": []
+            },
+            {
+                "step": 49,
+                "token_action": []
+            },
+            {
+                "step": 50,
+                "token_action": []
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
