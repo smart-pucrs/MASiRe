@@ -1,0 +1,822 @@
+{
+    "environment": {
+        "current_step": 50,
+        "max_steps": 50,
+        "delivered_items": [
+            {
+                "identifier": 0,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 3
+            },
+            {
+                "identifier": 1,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7780968,
+                    "lon": -51.1281765
+                },
+                "size": 1,
+                "lifetime": 0
+            },
+            {
+                "identifier": 8,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7791519,
+                    "lon": -51.1107053
+                },
+                "size": 1,
+                "lifetime": 0
+            },
+            {
+                "identifier": 17,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7908007,
+                    "lon": -51.1380157
+                },
+                "size": 1,
+                "lifetime": 12
+            }
+        ],
+        "floods_amount": 5,
+        "total_victims": 43,
+        "total_victims_in_photos": 31,
+        "victims_saved": 5,
+        "victims_dead": 3,
+        "total_photos": 10,
+        "photos_taken": 4,
+        "photos_analyzed": 0,
+        "photos_ignored": 10,
+        "total_water_samples": 9,
+        "water_samples_collected": 2,
+        "water_samples_ignored": 7
+    },
+    "agents": {
+        "active_agents_amount": 1,
+        "agents_amount": 1,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7888257,
+                    "lon": -51.1432584
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 46,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "active": true,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7888257,
+                    "lon": -51.1432584
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 46,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 50,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 1
+            },
+            {
+                "step": 2,
+                "actions_amount": 1
+            },
+            {
+                "step": 3,
+                "actions_amount": 1
+            },
+            {
+                "step": 4,
+                "actions_amount": 1
+            },
+            {
+                "step": 5,
+                "actions_amount": 1
+            },
+            {
+                "step": 6,
+                "actions_amount": 1
+            },
+            {
+                "step": 7,
+                "actions_amount": 1
+            },
+            {
+                "step": 8,
+                "actions_amount": 1
+            },
+            {
+                "step": 9,
+                "actions_amount": 1
+            },
+            {
+                "step": 10,
+                "actions_amount": 1
+            },
+            {
+                "step": 11,
+                "actions_amount": 1
+            },
+            {
+                "step": 12,
+                "actions_amount": 1
+            },
+            {
+                "step": 13,
+                "actions_amount": 1
+            },
+            {
+                "step": 14,
+                "actions_amount": 1
+            },
+            {
+                "step": 15,
+                "actions_amount": 1
+            },
+            {
+                "step": 16,
+                "actions_amount": 1
+            },
+            {
+                "step": 17,
+                "actions_amount": 1
+            },
+            {
+                "step": 18,
+                "actions_amount": 1
+            },
+            {
+                "step": 19,
+                "actions_amount": 1
+            },
+            {
+                "step": 20,
+                "actions_amount": 1
+            },
+            {
+                "step": 21,
+                "actions_amount": 1
+            },
+            {
+                "step": 22,
+                "actions_amount": 1
+            },
+            {
+                "step": 23,
+                "actions_amount": 1
+            },
+            {
+                "step": 24,
+                "actions_amount": 1
+            },
+            {
+                "step": 25,
+                "actions_amount": 1
+            },
+            {
+                "step": 26,
+                "actions_amount": 1
+            },
+            {
+                "step": 27,
+                "actions_amount": 1
+            },
+            {
+                "step": 28,
+                "actions_amount": 1
+            },
+            {
+                "step": 29,
+                "actions_amount": 1
+            },
+            {
+                "step": 30,
+                "actions_amount": 1
+            },
+            {
+                "step": 31,
+                "actions_amount": 1
+            },
+            {
+                "step": 32,
+                "actions_amount": 1
+            },
+            {
+                "step": 33,
+                "actions_amount": 1
+            },
+            {
+                "step": 34,
+                "actions_amount": 1
+            },
+            {
+                "step": 35,
+                "actions_amount": 1
+            },
+            {
+                "step": 36,
+                "actions_amount": 1
+            },
+            {
+                "step": 37,
+                "actions_amount": 1
+            },
+            {
+                "step": 38,
+                "actions_amount": 1
+            },
+            {
+                "step": 39,
+                "actions_amount": 1
+            },
+            {
+                "step": 40,
+                "actions_amount": 1
+            },
+            {
+                "step": 41,
+                "actions_amount": 1
+            },
+            {
+                "step": 42,
+                "actions_amount": 1
+            },
+            {
+                "step": 43,
+                "actions_amount": 1
+            },
+            {
+                "step": 44,
+                "actions_amount": 1
+            },
+            {
+                "step": 45,
+                "actions_amount": 1
+            },
+            {
+                "step": 46,
+                "actions_amount": 1
+            },
+            {
+                "step": 47,
+                "actions_amount": 1
+            },
+            {
+                "step": 48,
+                "actions_amount": 1
+            },
+            {
+                "step": 49,
+                "actions_amount": 1
+            },
+            {
+                "step": 50,
+                "actions_amount": 1
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "searchSocialAsset"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 21,
+                "actions": [
+                    "charge"
+                ]
+            },
+            {
+                "step": 22,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 23,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 24,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 25,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 26,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 27,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 28,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 29,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 30,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 31,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 32,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 33,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 34,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 35,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 36,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 37,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 38,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 39,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 40,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 41,
+                "actions": [
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 42,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 43,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 44,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 45,
+                "actions": [
+                    "charge"
+                ]
+            },
+            {
+                "step": 46,
+                "actions": [
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 47,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 48,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 49,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 50,
+                "actions": [
+                    "rescueVictim"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": []
+            },
+            {
+                "step": 2,
+                "token_action": []
+            },
+            {
+                "step": 3,
+                "token_action": []
+            },
+            {
+                "step": 4,
+                "token_action": []
+            },
+            {
+                "step": 5,
+                "token_action": []
+            },
+            {
+                "step": 6,
+                "token_action": []
+            },
+            {
+                "step": 7,
+                "token_action": []
+            },
+            {
+                "step": 8,
+                "token_action": []
+            },
+            {
+                "step": 9,
+                "token_action": []
+            },
+            {
+                "step": 10,
+                "token_action": []
+            },
+            {
+                "step": 11,
+                "token_action": []
+            },
+            {
+                "step": 12,
+                "token_action": []
+            },
+            {
+                "step": 13,
+                "token_action": []
+            },
+            {
+                "step": 14,
+                "token_action": []
+            },
+            {
+                "step": 15,
+                "token_action": []
+            },
+            {
+                "step": 16,
+                "token_action": []
+            },
+            {
+                "step": 17,
+                "token_action": []
+            },
+            {
+                "step": 18,
+                "token_action": []
+            },
+            {
+                "step": 19,
+                "token_action": []
+            },
+            {
+                "step": 20,
+                "token_action": []
+            },
+            {
+                "step": 21,
+                "token_action": []
+            },
+            {
+                "step": 22,
+                "token_action": []
+            },
+            {
+                "step": 23,
+                "token_action": []
+            },
+            {
+                "step": 24,
+                "token_action": []
+            },
+            {
+                "step": 25,
+                "token_action": []
+            },
+            {
+                "step": 26,
+                "token_action": []
+            },
+            {
+                "step": 27,
+                "token_action": []
+            },
+            {
+                "step": 28,
+                "token_action": []
+            },
+            {
+                "step": 29,
+                "token_action": []
+            },
+            {
+                "step": 30,
+                "token_action": []
+            },
+            {
+                "step": 31,
+                "token_action": []
+            },
+            {
+                "step": 32,
+                "token_action": []
+            },
+            {
+                "step": 33,
+                "token_action": []
+            },
+            {
+                "step": 34,
+                "token_action": []
+            },
+            {
+                "step": 35,
+                "token_action": []
+            },
+            {
+                "step": 36,
+                "token_action": []
+            },
+            {
+                "step": 37,
+                "token_action": []
+            },
+            {
+                "step": 38,
+                "token_action": []
+            },
+            {
+                "step": 39,
+                "token_action": []
+            },
+            {
+                "step": 40,
+                "token_action": []
+            },
+            {
+                "step": 41,
+                "token_action": []
+            },
+            {
+                "step": 42,
+                "token_action": []
+            },
+            {
+                "step": 43,
+                "token_action": []
+            },
+            {
+                "step": 44,
+                "token_action": []
+            },
+            {
+                "step": 45,
+                "token_action": []
+            },
+            {
+                "step": 46,
+                "token_action": []
+            },
+            {
+                "step": 47,
+                "token_action": []
+            },
+            {
+                "step": 48,
+                "token_action": []
+            },
+            {
+                "step": 49,
+                "token_action": []
+            },
+            {
+                "step": 50,
+                "token_action": []
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

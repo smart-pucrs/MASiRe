@@ -51,7 +51,7 @@ class MonitorManager:
 
         return {
             'simulation_info': self.simulation_info,
-            'map_info': self.matchs[self.monitor_match]['map'],
+            'map_info': map_info,
             'match_info': match_info
         }
 
@@ -89,8 +89,6 @@ class MonitorManager:
 
             return self.get_match_data()
 
-
-
     def next_match(self):
         if self.monitor_match == len(self.matchs)-1:
             self.current_step = 0
@@ -99,7 +97,7 @@ class MonitorManager:
 
         else:
             self.monitor_match += 1
-            self.current_step
+            self.current_step = 0
 
             return self.get_match_data()
             
