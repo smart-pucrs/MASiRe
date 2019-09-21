@@ -29,6 +29,13 @@ one_agent_registered_queue = Queue()
 actions_queue = Queue()
 request_queue = Queue()
 
+# Events variables
+initial_percepts_event = 'initial_percepts'
+percepts_event = 'percepts'
+end_event = 'end'
+bye_event = 'bye'
+error_event = 'error'
+
 
 @app.route('/start_connections', methods=['POST'])
 def start_connections():
@@ -134,7 +141,8 @@ def start_step_cycle():
 
     sim_response = requests.post(f'http://{base_url}:{simulation_port}/start', json={'secret': secret}).json()
 
-    notify_actors('percepts', sim_response)
+    notify_actors(percepts_event, sim_response)
+    notify_monitors(percepts_event, sim_response)
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
@@ -194,6 +202,26 @@ def disconnect():
 @socket.on('message')
 def message(msg):
     Logger.message(msg)
+
+
+@socket.on('connect_monitor')
+def connect_monitor(data):
+    ok, message = controller.add_monitor(request)
+
+    if ok:
+        Logger.normal(message)
+    else:
+        Logger.error(message)
+
+
+@socket.on('disconnect_monitor')
+def disconnect_monitor(data):
+    ok, message = controller.rmv_monitor(request)
+
+    if ok:
+        Logger.normal(message)
+    else:
+        Logger.error(message)
 
 
 @app.route('/simulation_info', methods=['GET'])
@@ -324,7 +352,7 @@ def finish_step():
 
         if sim_response['status'] == 0:
             Logger.critical('An internal error occurred. Shutting down...')
-            socket.emit('monitor', {'status': -1})
+            notify_monitors(error_event, {'message': 'An internal error occurred. Shutting down...'})
 
             requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True})
             multiprocessing.Process(target=auto_destruction, daemon=True).start()
@@ -333,32 +361,36 @@ def finish_step():
             Logger.normal('End of the simulation, preparer to restart.')
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
-            notify_actors('end', sim_response['report'])
+            notify_actors(end_event, sim_response['report'])
+            notify_monitors(end_event, sim_response['report'])
 
             if sim_response['status'] == 0:
                 Logger.normal('No more map to run, finishing the simulation...')
-                socket.emit('monitor', {'status': 0, 'sim_data': sim_response})
 
                 report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
-                notify_actors('bye', {'status': 1, 'message': 'Simulation ended all matches.', 'report': report})
+                notify_actors(bye_event, report)
+                notify_monitors(bye_event, report)
+
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
             else:
                 Logger.normal('Restart the simulation.')
-                socket.emit('monitor', {'status': 1, 'sim_data': sim_response['percepts']})
+                notify_monitors(end_event, sim_response['percepts'])
 
                 controller.clear_social_assets(sim_response['assets_tokens'])
 
-                notify_actors('initial_percepts', sim_response['initial_percepts'])
-                notify_actors('percepts', sim_response['percepts'])
+                notify_actors(initial_percepts_event, sim_response['initial_percepts'])
+                notify_actors(percepts_event, sim_response['percepts'])
+                notify_monitors(initial_percepts_event, sim_response['initial_percepts'])
+                notify_monitors(percepts_event, sim_response['percepts'])
 
                 controller.set_processing_actions()
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
         else:
             controller.set_processing_actions()
-            socket.emit('monitor', {'status': 2, 'sim_data': sim_response})
+            notify_monitors(percepts_event, sim_response)
 
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')
@@ -548,16 +580,16 @@ def notify_actors(event, response):
     tokens = [*controller.manager.agents_sockets_manager.get_tokens(), *controller.manager.assets_sockets_manager.get_tokens()]
     room_response_list = []
     for token in tokens:
-        if event == 'initial_percepts':
+        if event == initial_percepts_event:
             info = json_formatter.initial_percepts_format(response, token)
 
-        elif event == 'percepts':
+        elif event == percepts_event:
             info = json_formatter.percepts_format(response, token)
 
-        elif event == 'end':
+        elif event == end_event:
             info = json_formatter.end_format(response, token)
 
-        elif event == 'bye':
+        elif event == bye_event:
             info = json_formatter.bye_format(response, token)
 
         else:

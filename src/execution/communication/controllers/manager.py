@@ -1,6 +1,7 @@
 from communication.helpers.agents_manager import AgentsManager
 from communication.helpers.social_assets_manager import SocialAssetsManager
 from communication.helpers.sockets_manager import SocketsManager
+from communication.helpers.monitor_manager import MonitorManager
 
 
 class Manager:
@@ -11,6 +12,7 @@ class Manager:
         self.social_assets_manager = SocialAssetsManager()
         self.agents_sockets_manager = SocketsManager()
         self.assets_sockets_manager = SocketsManager()
+        self.monitors_manager = MonitorManager()
 
     def add(self, token, obj_info, kind):
         """Add an actor to the corresponding manager.
@@ -178,3 +180,9 @@ class Manager:
             return False
 
         return True
+
+    def add_monitor(self, sid):
+        return self.monitors_manager.add_monitor(sid)
+
+    def rmv_monitor(self, sid):
+        return self.monitors_manager.rmv_monitor(sid)
