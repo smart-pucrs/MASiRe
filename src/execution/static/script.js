@@ -177,60 +177,92 @@ function process_simulation_data(data) {
     $('#step').text(data['current_step'] + ' of ' + data['total_steps']);
 
     let events = data['step_data']['environment']['events'];
-    let event_type;
+    let old_locations = [];
     for (i in events) {
-        event_type = events[i]['type'];
+        event_location = events[i]['location'];
 
-        if (event_type == 'flood') {
-            L.marker(events[i]['location'], { icon: floodIcon }).addTo(variablesMarkerGroup);
+        event_location = format_location(event_location, old_locations);
+        old_locations.push(event_location);
+        event_location_formated = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-            L.circle(events[i]['location'], {
+        if (events[i]['type'] == 'flood') {
+            L.marker(event_location_formated, { icon: floodIcon }).addTo(variablesMarkerGroup);
+            L.circle(event_location_formated, {
                 color: 'blue',
                 fillColor: 'blue',
                 fillOpacity: 0.2,
                 radius: events[i]['radius'] * 1000
             }).addTo(variablesMarkerGroup);
 
-        } else if (event_type == 'victim') {
+        } else if (events[i]['type'] == 'victim') {
             if (events[i]['lifetime'] == 0) {
-                L.marker(events[i]['location'], { icon: victimIcon3 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formated, { icon: victimIcon3 }).addTo(variablesMarkerGroup);
             }
             else if (events[i]['lifetime'] < 5) {
-                L.marker(events[i]['location'], { icon: victimIcon2 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formated, { icon: victimIcon2 }).addTo(variablesMarkerGroup);
             } else if (events[i]['lifetime'] < 10) {
-                L.marker(events[i]['location'], { icon: victimIcon1 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formated, { icon: victimIcon1 }).addTo(variablesMarkerGroup);
             } else {
-                L.marker(events[i]['location'], { icon: victimIcon0 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formated, { icon: victimIcon0 }).addTo(variablesMarkerGroup);
             }
-        } else if (event_type == 'photo') {
-            L.marker(events[i]['location'], { icon: photoIcon }).addTo(variablesMarkerGroup);
+        } else if (events[i]['type'] == 'photo') {
+            L.marker(event_location_formated, { icon: photoIcon }).addTo(variablesMarkerGroup);
         } else {
-            L.marker(events[i]['location'], { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
+            L.marker(event_location_formated, { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
         }
 
-        let actors = data['step_data']['actors'];
 
-        $('#active-agents').text(actors.length);
+    }
 
-        for (i in actors) {
-            agent = actors[i]['agent'];
+    let actors = data['step_data']['actors'];
+
+    $('#active-agents').text(actors.length);
+
+    for (i in actors) {
+        agent = actors[i]['agent'];
+
+        agent_location = format_location(agent['location'], old_locations);
+        old_locations.push(agent_location);
+        agent_location_formated = [agent_location['lat'], agent_location['lon']];
+
+        L.marker(agent_location_formated, { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
+        /*
+        if (agent['role'] == 'drone') {
             L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-            /*
-            if (agent['role'] == 'drone') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'car') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentCarIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'boat') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'social_asset') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: socialAssetIcon }).addTo(variablesMarkerGroup);
-            } else {
-                logError('Role of agent not found: ' + agent['role']);
-            }
-            */
+        } else if (agent['role'] == 'car') {
+            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentCarIcon }).addTo(variablesMarkerGroup);
+        } else if (agent['role'] == 'boat') {
+            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
+        } else if (agent['role'] == 'social_asset') {
+            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: socialAssetIcon }).addTo(variablesMarkerGroup);
+        } else {
+            logError('Role of agent not found: ' + agent['role']);
         }
+        */
     }
 }
+
+function containsLocation(locations, location){
+    for (i in locations){
+        if (locations[i]['lat'] == location['lat']){
+            if (locations[i]['lon'] == location['lon']) return true;
+        }
+    }
+
+    return false;
+}
+
+function format_location(event_location, old_locations){
+    let new_location = event_location;
+    let alfa = 0.0001;
+
+    while (containsLocation(old_locations, new_location)){
+        new_location['lat'] += alfa;
+    }
+
+    return new_location;
+}
+
 function init() {
     logNormal('Initializing variables.');
 
