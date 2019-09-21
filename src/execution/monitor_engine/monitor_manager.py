@@ -47,7 +47,7 @@ class MonitorManager:
         map_info = self.matchs[self.monitor_match]['map']
 
         total_matchs = len(self.matchs)
-        match_info = {'current_match': self.current_match, 'total_matchs': total_matchs}
+        match_info = {'current_match': self.current_match+1, 'total_matchs': total_matchs}
 
         return {
             'simulation_info': self.simulation_info,
@@ -78,7 +78,7 @@ class MonitorManager:
         return self.get_step_data()
 
     def prev_match(self):
-        if self.current_match == 0:
+        if self.monitor_match == 0:
             self.current_step = 0
 
             return self.get_match_data()
@@ -120,11 +120,11 @@ class MonitorManager:
 
         return {
             'match_info': {
-                'current_match': current_match,
+                'current_match': current_match+1,
                 'total_matchs': total_matchs
             },
             'step_info': {
-                'step': step,
+                'step': step+1,
                 'total_steps': total_steps,
                 'step_data': step_data,    
             },
