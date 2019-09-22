@@ -12,12 +12,12 @@ class MonitorManager:
         return True
 
     def rmv_monitor(self, sid):
-        if sid not in self.monitor:
+        if sid not in self.monitors:
             return False
 
         self.monitors.remove(sid)
 
         return True
 
-    def get_sids(self):
+    def get_rooms(self):
         return self.monitors

@@ -7,9 +7,19 @@ import signal
 
 from flask import Flask, render_template, jsonify
 from socketio.exceptions import ConnectionError as SocketError
-from monitor_engine.monitor_manager import MonitorManager
+from monitor_engine.controllers.monitor_manager import MonitorManager
+from monitor_engine.helpers.logger import Logger
 
 arguments = sys.argv[1:]
+
+# Events strings
+initial_percepts_event = 'initial_percepts'
+percepts_event = 'percepts'
+end_event = 'end'
+bye_event = 'bye'
+error_event = 'error'
+connect_monitor_event = 'connect_monitor'
+disconnect_monitor_event = 'disconnect_monitor'
 
 if len(arguments) == 3:
     replay, base_url, monitor_port = arguments
@@ -25,29 +35,65 @@ manager = MonitorManager()
 
 @socket.on('connect')
 def connect():
+    socket.emit(connect_monitor_event, '')
     response = requests.get(f'http://{base_url}:{api_port}/simulation_info').json() 
     manager.set_simulation_info(response)
+
+
+@socket.on(initial_percepts_event)
+def initial_percepts_handler(data):
+    print(f'[{initial_percepts_event}] ## ', data)
+    pass
+
+
+@socket.on(percepts_event)
+def percepts_handler(data):
+    print(f'[{percepts_event}] ## ', data)
+    pass
+
+
+@socket.on(end_event)
+def end_handler(data):
+    print(f'[{end_event}] ## ', data)
+    pass
+
+
+@socket.on(bye_event)
+def bye_handler(data):
+    print(f'[{bye_event}] ## ', data)
+    pass
+
+
+@socket.on(error_event)
+def error_handler(data):
+    print(f'[{error_event}] ## ', data)
+    pass
 
 
 @socket.on('monitor')
 def monitor(data):
     # CODE -1 : ERROR
     if data['status'] == -1:
-        print('[ MONITOR ][ ERROR ] ## A error occurrence, finishing the monitor.')
+        Logger.error('A error occurrence, finishing the monitor.')
+
         os.kill(os.getpid(), signal.SIGTERM)
 
     # CODE 0 : SIMULATION FINISH
     elif data['status'] == 0:
-        print('[ MONITOR ][ FINISH ] ## Finishing the monitor.')
+        Logger.normal('Finishing the monitor.')
+
         if record:
             manager.save_replay()
 
     # CODE 1 : SIMULATION RESTART
     elif data['status'] == 1:
+        Logger.normal('Simulation restarted.')
         manager.next_match_api()
 
     # CODE 2 : STEP DATA
     else:
+        Logger.normal('Update data.')
+
         manager.add_step_data(data['sim_data'])
         
 
@@ -129,8 +175,8 @@ def init_monitor():
 if __name__ == "__main__":
     if replay_mode:
         try:
-            manager.init_replay_mode(replay)
-
+            #manager.init_replay_mode(replay)
+            print('replay')
         except Exception as e:
             print(str(e))
 
@@ -141,13 +187,14 @@ if __name__ == "__main__":
                 break
 
             except SocketError as error:
-                print('[ MONITOR ][ ERROR ] ## Error to connect the monitor socket to API.')
-                print('[ MONITOR ][ ERROR ] ## Try to connect again...')
+                Logger.error('Error to connect the monitor socket to API.')
+                Logger.error('Try to connect again...')
+
                 time.sleep(2)
 
         try:
-            manager.init_live_mode(config)
-
+            #manager.init_live_mode(config)
+            print('live')
         except Exception as e:
             print(str(e))
 

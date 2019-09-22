@@ -186,3 +186,6 @@ class Manager:
 
     def rmv_monitor(self, sid):
         return self.monitors_manager.rmv_monitor(sid)
+
+    def get_monitors_rooms(self):
+        return self.monitors_manager.get_rooms()

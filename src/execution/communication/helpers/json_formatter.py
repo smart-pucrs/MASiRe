@@ -6,14 +6,20 @@ Note: The response does not have agent or social asset as key until they are pro
 def initial_percepts_format(response, token):
     info = {'type': 'initial_percepts', 'map_percepts': {}, 'agent_percepts': {}}
 
-    for agent in response['agents']:
-        if agent['token'] == token:
-            info['agent_percepts'] = agent
-            info['map_percepts'] = response['map_percepts']
+    if response:
+        if response['status']:
+            for agent in response['agents']:
+                if agent['token'] == token:
+                    info['agent_percepts'] = agent
+                    info['map_percepts'] = response['map_percepts']
 
-            return info
+                    return info
 
-    return event_error_format('Agent not found.')
+            return event_error_format('Agent not found.')
+        else:
+            return event_error_format(response['message'])
+    else:
+        return event_error_format('Empty simulation response. ')
 
 
 def percepts_format(response, token):
@@ -48,17 +54,29 @@ def percepts_format(response, token):
 
 
 def end_format(response, token):
-    if token in response.keys():
-        return {'type': 'end', 'report': response[token]}
+    if response:
+        if response['status']:
+            if token in response.keys():
+                return {'type': 'end', 'report': response[token]}
 
-    return event_error_format('A error occurred in API.')
+            return event_error_format('Report not found.')
+        else:
+            return event_error_format(response['message'])
+    else:
+        return event_error_format('Empty simulation response.')
 
 
 def bye_format(response, token):
-    if token in response['report'].keys():
-        return {'type': 'bye', 'report': response['report'][token]}
+    if response:
+        if response['message']:
+            if token in response['report'].keys():
+                return {'type': 'bye', 'report': response['report'][token]}
 
-    return event_error_format(response['message'])
+            return event_error_format('Report not found.')
+        else:
+            return event_error_format(response['message'])
+    else:
+        return event_error_format('Empty simulation response.')
 
 
 def event_error_format(message):
@@ -67,3 +85,74 @@ def event_error_format(message):
 
     return {'type': 'error', 'message': f'{message}Possible internal error.'}
 
+
+def initial_percepts_monitor_format(response):
+    info = {'status': 0, 'map_percepts': None, 'message': ''}
+
+    if response:
+        if response['status']:
+            if 'map_percepts' in response:
+                info['map_percepts'] = response['map_percepts']
+                info['status'] = 1
+            else:
+                info['message'] = 'Error formatting initial_percepts into API.'
+        else:
+            info['message'] = response['message']
+    else:
+        info['message'] = 'Empty simulation response.'
+
+    return info
+
+
+def percepts_monitor_format(response):
+    info = {'status': 0, 'actors': None, 'environment': None, 'message': ''}
+    
+    if response:
+        if response['status']:
+            if 'actors' not in response:
+                info['message'] = 'Error formatting percepts into API, key "actors" not found in response.'
+            elif 'environment' not in response:
+                info['message'] = 'Error formatting percepts into API, key "environment" not found in response.'
+            else:
+                info['status'] = 1
+                info['actors'] = response['actors']
+                info['environment'] = response['environment']
+        else:
+            info['message'] = response['message']
+    else:
+        info['message'] = 'Empty simulation response.'
+
+    return info
+
+
+def end_monitor_format(response):
+    info = {'status': 0, 'report': None, 'message': ''}
+
+    if response:
+        if response['status']:
+            info['status'] = 1
+            info['report'] = response['report']
+        else:
+            info['message'] = response['message']
+    else:
+        info['message'] = 'Empty simulation response.'
+
+    return info
+
+def bye_monitor_format(response):
+    info = {'status': 0, 'report': None, 'message': ''}
+
+    if response:
+        if response['status']:
+            info['status'] = 1
+            info['report'] = response['report']
+        else:
+            info['message'] = response['message']
+    else:
+        info['message'] = 'Empty simulation response.'
+
+    return info
+
+
+def event_error_monitor_format(message):
+    return {'message': f'{message}Possible internal error.'}

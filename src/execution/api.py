@@ -141,8 +141,8 @@ def start_step_cycle():
 
     sim_response = requests.post(f'http://{base_url}:{simulation_port}/start', json={'secret': secret}).json()
 
-    notify_actors(percepts_event, sim_response)
     notify_monitors(percepts_event, sim_response)
+    notify_actors(percepts_event, sim_response)
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
@@ -361,29 +361,31 @@ def finish_step():
             Logger.normal('End of the simulation, preparer to restart.')
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
-            notify_actors(end_event, sim_response['report'])
-            notify_monitors(end_event, sim_response['report'])
+            
+            notify_monitors(end_event, sim_response)
+            notify_actors(end_event, sim_response)
 
             if sim_response['status'] == 0:
                 Logger.normal('No more map to run, finishing the simulation...')
 
-                report = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
+                sim_response = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
-                notify_actors(bye_event, report)
-                notify_monitors(bye_event, report)
+                notify_monitors(bye_event, sim_response)
+                notify_actors(bye_event, sim_response)
 
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
 
             else:
                 Logger.normal('Restart the simulation.')
-                notify_monitors(end_event, sim_response['percepts'])
-
+                print('-----> ', sim_response)
                 controller.clear_social_assets(sim_response['assets_tokens'])
 
-                notify_actors(initial_percepts_event, sim_response['initial_percepts'])
-                notify_actors(percepts_event, sim_response['percepts'])
+                notify_monitors(end_event, sim_response['report'])
                 notify_monitors(initial_percepts_event, sim_response['initial_percepts'])
                 notify_monitors(percepts_event, sim_response['percepts'])
+                notify_actors(end_event, sim_response['report'])
+                notify_actors(initial_percepts_event, sim_response['initial_percepts'])
+                notify_actors(percepts_event, sim_response['percepts'])
 
                 controller.set_processing_actions()
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
@@ -399,7 +401,7 @@ def finish_step():
                 multiprocessing.Process(target=step_controller, args=(request_queue, 2), daemon=True).start()
 
             else:
-                notify_actors('percepts', sim_response)
+                notify_actors(percepts_event, sim_response)
                 Logger.normal('Wait all the agent send yours actions.')
 
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
@@ -422,7 +424,7 @@ def handle_response():
                                  json={'tokens': tokens, 'secret': secret}).json()
 
     response = controller.format_actions_result(sim_response)
-    notify_actors('percepts', response)
+    notify_actors(percepts_event, response)
     controller.asset_request_manager.reset()
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
@@ -564,7 +566,28 @@ def send_initial_percepts(token, info):
     The message contain the agent and map percepts."""
 
     room = controller.manager.get(token, 'socket')
-    socket.emit('initial_percepts', info, room=room)
+    socket.emit(initial_percepts_event, info, room=room)
+
+
+def notify_monitors(event, response):
+    Logger.normal('Update monitors.')
+
+    rooms = controller.get_monitors_rooms()
+
+    if event == initial_percepts_event:
+        info = json_formatter.initial_percepts_monitor_format(response)
+    elif event == percepts_event:
+        info = json_formatter.percepts_monitor_format(response)
+    elif event == end_event:
+        info = json_formatter.end_monitor_format(response)
+    elif event == bye_event:
+        info = json_formatter.bye_monitor_format(response)
+    else:
+        info = json_formatter.event_error_monitor_format(response)
+        event = error_event
+
+    for room in rooms:
+        socket.emit(event, info, room=room)
 
 
 def notify_actors(event, response):
@@ -579,6 +602,7 @@ def notify_actors(event, response):
 
     tokens = [*controller.manager.agents_sockets_manager.get_tokens(), *controller.manager.assets_sockets_manager.get_tokens()]
     room_response_list = []
+
     for token in tokens:
         if event == initial_percepts_event:
             info = json_formatter.initial_percepts_format(response, token)

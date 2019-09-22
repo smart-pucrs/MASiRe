@@ -18,7 +18,6 @@ class JsonFormatter:
         """Do the log and returns a JSON response.
 
         :return dict: Dictionary with status (0|1) if it is possible do to another round and the appropriate message."""
-
         if not self.copycat.log():
             return {'status': 0, 'message': 'No more maps available for matches.'}
         else:
@@ -40,23 +39,24 @@ class JsonFormatter:
             message = 'Simulation restarted.'
 
             json_agents_init = [self.jsonify_agent_constants(agent) for agent in agents]
-            initial_percepts = {'agents': json_agents_init, 'map_percepts': new_map_percepts}
 
             json_agents = self.jsonify_agents_variables(agents)
             json_actors = [{'agent': agent, 'message': message} for agent in json_agents]
             environment = {'events': self.jsonify_events(step), 'step': current_step}
+
             percepts = {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Simulation restarted.'}
+            initial_percepts = {'status': 1, 'agents': json_agents_init, 'map_percepts': new_map_percepts, 'message': ''}
+            report_response = {'status': 1, 'report': report, 'message': ''}
 
             Logger.normal('Simulation restarted.')
 
             return {'status': 1, 'initial_percepts': initial_percepts, 'assets_tokens': assets_tokens,
-                    'report': report, 'percepts': percepts, 'message': message}
+                    'report': report_response, 'percepts': percepts, 'message': message}
 
         except Exception as e:
             Logger.critical(f'Error to restart the simulation, Error: {str(e)}.')
 
-            return {'status': 0, 'actors': [], 'environment': {},
-                    'message': f'An error occurred during restart: "{str(e)}"'}
+            return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
 
     def connect_agent(self, token):
         """Connect the agent to the simulation and returns a JSON response.
@@ -111,36 +111,44 @@ class JsonFormatter:
             else:
                 Logger.normal('Social asset could not connect.')
 
-                return {'status': 0, 'agent': {}, 'message': 'Social asset could not connect.'}
+                return {'status': 0, 'message': 'Social asset could not connect.'}
 
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
 
-            return {'status': 0, 'agent': {}, 'message': f'An error occurred during connection: {str(e)}.'}
+            return {'status': 0, 'message': f'An error occurred during connection: {str(e)}.'}
 
     def match_report(self):
         Logger.normal('Generate match report.')
+        response = {'status': 0, 'message': ''}
+        
+        try:
+            response['report'] = self.copycat.match_report()
 
-        report = self.copycat.match_report()
+        except Exception as e:
+            response['message'] = str(e)
 
-        return {'status': 0, 'report': report}
+        return response
 
     def simulation_report(self):
         Logger.normal('Generate simulation report.')
+        response = {'status': 0, 'message': ''}
 
         try:
-            response = self.copycat.simulation_report()
+            report = self.copycat.simulation_report()
 
             if isinstance(response, str):
                 Logger.error('Error to generate simulation report.')
-                return {'status': 0, 'message': response}
-
-            response['status'] = 1
-
-            return response
+                response['message'] = 'Error to generate simulation report.'
+            
+            else:
+                response['status'] = 1
+                response['report'] = report
 
         except Exception as e:
-            return {'status': 0, 'message': str(e)}
+            response['message'] = str(e)
+
+        return response
 
     def finish_social_asset_connections(self, tokens):
         Logger.normal('Finishing social assets connections.')
@@ -159,7 +167,7 @@ class JsonFormatter:
         except Exception as e:
             Logger.error(f'Unknown error {str(e)}.')
 
-            return {'status': 0, 'actors': [], 'message': f'An error occurred during connection: {str(e)}.'}
+            return {'status': 0, 'message': f'An error occurred during connection: {str(e)}.'}
 
     def disconnect_agent(self, token):
         """Disconnect the agent to the simulation and returns a JSON response.
@@ -240,7 +248,7 @@ class JsonFormatter:
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
 
-            return {'status': 0, 'actors': [], 'environment': {}, 'message': f'An error occurred during restart: "{str(e)}"'}
+            return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
 
     def do_step(self, token_action_list):
         """Do a step on the simulation.
@@ -258,7 +266,7 @@ class JsonFormatter:
             response = self.copycat.do_step(token_action_list)
 
             if response is None:
-                return {'status': 1, 'actors': [], 'environment': {}, 'message': 'Simulation finished.'}
+                return {'status': 1, 'message': 'Simulation finished.'}
 
             json_actors = []
             for obj in response[0]:
@@ -283,7 +291,7 @@ class JsonFormatter:
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
 
-            return {'status': 0, 'actors': [], 'environment': {}, 'message': f'An error occurred during step: "{str(e)}"'}
+            return {'status': 0, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):
         """Write all the saved logs to a file on the root of the project, the file will be inside a folder structure

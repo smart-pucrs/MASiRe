@@ -1,9 +1,9 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 50,
+    "steps": 5,
     "maps": [{
-      "osm": "files/map0.osm",
+      "osm": "files/poa-vila-nova.osm",
       "minLon": -51.2163800,
       "maxLon": -51.2076000,
       "minLat": -30.1130100,
@@ -12,13 +12,13 @@
       "centerLon": -51.21199
     },
     {
-      "osm": "files/map1.osm",
-      "minLon": -51.1475000,
-      "maxLon": -51.1068000,
-      "minLat": -29.7911000,
-      "maxLat": -29.7701000,
-      "centerLat": -29.780357,
-      "centerLon": -51.131166
+      "osm": "files/sl-jardim-america.osm",
+      "minLat":-29.7826100,
+      "maxLat": -29.7772700,
+      "minLon": -51.1338500,
+      "maxLon": -51.1229500,
+      "centerLat": -29.779990,
+      "centerLon": -51.128888
     }],
     "proximity": 5,
     "randomSeed": 2018
