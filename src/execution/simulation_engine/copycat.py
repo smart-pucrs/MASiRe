@@ -20,7 +20,7 @@ class CopyCat:
 
         self.logs[self.config['map']['maps'][0]['osm']] = self.simulation.log()
         self.config['map']['maps'].pop(0)
-        print('MAP: ', self.config['map']['maps'])
+
         if not self.config['map']['maps']:
             return 0
 

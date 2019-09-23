@@ -56,8 +56,8 @@ def percepts_format(response, token):
 def end_format(response, token):
     if response:
         if response['status']:
-            if token in response.keys():
-                return {'type': 'end', 'report': response[token]}
+            if token in response['report'].keys():
+                return {'type': 'end', 'report': response['report'][token]}
 
             return event_error_format('Report not found.')
         else:
@@ -68,7 +68,7 @@ def end_format(response, token):
 
 def bye_format(response, token):
     if response:
-        if response['message']:
+        if response['status']:
             if token in response['report'].keys():
                 return {'type': 'bye', 'report': response['report'][token]}
 
@@ -138,6 +138,7 @@ def end_monitor_format(response):
         info['message'] = 'Empty simulation response.'
 
     return info
+
 
 def bye_monitor_format(response):
     info = {'status': 0, 'report': None, 'message': ''}

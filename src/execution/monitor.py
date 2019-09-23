@@ -42,31 +42,31 @@ def connect():
 
 @socket.on(initial_percepts_event)
 def initial_percepts_handler(data):
-    print(f'[{initial_percepts_event}] ## ', data)
+    print(f'[{initial_percepts_event}] ## Received.')
     pass
 
 
 @socket.on(percepts_event)
 def percepts_handler(data):
-    print(f'[{percepts_event}] ## ', data)
+    print(f'[{percepts_event}] ##  Received.')
     pass
 
 
 @socket.on(end_event)
 def end_handler(data):
-    print(f'[{end_event}] ## ', data)
+    print(f'[{end_event}] ## Received.')
     pass
 
 
 @socket.on(bye_event)
 def bye_handler(data):
-    print(f'[{bye_event}] ## ', data)
+    print(f'[{bye_event}] ## Received.')
     pass
 
 
 @socket.on(error_event)
 def error_handler(data):
-    print(f'[{error_event}] ## ', data)
+    print(f'[{error_event}] ## Received.')
     pass
 
 
