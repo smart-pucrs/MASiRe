@@ -362,8 +362,8 @@ def finish_step():
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
             
-            notify_monitors(end_event, sim_response)
-            notify_actors(end_event, sim_response)
+            notify_monitors(end_event, sim_response['report'])
+            notify_actors(end_event, sim_response['report'])
 
             if sim_response['status'] == 0:
                 Logger.normal('No more map to run, finishing the simulation...')
@@ -377,14 +377,12 @@ def finish_step():
 
             else:
                 Logger.normal('Restart the simulation.')
-                print('-----> ', sim_response)
+
                 controller.clear_social_assets(sim_response['assets_tokens'])
 
-                notify_monitors(end_event, sim_response['report'])
                 notify_monitors(initial_percepts_event, sim_response['initial_percepts'])
-                notify_monitors(percepts_event, sim_response['percepts'])
-                notify_actors(end_event, sim_response['report'])
                 notify_actors(initial_percepts_event, sim_response['initial_percepts'])
+                notify_monitors(percepts_event, sim_response['percepts'])
                 notify_actors(percepts_event, sim_response['percepts'])
 
                 controller.set_processing_actions()
@@ -566,7 +564,8 @@ def send_initial_percepts(token, info):
     The message contain the agent and map percepts."""
 
     room = controller.manager.get(token, 'socket')
-    socket.emit(initial_percepts_event, info, room=room)
+    response = json_formatter.initial_percepts_format(info, token)
+    socket.emit(initial_percepts_event, response, room=room)
 
 
 def notify_monitors(event, response):

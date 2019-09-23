@@ -3,7 +3,7 @@
     "id": "2018-SampleSimulation",
     "steps": 5,
     "maps": [{
-      "osm": "files/map1.osm",
+      "osm": "files/map0.osm",
       "minLon": -51.2163800,
       "maxLon": -51.2076000,
       "minLat": -30.1130100,
@@ -12,7 +12,7 @@
       "centerLon": -51.21199
     },
     {
-      "osm": "files/map1.osm",
+      "osm": "files/map0.osm",
       "minLon": -51.2163800,
       "maxLon": -51.2076000,
       "minLat": -30.1130100,
@@ -20,7 +20,7 @@
       "centerLat": -30.110815,
       "centerLon": -51.21199
     }],
-    "proximity": 5,
+    "proximity": 50,
     "randomSeed": 2018
   },
   "socialAssets": {
@@ -167,7 +167,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 30,
+      "probability": 0,
       "minPeriod": 20,
       "maxPeriod": 20,
       "circle": {
@@ -178,15 +178,15 @@
     "photo": {
       "minSize": 1,
       "maxSize": 1,
-      "minAmount": 2,
-      "maxAmount": 2,
+      "minAmount": 1,
+      "maxAmount": 1,
       "victimProbability": 100
     },
     "victim": {
       "minSize": 1,
       "maxSize": 1,
       "minAmount": 1,
-      "maxAmount": 3,
+      "maxAmount": 1,
       "minLifetime": 15,
       "maxLifetime": 30
     },
@@ -194,11 +194,11 @@
       "minSize": 1,
       "maxSize": 1,
       "minAmount": 1,
-      "maxAmount": 3
+      "maxAmount": 1
     },
     "socialAsset": {
-      "minAmount": 1,
-      "maxAmount": 1,
+      "minAmount": 5,
+      "maxAmount": 5,
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
     }
   }

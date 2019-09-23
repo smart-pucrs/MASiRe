@@ -1,130 +1,70 @@
 {
     "environment": {
-        "current_step": 50,
-        "max_steps": 50,
-        "delivered_items": [
+        "current_step": 5,
+        "max_steps": 5,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 2,
+        "total_victims_in_photos": 1,
+        "victims_saved": 1,
+        "victims_dead": 0,
+        "total_photos": 1,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 1
+    },
+    "agents": {
+        "active_agents_amount": 1,
+        "agents_amount": 1,
+        "active_agents": [
             {
-                "identifier": 0,
-                "type": "victim",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
                 "location": {
                     "lat": -30.1098256,
                     "lon": -51.2115133
                 },
-                "size": 1,
-                "lifetime": 3
-            },
-            {
-                "identifier": 1,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1106934,
-                    "lon": -51.2121034
-                },
-                "size": 1,
-                "lifetime": 2
-            },
-            {
-                "identifier": 2,
-                "type": "victim",
-                "location": {
-                    "lat": -30.111299,
-                    "lon": -51.213871
-                },
-                "size": 1,
-                "lifetime": 0
-            },
-            {
-                "identifier": 3,
-                "type": "victim",
-                "location": {
-                    "lat": -30.110152,
-                    "lon": -51.2073927
-                },
-                "size": 1,
-                "lifetime": 0
-            },
-            {
-                "identifier": 4,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1107653,
-                    "lon": -51.2142116
-                },
-                "size": 1,
-                "lifetime": 8
-            },
-            {
-                "identifier": 5,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1127706,
-                    "lon": -51.2137695
-                },
-                "size": 1,
-                "lifetime": 0
-            },
-            {
-                "identifier": 6,
-                "type": "victim",
-                "location": {
-                    "lat": -30.111137,
-                    "lon": -51.214825
-                },
-                "size": 1,
-                "lifetime": 11
-            },
-            {
-                "identifier": 7,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1092021,
-                    "lon": -51.2112554
-                },
-                "size": 1,
-                "lifetime": 9
-            },
-            {
-                "identifier": 8,
-                "type": "victim",
-                "location": {
-                    "lat": -30.1085657,
-                    "lon": -51.2131226
-                },
-                "size": 1,
-                "lifetime": 14
-            }
-        ],
-        "floods_amount": 9,
-        "total_victims": 11,
-        "total_victims_in_photos": 3,
-        "victims_saved": 7,
-        "victims_dead": 3,
-        "total_photos": 9,
-        "photos_taken": 7,
-        "photos_analyzed": 3,
-        "photos_ignored": 6,
-        "total_water_samples": 9,
-        "water_samples_collected": 7,
-        "water_samples_ignored": 2
-    },
-    "agents": {
-        "active_agents_amount": 2,
-        "agents_amount": 2,
-        "active_agents": [
-            {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                "active": true,
-                "last_action": "pass",
-                "last_action_result": true,
-                "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
-                },
                 "route": [],
                 "destination_distance": 0,
                 "battery": 50,
-                "physical_storage": 50,
-                "physical_storage_vector": [],
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
                 "social_assets": [
@@ -135,54 +75,80 @@
                             "lat": -30.110032145032346,
                             "lon": -51.21638
                         }
+                    },
+                    {
+                        "id": 1,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.108812023355213,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.1117224175246,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 3,
+                        "profession": "nurse",
+                        "location": {
+                            "lat": -30.11230736618813,
+                            "lon": -51.21638
+                        }
                     }
                 ]
-            },
-            {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                "active": true,
-                "last_action": "move",
-                "last_action_result": true,
-                "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
-                },
-                "route": [],
-                "destination_distance": 0,
-                "battery": 50,
-                "physical_storage": 49,
-                "physical_storage_vector": [
-                    {
-                        "identifier": 9,
-                        "type": "victim",
-                        "location": {
-                            "lat": -30.1095031,
-                            "lon": -51.2120256
-                        },
-                        "size": 1,
-                        "lifetime": 12
-                    }
-                ],
-                "virtual_storage": 4096,
-                "virtual_storage_vector": [],
-                "social_assets": []
             }
         ],
         "agents": [
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
                 "active": true,
-                "last_action": "pass",
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "rescueVictim",
                 "last_action_result": true,
                 "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
                 },
                 "route": [],
                 "destination_distance": 0,
                 "battery": 50,
-                "physical_storage": 50,
-                "physical_storage_vector": [],
+                "physical_storage": 49,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -30.1098256,
+                            "lon": -51.2115133
+                        },
+                        "size": 1,
+                        "lifetime": 18
+                    }
+                ],
                 "virtual_storage": 4096,
                 "virtual_storage_vector": [],
                 "social_assets": [
@@ -193,60 +159,119 @@
                             "lat": -30.110032145032346,
                             "lon": -51.21638
                         }
+                    },
+                    {
+                        "id": 1,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.108812023355213,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "profession": "pharmacist",
+                        "location": {
+                            "lat": -30.1117224175246,
+                            "lon": -51.21638
+                        }
+                    },
+                    {
+                        "id": 3,
+                        "profession": "nurse",
+                        "location": {
+                            "lat": -30.11230736618813,
+                            "lon": -51.21638
+                        }
                     }
                 ]
-            },
-            {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                "active": true,
-                "last_action": "move",
-                "last_action_result": true,
-                "location": {
-                    "lat": -30.110815,
-                    "lon": -51.21199
-                },
-                "route": [],
-                "destination_distance": 0,
-                "battery": 50,
-                "physical_storage": 49,
-                "physical_storage_vector": [
-                    {
-                        "identifier": 9,
-                        "type": "victim",
-                        "location": {
-                            "lat": -30.1095031,
-                            "lon": -51.2120256
-                        },
-                        "size": 1,
-                        "lifetime": 12
-                    }
-                ],
-                "virtual_storage": 4096,
-                "virtual_storage_vector": [],
-                "social_assets": []
             }
         ]
     },
     "assets": {
-        "active_assets_amount": 0,
-        "assets_amount": 0,
-        "active_assets": [],
-        "assets": []
+        "active_assets_amount": 1,
+        "assets_amount": 1,
+        "active_assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
+                "type": "social_asset",
+                "profession": "pharmacist",
+                "active": true,
+                "carried": false,
+                "size": 77,
+                "abilities": [
+                    "move",
+                    "carry",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "strength"
+                ],
+                "speed": 14,
+                "physical_capacity": 50,
+                "virtual_capacity": 0,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 0,
+                "virtual_storage_vector": []
+            }
+        ],
+        "assets": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
+                "type": "social_asset",
+                "profession": "pharmacist",
+                "active": true,
+                "carried": false,
+                "size": 77,
+                "abilities": [
+                    "move",
+                    "carry",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "strength"
+                ],
+                "speed": 14,
+                "physical_capacity": 50,
+                "virtual_capacity": 0,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "route": [],
+                "destination_distance": 0,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 0,
+                "virtual_storage_vector": []
+            }
+        ]
     },
     "actions": {
-        "amount_of_actions_executed": 100,
+        "amount_of_actions_executed": 7,
         "amount_of_actions_by_step": [
             {
                 "step": 1,
-                "actions_amount": 2
+                "actions_amount": 1
             },
             {
                 "step": 2,
-                "actions_amount": 2
+                "actions_amount": 1
             },
             {
                 "step": 3,
-                "actions_amount": 2
+                "actions_amount": 1
             },
             {
                 "step": 4,
@@ -254,186 +279,6 @@
             },
             {
                 "step": 5,
-                "actions_amount": 2
-            },
-            {
-                "step": 6,
-                "actions_amount": 2
-            },
-            {
-                "step": 7,
-                "actions_amount": 2
-            },
-            {
-                "step": 8,
-                "actions_amount": 2
-            },
-            {
-                "step": 9,
-                "actions_amount": 2
-            },
-            {
-                "step": 10,
-                "actions_amount": 2
-            },
-            {
-                "step": 11,
-                "actions_amount": 2
-            },
-            {
-                "step": 12,
-                "actions_amount": 2
-            },
-            {
-                "step": 13,
-                "actions_amount": 2
-            },
-            {
-                "step": 14,
-                "actions_amount": 2
-            },
-            {
-                "step": 15,
-                "actions_amount": 2
-            },
-            {
-                "step": 16,
-                "actions_amount": 2
-            },
-            {
-                "step": 17,
-                "actions_amount": 2
-            },
-            {
-                "step": 18,
-                "actions_amount": 2
-            },
-            {
-                "step": 19,
-                "actions_amount": 2
-            },
-            {
-                "step": 20,
-                "actions_amount": 2
-            },
-            {
-                "step": 21,
-                "actions_amount": 2
-            },
-            {
-                "step": 22,
-                "actions_amount": 2
-            },
-            {
-                "step": 23,
-                "actions_amount": 2
-            },
-            {
-                "step": 24,
-                "actions_amount": 2
-            },
-            {
-                "step": 25,
-                "actions_amount": 2
-            },
-            {
-                "step": 26,
-                "actions_amount": 2
-            },
-            {
-                "step": 27,
-                "actions_amount": 2
-            },
-            {
-                "step": 28,
-                "actions_amount": 2
-            },
-            {
-                "step": 29,
-                "actions_amount": 2
-            },
-            {
-                "step": 30,
-                "actions_amount": 2
-            },
-            {
-                "step": 31,
-                "actions_amount": 2
-            },
-            {
-                "step": 32,
-                "actions_amount": 2
-            },
-            {
-                "step": 33,
-                "actions_amount": 2
-            },
-            {
-                "step": 34,
-                "actions_amount": 2
-            },
-            {
-                "step": 35,
-                "actions_amount": 2
-            },
-            {
-                "step": 36,
-                "actions_amount": 2
-            },
-            {
-                "step": 37,
-                "actions_amount": 2
-            },
-            {
-                "step": 38,
-                "actions_amount": 2
-            },
-            {
-                "step": 39,
-                "actions_amount": 2
-            },
-            {
-                "step": 40,
-                "actions_amount": 2
-            },
-            {
-                "step": 41,
-                "actions_amount": 2
-            },
-            {
-                "step": 42,
-                "actions_amount": 2
-            },
-            {
-                "step": 43,
-                "actions_amount": 2
-            },
-            {
-                "step": 44,
-                "actions_amount": 2
-            },
-            {
-                "step": 45,
-                "actions_amount": 2
-            },
-            {
-                "step": 46,
-                "actions_amount": 2
-            },
-            {
-                "step": 47,
-                "actions_amount": 2
-            },
-            {
-                "step": 48,
-                "actions_amount": 2
-            },
-            {
-                "step": 49,
-                "actions_amount": 2
-            },
-            {
-                "step": 50,
                 "actions_amount": 2
             }
         ],
@@ -441,351 +286,33 @@
             {
                 "step": 1,
                 "actions": [
-                    "pass",
                     "move"
                 ]
             },
             {
                 "step": 2,
                 "actions": [
-                    "searchSocialAsset",
-                    "rescueVictim"
+                    "searchSocialAsset"
                 ]
             },
             {
                 "step": 3,
                 "actions": [
-                    "pass",
-                    "move"
+                    "requestSocialAsset"
                 ]
             },
             {
                 "step": 4,
                 "actions": [
-                    "pass",
-                    "deliverPhysical"
+                    "rescueVictim",
+                    "move"
                 ]
             },
             {
                 "step": 5,
                 "actions": [
-                    "pass",
+                    "move",
                     "move"
-                ]
-            },
-            {
-                "step": 6,
-                "actions": [
-                    "pass",
-                    "takePhoto"
-                ]
-            },
-            {
-                "step": 7,
-                "actions": [
-                    "pass",
-                    "analyzePhoto"
-                ]
-            },
-            {
-                "step": 8,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 9,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 10,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 11,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 12,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 13,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 14,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 15,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 16,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 17,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 18,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 19,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 20,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 21,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 22,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 23,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 24,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 25,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 26,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 27,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 28,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 29,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 30,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 31,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 32,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 33,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 34,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 35,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 36,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 37,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 38,
-                "actions": [
-                    "pass",
-                    "takePhoto"
-                ]
-            },
-            {
-                "step": 39,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 40,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 41,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 42,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
-                ]
-            },
-            {
-                "step": 43,
-                "actions": [
-                    "pass",
-                    "analyzePhoto"
-                ]
-            },
-            {
-                "step": 44,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 45,
-                "actions": [
-                    "pass",
-                    "takePhoto"
-                ]
-            },
-            {
-                "step": 46,
-                "actions": [
-                    "pass",
-                    "analyzePhoto"
-                ]
-            },
-            {
-                "step": 47,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 48,
-                "actions": [
-                    "pass",
-                    "rescueVictim"
-                ]
-            },
-            {
-                "step": 49,
-                "actions": [
-                    "pass",
-                    "move"
-                ]
-            },
-            {
-                "step": 50,
-                "actions": [
-                    "pass",
-                    "deliverPhysical"
                 ]
             }
         ],
@@ -794,10 +321,6 @@
                 "step": 1,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                         "action": "move"
                     }
@@ -807,12 +330,8 @@
                 "step": 2,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "searchSocialAsset"
-                    },
-                    {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
+                        "action": "searchSocialAsset"
                     }
                 ]
             },
@@ -820,12 +339,8 @@
                 "step": 3,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
+                        "action": "requestSocialAsset"
                     }
                 ]
             },
@@ -833,12 +348,12 @@
                 "step": 4,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
                     },
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
+                        "action": "move"
                     }
                 ]
             },
@@ -846,597 +361,12 @@
                 "step": 5,
                 "token_action": [
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
                         "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 6,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
                     },
                     {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "takePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 7,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "analyzePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 8,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
                         "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 9,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 10,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 11,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 12,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 13,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 14,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 15,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 16,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 17,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 18,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 19,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 20,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 21,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 22,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 23,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 24,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 25,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 26,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 27,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 28,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 29,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 30,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 31,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 32,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 33,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 34,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 35,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 36,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 37,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 38,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "takePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 39,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 40,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 41,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 42,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
-                    }
-                ]
-            },
-            {
-                "step": 43,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "analyzePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 44,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 45,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "takePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 46,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "analyzePhoto"
-                    }
-                ]
-            },
-            {
-                "step": 47,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 48,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    }
-                ]
-            },
-            {
-                "step": 49,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    }
-                ]
-            },
-            {
-                "step": 50,
-                "token_action": [
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
-                        "action": "pass"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "deliverPhysical"
                     }
                 ]
             }

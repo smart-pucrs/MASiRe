@@ -8,14 +8,27 @@ def initial_percepts_format(response, token):
 
     if response:
         if response['status']:
-            for agent in response['agents']:
-                if agent['token'] == token:
-                    info['agent_percepts'] = agent
-                    info['map_percepts'] = response['map_percepts']
 
-                    return info
+            found_index = 0
+            for idx, agent in enumerate(response['agents']):
+                if 'agent' in agent:
+                    if agent['agent']['token'] == token:
+                        info['agent_percepts'] = agent_constants(agent['agent'])
+                        found_index = idx
+                        break
 
-            return event_error_format('Agent not found.')
+                else:
+                    if agent['asset']['token'] == token:
+                        info['agent_percepts'] = asset_constants(agent['asset'])
+                        found_index = idx
+                        break
+
+            if not info['agent_percepts']:
+                return event_error_format('Actor not found in response.')
+
+            response['agents'].pop(found_index)
+
+            return info
         else:
             return event_error_format(response['message'])
     else:
@@ -32,11 +45,18 @@ def percepts_format(response, token):
 
             found_index = 0
             for idx, actor in enumerate(response['actors']):
-                if actor['agent']['token'] == token:
-                    info['agent'] = actor['agent']
-                    info['message'] = actor['message']
-                    found_index = idx
-                    break
+                if 'agent' in actor:
+                    if actor['agent']['token'] == token:
+                        info['agent'] = agent_variables(actor['agent'])
+                        info['message'] = actor['message']
+                        found_index = idx
+                        break
+                else:
+                    if actor['asset']['token'] == token:
+                        info['agent'] = asset_variables(actor['asset'])
+                        info['message'] = actor['message']
+                        found_index = idx
+                        break
 
             if 'agent' not in info:
                 return event_error_format('Actor not found in response. ')
@@ -54,6 +74,7 @@ def percepts_format(response, token):
 
 
 def end_format(response, token):
+    print('END---> ', token, response)
     if response:
         if response['status']:
             if token in response['report'].keys():
@@ -157,3 +178,64 @@ def bye_monitor_format(response):
 
 def event_error_monitor_format(message):
     return {'message': f'{message}Possible internal error.'}
+
+
+def agent_constants(agent):
+    return {
+        'token': agent['token'],
+        'role': agent['role'],
+        'abilities': agent['abilities'],
+        'resources': agent['resources'],
+        'max_charge': agent['max_charge'],
+        'speed': agent['speed'],
+        'size': agent['size'],
+        'physical_capacity': agent['physical_capacity'],
+        'virtual_capacity': agent['virtual_capacity']
+    }
+
+
+def agent_variables(agent):
+    return {
+        'token': agent['token'],
+        'active': agent['active'],
+        'last_action': agent['last_action'],
+        'last_action_result': agent['last_action_result'],
+        'location': agent['location'],
+        'route': agent['route'],
+        'destination_distance': agent['destination_distance'],
+        'battery': agent['battery'],
+        'physical_storage': agent['physical_storage'],
+        'physical_storage_vector': agent['physical_storage_vector'],
+        'virtual_storage': agent['virtual_storage'],
+        'virtual_storage_vector': agent['virtual_storage_vector'],
+        'social_assets': agent['social_assets']
+    }
+
+
+def asset_constants(asset):
+    return {
+        'token': asset['token'],
+        'profession': asset['profession'],
+        'abilities': asset['abilities'],
+        'resources': asset['resources'],
+        'speed': asset['speed'],
+        'size': asset['size'],
+        'physical_capacity': asset['physical_capacity'],
+        'virtual_capacity': asset['virtual_capacity']
+    }
+
+
+def asset_variables(agent):
+    return {
+        'token': agent['token'],
+        'active': agent['active'],
+        'last_action': agent['last_action'],
+        'last_action_result': agent['last_action_result'],
+        'location': agent['location'],
+        'route': agent['route'],
+        'destination_distance': agent['destination_distance'],
+        'physical_storage': agent['physical_storage'],
+        'physical_storage_vector': agent['physical_storage_vector'],
+        'virtual_storage': agent['virtual_storage'],
+        'virtual_storage_vector': agent['virtual_storage_vector'],
+    }
