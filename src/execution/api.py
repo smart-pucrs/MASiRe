@@ -141,6 +141,7 @@ def start_step_cycle():
 
     sim_response = requests.post(f'http://{base_url}:{simulation_port}/start', json={'secret': secret}).json()
 
+    notify_monitors(initial_percepts_event, sim_response)
     notify_monitors(percepts_event, sim_response)
     notify_actors(percepts_event, sim_response)
 
@@ -361,7 +362,8 @@ def finish_step():
             Logger.normal('End of the simulation, preparer to restart.')
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
-            
+
+            print(sim_response)
             notify_monitors(end_event, sim_response['report'])
             notify_actors(end_event, sim_response['report'])
 

@@ -1,132 +1,70 @@
 import os
 import time
 from datetime import date
-
 from flask import json
+from monitor_engine.helpers.match import Match
 
 
 class MonitorManager:
 
-    def __init__(self):
+    def __init__(self, simulation_config):
+        self.simulation_config = simulation_config
         self.current_match = 0
-        self.monitor_match = 0
-        self.current_step = 0
-        self.simulation_info = {}
         self.matchs = []
+        self.sim_report = None
 
-    def init_replay_mode(self, replay):
-        replay_path = os.getcwd() + '/replays/' + replay
+    def create_new_match(self, map_config):
+        match = Match(map_config)
 
-        replay_data = json.loads(open(replay_path, 'r').read())
-            
-        self.simulation_info = replay_data['simulation_info']
-        self.matchs = replay_data['matchs']
-    
-    def init_live_mode(self, config):
-        config_location = os.getcwd() + '/' + config
-        maps = json.load(open(config_location, 'r'))['map']['maps']
+        self.matchs.append(match)
 
-        for map_info in maps:
-            self.matchs.append({'map': map_info, 'steps_data': []})
+    def add_percepts(self, actors, environment):
+        match = self.matchs[-1]
 
-    def set_simulation_info(self, simulation_info):
-        self.simulation_info = simulation_info
+        step = {'actors': actors, 'environment': environment}
+        match.add_step(step)
 
-    def save_replay(self):
+    def add_match_report(self, match_report):
+        match = self.matchs[-1]
+        match.report = match_report
+
+    def add_simulation_report(self, sim_report):
+        self.sim_report = sim_report
+
+    def load_simulation(self, matchs, sim_report):
+        for match in matchs:
+            new_match = Match(match['map_config'], match['steps'], match['match_report'])
+            self.matchs.append(new_match)
+
+        self.sim_report = sim_report
+
+    def record_simulation(self):
         current_date = date.today().strftime('%d-%m-%Y')
         hours = time.strftime("%H:%M:%S")
         file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
 
         abs_path = os.getcwd() + '/replays/'
-        replay_data = {'simulation_info': self.simulation_info, 'matchs': self.matchs}
+        formatted_data = self.format_simulation_data()
 
         with open(str(abs_path + file_name), 'w+') as file:
-            file.write(json.dumps(replay_data, sort_keys=False, indent=4))
+            file.write(json.dumps(formatted_data, sort_keys=False, indent=4))
 
-    def get_initial_information(self):
-        map_info = self.matchs[self.monitor_match]['map']
+    def format_simulation_data(self):
+        simulation_config = self.simulation_config
+        sim_report = self.sim_report
+        matchs = []
 
-        total_matchs = len(self.matchs)
-        match_info = {'current_match': self.current_match+1, 'total_matchs': total_matchs}
+        for match in self.matchs:
+            jsonify_match = {'map_percepts': match.map_config,
+                             'steps': match.steps,
+                             'match_report': match.report}
 
-        return {
-            'simulation_info': self.simulation_info,
-            'map_info': map_info,
-            'match_info': match_info
+            matchs.append(jsonify_match)
+
+        formatted_data = {
+            'simulation_config': simulation_config,
+            'matchs': matchs,
+            'sim_report': sim_report
         }
 
-    def next_match_api(self):
-        self.current_match += 1
-
-    def add_step_data(self, step_data):
-        self.matchs[self.current_match]['steps_data'].append(step_data)
-
-    def next_step(self):
-        total_steps = len(self.matchs[self.monitor_match]['steps_data'])
-        
-        if self.current_step == total_steps-1:
-            return self.get_step_data()
-
-        self.current_step += 1
-        return self.get_step_data()
-
-    def prev_step(self):
-        if self.current_step == 0:
-            return self.get_step_data()
-
-        self.current_step -= 1
-        return self.get_step_data()
-
-    def prev_match(self):
-        if self.monitor_match == 0:
-            self.current_step = 0
-
-            return self.get_match_data()
-
-        else:
-            self.monitor_match -= 1
-            self.current_step = 0
-
-            return self.get_match_data()
-
-    def next_match(self):
-        if self.monitor_match == len(self.matchs)-1:
-            self.current_step = 0
-
-            return self.get_match_data()
-
-        else:
-            self.monitor_match += 1
-            self.current_step = 0
-
-            return self.get_match_data()
-            
-    def get_step_data(self):
-        step = self.current_step
-        step_data = self.matchs[self.monitor_match]['steps_data'][step]
-        total_steps = len(self.matchs[self.monitor_match]['steps_data'])
-        
-        return {'current_step': step,
-                'total_steps': total_steps,
-                'step_data': step_data}
-
-    def get_match_data(self):
-        step = self.current_step
-        total_matchs = len(self.matchs)
-        current_match = self.monitor_match
-        map_info = self.matchs[current_match]['map']
-        total_steps = len(self.matchs[current_match]['steps_data'])
-        step_data = self.matchs[current_match]['steps_data'][step]
-
-        return {
-            'match_info': {
-                'current_match': current_match+1,
-                'total_matchs': total_matchs
-            },
-            'step_info': {
-                'step': step+1,
-                'total_steps': total_steps,
-                'step_data': step_data,    
-            },
-            'map_info': map_info
-        }
+        return formatted_data

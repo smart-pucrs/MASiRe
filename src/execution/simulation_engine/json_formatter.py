@@ -35,7 +35,7 @@ class JsonFormatter:
         Logger.normal('Try to restart the simulation.')
 
         try:
-            agents, step, current_step, report, new_map_percepts, assets_tokens = self.copycat.restart()
+            agents, step, current_step, new_map_percepts, report, assets_tokens = self.copycat.restart()
             message = 'Simulation restarted.'
 
             json_agents_init = [{'agent': self.jsonify_agent(agent)} for agent in agents]
@@ -258,11 +258,12 @@ class JsonFormatter:
             json_agents = self.jsonify_agents(response[0])
             json_actors = [{'agent': agent, 'message': message} for agent in [*json_agents]]
             environment = {'events': self.jsonify_events(response[1]), 'step': response[2]}
+            map_percepts = response[3]
 
             Logger.normal(message)
 
             return {'status': 1, 'actors': json_actors, 'environment': environment,
-                    'message': message}
+                    'map_percepts': map_percepts, 'message': message}
 
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')

@@ -74,7 +74,6 @@ def percepts_format(response, token):
 
 
 def end_format(response, token):
-    print('END---> ', token, response)
     if response:
         if response['status']:
             if token in response['report'].keys():
@@ -136,7 +135,15 @@ def percepts_monitor_format(response):
                 info['message'] = 'Error formatting percepts into API, key "environment" not found in response.'
             else:
                 info['status'] = 1
-                info['actors'] = response['actors']
+
+                actors = []
+                for actor in response['actors']:
+                    if 'agent' in actor:
+                        actors.append(monitor_agent_info(actor['agent']))
+                    else:
+                        actors.append(monitor_asset_info(actor['asset']))
+
+                info['actors'] = actors
                 info['environment'] = response['environment']
         else:
             info['message'] = response['message']
@@ -178,6 +185,22 @@ def bye_monitor_format(response):
 
 def event_error_monitor_format(message):
     return {'message': f'{message}Possible internal error.'}
+
+
+def monitor_agent_info(agent):
+    return {
+        'type': agent['type'],
+        'role': agent['role'],
+        'location': agent['location'],
+    }
+
+
+def monitor_asset_info(asset):
+    return {
+        'type': asset['type'],
+        'profession': asset['profession'],
+        'location': asset['location'],
+    }
 
 
 def agent_constants(agent):
