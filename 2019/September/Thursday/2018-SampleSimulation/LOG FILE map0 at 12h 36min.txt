@@ -193,12 +193,12 @@
         "assets_amount": 1,
         "active_assets": [
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
                 "type": "social_asset",
                 "profession": "pharmacist",
                 "active": true,
                 "carried": false,
-                "size": 77,
+                "size": 80,
                 "abilities": [
                     "move",
                     "carry",
@@ -226,12 +226,12 @@
         ],
         "assets": [
             {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXQifQ.aWy64IEDKCDRrwO9l1G7poYCvwJfBgCtyhgVtq1o_1U",
                 "type": "social_asset",
                 "profession": "pharmacist",
                 "active": true,
                 "carried": false,
-                "size": 77,
+                "size": 80,
                 "abilities": [
                     "move",
                     "carry",
@@ -275,11 +275,11 @@
             },
             {
                 "step": 4,
-                "actions_amount": 2
+                "actions_amount": 1
             },
             {
                 "step": 5,
-                "actions_amount": 2
+                "actions_amount": 1
             }
         ],
         "actions_by_step": [
@@ -298,20 +298,18 @@
             {
                 "step": 3,
                 "actions": [
-                    "requestSocialAsset"
+                    "rescueVictim"
                 ]
             },
             {
                 "step": 4,
                 "actions": [
-                    "rescueVictim",
                     "move"
                 ]
             },
             {
                 "step": 5,
                 "actions": [
-                    "move",
                     "move"
                 ]
             }
@@ -340,7 +338,7 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "requestSocialAsset"
+                        "action": "rescueVictim"
                     }
                 ]
             },
@@ -349,10 +347,6 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "rescueVictim"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
                         "action": "move"
                     }
                 ]
@@ -362,10 +356,6 @@
                 "token_action": [
                     {
                         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
-                        "action": "move"
-                    },
-                    {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYXNzZXRfMSJ9.qjP05HnPUHinvDXBURf6K8JMLKCCF5RkV96rvINCSIQ",
                         "action": "move"
                     }
                 ]

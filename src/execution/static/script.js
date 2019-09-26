@@ -1,6 +1,7 @@
 var mymap = null;
 var variablesMarkerGroup = null;
 var constantsMarkerGroup = null;
+var startMatchFunctionId = null;
 var updateStateFunctionId = null;
 var stepSpeed = 1000;
 var logId = '#log';
@@ -70,8 +71,32 @@ var agentDroneIcon = L.icon({
     iconAnchor: [15, 13]
 });
 
-var socialAssetIcon = L.icon({
-    iconUrl: '/static/images/social_asset.png',
+var doctorIcon = L.icon({
+    iconUrl: '/static/images/doctor.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var nurseIcon = L.icon({
+    iconUrl: '/static/images/nurse.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var pharmacistIcon = L.icon({
+    iconUrl: '/static/images/pharmacist.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var photographerIcon = L.icon({
+    iconUrl: '/static/images/photographer.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var teacherIcon = L.icon({
+    iconUrl: '/static/images/teacher.png',
     iconSize: [40, 45],
     iconAnchor: [15, 13]
 });
@@ -82,6 +107,18 @@ var centralIcon = L.icon({
     iconAnchor: [20, 25]
 });
 
+function startMatch(){
+    $.getJSON($SCRIPT_ROOT + '/current_match', function (data) {
+        if (data['status']) {
+            handle_new_match(data['data']);
+            
+            clearInterval(startMatchFunctionId);
+            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        } else {
+            logError(data['message']);
+        }
+    });
+}
 
 function nextStep() {
     $.getJSON($SCRIPT_ROOT + '/next_step', function (data) {
@@ -174,11 +211,11 @@ function process_simulation_data(data) {
 
     variablesMarkerGroup.clearLayers();
 
-    $('#step').text(data['current_step'] + ' of ' + data['total_steps']);
+    $('#step').text(data['environment']['step'] + ' of ' + data['total_steps']);
 
-    let events = data['step_data']['environment']['events'];
+    let events = data['environment']['events'];
     let old_locations = [];
-    for (i in events) {
+    for (let i=0; i < events.length; i++) {
         event_location = events[i]['location'];
 
         event_location = format_location(event_location, old_locations);
@@ -214,36 +251,57 @@ function process_simulation_data(data) {
 
     }
 
-    let actors = data['step_data']['actors'];
+    let actors = data['actors'];
 
     $('#active-agents').text(actors.length);
 
-    for (i in actors) {
-        agent = actors[i]['agent'];
+    for (let i=0; i < actors.length; i++) {
+        type = actors[i]['type'];
 
-        agent_location = format_location(agent['location'], old_locations);
+        agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
         agent_location_formated = [agent_location['lat'], agent_location['lon']];
-
-        L.marker(agent_location_formated, { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-        /*
-        if (agent['role'] == 'drone') {
-            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-        } else if (agent['role'] == 'car') {
-            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentCarIcon }).addTo(variablesMarkerGroup);
-        } else if (agent['role'] == 'boat') {
-            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
-        } else if (agent['role'] == 'social_asset') {
-            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: socialAssetIcon }).addTo(variablesMarkerGroup);
-        } else {
-            logError('Role of agent not found: ' + agent['role']);
+        console.log('--> ' + actors[i] + i);
+        if (type == 'agent'){
+            switch(actors[i]['role']){
+                case 'drone':
+                    L.marker(agent_location_formated, { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'car':
+                    L.marker(agent_location_formated, { icon: agentCarIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'boat':
+                    L.marker(agent_location_formated, { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
+                    break;
+                default:
+                    logError('Role not found.');
+            }
+        }else{
+            switch(actors[i]['profession']){
+                case 'doctor':
+                    L.marker(agent_location_formated, { icon: doctorIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'nurse':
+                    L.marker(agent_location_formated, { icon: nurseIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'pharmacist':
+                    L.marker(agent_location_formated, { icon: pharmacistIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'teacher':
+                    L.marker(agent_location_formated, { icon: teacherIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'photographer':
+                    L.marker(agent_location_formated, { icon: photographerIcon }).addTo(variablesMarkerGroup);
+                    break;
+                default:
+                    logError('Profession not found.');
+            }
         }
-        */
     }
 }
 
 function containsLocation(locations, location){
-    for (i in locations){
+    for (let i=0; i < locations.length; i++){
         if (locations[i]['lat'] == location['lat']){
             if (locations[i]['lon'] == location['lon']) return true;
         }
@@ -275,9 +333,8 @@ function init() {
                 return;
             }
 
-            setSimulationInfo(data['simulation_info']);
-            setMatchInfo(data['match_info']);
-            setMapConfig(data['map_info']);
+            setSimulationInfo(data['sim_information']);
+            startMatchFunctionId = setInterval(startMatch, stepSpeed);
         });
 }
 
@@ -337,8 +394,6 @@ function logError(message) {
 function logCritical(message) {
     log('CRITICAL', message);
 }
-
-updateStateFunctionId = setInterval(nextStep, stepSpeed);
 
 window.onload = function () {
     this.init();

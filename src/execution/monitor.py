@@ -153,79 +153,92 @@ def load_simulation():
 
 @app.route('/')
 def home():
-    # return render_template('index.html')
-    return 'Teste'
+    return render_template('index.html')
 
-#
-# @app.route('/next_step', methods=['GET'])
-# def next_step():
-#     data = {'status': False, 'message': ''}
-#
-#     try:
-#         data['data'] = manager.next_step()
-#         data['status'] = True
-#
-#     except Exception as e:
-#         data['message'] = str(e)
-#
-#     return jsonify(data)
-#
-#
-# @app.route('/next_match', methods=['GET'])
-# def next_match():
-#     data = {'status': False, 'message': ''}
-#
-#     try:
-#         data['data'] = manager.next_match()
-#         data['status'] = True
-#
-#     except Exception as e:
-#         data['message'] = str(e)
-#
-#     return jsonify(data)
-#
-#
-# @app.route('/prev_match', methods=['GET'])
-# def prev_match():
-#     data = {'status': False, 'message': ''}
-#
-#     try:
-#         data['data'] = manager.prev_match()
-#         data['status'] = True
-#
-#     except Exception as e:
-#         data['message'] = str(e)
-#
-#     return jsonify(data)
-#
-#
-# @app.route('/prev_step', methods=['GET'])
-# def prev_step():
-#     data = {'status': False, 'message': ''}
-#
-#     try:
-#         data['data'] = manager.prev_step()
-#         data['status'] = True
-#
-#     except Exception as e:
-#         data['message'] = str(e)
-#
-#     return jsonify(data)
-#
-#
-# @app.route('/init', methods=['GET'])
-# def init_monitor():
-#     data = {'status': False, 'message': ''}
-#
-#     try:
-#         response = manager.get_initial_information()
-#         data.update(response)
-#         data['status'] = True
-#
-#     except Exception as e:
-#         data['message'] = f'Unknown error: {str(e)}'
-#
-#     return jsonify(data)
+
+@app.route('/current_match', methods=['GET'])
+def current_match():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_current_match()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/next_step', methods=['GET'])
+def next_step():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_next_step()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/next_match', methods=['GET'])
+def next_match():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_next_match()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/prev_match', methods=['GET'])
+def prev_match():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_prev_match()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/prev_step', methods=['GET'])
+def prev_step():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_prev_step()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
+
+@app.route('/init', methods=['GET'])
+def init_monitor():
+    data = {'status': False, 'message': ''}
+
+    try:
+        response = manager.get_initial_information()
+        data.update(response)
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = f'Unknown error: {str(e)}'
+
+    return jsonify(data)
 
 
 if __name__ == "__main__":
