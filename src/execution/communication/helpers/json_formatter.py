@@ -26,6 +26,7 @@ def initial_percepts_format(response, token):
             if not info['agent_percepts']:
                 return event_error_format('Actor not found in response.')
 
+            info['map_percepts'] = format_map_percepts_agents(response['map_percepts'])
             response['agents'].pop(found_index)
 
             return info
@@ -33,6 +34,18 @@ def initial_percepts_format(response, token):
             return event_error_format(response['message'])
     else:
         return event_error_format('Empty simulation response. ')
+
+
+def format_map_percepts_agents(map_percepts):
+    return {
+        'proximity': map_percepts['proximity'],
+        'minLat': map_percepts['minLat'],
+        'maxLat': map_percepts['maxLat'],
+        'minLon': map_percepts['minLon'],
+        'maxLon': map_percepts['maxLon'],
+        'centerLat': map_percepts['centerLat'],
+        'centerLon': map_percepts['centerLon']
+    }
 
 
 def percepts_format(response, token):
@@ -47,6 +60,7 @@ def percepts_format(response, token):
             for idx, actor in enumerate(response['actors']):
                 if 'agent' in actor:
                     if actor['agent']['token'] == token:
+                        print(actor)
                         info['agent'] = agent_variables(actor['agent'])
                         info['message'] = actor['message']
                         found_index = idx
@@ -126,7 +140,7 @@ def initial_percepts_monitor_format(response):
 
 def percepts_monitor_format(response):
     info = {'status': 0, 'actors': None, 'environment': None, 'message': ''}
-    
+
     if response:
         if response['status']:
             if 'actors' not in response:

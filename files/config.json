@@ -167,38 +167,38 @@
   },
   "generate": {
     "flood": {
-      "probability": 30,
-      "minPeriod": 20,
-      "maxPeriod": 20,
+      "probability": 10,
+      "minPeriod": 30,
+      "maxPeriod": 50,
       "circle": {
         "minRadius": 0.05,
         "maxRadius": 0.5
       }
     },
     "photo": {
-      "minSize": 1,
-      "maxSize": 1,
-      "minAmount": 2,
-      "maxAmount": 4,
-      "victimProbability": 100
+      "minSize": 256,
+      "maxSize": 512,
+      "minAmount": 3,
+      "maxAmount": 6,
+      "victimProbability": 50
     },
     "victim": {
-      "minSize": 1,
-      "maxSize": 1,
+      "minSize": 18,
+      "maxSize": 22,
       "minAmount": 4,
       "maxAmount": 8,
       "minLifetime": 15,
       "maxLifetime": 30
     },
     "waterSample": {
-      "minSize": 1,
-      "maxSize": 1,
+      "minSize": 15,
+      "maxSize": 20,
       "minAmount": 3,
-      "maxAmount": 9
+      "maxAmount": 4
     },
     "socialAsset": {
       "minAmount": 1,
-      "maxAmount": 3,
+      "maxAmount": 1,
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
     }
   }
