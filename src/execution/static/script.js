@@ -220,11 +220,11 @@ function process_simulation_data(data) {
 
         event_location = format_location(event_location, old_locations);
         old_locations.push(event_location);
-        event_location_formated = [events[i]['location']['lat'], events[i]['location']['lon']];
+        event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
         if (events[i]['type'] == 'flood') {
-            L.marker(event_location_formated, { icon: floodIcon }).addTo(variablesMarkerGroup);
-            L.circle(event_location_formated, {
+            L.marker(event_location_formatted, { icon: floodIcon }).addTo(variablesMarkerGroup);
+            L.circle(event_location_formatted, {
                 color: 'blue',
                 fillColor: 'blue',
                 fillOpacity: 0.2,
@@ -233,19 +233,19 @@ function process_simulation_data(data) {
 
         } else if (events[i]['type'] == 'victim') {
             if (events[i]['lifetime'] == 0) {
-                L.marker(event_location_formated, { icon: victimIcon3 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon3 }).addTo(variablesMarkerGroup);
             }
             else if (events[i]['lifetime'] < 5) {
-                L.marker(event_location_formated, { icon: victimIcon2 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon2 }).addTo(variablesMarkerGroup);
             } else if (events[i]['lifetime'] < 10) {
-                L.marker(event_location_formated, { icon: victimIcon1 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon1 }).addTo(variablesMarkerGroup);
             } else {
-                L.marker(event_location_formated, { icon: victimIcon0 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon0 }).addTo(variablesMarkerGroup);
             }
         } else if (events[i]['type'] == 'photo') {
-            L.marker(event_location_formated, { icon: photoIcon }).addTo(variablesMarkerGroup);
+            L.marker(event_location_formatted, { icon: photoIcon }).addTo(variablesMarkerGroup);
         } else {
-            L.marker(event_location_formated, { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
+            L.marker(event_location_formatted, { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
         }
 
 
@@ -376,6 +376,18 @@ function setLog() {
         $(btnLogId).text('Show log');
     }
 }
+
+$(function () {
+    $('#speed input[type=radio]').change(function(){
+        stepSpeed = parseInt(this.value);
+        
+        clearInterval(updateStateFunctionId);
+        updateStateFunctionId = setInterval(nextStep, stepSpeed);
+
+        logNormal("Step speed change to " + $(this).val() + " ms");
+  
+    })
+})
 
 function log(tag, message) {
     var oldText = $(logId).val();
