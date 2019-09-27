@@ -624,8 +624,8 @@ def notify_actors(event, response):
         room = controller.manager.get(token, 'socket')
         room_response_list.append((room, json.dumps(info)))
 
-    for room, response in room_response_list:
-        socket.emit(event, response, room=room)
+    for room, agent_response in room_response_list:
+        socket.emit(event, agent_response, room=room)
         
 
 @app.route('/terminate', methods=['GET'])

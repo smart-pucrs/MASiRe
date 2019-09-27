@@ -244,7 +244,6 @@ def init_monitor():
 if __name__ == "__main__":
     if replay_mode:
         try:
-            print('replay')
             load_simulation()
         except Exception as e:
             print(str(e))

@@ -1616,7 +1616,8 @@ class Cycle:
                     'maxLat': self.map_percepts['maps'][0]['maxLat'], 'minLon': self.map_percepts['maps'][0]['minLon'],
                     'maxLon': self.map_percepts['maps'][0]['maxLon'],
                     'centerLat': self.map_percepts['maps'][0]['centerLat'],
-                    'centerLon': self.map_percepts['maps'][0]['centerLon']}
+                    'centerLon': self.map_percepts['maps'][0]['centerLon'],
+                    'osm': self.map_percepts['maps'][0]['osm']}
 
         return percepts
 

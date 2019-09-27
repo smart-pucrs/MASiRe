@@ -95,10 +95,11 @@ class MonitorManager:
 
     def load_simulation(self, matchs, sim_report):
         for match in matchs:
-            new_match = Match(match['map_config'], match['steps'], match['match_report'])
+            new_match = Match(match['map_percepts'], match['steps'], match['match_report'])
             self.matchs.append(new_match)
 
         self.sim_report = sim_report
+        print(self.sim_report, self.matchs)
 
     def format_simulation_data(self):
         simulation_config = self.simulation_config
