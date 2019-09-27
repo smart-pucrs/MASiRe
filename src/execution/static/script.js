@@ -55,20 +55,20 @@ var waterSampleIcon = L.icon({
 
 var agentCarIcon = L.icon({
     iconUrl: '/static/images/car.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
 });
 
 var agentBoatIcon = L.icon({
     iconUrl: '/static/images/boat.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
 });
 
 var agentDroneIcon = L.icon({
     iconUrl: '/static/images/drone.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
 });
 
 var doctorIcon = L.icon({
@@ -381,8 +381,10 @@ $(function () {
     $('#speed input[type=radio]').change(function(){
         stepSpeed = parseInt(this.value);
         
-        clearInterval(updateStateFunctionId);
-        updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        if (playing){
+            clearInterval(updateStateFunctionId);
+            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        }
 
         logNormal("Step speed change to " + $(this).val() + " ms");
   

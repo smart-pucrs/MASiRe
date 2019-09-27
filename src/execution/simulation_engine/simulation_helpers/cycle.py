@@ -1324,7 +1324,7 @@ class Cycle:
         if not agent.check_battery():
             raise FailedInsufficientBattery('Not enough battery to complete this step.')
 
-        elif self.map.check_location(agent.location, destination):
+        elif self.map.check_location(agent.location, destination) and not agent.role == 'car':
             self.agents_manager.edit(token, 'location', destination)
             self.agents_manager.edit(token, 'route', [])
             self.agents_manager.edit(token, 'destination_distance', 0)

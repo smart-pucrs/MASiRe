@@ -99,7 +99,6 @@ class MonitorManager:
             self.matchs.append(new_match)
 
         self.sim_report = sim_report
-        print(self.sim_report, self.matchs)
 
     def format_simulation_data(self):
         simulation_config = self.simulation_config

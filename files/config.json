@@ -75,7 +75,7 @@
       "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 1,
+      "amount": 0,
       "speed": 10,
       "physicalCapacity": 50,
       "virtualCapacity": 4096,
@@ -95,7 +95,7 @@
       "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 8000,
-      "amount": 0,
+      "amount": 1,
       "speed": 7,
       "physicalCapacity": 1000,
       "virtualCapacity": 128,
@@ -178,15 +178,15 @@
     "photo": {
       "minSize": 256,
       "maxSize": 512,
-      "minAmount": 3,
-      "maxAmount": 6,
+      "minAmount": 2,
+      "maxAmount": 4,
       "victimProbability": 50
     },
     "victim": {
       "minSize": 18,
       "maxSize": 22,
-      "minAmount": 4,
-      "maxAmount": 8,
+      "minAmount": 1,
+      "maxAmount": 2,
       "minLifetime": 15,
       "maxLifetime": 30
     },
