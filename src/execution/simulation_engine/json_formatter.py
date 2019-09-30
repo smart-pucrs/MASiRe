@@ -525,7 +525,6 @@ class JsonFormatter:
                     'type': 'photo',
                     'location': self.format_location(event.location),
                     'size': event.size,
-                    # 'analyzed': event.analyzed,
                     'victims': photo_victims
                 }
 
@@ -567,14 +566,15 @@ class JsonFormatter:
                 json_photo_victims = []
 
                 for victim in item.victims:
-                    json_victim = {
-                        'identifier': victim.identifier,
-                        'type': 'victim',
-                        'location': self.format_location(victim.location),
-                        'size': victim.size,
-                        'lifetime': victim.lifetime
-                    }
-                    json_photo_victims.append(json_victim)
+                    if victim.active:
+                        json_victim = {
+                            'identifier': victim.identifier,
+                            'type': 'victim',
+                            'location': self.format_location(victim.location),
+                            'size': victim.size,
+                            'lifetime': victim.lifetime
+                        }
+                        json_photo_victims.append(json_victim)
 
                 json_item = {
                     'identifier': item.identifier,

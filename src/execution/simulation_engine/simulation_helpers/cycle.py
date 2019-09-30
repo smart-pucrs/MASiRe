@@ -1593,6 +1593,7 @@ class Cycle:
                     photo.analyzed = True
                     for victim in photo.victims:
                         victim.active = True
+                        self.steps[i]['victims'].append(victim)
 
     @staticmethod
     def check_location(l1, l2, radius):
