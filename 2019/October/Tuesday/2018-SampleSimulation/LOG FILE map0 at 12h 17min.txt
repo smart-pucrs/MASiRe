@@ -1,0 +1,1090 @@
+{
+    "environment": {
+        "current_step": 20,
+        "max_steps": 20,
+        "delivered_items": [
+            {
+                "identifier": 0,
+                "type": "victim",
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "size": 22,
+                "lifetime": 3
+            },
+            {
+                "identifier": 1,
+                "type": "victim",
+                "location": {
+                    "lat": -30.1098256,
+                    "lon": -51.2115133
+                },
+                "size": 18,
+                "lifetime": 0
+            },
+            {
+                "identifier": 2,
+                "type": "victim",
+                "location": {
+                    "lat": -30.1106934,
+                    "lon": -51.2121034
+                },
+                "size": 21,
+                "lifetime": 0
+            },
+            {
+                "identifier": 5,
+                "type": "victim",
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "size": 21,
+                "lifetime": 0
+            },
+            {
+                "identifier": 3,
+                "type": "victim",
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "size": 22,
+                "lifetime": 0
+            },
+            {
+                "identifier": 4,
+                "type": "victim",
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "size": 22,
+                "lifetime": 0
+            }
+        ],
+        "floods_amount": 1,
+        "total_victims": 6,
+        "total_victims_in_photos": 6,
+        "victims_saved": 1,
+        "victims_dead": 8,
+        "total_photos": 1,
+        "photos_taken": 1,
+        "photos_analyzed": 1,
+        "photos_ignored": 0,
+        "total_water_samples": 0,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 0
+    },
+    "agents": {
+        "active_agents_amount": 4,
+        "agents_amount": 4,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110234,
+                    "lon": -51.2119344
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.110815,
+                    "lon": -51.21199
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 80,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 4
+            },
+            {
+                "step": 2,
+                "actions_amount": 4
+            },
+            {
+                "step": 3,
+                "actions_amount": 4
+            },
+            {
+                "step": 4,
+                "actions_amount": 4
+            },
+            {
+                "step": 5,
+                "actions_amount": 4
+            },
+            {
+                "step": 6,
+                "actions_amount": 4
+            },
+            {
+                "step": 7,
+                "actions_amount": 4
+            },
+            {
+                "step": 8,
+                "actions_amount": 4
+            },
+            {
+                "step": 9,
+                "actions_amount": 4
+            },
+            {
+                "step": 10,
+                "actions_amount": 4
+            },
+            {
+                "step": 11,
+                "actions_amount": 4
+            },
+            {
+                "step": 12,
+                "actions_amount": 4
+            },
+            {
+                "step": 13,
+                "actions_amount": 4
+            },
+            {
+                "step": 14,
+                "actions_amount": 4
+            },
+            {
+                "step": 15,
+                "actions_amount": 4
+            },
+            {
+                "step": 16,
+                "actions_amount": 4
+            },
+            {
+                "step": 17,
+                "actions_amount": 4
+            },
+            {
+                "step": 18,
+                "actions_amount": 4
+            },
+            {
+                "step": 19,
+                "actions_amount": 4
+            },
+            {
+                "step": 20,
+                "actions_amount": 4
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass",
+                    "move",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "rescueVictim"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "rescueVictim"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 13,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 14,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 15,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 16,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 17,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 18,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 19,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 20,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

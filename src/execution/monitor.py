@@ -47,7 +47,7 @@ def connect():
 
 @socket.on(initial_percepts_event)
 def initial_percepts_handler(data):
-    print(f'[{initial_percepts_event}] ## Received.')
+    Logger.normal(f'{initial_percepts_event} received.')
 
     if data['status']:
         try:
@@ -62,7 +62,7 @@ def initial_percepts_handler(data):
 
 @socket.on(percepts_event)
 def percepts_handler(data):
-    print(f'[{percepts_event}] ##  Received.')
+    Logger.normal(f'{percepts_event} received.')
 
     if data['status']:
         try:
@@ -77,7 +77,7 @@ def percepts_handler(data):
 
 @socket.on(end_event)
 def end_handler(data):
-    print(f'[{end_event}] ## Received.')
+    Logger.normal(f'{end_event} received.')
 
     if data['status']:
         try:
@@ -92,7 +92,7 @@ def end_handler(data):
 
 @socket.on(bye_event)
 def bye_handler(data):
-    print(f'[{bye_event}] ## Received.')
+    Logger.normal(f'{bye_event} received.')
 
     if data['status']:
         try:
@@ -111,8 +111,6 @@ def bye_handler(data):
 
 @socket.on(error_event)
 def error_handler(data):
-    print(f'[{error_event}] ## Received.')
-
     Logger.error(data['message'])
 
 

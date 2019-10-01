@@ -1,0 +1,900 @@
+{
+    "simulation_config": {
+        "simulation_url": "http://127.0.0.1:8910",
+        "api_url": "http://127.0.0.1:12345",
+        "max_agents": "1",
+        "first_step_time": "5",
+        "step_time": "5",
+        "social_asset_timeout": "5"
+    },
+    "matchs": [
+        {
+            "map_percepts": {
+                "proximity": 50,
+                "minLat": -30.11301,
+                "maxLat": -30.10862,
+                "minLon": -51.21638,
+                "maxLon": -51.2076,
+                "centerLat": -30.110815,
+                "centerLon": -51.21199,
+                "osm": "files/map0.osm"
+            },
+            "steps": [
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 22,
+                                "lifetime": 22
+                            },
+                            {
+                                "identifier": 1,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1098256,
+                                    "lon": -51.2115133
+                                },
+                                "size": 18,
+                                "lifetime": 16
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 16
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 1
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.1106934,
+                                "lon": -51.2121034
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 22,
+                                "lifetime": 21
+                            },
+                            {
+                                "identifier": 1,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1098256,
+                                    "lon": -51.2115133
+                                },
+                                "size": 18,
+                                "lifetime": 15
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 15
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 2
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.1106934,
+                                "lon": -51.2121034
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 1,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1098256,
+                                    "lon": -51.2115133
+                                },
+                                "size": 18,
+                                "lifetime": 14
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 14
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 3
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.1106934,
+                                "lon": -51.2121034
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 13
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 4
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 12
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 5
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 11
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 6
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.1106934,
+                                "lon": -51.2121034
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 2,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.1106934,
+                                    "lon": -51.2121034
+                                },
+                                "size": 21,
+                                "lifetime": 10
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 7
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.1106934,
+                                "lon": -51.2121034
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 8
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 9
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 10
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 0,
+                                "type": "photo",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 371,
+                                "victims": []
+                            }
+                        ],
+                        "step": 11
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            }
+                        ],
+                        "step": 12
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 3,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 22,
+                                "lifetime": 12
+                            },
+                            {
+                                "identifier": 4,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 22,
+                                "lifetime": 8
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 12
+                            }
+                        ],
+                        "step": 13
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 4,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 22,
+                                "lifetime": 6
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 10
+                            }
+                        ],
+                        "step": 14
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 8
+                            }
+                        ],
+                        "step": 15
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 6
+                            }
+                        ],
+                        "step": 16
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 4
+                            }
+                        ],
+                        "step": 17
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            },
+                            {
+                                "identifier": 5,
+                                "type": "victim",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "size": 21,
+                                "lifetime": 2
+                            }
+                        ],
+                        "step": 18
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110234,
+                                "lon": -51.2119344
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            }
+                        ],
+                        "step": 19
+                    }
+                },
+                {
+                    "actors": [
+                        {
+                            "type": "agent",
+                            "role": "drone",
+                            "location": {
+                                "lat": -30.110815,
+                                "lon": -51.21199
+                            }
+                        }
+                    ],
+                    "environment": {
+                        "events": [
+                            {
+                                "identifier": 1,
+                                "type": "flood",
+                                "location": {
+                                    "lat": -30.110234,
+                                    "lon": -51.2119344
+                                },
+                                "shape": "circle",
+                                "radius": 0.06246028044590135
+                            }
+                        ],
+                        "step": 20
+                    }
+                }
+            ],
+            "match_report": {
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo": {
+                    "total_victims": 5,
+                    "total_photos": 0,
+                    "total_water_samples": 0
+                }
+            }
+        }
+    ],
+    "sim_report": {
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo": {
+            "total_victims": 5,
+            "total_photos": 0,
+            "total_water_samples": 0
+        }
+    }
+}

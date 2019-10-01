@@ -169,7 +169,7 @@ function prevMatch() {
 }
 
 function setMatchInfo(match_info) {
-    $('#current-match').text(match_info['current_match'] + ' of ' + match_info['total_matchs']);
+    $('#current-match').text((match_info['current_match'] + 1) + ' of ' + match_info['total_matchs']);
 }
 
 function setMapConfig(config) {

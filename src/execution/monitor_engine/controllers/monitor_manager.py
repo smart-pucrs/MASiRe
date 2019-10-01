@@ -41,9 +41,9 @@ class MonitorManager:
 
     def get_next_match(self):
         if self.current_match < len(self.matchs) - 1:
-            self.current_step = 0
             self.current_match += 1
 
+        self.current_step = 0
         match = self.matchs[self.current_match]
         step = match.get_step(self.current_step)
 
@@ -51,9 +51,9 @@ class MonitorManager:
 
     def get_prev_match(self):
         if self.current_match > 0:
-            self.current_step = 0
             self.current_match -= 1
 
+        self.current_step = 0
         match = self.matchs[self.current_match]
         step = match.get_step(self.current_step)
 

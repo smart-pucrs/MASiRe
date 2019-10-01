@@ -1,0 +1,557 @@
+{
+    "environment": {
+        "current_step": 15,
+        "max_steps": 15,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 10,
+        "total_victims_in_photos": 10,
+        "victims_saved": 0,
+        "victims_dead": 4,
+        "total_photos": 2,
+        "photos_taken": 1,
+        "photos_analyzed": 1,
+        "photos_ignored": 1,
+        "total_water_samples": 4,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 4
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1103825,
+                    "lon": -51.2120283
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1103825,
+                    "lon": -51.2120283
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1103825,
+                    "lon": -51.2120283
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 50,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -30.1103825,
+                    "lon": -51.2120283
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 50,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 30,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 2
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            },
+            {
+                "step": 6,
+                "actions_amount": 2
+            },
+            {
+                "step": 7,
+                "actions_amount": 2
+            },
+            {
+                "step": 8,
+                "actions_amount": 2
+            },
+            {
+                "step": 9,
+                "actions_amount": 2
+            },
+            {
+                "step": 10,
+                "actions_amount": 2
+            },
+            {
+                "step": 11,
+                "actions_amount": 2
+            },
+            {
+                "step": 12,
+                "actions_amount": 2
+            },
+            {
+                "step": 13,
+                "actions_amount": 2
+            },
+            {
+                "step": 14,
+                "actions_amount": 2
+            },
+            {
+                "step": 15,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "takePhoto",
+                    "move"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "analyzePhoto",
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 13,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 14,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 15,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
