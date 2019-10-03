@@ -553,6 +553,7 @@ class JsonFormatter:
 
         json_items = []
         for item in items:
+            print('-----> ', item)
             if item.type == 'victim':
                 json_item = {
                     'identifier': item.identifier,

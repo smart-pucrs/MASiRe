@@ -153,6 +153,15 @@ class AgentsManager:
 
         return self.agents[token].remove_physical_item(kind, amount)
 
+    def deliver_agent(self, token, target_token):
+        """Deliver a agent item from the requested agent.
+
+        :param token: The identifier of the requested agent.
+        :param target_token: The identifier of the agent to be removed.
+        :return agent: The agent removed."""
+
+        return self.agents[token].remove_agent_item(target_token)
+
     def deliver_virtual(self, token, kind, amount=1):
         """Deliver a virtual item from the requested agent.
 
