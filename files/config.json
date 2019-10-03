@@ -10,15 +10,6 @@
       "maxLat": -30.1086200,
       "centerLat": -30.110815,
       "centerLon": -51.21199
-    },
-    {
-      "osm": "files/map1.osm",
-      "minLon": -51.1475000,
-      "maxLon": -51.1068000,
-      "minLat": -29.7911000,
-      "maxLat": -29.7701000,
-      "centerLat": -29.780357,
-      "centerLon": -51.131166
     }],
     "proximity": 5,
     "randomSeed": 2018
@@ -75,7 +66,7 @@
       "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 1,
+      "amount": 7,
       "speed": 10,
       "physicalCapacity": 50,
       "virtualCapacity": 4096,
