@@ -83,6 +83,29 @@ class Agent:
         self.virtual_storage -= size
         self.virtual_storage_vector.append(item)
 
+    def remove_agent_item(self, token):
+        """Remove a agent from the agent physical vector.
+
+        :param token: The identifier of the agent to be removed
+        :return agent: The agent removed."""
+        if self.physical_storage == self.physical_capacity:
+            raise FailedItemAmount('The agent has no other agent to deliver.')
+
+        found_item = None
+        for stored_item in self.physical_storage_vector:
+            if stored_item.type == 'agent' or stored_item.type == 'asset':
+                if stored_item.token == token:
+                    found_item = stored_item
+                    break
+
+        if found_item is None:
+            raise FailedUnknownItem('The agent has no other agent to wants be delivered.')
+
+        self.physical_storage_vector.remove(found_item)
+        self.physical_storage += found_item.size
+
+        return found_item
+
     def remove_physical_item(self, kind, amount):
         """Remove physical items from the agent.
 

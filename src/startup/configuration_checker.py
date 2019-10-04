@@ -275,8 +275,9 @@ class Checker:
         return 1, 'Agents: Ok.'
 
     def test_actions_key(self):
-        keys = ['pass', 'move', 'charge', 'rescueVictim', 'collectWater', 'takePhoto', 'analyzePhoto', 'searchSocialAsset',
-                'deliverPhysical', 'deliverVirtual', 'carry', 'getCarried', 'receivePhysical', 'receiveVirtual', 'requestSocialAsset']
+        keys = ['pass', 'move', 'charge', 'rescueVictim', 'collectWater', 'takePhoto', 'analyzePhoto',
+                'searchSocialAsset', 'deliverPhysical', 'deliverVirtual', 'carry', 'getCarried', 'receivePhysical',
+                'receiveVirtual', 'requestSocialAsset', 'deliverRequest', 'deliverAgent']
 
         sub_keys = ['abilities', 'resources']
 

@@ -66,8 +66,9 @@ class Simulation:
             return agents, step
 
         self.cycler.activate_step()
+        map_percepts = self.get_map_percepts()
 
-        return agents, step, self.cycler.current_step
+        return agents, step, self.cycler.current_step, map_percepts
 
     def restart(self, config_file):
         """Restart the simulation by regenerating all the simulation and reseting all the log variables.
@@ -85,9 +86,8 @@ class Simulation:
         self.actions_by_step.clear()
         self.actions_amount_by_step.clear()
         self.action_token_by_step.clear()
-        new_map_percepts = self.cycler.get_map_percepts()
 
-        return (*self.start(), report, new_map_percepts, social_assets_tokens)
+        return (*self.start(), report, social_assets_tokens)
 
     def do_step(self, token_action_list):
         """Do one step against the simulation.

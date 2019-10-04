@@ -1,6 +1,7 @@
 var mymap = null;
 var variablesMarkerGroup = null;
 var constantsMarkerGroup = null;
+var startMatchFunctionId = null;
 var updateStateFunctionId = null;
 var stepSpeed = 1000;
 var logId = '#log';
@@ -54,24 +55,48 @@ var waterSampleIcon = L.icon({
 
 var agentCarIcon = L.icon({
     iconUrl: '/static/images/car.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
 });
 
 var agentBoatIcon = L.icon({
     iconUrl: '/static/images/boat.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
 });
 
 var agentDroneIcon = L.icon({
     iconUrl: '/static/images/drone.png',
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
+});
+
+var doctorIcon = L.icon({
+    iconUrl: '/static/images/doctor.png',
     iconSize: [40, 45],
     iconAnchor: [15, 13]
 });
 
-var socialAssetIcon = L.icon({
-    iconUrl: '/static/images/social_asset.png',
+var nurseIcon = L.icon({
+    iconUrl: '/static/images/nurse.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var pharmacistIcon = L.icon({
+    iconUrl: '/static/images/pharmacist.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var photographerIcon = L.icon({
+    iconUrl: '/static/images/photographer.png',
+    iconSize: [40, 45],
+    iconAnchor: [15, 13]
+});
+
+var teacherIcon = L.icon({
+    iconUrl: '/static/images/teacher.png',
     iconSize: [40, 45],
     iconAnchor: [15, 13]
 });
@@ -82,6 +107,18 @@ var centralIcon = L.icon({
     iconAnchor: [20, 25]
 });
 
+function startMatch(){
+    $.getJSON($SCRIPT_ROOT + '/current_match', function (data) {
+        if (data['status']) {
+            handle_new_match(data['data']);
+            
+            clearInterval(startMatchFunctionId);
+            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        } else {
+            logError(data['message']);
+        }
+    });
+}
 
 function nextStep() {
     $.getJSON($SCRIPT_ROOT + '/next_step', function (data) {
@@ -132,7 +169,7 @@ function prevMatch() {
 }
 
 function setMatchInfo(match_info) {
-    $('#current-match').text(match_info['current_match'] + ' of ' + match_info['total_matchs']);
+    $('#current-match').text((match_info['current_match'] + 1) + ' of ' + match_info['total_matchs']);
 }
 
 function setMapConfig(config) {
@@ -174,63 +211,116 @@ function process_simulation_data(data) {
 
     variablesMarkerGroup.clearLayers();
 
-    $('#step').text(data['current_step'] + ' of ' + data['total_steps']);
+    $('#step').text(data['environment']['step'] + ' of ' + data['total_steps']);
 
-    let events = data['step_data']['environment']['events'];
-    let event_type;
-    for (i in events) {
-        event_type = events[i]['type'];
+    let events = data['environment']['events'];
+    let old_locations = [];
+    for (let i=0; i < events.length; i++) {
+        event_location = events[i]['location'];
 
-        if (event_type == 'flood') {
-            L.marker(events[i]['location'], { icon: floodIcon }).addTo(variablesMarkerGroup);
+        event_location = format_location(event_location, old_locations);
+        old_locations.push(event_location);
+        event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-            L.circle(events[i]['location'], {
+        if (events[i]['type'] == 'flood') {
+            L.marker(event_location_formatted, { icon: floodIcon }).addTo(variablesMarkerGroup);
+            L.circle(event_location_formatted, {
                 color: 'blue',
                 fillColor: 'blue',
                 fillOpacity: 0.2,
                 radius: events[i]['radius'] * 1000
             }).addTo(variablesMarkerGroup);
 
-        } else if (event_type == 'victim') {
+        } else if (events[i]['type'] == 'victim') {
             if (events[i]['lifetime'] == 0) {
-                L.marker(events[i]['location'], { icon: victimIcon3 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon3 }).addTo(variablesMarkerGroup);
             }
             else if (events[i]['lifetime'] < 5) {
-                L.marker(events[i]['location'], { icon: victimIcon2 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon2 }).addTo(variablesMarkerGroup);
             } else if (events[i]['lifetime'] < 10) {
-                L.marker(events[i]['location'], { icon: victimIcon1 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon1 }).addTo(variablesMarkerGroup);
             } else {
-                L.marker(events[i]['location'], { icon: victimIcon0 }).addTo(variablesMarkerGroup);
+                L.marker(event_location_formatted, { icon: victimIcon0 }).addTo(variablesMarkerGroup);
             }
-        } else if (event_type == 'photo') {
-            L.marker(events[i]['location'], { icon: photoIcon }).addTo(variablesMarkerGroup);
+        } else if (events[i]['type'] == 'photo') {
+            L.marker(event_location_formatted, { icon: photoIcon }).addTo(variablesMarkerGroup);
         } else {
-            L.marker(events[i]['location'], { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
+            L.marker(event_location_formatted, { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
         }
 
-        let actors = data['step_data']['actors'];
 
-        $('#active-agents').text(actors.length);
+    }
 
-        for (i in actors) {
-            agent = actors[i]['agent'];
-            L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-            /*
-            if (agent['role'] == 'drone') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'car') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentCarIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'boat') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
-            } else if (agent['role'] == 'social_asset') {
-                L.marker([agent['location']['lat'], agent['location']['lon']], { icon: socialAssetIcon }).addTo(variablesMarkerGroup);
-            } else {
-                logError('Role of agent not found: ' + agent['role']);
+    let actors = data['actors'];
+
+    $('#active-agents').text(actors.length);
+
+    for (let i=0; i < actors.length; i++) {
+        type = actors[i]['type'];
+
+        agent_location = format_location(actors[i]['location'], old_locations);
+        old_locations.push(agent_location);
+        agent_location_formated = [agent_location['lat'], agent_location['lon']];
+        console.log('--> ' + actors[i] + i);
+        if (type == 'agent'){
+            switch(actors[i]['role']){
+                case 'drone':
+                    L.marker(agent_location_formated, { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'car':
+                    L.marker(agent_location_formated, { icon: agentCarIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'boat':
+                    L.marker(agent_location_formated, { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
+                    break;
+                default:
+                    logError('Role not found.');
             }
-            */
+        }else{
+            switch(actors[i]['profession']){
+                case 'doctor':
+                    L.marker(agent_location_formated, { icon: doctorIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'nurse':
+                    L.marker(agent_location_formated, { icon: nurseIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'pharmacist':
+                    L.marker(agent_location_formated, { icon: pharmacistIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'teacher':
+                    L.marker(agent_location_formated, { icon: teacherIcon }).addTo(variablesMarkerGroup);
+                    break;
+                case 'photographer':
+                    L.marker(agent_location_formated, { icon: photographerIcon }).addTo(variablesMarkerGroup);
+                    break;
+                default:
+                    logError('Profession not found.');
+            }
         }
     }
 }
+
+function containsLocation(locations, location){
+    for (let i=0; i < locations.length; i++){
+        if (locations[i]['lat'] == location['lat']){
+            if (locations[i]['lon'] == location['lon']) return true;
+        }
+    }
+
+    return false;
+}
+
+function format_location(event_location, old_locations){
+    let new_location = event_location;
+    let alfa = 0.0001;
+
+    while (containsLocation(old_locations, new_location)){
+        new_location['lat'] += alfa;
+    }
+
+    return new_location;
+}
+
 function init() {
     logNormal('Initializing variables.');
 
@@ -243,9 +333,8 @@ function init() {
                 return;
             }
 
-            setSimulationInfo(data['simulation_info']);
-            setMatchInfo(data['match_info']);
-            setMapConfig(data['map_info']);
+            setSimulationInfo(data['sim_information']);
+            startMatchFunctionId = setInterval(startMatch, stepSpeed);
         });
 }
 
@@ -288,6 +377,20 @@ function setLog() {
     }
 }
 
+$(function () {
+    $('#speed input[type=radio]').change(function(){
+        stepSpeed = parseInt(this.value);
+        
+        if (playing){
+            clearInterval(updateStateFunctionId);
+            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        }
+
+        logNormal("Step speed change to " + $(this).val() + " ms");
+  
+    })
+})
+
 function log(tag, message) {
     var oldText = $(logId).val();
     var formattedText = oldText + '\n[ ' + tag + ' ] ## ' + message;
@@ -305,8 +408,6 @@ function logError(message) {
 function logCritical(message) {
     log('CRITICAL', message);
 }
-
-updateStateFunctionId = setInterval(nextStep, stepSpeed);
 
 window.onload = function () {
     this.init();

@@ -448,3 +448,30 @@ class Controller:
 
     def disconnect_social_asset(self, token):
         self.manager.remove(token, 'social_asset')
+
+    def add_monitor(self, request):
+        try:
+            sid = request.sid
+
+            if self.manager.add_monitor(sid):
+                return True, f'Monitor "{sid}" connected.'
+
+            return False, f'Error to connect monitor "{sid}".'
+
+        except Exception as e:
+            return False, f'Error to connect monitor "{sid}": {str(e)}.'
+
+    def rmv_monitor(self, request):
+        try:
+            sid = request.sid
+
+            if self.manager.rmv_monitor(sid):
+                return True, f'Monitor "{sid}" disconnected.'
+
+            return False, f'Error to disconnect monitor "{sid}".'
+
+        except Exception as e:
+            return False, f'Error to disconnect monitor "{sid}": {str(e)}.'
+
+    def get_monitors_rooms(self):
+        return self.manager.get_monitors_rooms()

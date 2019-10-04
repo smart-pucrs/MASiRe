@@ -1,4 +1,7 @@
+import json
 import sys
+from datetime import date
+
 import socketio
 import time
 import requests
@@ -7,9 +10,19 @@ import signal
 
 from flask import Flask, render_template, jsonify
 from socketio.exceptions import ConnectionError as SocketError
-from monitor_engine.monitor_manager import MonitorManager
+from monitor_engine.controllers.monitor_manager import MonitorManager
+from monitor_engine.helpers.logger import Logger
 
 arguments = sys.argv[1:]
+
+# Events strings
+initial_percepts_event = 'initial_percepts'
+percepts_event = 'percepts'
+end_event = 'end'
+bye_event = 'bye'
+error_event = 'error'
+connect_monitor_event = 'connect_monitor'
+disconnect_monitor_event = 'disconnect_monitor'
 
 if len(arguments) == 3:
     replay, base_url, monitor_port = arguments
@@ -20,47 +33,147 @@ else:
 
 app = Flask(__name__)
 socket = socketio.Client()
-manager = MonitorManager()
+manager = None
 
 
 @socket.on('connect')
 def connect():
+    global manager
+
+    socket.emit(connect_monitor_event, '')
     response = requests.get(f'http://{base_url}:{api_port}/simulation_info').json() 
-    manager.set_simulation_info(response)
+    manager = MonitorManager(response)
 
 
-@socket.on('monitor')
-def monitor(data):
-    # CODE -1 : ERROR
-    if data['status'] == -1:
-        print('[ MONITOR ][ ERROR ] ## A error occurrence, finishing the monitor.')
-        os.kill(os.getpid(), signal.SIGTERM)
+@socket.on(initial_percepts_event)
+def initial_percepts_handler(data):
+    Logger.normal(f'{initial_percepts_event} received.')
 
-    # CODE 0 : SIMULATION FINISH
-    elif data['status'] == 0:
-        print('[ MONITOR ][ FINISH ] ## Finishing the monitor.')
-        if record:
-            manager.save_replay()
+    if data['status']:
+        try:
+            manager.create_new_match(data['map_percepts'])
 
-    # CODE 1 : SIMULATION RESTART
-    elif data['status'] == 1:
-        manager.next_match_api()
+        except Exception as e:
+            Logger.error(f'Error to create a new Match: {str(e)}')
 
-    # CODE 2 : STEP DATA
     else:
-        manager.add_step_data(data['sim_data'])
-        
+        Logger.error(f"Error in Initial percepts event: {data['message']}")
+
+
+@socket.on(percepts_event)
+def percepts_handler(data):
+    Logger.normal(f'{percepts_event} received.')
+
+    if data['status']:
+        try:
+            manager.add_percepts(data['actors'], data['environment'])
+
+        except Exception as e:
+            Logger.error(f'Error to add new percepts: {str(e)}')
+
+    else:
+        Logger.error(f"Error in percepts event: {data['message']}")
+
+
+@socket.on(end_event)
+def end_handler(data):
+    Logger.normal(f'{end_event} received.')
+
+    if data['status']:
+        try:
+            manager.add_match_report(data['report'])
+
+        except Exception as e:
+            Logger.error(f'Error to add the report of the match: {str(e)}')
+
+    else:
+        Logger.error(f"Error in end event: {data['message']}")
+
+
+@socket.on(bye_event)
+def bye_handler(data):
+    Logger.normal(f'{bye_event} received.')
+
+    if data['status']:
+        try:
+            manager.add_simulation_report(data['report'])
+
+            if record:
+                record_simulation()
+                Logger.normal('Match recorded.')
+
+        except Exception as e:
+            Logger.error(f'Error to add the simulation report: {str(e)}')
+
+    else:
+        Logger.error(f"Error in bye event: {data['message']}")
+
+
+@socket.on(error_event)
+def error_handler(data):
+    Logger.error(data['message'])
+
+
+def record_simulation():
+    current_date = date.today().strftime('%d-%m-%Y')
+    hours = time.strftime("%H:%M:%S")
+    file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
+
+    abs_path = os.getcwd() + '/replays/' + file_name
+
+    try:
+        formatted_data = manager.format_simulation_data()
+
+        with open(abs_path, 'w+') as file:
+            file.write(json.dumps(formatted_data, sort_keys=False, indent=4))
+
+        Logger.normal('Simulation recorded.')
+
+    except Exception as e:
+        Logger.error(f'Error to record the simulation: {str(e)}')
+
+
+def load_simulation():
+    global manager
+
+    try:
+        replay_path = os.getcwd() + '/replays/' + replay
+        replay_data = json.loads(open(replay_path, 'r').read())
+
+        manager = MonitorManager(replay_data['simulation_config'])
+        manager.load_simulation(replay_data['matchs'], replay_data['sim_report'])
+
+        Logger.normal('Simulation loaded.')
+
+    except Exception as e:
+        Logger.error(f'Error to load the simulation: {str(e)}')
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/current_match', methods=['GET'])
+def current_match():
+    data = {'status': False, 'message': ''}
+
+    try:
+        data['data'] = manager.get_current_match()
+        data['status'] = True
+
+    except Exception as e:
+        data['message'] = str(e)
+
+    return jsonify(data)
+
 
 @app.route('/next_step', methods=['GET'])
 def next_step():
     data = {'status': False, 'message': ''}
 
     try:
-        data['data'] = manager.next_step()
+        data['data'] = manager.get_next_step()
         data['status'] = True
 
     except Exception as e:
@@ -74,12 +187,12 @@ def next_match():
     data = {'status': False, 'message': ''}
 
     try:
-        data['data'] = manager.next_match()
+        data['data'] = manager.get_next_match()
         data['status'] = True
 
     except Exception as e:
         data['message'] = str(e)
-        
+
     return jsonify(data)
 
 
@@ -88,7 +201,7 @@ def prev_match():
     data = {'status': False, 'message': ''}
 
     try:
-        data['data'] = manager.prev_match()
+        data['data'] = manager.get_prev_match()
         data['status'] = True
 
     except Exception as e:
@@ -102,7 +215,7 @@ def prev_step():
     data = {'status': False, 'message': ''}
 
     try:
-        data['data'] = manager.prev_step()
+        data['data'] = manager.get_prev_step()
         data['status'] = True
 
     except Exception as e:
@@ -129,8 +242,7 @@ def init_monitor():
 if __name__ == "__main__":
     if replay_mode:
         try:
-            manager.init_replay_mode(replay)
-
+            load_simulation()
         except Exception as e:
             print(str(e))
 
@@ -141,15 +253,14 @@ if __name__ == "__main__":
                 break
 
             except SocketError as error:
-                print('[ MONITOR ][ ERROR ] ## Error to connect the monitor socket to API.')
-                print('[ MONITOR ][ ERROR ] ## Try to connect again...')
-                time.sleep(2)
+                Logger.error('Error to connect the monitor socket to API.')
+                Logger.error('Try to connect again...')
+
+                time.sleep(1)
 
         try:
-            manager.init_live_mode(config)
-
+            print('live')
         except Exception as e:
             print(str(e))
-
 
     app.run(host=base_url, port=int(monitor_port))

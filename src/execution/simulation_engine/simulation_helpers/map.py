@@ -105,6 +105,7 @@ class Map:
         else:
             start_node = self.get_closest_node(*start_coord)
             end_node = self.get_closest_node(*end_coord)
+
             if start_node not in list_of_nodes:
                 result, nodes = self.router.doRoute(start_node, end_node)
 

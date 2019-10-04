@@ -1,9 +1,11 @@
+from math import sqrt
+
 from simulation_engine.exceptions.exceptions import *
-from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.generator.generator import Generator
 from simulation_engine.simulation_helpers.agents_manager import AgentsManager
+from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
-from math import sqrt
+
 
 class Cycle:
     def __init__(self, config):
@@ -186,7 +188,7 @@ class Cycle:
         requests = []
 
         special_actions = ['carry', 'getCarried', 'deliverPhysical', 'deliverVirtual', 'receivePhysical',
-                           'receiveVirtual']
+                           'receiveVirtual', 'deliverAgent', 'deliverRequest']
         special_action_tokens = []
         requests_action = ['requestSocialAsset']
 
@@ -248,7 +250,7 @@ class Cycle:
         if action_name not in self.actions:
             return {'agent': self.agents_manager.get(token), 'message': 'Wrong action name given.'}, secondary_result
 
-        if not self.agents_manager.get(token).is_active:
+        if not self.agents_manager.get(token).is_active and not self.agents_manager.get(token).last_action == 'deliverRequest':
             return {'agent': self.agents_manager.get(token), 'message': 'Agent is not active.'}, secondary_result
 
         if self.agents_manager.get(token).carried:
@@ -263,9 +265,11 @@ class Cycle:
         try:
             if action_name == 'carry':
                 if len(parameters) == 1:
+                    parameters[0] = parameters[0].replace('"', '')
                     match = None
                     for sub_token, sub_action, sub_param in special_action_tokens:
                         if len(sub_param) == 1:
+                            sub_param[0] = sub_param[0].replace('"', '')
                             if sub_token == parameters[0] and sub_action == 'getCarried' and sub_param[0] == token:
                                 match = [sub_token, sub_action, sub_param]
                                 break
@@ -301,9 +305,11 @@ class Cycle:
 
             elif action_name == 'getCarried':
                 if len(parameters) == 1:
+                    parameters[0] = parameters[0].replace('"', '')
                     match = None
                     for sub_token, sub_action, sub_param in special_action_tokens:
                         if len(sub_param) == 1:
+                            sub_param[0] = sub_param[0].replace('"', '')
                             if sub_token == parameters[0] and sub_action == 'carry' and sub_param[0] == token:
                                 match = [sub_token, sub_action, sub_param]
                                 break
@@ -313,9 +319,9 @@ class Cycle:
                         if self.agents_manager.get(parameters[0]) is not None:
                             self.agents_manager.add_physical(parameters[0],
                                                              self.agents_manager.get(token))
-                            self.agents_manager.edit(parameters[0], 'last_action_result', True)
                             self.agents_manager.edit(token, 'last_action_result', True)
-                            self.agents_manager.edit(token, 'last_action', 'getCarried')
+                            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+                            self.agents_manager.edit(parameters[0], 'last_action', 'carry')
                             secondary_result = {
                                 'agent': self.agents_manager.get(parameters[0]),
                                 'message': ''
@@ -323,9 +329,9 @@ class Cycle:
                         else:
                             self.social_assets_manager.add_physical(parameters[0],
                                                                     self.agents_manager.get(token))
-                            self.social_assets_manager.edit(parameters[0], 'last_action_result', True)
-                            self.agents_manager.edit(token, 'last_action_result', True)
-                            self.agents_manager.edit(token, 'last_action', 'getCarried')
+                            self.social_assets_manager.edit(token, 'last_action_result', True)
+                            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+                            self.agents_manager.edit(parameters[0], 'last_action', 'getCarried')
                             secondary_result = {
                                 'social_asset': self.social_assets_manager.get(parameters[0]),
                                 'message': ''
@@ -476,6 +482,94 @@ class Cycle:
                 else:
                     raise FailedWrongParam('More than 1 parameter was given.')
 
+            elif action_name == 'deliverAgent':
+                if len(parameters) == 1:
+                    parameters[0] = parameters[0].replace('"', '')
+                    match = None
+                    for sub_token, sub_action, sub_param in special_action_tokens:
+                        if len(sub_param) == 1:
+                            sub_param[0] = sub_param[0].replace('"', '')
+                            if sub_token == parameters[0] and sub_action == 'deliverRequest' and sub_param[0] == token:
+                                match = [sub_token, sub_action, sub_param]
+                                break
+
+                    if match is not None:
+                        special_action_tokens.remove(match)
+                        if self.agents_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(token, parameters)
+
+                            self.agents_manager.edit(token, 'last_action_result', True)
+                            self.agents_manager.edit(parameters[0], 'last_action', 'deliverRequest')
+                            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+                            secondary_result = {
+                                'agent': self.agents_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        elif self.social_assets_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_asset(token, parameters)
+
+                            self.social_assets_manager.edit(token, 'last_action_result', True)
+                            self.social_assets_manager.edit(parameters[0], 'last_action', 'deliverRequest')
+                            self.social_assets_manager.edit(parameters[0], 'last_action_result', True)
+                            secondary_result = {
+                                'social_asset': self.social_assets_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        else:
+                            raise FailedUnknownToken('Given token was not found.')
+
+                    else:
+                        raise FailedNoMatch('No other agent or social asset wants be delivered.')
+
+                else:
+                    FailedWrongParam('More or less than 1 parameter was given.')
+
+            elif action_name == 'deliverRequest':
+                if len(parameters) == 1:
+                    parameters[0] = parameters[0].replace('"', '')
+                    match = None
+                    for sub_token, sub_action, sub_param in special_action_tokens:
+                        if len(sub_param) == 1:
+                            sub_param[0] = sub_param[0].replace('"', '')
+                            if sub_token == parameters[0] and sub_action == 'deliverAgent' and sub_param[0] == token:
+                                match = [sub_token, sub_action, sub_param]
+                                break
+
+                    if match is not None:
+                        special_action_tokens.remove(match)
+                        if self.agents_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(parameters[0], [token])
+
+                            self.agents_manager.edit(token, 'last_action_result', True)
+                            self.agents_manager.edit(parameters[0], 'last_action', 'deliverAgent')
+                            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+                            secondary_result = {
+                                'agent': self.agents_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        elif self.social_assets_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(parameters[0], [token])
+
+                            self.social_assets_manager.edit(token, 'last_action_result', True)
+                            self.social_assets_manager.edit(parameters[0], 'last_action', 'deliverAgent')
+                            self.social_assets_manager.edit(parameters[0], 'last_action_result', True)
+                            secondary_result = {
+                                'social_asset': self.social_assets_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        else:
+                            raise FailedUnknownToken('Given token was not found.')
+
+                    else:
+                        raise FailedNoMatch('No other agent or social asset wants deliver the agent.')
+
+                else:
+                    FailedWrongParam('More or less than 1 parameter was given.')
+
         except FailedCapacity as e:
             error_message = e.message
 
@@ -499,6 +593,64 @@ class Cycle:
 
         finally:
             return {'agent': self.agents_manager.get(token), 'message': error_message}, secondary_result
+
+    def _deliver_agent_agent(self, token, parameters):
+        if len(parameters) < 1:
+            raise FailedWrongParam('Less than 1 parameter was given.')
+
+        if len(parameters) > 1:
+            raise FailedWrongParam('More than 1 parameters were given.')
+
+        type_agent = True
+        agent_target = self.agents_manager.get(parameters[0])
+        if agent_target is None:
+            agent_target = self.social_assets_manager.get(parameters[0])
+            type_agent = False
+            if agent_target is None:
+                raise FailedUnknownToken('There is no agent or social asset with this token.')
+
+        agent = self.agents_manager.get(token)
+
+        self.agents_manager.deliver_agent(token, parameters[0])
+
+        self.agents_manager.edit(token, 'last_action_result', True)
+        if type_agent:
+            self.agents_manager.edit(parameters[0], 'location', agent.location)
+            self.agents_manager.edit(parameters[0], 'carried', False)
+            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+        else:
+            self.social_assets_manager.edit(parameters[0], 'location', agent.location)
+            self.social_assets_manager.edit(parameters[0], 'carried', False)
+            self.social_assets_manager.edit(parameters[0], 'last_action_result', True)
+
+    def _deliver_agent_asset(self, token, parameters):
+        if len(parameters) < 1:
+            raise FailedWrongParam('Less than 1 parameter was given.')
+
+        if len(parameters) > 1:
+            raise FailedWrongParam('More than 1 parameters were given.')
+
+        agent_type = True
+        agent_target = self.agents_manager.get(parameters[0])
+        if agent_target is None:
+            agent_target = self.social_assets_manager.get(parameters[0])
+            agent_type = False
+            if agent_target is None:
+                raise FailedUnknownToken('There is no agent or social asset with this token.')
+
+        asset = self.social_assets_manager.get(token)
+
+        self.social_assets_manager.deliver_agent(token, parameters[0])
+
+        self.social_assets_manager.edit(token, 'last_action_result', True)
+        if agent_type:
+            self.agents_manager.edit(parameters[0], 'location', asset.location)
+            self.agents_manager.edit(parameters[0], 'carried', False)
+            self.agents_manager.edit(parameters[0], 'last_action_result', True)
+        else:
+            self.social_assets_manager.edit(parameters[0], 'location', asset.location)
+            self.social_assets_manager.edit(parameters[0], 'carried', False)
+            self.social_assets_manager.edit(parameters[0], 'last_action_result', True)
 
     def _execute_asset_special_action(self, token, action_name, parameters, special_action_tokens):
         self.social_assets_manager.edit(token, 'last_action', action_name)
@@ -738,6 +890,74 @@ class Cycle:
 
                     else:
                         raise FailedNoMatch('No other agent or social asset wants to receive virtual items.')
+
+            elif action_name == 'deliverAgent':
+                if len(parameters) == 1:
+                    match = None
+                    for sub_token, sub_action, sub_param in special_action_tokens:
+                        if len(sub_param) == 1:
+                            if sub_token == parameters[0] and sub_action == 'deliverRequest' and sub_param[0] == token:
+                                match = [sub_token, sub_action, sub_param]
+                                break
+
+                    if match is not None:
+                        special_action_tokens.remove(match)
+                        if self.agents_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(token, parameters)
+                            secondary_result = {
+                                'agent': self.agents_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        elif self.social_assets_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_asset(token, parameters)
+                            secondary_result = {
+                                'social_asset': self.social_assets_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        else:
+                            raise FailedUnknownToken('Given token was not found.')
+
+                    else:
+                        raise FailedNoMatch('No other agent or social asset wants be delivered.')
+
+                else:
+                    FailedWrongParam('More or less than 1 parameter was given.')
+
+            elif action_name == 'deliverRequest':
+                if len(parameters) == 1:
+                    match = None
+                    for sub_token, sub_action, sub_param in special_action_tokens:
+                        if len(sub_param) == 1:
+                            if sub_token == parameters[0] and sub_action == 'deliverAgent' and sub_param[0] == token:
+                                match = [sub_token, sub_action, sub_param]
+                                break
+
+                    if match is not None:
+                        special_action_tokens.remove(match)
+                        if self.agents_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(parameters[0], [token])
+                            secondary_result = {
+                                'agent': self.agents_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        elif self.social_assets_manager.get(parameters[0]) is not None:
+                            self._deliver_agent_agent(parameters[0], [token])
+                            secondary_result = {
+                                'social_asset': self.social_assets_manager.get(parameters[0]),
+                                'message': ''
+                            }
+
+                        else:
+                            raise FailedUnknownToken('Given token was not found.')
+
+                    else:
+                        raise FailedNoMatch('No other agent or social asset wants deliver the agent.')
+
+                else:
+                    FailedWrongParam('More or less than 1 parameter was given.')
 
         except FailedCapacity as e:
             error_message = e.message
@@ -1324,7 +1544,7 @@ class Cycle:
         if not agent.check_battery():
             raise FailedInsufficientBattery('Not enough battery to complete this step.')
 
-        elif self.map.check_location(agent.location, destination):
+        elif self.map.check_location(agent.location, destination) and not agent.role == 'car':
             self.agents_manager.edit(token, 'location', destination)
             self.agents_manager.edit(token, 'route', [])
             self.agents_manager.edit(token, 'destination_distance', 0)
@@ -1593,6 +1813,7 @@ class Cycle:
                     photo.analyzed = True
                     for victim in photo.victims:
                         victim.active = True
+                        self.steps[i]['victims'].append(victim)
 
     @staticmethod
     def check_location(l1, l2, radius):
@@ -1616,7 +1837,8 @@ class Cycle:
                     'maxLat': self.map_percepts['maps'][0]['maxLat'], 'minLon': self.map_percepts['maps'][0]['minLon'],
                     'maxLon': self.map_percepts['maps'][0]['maxLon'],
                     'centerLat': self.map_percepts['maps'][0]['centerLat'],
-                    'centerLon': self.map_percepts['maps'][0]['centerLon']}
+                    'centerLon': self.map_percepts['maps'][0]['centerLon'],
+                    'osm': self.map_percepts['maps'][0]['osm']}
 
         return percepts
 
