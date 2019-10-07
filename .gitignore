@@ -231,3 +231,6 @@ misc.xml
 
 #VSCODE
 .vscode/
+
+### Replay folder ###
+replays/
