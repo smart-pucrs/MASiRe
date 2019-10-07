@@ -3,13 +3,22 @@
     "id": "2018-SampleSimulation",
     "steps": 10,
     "maps": [{
-      "osm": "files/map1.osm",
-      "minLon": -51.1475000,
-      "maxLon": -51.1068000,
-      "minLat": -29.7911000,
-      "maxLat": -29.7701000,
-      "centerLat": -29.7806000,
-      "centerLon": -51.1271500
+      "osm": "files/map-poa.osm",
+      "minLat": -30.1215000,
+      "minLon": -51.2175000,
+      "maxLat": -30.1101000,
+      "maxLon": -51.1957000,
+      "centerLon": -51.2066,
+      "centerLat": -30.1158
+    },
+    {
+      "osm": "files/map-sl.osm",
+      "centerLat": -29.766155,
+      "centerLon": -51.14581,
+      "minLat": -29.7687900,
+      "minLon": -51.1512600,
+      "maxLat": -29.7635200,
+      "maxLon": -51.1403600
     }],
     "proximity": 1,
     "randomSeed": 2018
