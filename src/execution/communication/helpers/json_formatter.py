@@ -60,7 +60,6 @@ def percepts_format(response, token):
             for idx, actor in enumerate(response['actors']):
                 if 'agent' in actor:
                     if actor['agent']['token'] == token:
-                        print(actor)
                         info['agent'] = agent_variables(actor['agent'])
                         info['message'] = actor['message']
                         found_index = idx

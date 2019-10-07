@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 300,
+    "steps": 10,
     "maps": [{
       "osm": "files/map1.osm",
       "minLon": -51.1475000,

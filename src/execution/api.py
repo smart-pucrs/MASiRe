@@ -363,7 +363,6 @@ def finish_step():
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
-            print(sim_response)
             notify_monitors(end_event, sim_response['report'])
             notify_actors(end_event, sim_response['report'])
 
