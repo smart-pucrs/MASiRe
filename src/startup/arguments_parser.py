@@ -28,7 +28,7 @@ class Parser:
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
         self.parser.add_argument('-monitor', required=False, type=str, default='8000')
-        self.parser.add_argument('-record', required=False, type=bool, default=True)
+        self.parser.add_argument('-record', required=False, type=str, default='False')
         self.parser.add_argument('-sa_timeout', required=False, type=int, default=5)
         self.parser.add_argument('-secret', required=False, type=str, default='')
 

@@ -98,12 +98,12 @@ def bye_handler(data):
         try:
             manager.add_simulation_report(data['report'])
 
-            if record:
+            if record == 'True':
                 record_simulation()
                 Logger.normal('Match recorded.')
 
         except Exception as e:
-            Logger.error(f'Error to add the simulation report: {str(e)}')
+            Logger.error(f'Error to record the simulation: {str(e)}')
 
     else:
         Logger.error(f"Error in bye event: {data['message']}")
@@ -258,9 +258,5 @@ if __name__ == "__main__":
 
                 time.sleep(1)
 
-        try:
-            print('live')
-        except Exception as e:
-            print(str(e))
-
+    print(f'Graphic Interface: Serving on http://{base_url}:{monitor_port}')
     app.run(host=base_url, port=int(monitor_port))

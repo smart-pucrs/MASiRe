@@ -1,0 +1,988 @@
+{
+    "environment": {
+        "current_step": 10,
+        "max_steps": 10,
+        "delivered_items": [
+            {
+                "identifier": 0,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7644108,
+                    "lon": -51.1451617
+                },
+                "size": 22,
+                "lifetime": 19
+            },
+            {
+                "identifier": 3,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7616989,
+                    "lon": -51.1459178
+                },
+                "size": 22,
+                "lifetime": 11
+            },
+            {
+                "identifier": 1,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7640071,
+                    "lon": -51.142891
+                },
+                "size": 19,
+                "lifetime": 11
+            },
+            {
+                "identifier": 5,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7639907,
+                    "lon": -51.1427952
+                },
+                "size": 19,
+                "lifetime": 14
+            },
+            {
+                "identifier": 2,
+                "type": "victim",
+                "location": {
+                    "lat": -29.767721,
+                    "lon": -51.1410908
+                },
+                "size": 18,
+                "lifetime": 17
+            },
+            {
+                "identifier": 4,
+                "type": "victim",
+                "location": {
+                    "lat": -29.7635693,
+                    "lon": -51.1401049
+                },
+                "size": 22,
+                "lifetime": 11
+            }
+        ],
+        "floods_amount": 2,
+        "total_victims": 31,
+        "total_victims_in_photos": 20,
+        "victims_saved": 11,
+        "victims_dead": 0,
+        "total_photos": 5,
+        "photos_taken": 2,
+        "photos_analyzed": 0,
+        "photos_ignored": 5,
+        "total_water_samples": 11,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 11
+    },
+    "agents": {
+        "active_agents_amount": 7,
+        "agents_amount": 7,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7603134,
+                    "lon": -51.1462431
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 44,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7718758,
+                    "lon": -51.1497911
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 48,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7604273,
+                    "lon": -51.1462176
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 44,
+                "physical_storage": 480,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 20,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7651435,
+                            "lon": -51.1417482
+                        },
+                        "size": 20,
+                        "lifetime": 15
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.761522,
+                    "lon": -51.1410178
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 46,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7604273,
+                    "lon": -51.1462176
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 46,
+                "physical_storage": 459,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 18,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7603134,
+                            "lon": -51.1462431
+                        },
+                        "size": 19,
+                        "lifetime": 21
+                    },
+                    {
+                        "identifier": 21,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7604273,
+                            "lon": -51.1462176
+                        },
+                        "size": 22,
+                        "lifetime": 21
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.766155,
+                    "lon": -51.14581
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 38,
+                "physical_storage": 481,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 22,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7651435,
+                            "lon": -51.1417482
+                        },
+                        "size": 19,
+                        "lifetime": 25
+                    }
+                ],
+                "virtual_storage": 3319,
+                "virtual_storage_vector": [
+                    {
+                        "identifier": 2,
+                        "type": "photo",
+                        "location": {
+                            "lat": -29.7641575,
+                            "lon": -51.1525414
+                        },
+                        "size": 448,
+                        "victims": []
+                    },
+                    {
+                        "identifier": 1,
+                        "type": "photo",
+                        "location": {
+                            "lat": -29.7645692,
+                            "lon": -51.146103
+                        },
+                        "size": 329,
+                        "victims": []
+                    }
+                ],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.766155,
+                    "lon": -51.14581
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 44,
+                "physical_storage": 480,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 19,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7631127,
+                            "lon": -51.1455512
+                        },
+                        "size": 20,
+                        "lifetime": 19
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE2In0.P6qh1DjV9o13ZyMDV5RoV4Yw8Ml78k0OgdSPA0Bcnq0",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7603134,
+                    "lon": -51.1462431
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 44,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7718758,
+                    "lon": -51.1497911
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 48,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7604273,
+                    "lon": -51.1462176
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 44,
+                "physical_storage": 480,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 20,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7651435,
+                            "lon": -51.1417482
+                        },
+                        "size": 20,
+                        "lifetime": 15
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.761522,
+                    "lon": -51.1410178
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 46,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "rescueVictim",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.7604273,
+                    "lon": -51.1462176
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 46,
+                "physical_storage": 459,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 18,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7603134,
+                            "lon": -51.1462431
+                        },
+                        "size": 19,
+                        "lifetime": 21
+                    },
+                    {
+                        "identifier": 21,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7604273,
+                            "lon": -51.1462176
+                        },
+                        "size": 22,
+                        "lifetime": 21
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.766155,
+                    "lon": -51.14581
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 38,
+                "physical_storage": 481,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 22,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7651435,
+                            "lon": -51.1417482
+                        },
+                        "size": 19,
+                        "lifetime": 25
+                    }
+                ],
+                "virtual_storage": 3319,
+                "virtual_storage_vector": [
+                    {
+                        "identifier": 2,
+                        "type": "photo",
+                        "location": {
+                            "lat": -29.7641575,
+                            "lon": -51.1525414
+                        },
+                        "size": 448,
+                        "victims": []
+                    },
+                    {
+                        "identifier": 1,
+                        "type": "photo",
+                        "location": {
+                            "lat": -29.7645692,
+                            "lon": -51.146103
+                        },
+                        "size": 329,
+                        "victims": []
+                    }
+                ],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE3In0.IfEIvi105q9wZgAbAtajn_WjuESllpqIjF0-BWf6efg",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -29.766155,
+                    "lon": -51.14581
+                },
+                "route": [],
+                "destination_distance": 0.0,
+                "battery": 44,
+                "physical_storage": 480,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 19,
+                        "type": "victim",
+                        "location": {
+                            "lat": -29.7631127,
+                            "lon": -51.1455512
+                        },
+                        "size": 20,
+                        "lifetime": 19
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 70,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 7
+            },
+            {
+                "step": 2,
+                "actions_amount": 7
+            },
+            {
+                "step": 3,
+                "actions_amount": 7
+            },
+            {
+                "step": 4,
+                "actions_amount": 7
+            },
+            {
+                "step": 5,
+                "actions_amount": 7
+            },
+            {
+                "step": 6,
+                "actions_amount": 7
+            },
+            {
+                "step": 7,
+                "actions_amount": 7
+            },
+            {
+                "step": 8,
+                "actions_amount": 7
+            },
+            {
+                "step": 9,
+                "actions_amount": 7
+            },
+            {
+                "step": 10,
+                "actions_amount": 7
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "takePhoto",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "charge",
+                    "charge",
+                    "charge",
+                    "move",
+                    "charge",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "deliverPhysical",
+                    "move",
+                    "deliverPhysical",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "charge",
+                    "move",
+                    "takePhoto",
+                    "charge"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "deliverPhysical",
+                    "move",
+                    "move",
+                    "deliverPhysical"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "rescueVictim",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "move",
+                    "move",
+                    "rescueVictim",
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "move",
+                    "rescueVictim",
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move",
+                    "move",
+                    "charge",
+                    "takePhoto",
+                    "move",
+                    "charge",
+                    "takePhoto"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": []
+            },
+            {
+                "step": 2,
+                "token_action": []
+            },
+            {
+                "step": 3,
+                "token_action": []
+            },
+            {
+                "step": 4,
+                "token_action": []
+            },
+            {
+                "step": 5,
+                "token_action": []
+            },
+            {
+                "step": 6,
+                "token_action": []
+            },
+            {
+                "step": 7,
+                "token_action": []
+            },
+            {
+                "step": 8,
+                "token_action": []
+            },
+            {
+                "step": 9,
+                "token_action": []
+            },
+            {
+                "step": 10,
+                "token_action": []
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
