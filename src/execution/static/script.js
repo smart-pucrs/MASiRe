@@ -261,7 +261,6 @@ function process_simulation_data(data) {
         agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
         agent_location_formated = [agent_location['lat'], agent_location['lon']];
-        console.log('--> ' + actors[i] + i);
         if (type == 'agent'){
             switch(actors[i]['role']){
                 case 'drone':
