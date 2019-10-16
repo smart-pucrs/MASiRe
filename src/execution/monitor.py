@@ -102,6 +102,7 @@ def bye_handler(data):
                 record_simulation()
                 Logger.normal('Match recorded.')
 
+            os.kill(os.getpid(), signal.SIGTERM)
         except Exception as e:
             Logger.error(f'Error to record the simulation: {str(e)}')
 
