@@ -2,7 +2,7 @@ import glob
 import os
 import pathlib
 import subprocess
-
+"""
 print("Begin to generate the experiments")
 
 SCRIPTS_FOLDER_FILES = '/scripts/*.py'
@@ -14,4 +14,5 @@ scripts = glob.glob(main_script_path + SCRIPTS_FOLDER_FILES)
 for script in scripts:
     print(script)
     os.system('python3 '+script)
+"""
 
