@@ -197,7 +197,7 @@ function setMapConfig(config) {
     L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
     let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
-    L.rectangle(bounds, { color: 'blue', weight: 1 }).on('click', function (e) {
+    L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
         console.info(e);
     }).addTo(constantsMarkerGroup);
     console.log(config);
@@ -225,9 +225,9 @@ function process_simulation_data(data) {
         if (events[i]['type'] == 'flood') {
             L.marker(event_location_formatted, { icon: floodIcon }).addTo(variablesMarkerGroup);
             L.circle(event_location_formatted, {
-                color: 'blue',
-                fillColor: 'blue',
-                fillOpacity: 0.2,
+                color: '#504E0F',
+                fillColor: '#504E0F',
+                fillOpacity: 0.65,
                 radius: events[i]['radius'] * 1000
             }).addTo(variablesMarkerGroup);
 
