@@ -63,7 +63,6 @@ class Starter:
 
         globally = self.parser.get_argument('g')
         python_version = self.parser.get_argument('pyv')
-
         self.env_handler.create_environment(globally, python_version)
 
     def get_arguments(self):
