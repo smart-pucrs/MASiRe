@@ -1,15 +1,18 @@
 #! /bin/bash
 SERVER="smart@192.168.1.110"
+DIR_SCRIPTS="Desktop/DisasterSimulator/experiments/temp"
+PASSWORD="Samsung2013"
 
-scp -r server_scripts $SERVER:Desktop/DisasterSimulator/experiments/server_scripts
-ssh -tt $SERVER << EOF
+python3 scripts/local_agents.py &
+sshpass -p $PASSWORD scp -r scripts $SERVER:$DIR_SCRIPTS
+sshpass -p $PASSWORD ssh -tt $SERVER << EOF
     mkdir temp
-    python3 Desktop/DisasterSimulator/experiments/server_scripts/step_amount.py
-    rm -R Desktop/DisasterSimulator/experiments/server_scripts    
+    python3 $DIR_SCRIPTS/server_agents.py
+    rm -R $DIR_SCRIPTS    
     exit
 EOF
-scp -r $SERVER:temp reports
-ssh -tt $SERVER << EOF
+sshpass -p $PASSWORD scp -r $SERVER:temp reports
+sshpass -p $PASSWORD ssh -tt $SERVER << EOF
     rm -R temp
     exit
 EOF
