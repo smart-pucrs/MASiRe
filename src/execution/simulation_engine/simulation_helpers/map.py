@@ -7,21 +7,23 @@ from itertools import zip_longest
 class Map:
     """Class that represents the map of the simulation, it holds all the functions about location and the map itself."""
 
-    def __init__(self, map_location, proximity):
-        map_location = str((pathlib.Path(__file__).parents[4] / map_location).absolute())
+    def __init__(self, map_config, proximity):
+        map_location = str((pathlib.Path(__file__).parents[4] / map_config['osm']).absolute())
         self.router = pyroutelib3.Router("car", map_location)
         self.proximity = proximity/1000
+        self.map_config = map_config
 
-    def restart(self, map_location, proximity):
+    def restart(self, map_config, proximity):
         """Restart the map by reseting all the variables and also deleting the router from memory to prevent errors.
 
-        :param map_location: The location of the file with the osm map.
+        :param map_config: The location of the file with the osm map.
         :param proximity: The proximity allowed by the user to someone be considered on the same place as anotherone."""
 
         del self.router
-        map_location = str((pathlib.Path(__file__).parents[4] / map_location).absolute())
+        map_location = str((pathlib.Path(__file__).parents[4] / map_config).absolute())
         self.router = pyroutelib3.Router("car", map_location)
         self.proximity = proximity/1000
+        self.map_config = map_config
 
     def get_closest_node(self, lat, lon):
         """Get the closest node given the latitude and longitude given. It has some errors on the lib itself,
@@ -133,7 +135,21 @@ class Map:
         result = []
         for node in self.router.rnodes:
             if self.router.distance(self.node_to_radian(node), self.coords_to_radian(coord)) <= radius:
-                result.append(node)
+                if not self.is_out(self.get_node_coord(node)):
+                    result.append(node)
+        return result
+
+    def is_out(self, node):
+        result = False
+        if node[0] <= self.map_config['minLat']:
+            result = True
+        elif node[0] >= self.map_config['maxLat']:
+            result = True
+        elif node[1] <= self.map_config['minLon']:
+            result = True
+        elif node[1] >= self.map_config['maxLon']:
+            result = True
+
         return result
 
     def node_to_radian(self, node):

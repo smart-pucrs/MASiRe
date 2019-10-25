@@ -9,7 +9,7 @@ from simulation_engine.simulation_helpers.social_assets_manager import SocialAss
 
 class Cycle:
     def __init__(self, config):
-        self.map = Map(config['map']['maps'][0]['osm'], config['map']['proximity'])
+        self.map = Map(config['map']['maps'][0], config['map']['proximity'])
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
@@ -27,7 +27,7 @@ class Cycle:
         self.match_history = []
 
     def restart(self, config_file):
-        self.map.restart(config_file['map']['maps'][0]['osm'], config_file['map']['proximity'])
+        self.map.restart(config_file['map']['maps'][0], config_file['map']['proximity'])
         generator = Generator(config_file, self.map)
         self.map_percepts = config_file['map']
         self.steps = generator.generate_events()
@@ -157,7 +157,7 @@ class Cycle:
 
                         for victim in photo.victims:
                             victim.active = False
-
+                            
                 else:
                     for victim in self.steps[i]['victims']:
                         if victim.lifetime <= 0:
