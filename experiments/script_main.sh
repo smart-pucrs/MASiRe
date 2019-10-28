@@ -3,17 +3,15 @@ SERVER="smart@192.168.1.110"
 DIR_SCRIPTS="Desktop/DisasterSimulator/experiments/temp"
 PASSWORD="Samsung2013"
 
-python3 scripts/local_agents.py &
-sshpass -p $PASSWORD scp -r scripts $SERVER:$DIR_SCRIPTS
+sshpass -p $PASSWORD scp -r exp_scripts $SERVER:$DIR_SCRIPTS
 sshpass -p $PASSWORD ssh -tt $SERVER << EOF
-    mkdir temp
-    python3 $DIR_SCRIPTS/server_agents.py
-    rm -R $DIR_SCRIPTS    
+    mkdir $DIR_SCRIPTS/reports
+    python3 $DIR_SCRIPTS/package_size.py
     exit
 EOF
-sshpass -p $PASSWORD scp -r $SERVER:temp reports
+sshpass -p $PASSWORD scp -r $SERVER:$DIR_SCRIPTS/reports reports
 sshpass -p $PASSWORD ssh -tt $SERVER << EOF
-    rm -R temp
+    rm -R $DIR_SCRIPTS
     exit
 EOF
 
