@@ -6,7 +6,7 @@ PASSWORD="Samsung2013"
 sshpass -p $PASSWORD scp -r exp_scripts $SERVER:$DIR_SCRIPTS
 sshpass -p $PASSWORD ssh -tt $SERVER << EOF
     mkdir $DIR_SCRIPTS/reports
-    python3 $DIR_SCRIPTS/package_size.py
+    python3 $DIR_SCRIPTS/package_size_simulator.py
     exit
 EOF
 sshpass -p $PASSWORD scp -r $SERVER:$DIR_SCRIPTS/reports reports

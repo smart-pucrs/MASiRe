@@ -60,9 +60,9 @@ def init_agents_connections():
         while not finished_process:
             time.sleep(1)
 
+        socket.disconnect()
         agents.clear()
         finished_process = False
-        socket.disconnect()
 
     os.kill(os.getpid(), signal.SIGTERM)
 

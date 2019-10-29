@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/maps/brumadinho.osm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/maps/map-poa.osm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/reports/report_AGENTS_10.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/reports/report_AGENTS_20.csv" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/fake_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/local_agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/local_agents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/script_main.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/script_main.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,7 +32,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/experiments" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>

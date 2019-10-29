@@ -40,7 +40,7 @@ current_prob = None
 def percepts(msg):
     global agent_package_sizes
 
-    msg_size = sys.getsizeof(msg)
+    msg_size = get_total_size(msg)
     agent_package_sizes.append(msg_size)
 
     agent_socket.emit('send_action', json.dumps({'token': agent_token, 'action': 'pass', 'parameters': []}))
@@ -68,7 +68,7 @@ def finish(msg):
 def percepts(msg):
     global monitor_package_sizes
 
-    msg_size = sys.getsizeof(msg)
+    msg_size = get_total_size(msg)
 
     print(len(msg['environment']['events']), msg_size)
 
@@ -87,6 +87,26 @@ def finish(msg):
 
     monitor_socket.disconnect()
     monitor_package_sizes.clear()
+
+
+def get_total_size(data):
+    total = 0
+    if isinstance(data, list):
+        for each in data:
+            if isinstance(each, dict) or isinstance(each, list):
+                total += get_total_size(each)
+            else:
+                total += sys.getsizeof(each)
+    elif isinstance(data, dict):
+        for each in data.values():
+            if isinstance(each, dict) or isinstance(each, list):
+                total += get_total_size(each)
+            else:
+                total += sys.getsizeof(each)
+    else:
+        total += sys.getsizeof(data)
+
+    return total
 
 
 def set_environment_steps(prob):
