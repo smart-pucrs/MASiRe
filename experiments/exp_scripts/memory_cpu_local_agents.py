@@ -9,8 +9,8 @@ server_url = 'http://192.168.1.110:12345'
 register_event = 'register_agent'
 connect_agent_url = f'{server_url}/connect_agent'
 finished_process = False
-agents_amounts = [10, 20]
-agent_name = 'temp'
+agents_amounts = [int(n) for n in sys.argv[1:]]
+agent_name = 'fake_agent'
 agents = {}
 
 socket = socketio.Client()
@@ -24,38 +24,33 @@ def finish_experiment(msg):
 
 
 def init_agents_connections():
-    global socket
     global finished_process
-    global socket
 
     for agents_amount in agents_amounts:
-        for agent in range(agents_amount - 1):
+        for agent in range(agents_amount - 2):
             agents[agent_name + str(agent)] = socketio.Client()
-        
-        for agent in agents:
-            response = dict(result=False)
 
-            while not response['result']:
-                time.sleep(1)
-                try:
-                    response = requests.post(connect_agent_url, json={'name': agent}).json()
-                    print(response.header)
-                except Exception:
-                    pass
-
-            agents[agent].connect(server_url)
-            agents[agent].emit(register_event, data=dict(token=response['message']))
-
-        response = dict(status=False)
-        while not response['status']:
-            time.sleep(1)
+        response = dict(result=False)
+        while not response['result']:
             try:
                 response = requests.post(connect_agent_url, json={'name': 'last'}).json()
             except Exception:
                 pass
 
-        socket.connect(server_url)            
+        socket.connect(server_url)
         socket.emit(register_event, data=dict(token=response['message']))
+
+        for agent in agents:
+            response = dict(result=False)
+
+            while not response['result']:
+                try:
+                    response = requests.post(connect_agent_url, json={'name': agent}).json()
+                except Exception:
+                    pass
+
+            agents[agent].connect(server_url)
+            agents[agent].emit(register_event, data=dict(token=response['message']))
 
         while not finished_process:
             time.sleep(1)

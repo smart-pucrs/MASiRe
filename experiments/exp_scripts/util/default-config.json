@@ -166,7 +166,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 30,
+      "probability": 100,
       "minPeriod": 30,
       "maxPeriod": 50,
       "circle": {

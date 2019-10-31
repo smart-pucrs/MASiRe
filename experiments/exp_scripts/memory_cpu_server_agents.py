@@ -8,21 +8,23 @@ import socketio
 import requests
 import json
 import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-temp_config = '/experiments/temp/temp-config.json'
-default_config = '/experiments/temp/default-config.json'
+temp_config = '/experiments/temp/util/temp-config.json'
+default_config = '/experiments/temp/util/default-config.json'
 start_system_path = root + '/start_system.py'
+exp_name = 'MEMORY_CPU_AGENTS'
 
 base_url = '192.168.1.110'
 api_port = 12345
 connect_agent_url = f'http://{base_url}:{api_port}/connect_agent'
 sim_command = ['python3', start_system_path,
-               *(f'-conf experiments/temp/temp-config.json -pyv 3 -g True -url {base_url} -secret temp -first_t 50').split(' ')]
+               *f'-conf experiments/temp/util/temp-config.json -pyv 3 -g True -url {base_url} -secret temp -first_t 50'.split(' ')]
 
 socket = socketio.Client()
 process_finished = False
-experiments = [10, 20]
+experiments = [int(n) for n in sys.argv[1:]]
 
 
 @socket.on('percepts')
@@ -33,11 +35,12 @@ def finish(msg):
 
 
 def set_environment_agents(agents):
-    log(f'AGENTS_{agents}', 'Setting the environment.')
+    log(f'{exp_name}_{agents}', 'Setting the environment.')
     with open(root + default_config, 'r') as config:
         content = json.loads(config.read())
 
-    content['agents']['drone']['amount'] = agents + 1
+    content['agents']['drone']['amount'] = agents
+
     with open(root + temp_config, 'w') as config:
         config.write(json.dumps(content, sort_keys=False, indent=4))
 
@@ -45,19 +48,19 @@ def set_environment_agents(agents):
 def start_processes(experiment):
     global process_finished
 
-    log(f'AGENTS_{experiment}', 'Start script-report.sh process.')
+    log(f'{exp_name}_{experiment}', 'Start report.sh process.')
 
     process_finished = False
 
     report_proc = subprocess.Popen(
-        ['Desktop/DisasterSimulator/experiments/temp/script-report.sh', 'AGENTS', str(experiment)])
+        ['Desktop/DisasterSimulator/experiments/temp/util/report.sh', exp_name, str(experiment)])
 
-    log(f'AGENTS_{experiment}', 'Start simulator process.')
+    log(f'{exp_name}_{experiment}', 'Start simulator process.')
 
     null = open(os.devnull, 'w')
     sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
 
-    log(f'AGENTS_{experiment}', 'Waiting for the simulation start...')
+    log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 
     response = dict(result=False)
     while not response['result']:
@@ -72,9 +75,10 @@ def start_processes(experiment):
 
     while not process_finished:
         time.sleep(1)
+
     time.sleep(5)
 
-    log(f'AGENTS_{experiment}', 'Simulation started, killing all processes.')
+    log(f'{exp_name}_{experiment}', 'Simulation started, killing all processes.')
 
     current_process = psutil.Process(sim_proc.pid)
     children = current_process.children(recursive=True)
@@ -95,7 +99,7 @@ def log(exp, message):
 
 def start_experiments():
     for agents in experiments:
-        log(f'AGENTS_{agents}', 'Start new experiment.')
+        log(f'{exp_name}_{agents}', 'Start new experiment.')
 
         set_environment_agents(agents)
         start_processes(agents)

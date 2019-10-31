@@ -7,14 +7,14 @@ import pathlib
 import socketio
 import requests
 import json
-import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-temp_config = '/experiments/temp/temp-config.json'
-default_config = '/experiments/temp/default-config.json'
-sim_path = root + '/src/execution/simulation.py'
-api_path = root + '/experiments/temp/fake_api.py'
+temp_config = '/experiments/temp/util/temp-config.json'
+default_config = '/experiments/temp/util/default-config.json'
+api_path = root + '/experiments/temp/util/fake_api.py'
 reports_folder = '/experiments/temp/reports'
+sim_path = root + '/src/execution/simulation.py'
 exp_name = 'PROCESS_TIME_PASS'
 
 base_url = '192.168.1.110'
@@ -29,8 +29,11 @@ api_command = ['python3', api_path, base_url, str(api_port), secret]
 socket = socketio.Client()
 sim_started = False
 actions = []
-complexity_experiments = [10, 100]
-agents_experiments = [10,50]
+
+args = [int(n) for n in sys.argv[1:]]
+complexity_experiments = args[:int(len(args)/2)]
+agents_experiments = args[int(len(args)/2):]
+
 results = []
 default_steps = 0
 
@@ -76,7 +79,7 @@ def start_processes(agents_amount, prob):
     sim_started = False
 
     api_null = open(os.devnull, 'w')
-    api_proc = subprocess.Popen(api_command)#, stdout=api_null, stderr=subprocess.STDOUT)
+    api_proc = subprocess.Popen(api_command, stdout=api_null, stderr=subprocess.STDOUT)
 
     connected = False
     while not connected:
@@ -88,7 +91,7 @@ def start_processes(agents_amount, prob):
 
     sim_null = open(os.devnull, 'w')
     log(f'{exp_name}_{agents_amount}_{prob}', 'Start simulator process.')
-    sim_proc = subprocess.Popen(sim_command)#, stdout=sim_null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command, stdout=sim_null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{agents_amount}_{prob}', 'Waiting for the simulation start...')
 

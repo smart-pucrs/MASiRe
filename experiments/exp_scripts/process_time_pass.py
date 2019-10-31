@@ -7,14 +7,14 @@ import pathlib
 import socketio
 import requests
 import json
-import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-temp_config = '/experiments/temp/temp-config.json'
-default_config = '/experiments/temp/default-config.json'
-sim_path = root + '/src/execution/simulation.py'
-api_path = root + '/experiments/temp/fake_api.py'
+temp_config = '/experiments/temp/util/temp-config.json'
+default_config = '/experiments/temp/util/default-config.json'
 reports_folder = '/experiments/temp/reports'
+api_path = root + '/experiments/temp/util/fake_api.py'
+sim_path = root + '/src/execution/simulation.py'
 
 base_url = '192.168.1.110'
 sim_port = 8910
@@ -24,12 +24,16 @@ sim_url = f'http://{base_url}:{sim_port}'
 api_url = f'http://{base_url}:{api_port}'
 sim_command = ['python3', sim_path, root + temp_config, base_url, str(sim_port), str(api_port), 'true', secret]
 api_command = ['python3', api_path, base_url, str(api_port), secret]
+exp_name = 'PROCESS_TIME_PASS'
 
 socket = socketio.Client()
 sim_started = False
 actions = []
-complexity_experiments = [10, 100]
-agents_experiments = [10,50]
+
+args = [int(n) for n in sys.argv[1:]]
+complexity_experiments = args[:int(len(args)/2)]
+agents_experiments = args[int(len(args)/2):]
+
 results = []
 default_steps = 0
 
@@ -57,7 +61,7 @@ def finish(msg):
 def set_environment_steps(agents_amount, prob):
     global default_steps
 
-    log(f'PROCESS_TIME_PASS_{agents_amount}_{prob}', 'Setting the environment.')
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Setting the environment.')
     with open(root + default_config, 'r') as config:
         content = json.loads(config.read())
 
@@ -75,7 +79,7 @@ def start_processes(agents_amount, prob):
     sim_started = False
 
     api_null = open(os.devnull, 'w')
-    api_proc = subprocess.Popen(api_command)#, stdout=api_null, stderr=subprocess.STDOUT)
+    api_proc = subprocess.Popen(api_command, stdout=api_null, stderr=subprocess.STDOUT)
 
     connected = False
     while not connected:
@@ -86,10 +90,10 @@ def start_processes(agents_amount, prob):
             time.sleep(1)
 
     sim_null = open(os.devnull, 'w')
-    log(f'PROCESS_TIME_PASS_{agents_amount}_{prob}', 'Start simulator process.')
-    sim_proc = subprocess.Popen(sim_command)#, stdout=sim_null, stderr=subprocess.STDOUT)
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Start simulator process.')
+    sim_proc = subprocess.Popen(sim_command, stdout=sim_null, stderr=subprocess.STDOUT)
 
-    log(f'PROCESS_TIME_PASS_{agents_amount}_{prob}', 'Waiting for the simulation start...')
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Waiting for the simulation start...')
 
     while not sim_started:
         time.sleep(1)
@@ -109,16 +113,6 @@ def start_processes(agents_amount, prob):
     actions.clear()
     socket.disconnect()
 
-    current_process = psutil.Process(sim_proc.pid)
-    children = current_process.children(recursive=True)
-    for child in children:
-        os.kill(child.pid, signal.SIGTERM)
-
-    current_process = psutil.Process(api_proc.pid)
-    children = current_process.children(recursive=True)
-    for child in children:
-        os.kill(child.pid, signal.SIGTERM)
-
     api_proc.kill()
     sim_proc.kill()
 
@@ -137,7 +131,7 @@ def connect_agents(agents_amount):
 def start_experiments():
     for agents_amount in agents_experiments:
         for prob in complexity_experiments:
-            log(f'PROCESS_TIME_PASS_{agents_amount}_{prob}', 'Start new experiment.')
+            log(f'{exp_name}_{agents_amount}_{prob}', 'Start new experiment.')
 
             set_environment_steps(agents_amount, prob)
             start_processes(agents_amount, prob)

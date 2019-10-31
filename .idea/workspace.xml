@@ -2,13 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/fake_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_monitor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/local_agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/local_agents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/complexity.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_complexity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/default-config.json" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/default-config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/fake_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/fake_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/local_agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_local_agents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/maps.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_maps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/script-report.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/report.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/script_memory_cpu.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/server_agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_server_agents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/steps_amount.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_steps_amount.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/maps/brumadinho.osm" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/maps/brumadinho.osm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/maps/map-poa.osm" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/maps/map-poa.osm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/script_main.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/script_main.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,15 +47,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/tests/unity/simulation" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/experiments/exp_scripts/util" />
       <recent name="$PROJECT_DIR$/experiments/scritps" />
       <recent name="$PROJECT_DIR$/src/execution/monitor_engine/helpers" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/execution" />
-      <recent name="$PROJECT_DIR$/util/templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/tests/unity/simulation" />
     </key>
   </component>
   <component name="RunDashboard">

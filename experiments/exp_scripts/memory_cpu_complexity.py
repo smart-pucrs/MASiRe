@@ -8,22 +8,24 @@ import socketio
 import requests
 import json
 import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-temp_config = '/experiments/temp/temp-config.json'
-default_config = '/experiments/temp/default-config.json'
+temp_config = '/experiments/temp/util/temp-config.json'
+default_config = '/experiments/temp/util/default-config.json'
 start_system_path = root + '/start_system.py'
+exp_name = 'COMPLEXITY'
 
 base_url = '192.168.1.110'
 api_port = 12345
 connect_agent_url = f'http://{base_url}:{api_port}/connect_agent'
 sim_command = ['python3', start_system_path,
-               *(f'-conf experiments/temp/temp-config.json -pyv 3 -g True -url {base_url} -secret temp').split(' ')]
+               *(f'-conf experiments/temp/util/temp-config.json -pyv 3 -g True -url {base_url} -secret temp').split(' ')]
 
 
 socket = socketio.Client()
 process_finished = False
-experiments = [10, 50, 100]
+experiments = [int(n) for n in sys.argv[1:]]
 
 
 @socket.on('percepts')
@@ -34,7 +36,7 @@ def finish(msg):
 
 
 def set_environment_steps(prob):
-    log(f'COMPLEXITY_{prob}', 'Setting the environment.')
+    log(f'{exp_name}_{prob}', 'Setting the environment.')
     with open(root + default_config, 'r') as config:
         content = json.loads(config.read())
 
@@ -47,19 +49,19 @@ def set_environment_steps(prob):
 def start_processes(experiment):
     global process_finished
 
-    log(f'COMPLEXITY_{experiment}', 'Start script-report.sh process.')
+    log(f'{exp_name}_{experiment}', 'Start report.sh process.')
 
     process_finished = False
 
     report_proc = subprocess.Popen(
-        ['Desktop/DisasterSimulator/experiments/temp/script-report.sh', 'COMPLEXITY', str(experiment)])
+        ['Desktop/DisasterSimulator/experiments/temp/util/report.sh', exp_name, str(experiment)])
     null = open(os.devnull, 'w')
 
-    log(f'COMPLEXITY_{experiment}', 'Start simulator process.')
+    log(f'{exp_name}_{experiment}', 'Start simulator process.')
 
     sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
 
-    log(f'COMPLEXITY_{experiment}', 'Waiting for the simulation start...')
+    log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 
     response = dict(result=False)
     while not response['result']:
@@ -76,7 +78,7 @@ def start_processes(experiment):
         time.sleep(1)
     time.sleep(5)
 
-    log(f'COMPLEXITY_{experiment}', 'Simulation started, killing all processes.')
+    log(f'{exp_name}_{experiment}', 'Simulation started, killing all processes.')
 
     current_process = psutil.Process(sim_proc.pid)
     children = current_process.children(recursive=True)
@@ -97,7 +99,7 @@ def log(exp, message):
 
 def start_experiments():
     for prob in experiments:
-        log(f'COMPLEXITY_{prob}', 'Start new experiment.')
+        log(f'{exp_name}_{prob}', 'Start new experiment.')
 
         set_environment_steps(prob)
         start_processes(prob)

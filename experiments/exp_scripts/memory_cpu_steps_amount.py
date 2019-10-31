@@ -8,30 +8,23 @@ import socketio
 import requests
 import json
 import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-temp_config = '/experiments/temp/temp-config.json'
-default_config = '/experiments/temp/default-config.json'
+temp_config = '/experiments/temp/util/temp-config.json'
+default_config = '/experiments/temp/util/default-config.json'
 start_system_path = root + '/start_system.py'
+exp_name = 'MEMORY_CPU_STEPS_AMOUNT'
 
 base_url = '192.168.1.110'
 api_port = 12345
 connect_agent_url = f'http://{base_url}:{api_port}/connect_agent'
 sim_command = ['python3', start_system_path,
-               *(f'-conf experiments/temp/temp-config.json -pyv 3 -g True -url {base_url} -secret temp').split(' ')]
+               *(f'-conf experiments/temp/util/temp-config.json -pyv 3 -g True -url {base_url} -secret temp').split(' ')]
 
 socket = socketio.Client()
 process_finished = False
-experiments = [{
-      "name": "Brumadinho",
-      "osm": "experiments/temp/maps/brumadinho.osm",
-      "minLat": -20.1726,
-      "minLon": -44.2104,
-      "maxLat": -20.1136,
-      "maxLon": -44.1102,
-      "centerLon": -44.1603,
-      "centerLat": -20.1431
-    }]
+experiments = [int(n) for n in sys.argv[1:]]
 
 
 @socket.on('percepts')
@@ -41,13 +34,12 @@ def finish(msg):
     process_finished = True
 
 
-def set_environment_map(map_config):
-    name = map_config['name']
-    log(f'MAP_{name}', 'Setting the environment.')
+def set_environment_steps(steps_amount):
+    log(f'{exp_name}_{steps_amount}', 'Setting the environment.')
     with open(root + default_config, 'r') as config:
         content = json.loads(config.read())
 
-    content['map']['maps'] = [map_config]
+    content['map']['steps'] = steps_amount
 
     with open(root + temp_config, 'w') as config:
         config.write(json.dumps(content, sort_keys=False, indent=4))
@@ -56,19 +48,19 @@ def set_environment_map(map_config):
 def start_processes(experiment):
     global process_finished
 
-    log(f'MAP_{experiment}', 'Start script-report.sh process.')
+    log(f'{exp_name}_{experiment}', 'Start report.sh process.')
 
     process_finished = False
 
     report_proc = subprocess.Popen(
-        ['Desktop/DisasterSimulator/experiments/temp/script-report.sh', 'MAP', experiment])
-
-    log(f'MAP_{experiment}', 'Start simulator process.')
-
+        ['Desktop/DisasterSimulator/experiments/temp/util/report.sh', exp_name, str(experiment)])
     null = open(os.devnull, 'w')
+
+    log(f'{exp_name}_{experiment}', 'Start simulator process.')
+
     sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
 
-    log(f'MAP_{experiment}', 'Waiting for the simulation start...')
+    log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 
     response = dict(result=False)
     while not response['result']:
@@ -85,7 +77,7 @@ def start_processes(experiment):
         time.sleep(1)
     time.sleep(5)
 
-    log(f'MAP_{experiment}', 'Simulation started, killing all processes.')
+    log(f'{exp_name}_{experiment}', 'Simulation started, killing all processes.')
 
     current_process = psutil.Process(sim_proc.pid)
     children = current_process.children(recursive=True)
@@ -105,12 +97,11 @@ def log(exp, message):
 
 
 def start_experiments():
-    for map_config in experiments:
-        name = map_config['name']
-        log(f'MAP_{name}', 'Start new experiment.')
+    for steps in experiments:
+        log(f'{exp_name}_{steps}', 'Start new experiment.')
 
-        set_environment_map(map_config)
-        start_processes(map_config['name'])
+        set_environment_steps(steps)
+        start_processes(steps)
         time.sleep(2)
 
 

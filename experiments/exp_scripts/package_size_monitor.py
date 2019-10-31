@@ -8,6 +8,7 @@ import socketio
 import requests
 import json
 import sys
+import psutil
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
 temp_config = '/experiments/temp/util/temp-config.json'
@@ -26,36 +27,37 @@ sim_command = ['python3', start_system_path,
 exp_name = 'PACKAGE_SIZE_API'
 
 agent_socket = socketio.Client()
+monitor_socket = socketio.Client()
 agent_token = None
+monitor_token = None
 agent_package_sizes = []
+monitor_package_sizes = []
 
 process_finished = False
-experiments = [int(n) for n in sys.argv[1:]]
+experiments = [100, 100]
 current_prob = None
 
 
-@agent_socket.on('percepts')
+@monitor_socket.on('percepts')
 def percepts(msg):
-    global agent_package_sizes
-
-    msg_size = get_total_size(msg)
-    agent_package_sizes.append(msg_size)
-
+    global monitor_package_sizes
+    #
+    # msg_size = get_total_size(msg)
+    # monitor_package_sizes.append(msg_size)
     agent_socket.emit('send_action', json.dumps({'token': agent_token, 'action': 'pass', 'parameters': []}))
 
 
-@agent_socket.on('bye')
+@monitor_socket.on('bye')
 def finish(msg):
     global process_finished
-
-    path = root + reports_folder + '/package_size_api_agent_' + str(current_prob) + '.csv'
-
-    with open(path, 'w+') as report:
-        for e in agent_package_sizes:
-            report.write(str(e)+'\n')
-
-    agent_socket.emit('disconnect_registered_agent', json.dumps({'token': agent_token}))
-
+    # global monitor_package_sizes
+    #
+    # path = root + reports_folder + '/package_size_api_monitor_' + str(current_prob) + '.csv'
+    #
+    # with open(path, 'w+') as report:
+    #     for e in monitor_package_sizes:
+    #         report.write(str(e)+'\n')
+    #
     process_finished = True
 
 
@@ -101,21 +103,29 @@ def start_processes(experiment):
     null = open(os.devnull, 'w')
     log(f'{exp_name}_{experiment}', 'Start simulator process.')
 
-    sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 
+    connect_monitor()
     connect_agent()
 
     while not process_finished:
         time.sleep(1)
 
-    agent_socket.disconnect()
-    agent_package_sizes.clear()
+    monitor_socket.disconnect()
+    monitor_package_sizes.clear()
 
     log(f'{exp_name}_{experiment}', 'Simulation finished, killing all processes.')
 
     time.sleep(5)
+
+    # current_process = psutil.Process(sim_proc.pid)
+    # children = current_process.children(recursive=True)
+    # for child in children:
+    #     os.kill(child.pid, signal.SIGTERM)
+    #
+    # sim_proc.kill()
 
     sim_proc.kill()
     del sim_proc
@@ -137,6 +147,20 @@ def connect_agent():
 
     agent_socket.connect(f'http://{base_url}:{api_port}')
     agent_socket.emit('register_agent', data=dict(token=agent_token))
+
+
+def connect_monitor():
+    connected = False
+
+    while not connected:
+        time.sleep(1)
+        try:
+            monitor_socket.connect(f'http://{base_url}:{api_port}')
+            connected = True
+        except Exception:
+            continue
+
+    monitor_socket.emit('connect_monitor', data=dict())
 
 
 def log(exp, message):
