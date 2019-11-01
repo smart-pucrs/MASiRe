@@ -13,7 +13,7 @@ class Agent:
         self.min_size = size
         self.location = cdm_location
         self.last_action = 'pass'
-        self.last_action_result = True
+        self.last_action_result = 'success'
         self.role = role_name
         self.abilities = abilities
         self.resources = resources

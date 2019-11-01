@@ -13,7 +13,7 @@ class SocialAsset:
         self.min_size = size
         self.location = location
         self.last_action = 'pass'
-        self.last_action_result = True
+        self.last_action_result = 'success'
         self.profession = profession
         self.abilities = abilities
         self.resources = resources
