@@ -589,7 +589,7 @@ class Cycle:
             error_message = 'Unknown error: ' + str(e)
 
         finally:
-            self.agents_manager.edit(parameters[0], 'last_action_result', last_action_result)
+            self.agents_manager.edit(token, 'last_action_result', last_action_result)
             return {'agent': self.agents_manager.get(token), 'message': error_message}, secondary_result
 
     def _deliver_agent_agent(self, token, parameters):
@@ -1253,8 +1253,6 @@ class Cycle:
 
             self.agents_manager.edit(receiving_agent.token, 'last_action', 'receiveVirtual')
             self.agents_manager.edit(receiving_agent.token, 'last_action_result', 'success')
-            
-
         else:
             raise FailedLocation('The social asset is not located near the desired agent.')
 
@@ -1277,7 +1275,6 @@ class Cycle:
 
             self.social_assets_manager.edit(receiving_asset.token, 'last_action', 'receiveVirtual')
             self.social_assets_manager.edit(receiving_asset.token, 'last_action_result', 'success')
-            
 
         else:
             raise FailedLocation('The social asset is not located near the desired agent.')
