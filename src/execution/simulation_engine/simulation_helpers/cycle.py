@@ -11,7 +11,6 @@ class Cycle:
     def __init__(self, config):
         self.map = Map(config['map']['maps'][0], config['map']['proximity'])
         self.actions = config['actions']
-        self.speed_reduction = config['map']['speed_reduction']
         self.max_steps = config['map']['steps']
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)

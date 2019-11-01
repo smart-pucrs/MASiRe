@@ -1,0 +1,858 @@
+{
+    "environment": {
+        "current_step": 7,
+        "max_steps": 7,
+        "delivered_items": [],
+        "floods_amount": 1,
+        "total_victims": 10,
+        "total_victims_in_photos": 5,
+        "victims_saved": 5,
+        "victims_dead": 0,
+        "total_photos": 1,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 1,
+        "total_water_samples": 1,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 1
+    },
+    "agents": {
+        "active_agents_amount": 5,
+        "agents_amount": 5,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.141499699999997,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.17857501636945117,
+                "battery": 40,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 4,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1314997,
+                            "lon": -44.1565901
+                        },
+                        "size": 22,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 42,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 3,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1327463,
+                            "lon": -44.1566887
+                        },
+                        "size": 22,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.141499699999997,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.17857501636945117,
+                "battery": 40,
+                "physical_storage": 482,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 2,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1356222,
+                            "lon": -44.1556467
+                        },
+                        "size": 18,
+                        "lifetime": 20
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 40,
+                "physical_storage": 481,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 1,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1396586,
+                            "lon": -44.1580209
+                        },
+                        "size": 19,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 40,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1356549,
+                            "lon": -44.158296
+                        },
+                        "size": 22,
+                        "lifetime": 22
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.141499699999997,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.17857501636945117,
+                "battery": 40,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 4,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1314997,
+                            "lon": -44.1565901
+                        },
+                        "size": 22,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 42,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 3,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1327463,
+                            "lon": -44.1566887
+                        },
+                        "size": 22,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.141499699999997,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.17857501636945117,
+                "battery": 40,
+                "physical_storage": 482,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 2,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1356222,
+                            "lon": -44.1556467
+                        },
+                        "size": 18,
+                        "lifetime": 20
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 40,
+                "physical_storage": 481,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 1,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1396586,
+                            "lon": -44.1580209
+                        },
+                        "size": 19,
+                        "lifetime": 14
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": true,
+                "location": {
+                    "lat": -20.1427463,
+                    "lon": -44.1603
+                },
+                "route": [
+                    {
+                        "lat": -20.1431,
+                        "lon": -44.1603
+                    }
+                ],
+                "destination_distance": 0.046843653296804094,
+                "battery": 40,
+                "physical_storage": 478,
+                "physical_storage_vector": [
+                    {
+                        "identifier": 0,
+                        "type": "victim",
+                        "location": {
+                            "lat": -20.1356549,
+                            "lon": -44.158296
+                        },
+                        "size": 22,
+                        "lifetime": 22
+                    }
+                ],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 35,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 5
+            },
+            {
+                "step": 2,
+                "actions_amount": 5
+            },
+            {
+                "step": 3,
+                "actions_amount": 5
+            },
+            {
+                "step": 4,
+                "actions_amount": 5
+            },
+            {
+                "step": 5,
+                "actions_amount": 5
+            },
+            {
+                "step": 6,
+                "actions_amount": 5
+            },
+            {
+                "step": 7,
+                "actions_amount": 5
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "rescueVictim",
+                    "move"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "rescueVictim",
+                    "move",
+                    "move",
+                    "move",
+                    "rescueVictim"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "move",
+                    "rescueVictim",
+                    "rescueVictim",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "move",
+                    "move",
+                    "move",
+                    "move",
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "rescueVictim"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE0In0.m0a7Anvl8ssOqQuq6efwwGA8tplMhEKzI34PSxzaUSk",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkExIn0.7ltKanLv9douhqaBCFdp47teHalaoeMo9wB6svBgvOo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkE1In0.1rS6ULtqI09BEu2qL4PX8X7tSk_BB2xPPzabzMntKqs",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEyIn0.VU-noL8Yudpixp4v2AKaUSNkunxfzSdYVv2vF19WEI4",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiY29ubmVjdGlvbkEzIn0.7WHKTYbcu37VzmlgRKJvfP05G3JDbYApXBZ58kDrGIE",
+                        "action": "move"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
