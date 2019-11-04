@@ -250,7 +250,8 @@ class Cycle:
             self.agents_manager.edit(token, 'last_action_result', 'unknownAction')
             return {'agent': self.agents_manager.get(token), 'message': 'Wrong action name given.'}, secondary_result
 
-        if not self.agents_manager.get(token).is_active and not self.agents_manager.get(token).last_action == 'deliverRequest':
+        if not self.agents_manager.get(token).is_active and not self.agents_manager.get(
+                token).last_action == 'deliverRequest':
             self.agents_manager.edit(token, 'last_action_result', 'agentNotActive')
             return {'agent': self.agents_manager.get(token), 'message': 'Agent is not active.'}, secondary_result
 
@@ -272,7 +273,6 @@ class Cycle:
                     match = None
                     for sub_token, sub_action, sub_param in special_action_tokens:
                         if len(sub_param) == 1:
-                            sub_param[0] = sub_param[0].replace('"', '')
                             if sub_token == parameters[0] and sub_action == 'getCarried' and sub_param[0] == token:
                                 match = [sub_token, sub_action, sub_param]
                                 break
@@ -485,7 +485,6 @@ class Cycle:
                     match = None
                     for sub_token, sub_action, sub_param in special_action_tokens:
                         if len(sub_param) == 1:
-                            sub_param[0] = sub_param[0].replace('"', '')
                             if sub_token == parameters[0] and sub_action == 'deliverRequest' and sub_param[0] == token:
                                 match = [sub_token, sub_action, sub_param]
                                 break
@@ -691,7 +690,6 @@ class Cycle:
                     if match is not None:
                         if self.agents_manager.get(parameters[0]) is not None:
                             self.social_assets_manager.add_physical(token, self.agents_manager.get(parameters[0]))
-                            
                             self.agents_manager.edit(parameters[0], 'carried', True)
                             self.agents_manager.edit(parameters[0], 'last_action', 'getCarried')
                             self.agents_manager.edit(parameters[0], 'last_action_result', 'success')
@@ -701,8 +699,8 @@ class Cycle:
                             }
                             special_action_tokens.remove(match)
                         else:
-                            self.social_assets_manager.add_physical(token, self.social_assets_manager.get(parameters[0]))
-                            
+                            self.social_assets_manager.add_physical(token,
+                                                                    self.social_assets_manager.get(parameters[0]))
                             self.social_assets_manager.edit(parameters[0], 'carried', True)
                             self.social_assets_manager.edit(parameters[0], 'last_action', 'getCarried')
                             self.social_assets_manager.edit(parameters[0], 'last_action_result', 'success')
@@ -730,7 +728,7 @@ class Cycle:
                         if self.agents_manager.get(parameters[0]) is not None:
                             self.agents_manager.add_physical(parameters[0], self.agents_manager.get(token))
                             self.agents_manager.edit(parameters[0], 'last_action_result', 'success')
-                            
+
                             self.social_assets_manager.edit(token, 'last_action', 'getCarried')
                             secondary_result = {
                                 'agent': self.agents_manager.get(parameters[0]),
@@ -740,7 +738,6 @@ class Cycle:
                         else:
                             self.social_assets_manager.add_physical(parameters[0], self.agents_manager.get(token))
                             self.social_assets_manager.edit(parameters[0], 'last_action_result', 'success')
-                            
                             self.social_assets_manager.edit(token, 'last_action', 'getCarried')
                             secondary_result = {
                                 'social_asset': self.social_assets_manager.get(parameters[0]),
@@ -1132,7 +1129,7 @@ class Cycle:
 
             self.social_assets_manager.edit(receiving_asset.token, 'last_action', 'receivePhysical')
             self.social_assets_manager.edit(receiving_asset.token, 'last_action_result', 'success')
-            
+
 
         else:
             raise FailedLocation('The social asset is not located near the desired social asset.')
@@ -1203,7 +1200,7 @@ class Cycle:
 
             self.social_assets_manager.edit(receiving_asset.token, 'last_action', 'receiveVirtual')
             self.social_assets_manager.edit(receiving_asset.token, 'last_action_result', 'success')
-            
+
 
         else:
             raise FailedLocation('The agent is not located near the desired agent.')
@@ -1229,7 +1226,7 @@ class Cycle:
                 'items': delivered_items,
                 'step': self.current_step})
 
-            
+
 
         else:
             raise FailedLocation('The social asset is not located at the CDM.')
@@ -1302,7 +1299,7 @@ class Cycle:
                 'message': 'Agent can not do any action while being carried.'}
 
         if action_name == 'pass':
-            self.agents_manager.edit(token, 'last_action_result', 'inactive')
+            self.agents_manager.edit(token, 'last_action_result', 'success')
             return {'agent': self.agents_manager.get(token), 'message': ''}
 
         if not self._check_abilities_and_resources(token, action_name):
@@ -1605,7 +1602,7 @@ class Cycle:
                 distance = self.map.node_distance(self.map.get_closest_node(*agent.location),
                                                   self.map.get_closest_node(*destination))
                 self.agents_manager.edit(token, 'destination_distance', distance)
-                
+
                 self.agents_manager.discharge(token)
 
     def _move_asset(self, token, parameters):
@@ -1666,7 +1663,7 @@ class Cycle:
                 if victim.active and self.map.check_location(victim.location, agent.location):
                     victim.active = False
                     self.agents_manager.add_physical(token, victim)
-                    
+
                     return
 
             for photo in self.steps[i]['photos']:
@@ -1674,7 +1671,7 @@ class Cycle:
                     if victim.active and self.map.check_location(victim.location, agent.location):
                         victim.active = False
                         self.agents_manager.add_physical(token, victim)
-                        
+
                         return
 
         raise FailedLocation('No victim by the given location is known.')
@@ -1690,7 +1687,7 @@ class Cycle:
                 if victim.active and self.map.check_location(victim.location, asset.location):
                     victim.active = False
                     self.social_assets_manager.add_physical(token, victim)
-                    
+
                     return
 
             for photo in self.steps[i]['photos']:
@@ -1698,7 +1695,7 @@ class Cycle:
                     if victim.active and self.map.check_location(victim.location, asset.location):
                         victim.active = False
                         self.social_assets_manager.add_physical(token, victim)
-                        
+
                         return
 
         raise FailedLocation('No victim by the given location is known.')
@@ -1713,7 +1710,7 @@ class Cycle:
                 if water_sample.active and self.map.check_location(water_sample.location, agent.location):
                     water_sample.active = False
                     self.agents_manager.add_physical(token, water_sample)
-                    
+
                     return
 
         raise FailedLocation('The agent is not in a location with a water sample event.')
@@ -1728,7 +1725,7 @@ class Cycle:
                 if water_sample.active and self.map.check_location(water_sample.location, asset.location):
                     water_sample.active = False
                     self.social_assets_manager.add_physical(token, water_sample)
-                    
+
                     return
 
         raise FailedLocation('The asset is not in a location with a water sample event.')
@@ -1743,7 +1740,7 @@ class Cycle:
                 if photo.active and self.map.check_location(photo.location, agent.location):
                     photo.active = False
                     self.agents_manager.add_virtual(token, photo)
-                    
+
                     return
 
         raise FailedLocation('The agent is not in a location with a photograph event.')
@@ -1758,7 +1755,7 @@ class Cycle:
                 if photo.active and self.map.check_location(photo.location, asset.location):
                     photo.active = False
                     self.social_assets_manager.add_virtual(token, photo)
-                    
+
                     return
 
         raise FailedLocation('The asset is not in a location with a photograph event.')
@@ -1780,7 +1777,7 @@ class Cycle:
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
-        
+
         self.agents_manager.clear_virtual_storage(token)
 
     def _analyze_photo_asset(self, token, parameters):
@@ -1800,7 +1797,7 @@ class Cycle:
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
-        
+
         self.social_assets_manager.clear_virtual_storage(token)
 
     def _search_social_asset_agent(self, token, parameters):

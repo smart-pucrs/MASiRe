@@ -1,0 +1,577 @@
+{
+    "environment": {
+        "current_step": 12,
+        "max_steps": 12,
+        "delivered_items": [],
+        "floods_amount": 5,
+        "total_victims": 26,
+        "total_victims_in_photos": 22,
+        "victims_saved": 0,
+        "victims_dead": 0,
+        "total_photos": 9,
+        "photos_taken": 2,
+        "photos_analyzed": 2,
+        "photos_ignored": 7,
+        "total_water_samples": 12,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 12
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1348589,
+                    "lon": -44.14640999999999
+                },
+                "route": [
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.141409999999986
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.136409999999984
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.13140999999998
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.12640999999998
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.121409999999976
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.11640999999997
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.1147191
+                    }
+                ],
+                "destination_distance": 3.090585971095505,
+                "battery": 40,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1364148,
+                    "lon": -44.176917300000014
+                },
+                "route": [
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.181917300000016
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.18691730000002
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.19191730000002
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.1944727
+                    }
+                ],
+                "destination_distance": 2.1815714925640175,
+                "battery": 40,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1348589,
+                    "lon": -44.14640999999999
+                },
+                "route": [
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.141409999999986
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.136409999999984
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.13140999999998
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.12640999999998
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.121409999999976
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.11640999999997
+                    },
+                    {
+                        "lat": -20.1348589,
+                        "lon": -44.1147191
+                    }
+                ],
+                "destination_distance": 3.090585971095505,
+                "battery": 40,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "move",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1364148,
+                    "lon": -44.176917300000014
+                },
+                "route": [
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.181917300000016
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.18691730000002
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.19191730000002
+                    },
+                    {
+                        "lat": -20.1364148,
+                        "lon": -44.1944727
+                    }
+                ],
+                "destination_distance": 2.1815714925640175,
+                "battery": 40,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 24,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 2
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            },
+            {
+                "step": 6,
+                "actions_amount": 2
+            },
+            {
+                "step": 7,
+                "actions_amount": 2
+            },
+            {
+                "step": 8,
+                "actions_amount": 2
+            },
+            {
+                "step": 9,
+                "actions_amount": 2
+            },
+            {
+                "step": 10,
+                "actions_amount": 2
+            },
+            {
+                "step": 11,
+                "actions_amount": 2
+            },
+            {
+                "step": 12,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "takePhoto",
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "takePhoto",
+                    "takePhoto"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "analyzePhoto",
+                    "takePhoto"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "analyzePhoto",
+                    "analyzePhoto"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move",
+                    "analyzePhoto"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "move",
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+
