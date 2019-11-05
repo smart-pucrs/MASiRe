@@ -1380,8 +1380,6 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
-            import traceback
-            traceback.print_exc()
             last_action_result = 'unknownError'
             error_message = 'Unknown error: ' + str(e)
 
@@ -1596,7 +1594,6 @@ class Cycle:
 
         else:
             if not agent.route or not self.map.check_location([*agent.route[-1]], destination):
-                print(agent.route, destination)
                 nodes = []
                 for i in range(self.current_step):
                     if self.steps[i]['flood'] and self.steps[i]['flood'].active:

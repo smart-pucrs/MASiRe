@@ -132,7 +132,7 @@ class Generator:
             if random.randint(0, 100) <= victim_probability:
                 photo_victims = self.generate_photo_victims(photo_location)
 
-            photos[i] = Photo(self.photo_id, photo_size, photo_victims, photo_location)
+            photos[i] = Photo(self.flood_id, self.photo_id, photo_size, photo_victims, photo_location)
             self.photo_id = self.photo_id + 1
             i += 1
 
@@ -158,7 +158,7 @@ class Generator:
             victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
             victim_location: tuple = self.map.get_node_coord(random.choice(nodes))
 
-            victims[i] = Victim(self.victim_id, victim_size, victim_lifetime, victim_location, False)
+            victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, victim_location, False)
             self.victim_id = self.victim_id + 1
             i += 1
 
@@ -185,7 +185,7 @@ class Generator:
             victim_size: int = random.randint(victim_min_size, victim_max_size)
             victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
 
-            victims[i] = Victim(self.victim_id, victim_size, victim_lifetime, location, True)
+            victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, location, True)
             self.victim_id = self.victim_id + 1
             i += 1
 
@@ -206,7 +206,7 @@ class Generator:
         while i < amount:
             water_sample_location: tuple = self.map.get_node_coord(random.choice(nodes))
             water_sample_size: int = random.randint(water_sample_min_size, water_sample_max_size)
-            water_samples[i] = WaterSample(self.water_sample_id, water_sample_size, water_sample_location)
+            water_samples[i] = WaterSample(self.flood_id, self.water_sample_id, water_sample_size, water_sample_location)
             self.water_sample_id = self.water_sample_id + 1
             i += 1
 
@@ -228,7 +228,7 @@ class Generator:
             location: list = [random.uniform(min_lat, max_lat),
                               random.uniform(min_lon, max_lon)]
             profession: str = random.choice(self.generate_variables['socialAsset']['professions'])
-            social_assets[i] = SocialAssetLayer(self.social_asset_id, location, profession)
+            social_assets[i] = SocialAssetLayer(self.flood_id, self.social_asset_id, location, profession)
             self.social_asset_id += 1
             i += 1
 

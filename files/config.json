@@ -77,7 +77,7 @@
       "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
       "resources": ["battery", "strength"],
       "size": 1200,
-      "amount": 10,
+      "amount": 5,
       "speed": 10,
       "physicalCapacity": 450,
       "virtualCapacity": 0,
@@ -167,7 +167,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 5,
+      "probability": 10,
       "minPeriod": 30,
       "maxPeriod": 50,
       "circle": {

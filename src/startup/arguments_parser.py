@@ -24,7 +24,7 @@ class Parser:
         self.parser.add_argument('-pyv', required=False, type=str, default='')
         self.parser.add_argument('-g', required=False, type=bool, default=False)
         self.parser.add_argument('-step_t', required=False, type=int, default=5)
-        self.parser.add_argument('-first_t', required=False, type=int, default=5)
+        self.parser.add_argument('-first_t', required=False, type=int, default=20)
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
         self.parser.add_argument('-monitor', required=False, type=str, default='8000')

@@ -498,6 +498,7 @@ class JsonFormatter:
 
             elif event.type == 'victim':
                 victim = {
+                    'flood_id': event.flood_id,
                     'identifier': event.identifier,
                     'type': 'victim',
                     'location': self.format_location(event.location),
@@ -512,6 +513,7 @@ class JsonFormatter:
                 for victim in event.victims:
                     if victim.active:
                         json_victim = {
+                            'flood_id': victim.flood_id,
                             'identifier': victim.identifier,
                             'type': 'victim',
                             'location': self.format_location(victim.location),
@@ -521,6 +523,7 @@ class JsonFormatter:
                         photo_victims.append(json_victim)
 
                 photo = {
+                    'flood_id': event.flood_id,
                     'identifier': event.identifier,
                     'type': 'photo',
                     'location': self.format_location(event.location),
@@ -532,6 +535,7 @@ class JsonFormatter:
 
             else:
                 water_sample = {
+                    'flood_id': event.flood_id,
                     'identifier': event.identifier,
                     'type': 'water_sample',
                     'location': self.format_location(event.location),
@@ -555,6 +559,7 @@ class JsonFormatter:
         for item in items:
             if item.type == 'victim':
                 json_item = {
+                    'flood_id': item.flood_id,
                     'identifier': item.identifier,
                     'type': 'victim',
                     'location': self.format_location(item.location),
@@ -568,6 +573,7 @@ class JsonFormatter:
                 for victim in item.victims:
                     if victim.active:
                         json_victim = {
+                            'flood_id': victim.flood_id,
                             'identifier': victim.identifier,
                             'type': 'victim',
                             'location': self.format_location(victim.location),
@@ -577,6 +583,7 @@ class JsonFormatter:
                         json_photo_victims.append(json_victim)
 
                 json_item = {
+                    'flood_id': item.flood_id,
                     'identifier': item.identifier,
                     'type': 'photo',
                     'location': self.format_location(item.location),
@@ -586,6 +593,7 @@ class JsonFormatter:
 
             elif item.type == 'water_sample':
                 json_item = {
+                    'flood_id': item.flood_id,
                     'identifier': item.identifier,
                     'type': 'water_sample',
                     'location': self.format_location(item.location),
