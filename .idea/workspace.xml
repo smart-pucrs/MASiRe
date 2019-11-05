@@ -4,7 +4,15 @@
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/files/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/communication/helpers/json_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/communication/helpers/json_formatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/exceptions/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/exceptions/exceptions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/photo.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/photo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/static/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/static/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/startup/configuration_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/startup/configuration_checker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/unity/simulation/test_map_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/unity/simulation/test_map_simulation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

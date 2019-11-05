@@ -296,6 +296,8 @@ function process_simulation_data(data) {
                     logError('Profession not found.');
             }
         }
+
+        printRoute(actors[i]['route']);
     }
 }
 
@@ -335,6 +337,16 @@ function init() {
             setSimulationInfo(data['sim_information']);
             startMatchFunctionId = setInterval(startMatch, stepSpeed);
         });
+}
+
+function printRoute(route){
+    for (let i=0; i<route.length; i++){
+        L.circle([route[i]['lat'], route[i]['lon']], {
+                color: 'red',
+                radius: 10
+        }).addTo(variablesMarkerGroup);
+    }
+
 }
 
 function setSimulationInfo(sim_info) {

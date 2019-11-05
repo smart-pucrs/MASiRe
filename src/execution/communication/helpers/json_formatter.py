@@ -205,6 +205,7 @@ def monitor_agent_info(agent):
         'type': agent['type'],
         'role': agent['role'],
         'location': agent['location'],
+        'route': agent['route']
     }
 
 
@@ -212,7 +213,7 @@ def monitor_asset_info(asset):
     return {
         'type': asset['type'],
         'profession': asset['profession'],
-        'location': asset['location'],
+        'location': asset['location']
     }
 
 

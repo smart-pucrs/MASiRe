@@ -1,0 +1,325 @@
+{
+    "environment": {
+        "current_step": 10,
+        "max_steps": 10,
+        "delivered_items": [],
+        "floods_amount": 3,
+        "total_victims": 15,
+        "total_victims_in_photos": 9,
+        "victims_saved": 0,
+        "victims_dead": 0,
+        "total_photos": 6,
+        "photos_taken": 0,
+        "photos_analyzed": 0,
+        "photos_ignored": 6,
+        "total_water_samples": 15,
+        "water_samples_collected": 0,
+        "water_samples_ignored": 15
+    },
+    "agents": {
+        "active_agents_amount": 1,
+        "agents_amount": 1,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "car",
+                "size": 1200,
+                "abilities": [
+                    "groundMovement",
+                    "charge",
+                    "carry",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength"
+                ],
+                "max_charge": 150,
+                "speed": 7,
+                "physical_capacity": 450,
+                "virtual_capacity": 0,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1401172,
+                    "lon": -44.1594842
+                },
+                "route": [
+                    {
+                        "lat": -20.139601,
+                        "lon": -44.1590068
+                    },
+                    {
+                        "lat": -20.1396323,
+                        "lon": -44.1584712
+                    }
+                ],
+                "destination_distance": 0.11870510613591513,
+                "battery": 142,
+                "physical_storage": 450,
+                "physical_storage_vector": [],
+                "virtual_storage": 0,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "car",
+                "size": 1200,
+                "abilities": [
+                    "groundMovement",
+                    "charge",
+                    "carry",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength"
+                ],
+                "max_charge": 150,
+                "speed": 7,
+                "physical_capacity": 450,
+                "virtual_capacity": 0,
+                "last_action": "move",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1401172,
+                    "lon": -44.1594842
+                },
+                "route": [
+                    {
+                        "lat": -20.139601,
+                        "lon": -44.1590068
+                    },
+                    {
+                        "lat": -20.1396323,
+                        "lon": -44.1584712
+                    }
+                ],
+                "destination_distance": 0.11870510613591513,
+                "battery": 142,
+                "physical_storage": 450,
+                "physical_storage_vector": [],
+                "virtual_storage": 0,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 10,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 1
+            },
+            {
+                "step": 2,
+                "actions_amount": 1
+            },
+            {
+                "step": 3,
+                "actions_amount": 1
+            },
+            {
+                "step": 4,
+                "actions_amount": 1
+            },
+            {
+                "step": 5,
+                "actions_amount": 1
+            },
+            {
+                "step": 6,
+                "actions_amount": 1
+            },
+            {
+                "step": 7,
+                "actions_amount": 1
+            },
+            {
+                "step": 8,
+                "actions_amount": 1
+            },
+            {
+                "step": 9,
+                "actions_amount": 1
+            },
+            {
+                "step": 10,
+                "actions_amount": 1
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "pass"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "move"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "move"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

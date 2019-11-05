@@ -55,12 +55,12 @@ def test_get_route():
 
 
 def test_generate_route_for_drone():
-    assert simulation_map.generate_coordinates_for_drones([10, 10], [30, 30], 10)[0]
+    assert simulation_map.generate_coordinates_for_air_movement([10, 10], [30, 30], 10)[0]
 
 
 def test_generate_route_for_boat():
-    assert simulation_map.generate_coordinates_for_boats((-30.1098256, -51.2115133), (-30.110234, -51.2119344), 10, nodes)[0]
-    assert not simulation_map.generate_coordinates_for_boats((-30.1135454, -51.2098736), (-30.110234, -51.2119344), 10, nodes)[0]
+    assert simulation_map.generate_coordinates_for_water_movement((-30.1098256, -51.2115133), (-30.110234, -51.2119344), 10, nodes)[0]
+    assert not simulation_map.generate_coordinates_for_water_movement((-30.1135454, -51.2098736), (-30.110234, -51.2119344), 10, nodes)[0]
 
 
 def test_decrease_until_reached():

@@ -1,0 +1,2060 @@
+{
+    "environment": {
+        "current_step": 50,
+        "max_steps": 50,
+        "delivered_items": [
+            {
+                "identifier": 1,
+                "type": "victim",
+                "location": {
+                    "lat": -20.1396323,
+                    "lon": -44.1584712
+                },
+                "size": 19,
+                "lifetime": 0
+            }
+        ],
+        "floods_amount": 5,
+        "total_victims": 26,
+        "total_victims_in_photos": 32,
+        "victims_saved": 0,
+        "victims_dead": 36,
+        "total_photos": 9,
+        "photos_taken": 9,
+        "photos_analyzed": 9,
+        "photos_ignored": 0,
+        "total_water_samples": 27,
+        "water_samples_collected": 15,
+        "water_samples_ignored": 12
+    },
+    "agents": {
+        "active_agents_amount": 4,
+        "agents_amount": 4,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "analyzePhoto",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1513923,
+                    "lon": -44.1701394
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 4,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "analyzePhoto",
+                "last_action_result": "itemAmount",
+                "location": {
+                    "lat": -20.1530133,
+                    "lon": -44.1740635
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 16,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "boat",
+                "size": 8000,
+                "abilities": [
+                    "waterMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 200,
+                "speed": 7,
+                "physical_capacity": 1000,
+                "virtual_capacity": 128,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 200,
+                "physical_storage": 1000,
+                "physical_storage_vector": [],
+                "virtual_storage": 128,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "boat",
+                "size": 8000,
+                "abilities": [
+                    "waterMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 200,
+                "speed": 7,
+                "physical_capacity": 1000,
+                "virtual_capacity": 128,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 200,
+                "physical_storage": 1000,
+                "physical_storage_vector": [],
+                "virtual_storage": 128,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "analyzePhoto",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1513923,
+                    "lon": -44.1701394
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 4,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 10,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "analyzePhoto",
+                "last_action_result": "itemAmount",
+                "location": {
+                    "lat": -20.1530133,
+                    "lon": -44.1740635
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 16,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "boat",
+                "size": 8000,
+                "abilities": [
+                    "waterMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 200,
+                "speed": 7,
+                "physical_capacity": 1000,
+                "virtual_capacity": 128,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 200,
+                "physical_storage": 1000,
+                "physical_storage_vector": [],
+                "virtual_storage": 128,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "boat",
+                "size": 8000,
+                "abilities": [
+                    "waterMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 200,
+                "speed": 7,
+                "physical_capacity": 1000,
+                "virtual_capacity": 128,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 200,
+                "physical_storage": 1000,
+                "physical_storage_vector": [],
+                "virtual_storage": 128,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 200,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 4
+            },
+            {
+                "step": 2,
+                "actions_amount": 4
+            },
+            {
+                "step": 3,
+                "actions_amount": 4
+            },
+            {
+                "step": 4,
+                "actions_amount": 4
+            },
+            {
+                "step": 5,
+                "actions_amount": 4
+            },
+            {
+                "step": 6,
+                "actions_amount": 4
+            },
+            {
+                "step": 7,
+                "actions_amount": 4
+            },
+            {
+                "step": 8,
+                "actions_amount": 4
+            },
+            {
+                "step": 9,
+                "actions_amount": 4
+            },
+            {
+                "step": 10,
+                "actions_amount": 4
+            },
+            {
+                "step": 11,
+                "actions_amount": 4
+            },
+            {
+                "step": 12,
+                "actions_amount": 4
+            },
+            {
+                "step": 13,
+                "actions_amount": 4
+            },
+            {
+                "step": 14,
+                "actions_amount": 4
+            },
+            {
+                "step": 15,
+                "actions_amount": 4
+            },
+            {
+                "step": 16,
+                "actions_amount": 4
+            },
+            {
+                "step": 17,
+                "actions_amount": 4
+            },
+            {
+                "step": 18,
+                "actions_amount": 4
+            },
+            {
+                "step": 19,
+                "actions_amount": 4
+            },
+            {
+                "step": 20,
+                "actions_amount": 4
+            },
+            {
+                "step": 21,
+                "actions_amount": 4
+            },
+            {
+                "step": 22,
+                "actions_amount": 4
+            },
+            {
+                "step": 23,
+                "actions_amount": 4
+            },
+            {
+                "step": 24,
+                "actions_amount": 4
+            },
+            {
+                "step": 25,
+                "actions_amount": 4
+            },
+            {
+                "step": 26,
+                "actions_amount": 4
+            },
+            {
+                "step": 27,
+                "actions_amount": 4
+            },
+            {
+                "step": 28,
+                "actions_amount": 4
+            },
+            {
+                "step": 29,
+                "actions_amount": 4
+            },
+            {
+                "step": 30,
+                "actions_amount": 4
+            },
+            {
+                "step": 31,
+                "actions_amount": 4
+            },
+            {
+                "step": 32,
+                "actions_amount": 4
+            },
+            {
+                "step": 33,
+                "actions_amount": 4
+            },
+            {
+                "step": 34,
+                "actions_amount": 4
+            },
+            {
+                "step": 35,
+                "actions_amount": 4
+            },
+            {
+                "step": 36,
+                "actions_amount": 4
+            },
+            {
+                "step": 37,
+                "actions_amount": 4
+            },
+            {
+                "step": 38,
+                "actions_amount": 4
+            },
+            {
+                "step": 39,
+                "actions_amount": 4
+            },
+            {
+                "step": 40,
+                "actions_amount": 4
+            },
+            {
+                "step": 41,
+                "actions_amount": 4
+            },
+            {
+                "step": 42,
+                "actions_amount": 4
+            },
+            {
+                "step": 43,
+                "actions_amount": 4
+            },
+            {
+                "step": 44,
+                "actions_amount": 4
+            },
+            {
+                "step": 45,
+                "actions_amount": 4
+            },
+            {
+                "step": 46,
+                "actions_amount": 4
+            },
+            {
+                "step": 47,
+                "actions_amount": 4
+            },
+            {
+                "step": 48,
+                "actions_amount": 4
+            },
+            {
+                "step": 49,
+                "actions_amount": 4
+            },
+            {
+                "step": 50,
+                "actions_amount": 4
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "pass",
+                    "pass",
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "rescueVictim",
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "rescueVictim",
+                    "pass"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "pass",
+                    "move",
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "pass",
+                    "move",
+                    "charge",
+                    "pass"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "pass",
+                    "move",
+                    "charge",
+                    "pass"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "pass",
+                    "move",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "pass",
+                    "move",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "pass",
+                    "move",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "pass",
+                    "move",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 21,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 22,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 23,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 24,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 25,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 26,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 27,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 28,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 29,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 30,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 31,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 32,
+                "actions": [
+                    "pass",
+                    "move",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 33,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 34,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 35,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 36,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 37,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 38,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 39,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 40,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 41,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 42,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 43,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 44,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 45,
+                "actions": [
+                    "pass",
+                    "move",
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 46,
+                "actions": [
+                    "pass",
+                    "move",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 47,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 48,
+                "actions": [
+                    "pass",
+                    "takePhoto",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 49,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "analyzePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 50,
+                "actions": [
+                    "pass",
+                    "analyzePhoto",
+                    "rescueVictim",
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "charge"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "charge"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 13,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 14,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 15,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 16,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 17,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 18,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 19,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 20,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 21,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 22,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 23,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 24,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 25,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 26,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 27,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 28,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 29,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 30,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 31,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 32,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 33,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 34,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 35,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 36,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 37,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 38,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 39,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 40,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 41,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 42,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 43,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 44,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 45,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 46,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 47,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 48,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 49,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 50,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMSJ9.DvFo9NNgSGIojB7ib02R0bgc4BZQEHjFcAKay3AUNco",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnQifQ.hms8E0SD1hE2sU-vnJtbhm_ZhEf2s6dhbFst-rwvpSc",
+                        "action": "analyzePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMiJ9._-Hd25h9wrdDHOSv-5igO3tlZYIDV7U32IEvZ9Fu3mo",
+                        "action": "rescueVictim"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYWdlbnRfMyJ9.RcS8r1tedk6riidc0ntf3DPORLGyPUlmcm7T7iEkWpQ",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

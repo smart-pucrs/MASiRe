@@ -84,7 +84,7 @@ class Map:
 
         return self.get_node_coord(self.get_closest_node(lat, lon))
 
-    def get_route(self, start_coord, end_coord, role, speed, list_of_nodes):
+    def get_route(self, start_coord, end_coord, abilities, speed, speed_reduction, list_of_nodes):
         """Get the route for each kind of actor.
 
         For drones and boats, the route is a straight line from one point to another.
@@ -92,38 +92,53 @@ class Map:
 
         :param start_coord: The start location.
         :param end_coord: The destination location.
-        :param role: The kind of the actor, either drone, boat or car.
+        :param abilities: The kind of the actor, either drone, boat or car.
         :param speed: The speed of the actor.
+        :param speed_reduction: The speed reduction in flood area.
         :param list_of_nodes: The list of flooded nodes.
         :return tuple: First position containing if the path can be done, second with the list of locations the actor
         must go to get to its destination and the third position hold the distance to the destination."""
 
-        if role == 'drone':
-            return self.generate_coordinates_for_drones(start_coord, end_coord, speed)
+        if 'airMovement' in abilities:
+            return self.generate_coordinates_for_air_movement(start_coord, end_coord, speed)
 
-        elif role == 'boat':
-            return self.generate_coordinates_for_boats(start_coord, end_coord, speed, list_of_nodes)
+        elif 'waterMovement' in abilities:
+            return self.generate_coordinates_for_water_movement(start_coord, end_coord, speed, list_of_nodes)
 
         else:
             start_node = self.get_closest_node(*start_coord)
             end_node = self.get_closest_node(*end_coord)
 
-            if start_node not in list_of_nodes:
-                result, nodes = self.router.doRoute(start_node, end_node)
+            result, nodes = self.router.doRoute(start_node, end_node)
 
-                if result == 'no_route':
-                    return False, [], 0
+            if result == 'no_route':
+                return False, [], 0
 
-                checked_nodes = []
-                for node in nodes:
-                    if node in list_of_nodes:
-                        return False, [], 0
+            if len(nodes) < 3:
+                return True, [self.get_node_coord(node) for node in nodes], self.node_distance(start_node, end_node)
 
-                    checked_nodes.append(self.get_node_coord(node))
+            max_dist = (self.proximity * speed) * 0.5
+            max_dist_flood = (self.proximity * (speed * (1 - speed_reduction/100))) * 0.5
+            pivot = self.get_node_coord(nodes[0])
+            checked_nodes = [self.get_node_coord(nodes[0])]
 
-                return True, checked_nodes, self.node_distance(start_node, end_node)
+            for node in nodes[1:-1]:
+                node_cord = self.get_node_coord(node)
+                if node in list_of_nodes:
+                    if self.check_node_proximity(pivot, node_cord, max_dist_flood):
+                        checked_nodes.append(node_cord)
+                        pivot = node_cord
 
-            return False, [], 0
+                else:
+                    if self.check_node_proximity(pivot, node_cord, max_dist):
+                        checked_nodes.append(node_cord)
+                        pivot = node_cord
+
+            checked_nodes.append(self.get_node_coord(nodes[-1]))
+            return True, checked_nodes, self.node_distance(start_node, end_node)
+
+    def check_node_proximity(self, p1, p2, radius):
+        return self.euclidean_distance(p1, p2) > radius
 
     def nodes_in_radius(self, coord, radius):
         """Get all the nodes in a circle around the coordinate given.
@@ -169,7 +184,7 @@ class Map:
 
         return self.router.distance(self.node_to_radian(node_x), self.node_to_radian(node_y))
 
-    def generate_coordinates_for_drones(self, start, end, speed):
+    def generate_coordinates_for_air_movement(self, start, end, speed):
         """Generate a straight line connecting two locations.
 
         :param start: The start location.
@@ -196,7 +211,7 @@ class Map:
 
         return True, list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
 
-    def generate_coordinates_for_boats(self, start, end, speed, list_of_nodes=None):
+    def generate_coordinates_for_water_movement(self, start, end, speed, list_of_nodes=None):
         """Generate a straight line connecting two locations.
 
         Note: A boat can only move through flooded nodes.

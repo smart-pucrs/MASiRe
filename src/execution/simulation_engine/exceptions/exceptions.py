@@ -98,16 +98,6 @@ class FailedNoSocialAsset(Exception):
         return 'FailedNoSocialAsset: ' + self.message
 
 
-class UnableToReach(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'unableToReach'
-
-    def __str__(self):
-        return 'UnableToReach: ' + self.message
-
-
 class FailedUnknownToken(Exception):
 
     def __init__(self, message):
@@ -136,3 +126,4 @@ class FailedNoMatch(Exception):
 
     def __str__(self):
         return 'FailedNoMatch: ' + self.message
+

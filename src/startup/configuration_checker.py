@@ -90,7 +90,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['id', 'steps', 'maps', 'proximity', 'randomSeed']
+        keys = ['id', 'steps', 'maps', 'proximity', 'randomSeed', 'speedReduction']
 
         map = json.load(open(self.config, 'r'))['map']
         for key in keys:
@@ -124,6 +124,9 @@ class Checker:
 
         if map['proximity'] <= 0:
             return 0, 'Map: Proximity can not be zero or negative.'
+
+        if map['speedReduction'] < 0:
+            return 0, 'Map: SpeedReduction can not be negative.'
 
         return 1, 'Map: Ok.'
 

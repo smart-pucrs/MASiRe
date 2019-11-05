@@ -1380,6 +1380,8 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             last_action_result = 'unknownError'
             error_message = 'Unknown error: ' + str(e)
 
@@ -1510,7 +1512,7 @@ class Cycle:
             last_action_result = e.identifier
             error_message = e.message
 
-        except UnableToReach as e:
+        except FailedNoRoute as e:
             last_action_result = e.identifier
             error_message = e.message
 
@@ -1531,15 +1533,30 @@ class Cycle:
         if actor is None:
             exit('Internal error. Non registered token requested.')
 
-        for ability in self.actions[action]['abilities']:
-            if ability not in actor.abilities:
-                return False
+        check = True
+        for option in self.actions[action]['abilities']:
+            check = True
+            for ability in option:
+                if ability not in actor.abilities:
+                    check = False
+                    break
+            if check:
+                break
 
-        for resource in self.actions[action]['resources']:
-            if resource not in actor.resources:
-                return False
+        if not check:
+            return False
 
-        return True
+        for option in self.actions[action]['resources']:
+            check = True
+            for resource in option:
+                if resource not in actor.resources:
+                    check = False
+                    break
+
+            if check:
+                return True
+
+        return check
 
     def _charge_agent(self, token, parameters):
         if parameters:
@@ -1578,20 +1595,21 @@ class Cycle:
             self.agents_manager.edit(token, 'destination_distance', 0)
 
         else:
-            if not agent.route or destination != agent.route[-1]:
+            if not agent.route or not self.map.check_location([*agent.route[-1]], destination):
+                print(agent.route, destination)
                 nodes = []
                 for i in range(self.current_step):
                     if self.steps[i]['flood'] and self.steps[i]['flood'].active:
                         nodes.extend(self.steps[i]['flood'].list_of_nodes)
 
-                result, route, distance = self.map.get_route(agent.location, destination, agent.role, agent.speed,
-                                                             nodes)
+                result, route, distance = self.map.get_route(agent.location, destination, agent.abilities, agent.speed,
+                                                             self.map_percepts['speedReduction'], nodes)
 
                 if not result:
                     self.agents_manager.edit(token, 'route', [])
                     self.agents_manager.edit(token, 'destination_distance', 0)
 
-                    raise UnableToReach('Agent is not capable of entering flood locations.')
+                    raise FailedNoRoute('No route are found.')
 
                 else:
                     self.agents_manager.edit(token, 'route', route)
@@ -1635,13 +1653,14 @@ class Cycle:
                     if self.steps[i]['flood'] and self.steps[i]['flood'].active:
                         nodes.extend(self.steps[i]['flood'].list_of_nodes)
 
-                result, route, distance = self.map.get_route(asset.location, destination, 'car', asset.speed, nodes)
+                result, route, distance = self.map.get_route(asset.location, destination, 'car', asset.speed,
+                                                             self.map_percepts['speedReduction'], nodes)
 
                 if not result:
                     self.social_assets_manager.edit(token, 'route', [])
                     self.social_assets_manager.edit(token, 'destination_distance', 0)
 
-                    raise UnableToReach('Asset is not capable of entering flood locations.')
+                    raise FailedNoRoute('Asset is not capable of entering flood locations.')
 
                 else:
                     self.social_assets_manager.edit(token, 'route', route)
@@ -1649,7 +1668,8 @@ class Cycle:
 
             if self.social_assets_manager.get(token).destination_distance:
                 self.social_assets_manager.update_location(token)
-                _, _, distance = self.map.get_route(asset.location, destination, 'car', asset.speed, [])
+                _, _, distance = self.map.get_route(asset.location, destination, 'car', asset.speed,
+                                                    self.map_percepts['speedReduction'], [])
                 self.social_assets_manager.edit(token, 'destination_distance', distance)
 
     def _rescue_victim_agent(self, token, parameters):
