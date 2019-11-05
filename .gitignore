@@ -232,5 +232,6 @@ misc.xml
 #VSCODE
 .vscode/
 
-### Replay folder ###
+### Logs folder ###
 replays/
+2019/
