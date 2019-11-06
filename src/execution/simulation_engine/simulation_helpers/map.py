@@ -112,7 +112,7 @@ class Map:
             result, nodes = self.router.doRoute(start_node, end_node)
 
             if result == 'no_route':
-                return False, [], 0
+                return self.generate_coordinates_for_air_movement(start_coord, end_coord, speed)
 
             if len(nodes) < 3:
                 return True, [self.get_node_coord(node) for node in nodes], self.node_distance(start_node, end_node)
