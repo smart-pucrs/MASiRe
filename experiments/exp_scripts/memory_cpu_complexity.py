@@ -14,7 +14,7 @@ root = str(pathlib.Path(__file__).resolve().parents[2])
 temp_config = '/experiments/temp/util/temp-config.json'
 default_config = '/experiments/temp/util/default-config.json'
 start_system_path = root + '/start_system.py'
-exp_name = 'COMPLEXITY'
+exp_name = 'MEMORY_CPU_COMPLEXITY'
 
 base_url = '192.168.1.110'
 api_port = 12345
@@ -83,7 +83,10 @@ def start_processes(experiment):
     current_process = psutil.Process(sim_proc.pid)
     children = current_process.children(recursive=True)
     for child in children:
-        os.kill(child.pid, signal.SIGTERM)
+        try:
+            os.kill(child.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
 
     socket.disconnect()
     report_proc.kill()

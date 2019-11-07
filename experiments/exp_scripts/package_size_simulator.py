@@ -55,8 +55,7 @@ def get_total_size(data):
 
 
 def save_results(prob):
-    file_name = f'/package_size_simulator_{prob}.csv'
-    path = root + reports_folder + file_name
+    path = f'{root}{reports_folder}/{exp_name}%{str(prob)}.csv'
 
     with open(path, 'w+') as report:
         for e in results:
@@ -110,10 +109,12 @@ def start_processes(prob):
     while not sim_started:
         time.sleep(1)
 
+    log(f'{exp_name}_{prob}', 'Simulation started, connecting the agents...')
     requests.post(sim_url + '/register_agent', json={'token': secret, 'secret': secret})
 
     requests.post(sim_url + '/start', json={'secret': secret})
 
+    log(f'{exp_name}_{prob}', 'Agents connected, processing steps...')
     for step in range(default_steps):
         response = requests.post(sim_url+'/do_actions', json={'actions': actions, 'secret': secret}).json()
         results.append(get_total_size(response))
@@ -123,6 +124,7 @@ def start_processes(prob):
     actions.clear()
     socket.disconnect()
 
+    log(f'{exp_name}_{prob}', 'Simulation finished, killing all processes...')
     api_proc.kill()
     sim_proc.kill()
 

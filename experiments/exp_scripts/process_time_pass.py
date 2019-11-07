@@ -43,8 +43,7 @@ def get_current_time():
 
 
 def save_results(agents_amount, prob):
-    file_name = f'/process_time_pass_{agents_amount}_{prob}.csv'
-    path = root + reports_folder + file_name
+    path = f'{root}{reports_folder}/{exp_name}_{str(agents_amount)}_{str(prob)}.csv'
 
     with open(path, 'w+') as report:
         for e in results:
@@ -98,10 +97,12 @@ def start_processes(agents_amount, prob):
     while not sim_started:
         time.sleep(1)
 
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Simulation started, connecting the agents...')
     connect_agents(agents_amount)
 
     requests.post(sim_url + '/start', json={'secret': secret})
 
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Agents connected, processing steps...')
     for step in range(default_steps):
         old_time = get_current_time()
         response = requests.post(sim_url+'/do_actions', json={'actions': actions, 'secret': secret}).json()
@@ -112,6 +113,8 @@ def start_processes(agents_amount, prob):
     results.clear()
     actions.clear()
     socket.disconnect()
+
+    log(f'{exp_name}_{agents_amount}_{prob}', 'Simulation finished, killing all processes...')
 
     api_proc.kill()
     sim_proc.kill()

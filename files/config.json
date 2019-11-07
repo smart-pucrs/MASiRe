@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 10,
+    "steps": 100,
     "maps": [{
       "osm": "files/brumadinho.osm",
       "minLat": -20.1726,
@@ -167,8 +167,8 @@
   },
   "generate": {
     "flood": {
-      "probability": 5,
-      "minPeriod": 30,
+      "probability": 10,
+      "minPeriod": 45,
       "maxPeriod": 50,
       "circle": {
         "minRadius": 1.0,
