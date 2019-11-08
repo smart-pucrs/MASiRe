@@ -159,7 +159,8 @@ class Simulation:
         floods_amount = 0
         victims_in_photo = 0
         victims_saved = 0
-        victims_dead = 0
+        victims_dead_ignored = 0
+        victims_dead_delivered = 0
         photos_taken = 0
         photos_analyzed = 0
         photos_ignored = 0
@@ -176,8 +177,11 @@ class Simulation:
                 if not victim.active and victim.lifetime > 0:
                     victims_saved += 1
 
+                elif not victim.active and victim.lifetime == 0:
+                    victims_dead_delivered += 1
+
                 elif not victim.lifetime:
-                    victims_dead += 1
+                    victims_dead_ignored += 1
 
             for photo in self.cycler.steps[i]['photos']:
                 if not photo.active:
@@ -192,8 +196,11 @@ class Simulation:
                         if not victim.active and victim.lifetime > 0:
                             victims_saved += 1
 
+                        elif not victim.active and victim.lifetime == 0:
+                            victims_dead_delivered += 1
+
                         elif not victim.lifetime:
-                            victims_dead += 1
+                            victims_dead_ignored += 1
 
                         victims_in_photo += 1
 
@@ -216,7 +223,8 @@ class Simulation:
                 'total_victims': self.cycler.max_victims,
                 'total_victims_in_photos': victims_in_photo,
                 'victims_saved': victims_saved,
-                'victims_dead': victims_dead,
+                'victims_ignored_dead': victims_dead_ignored,
+                'victims_dead_delivered': victims_dead_delivered,
                 'total_photos': self.cycler.max_photos,
                 'photos_taken': photos_taken,
                 'photos_analyzed': photos_analyzed,

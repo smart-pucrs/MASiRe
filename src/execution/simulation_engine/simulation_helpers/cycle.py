@@ -160,13 +160,15 @@ class Cycle:
 
                 else:
                     for victim in self.steps[i]['victims']:
-                        if victim.lifetime > 0:
-                            victim.lifetime -= 1
+                        if victim.active:
+                            if victim.lifetime > 0:
+                                victim.lifetime -= 1
 
                     for photo in self.steps[i]['photos']:
                         for victim in photo.victims:
-                            if victim.lifetime > 0:
-                                victim.lifetime -= 1
+                            if victim.active:
+                                if victim.lifetime > 0:
+                                    victim.lifetime -= 1
 
     def get_social_assets(self, tokens):
         result = []
