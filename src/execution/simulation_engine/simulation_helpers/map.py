@@ -117,28 +117,65 @@ class Map:
             if len(nodes) < 3:
                 return True, [self.get_node_coord(node) for node in nodes], self.node_distance(start_node, end_node)
 
-            max_dist = (self.proximity * speed) * 0.5
-            max_dist_flood = (self.proximity * (speed * (1 - speed_reduction/100))) * 0.5
-            pivot = self.get_node_coord(nodes[0])
-            checked_nodes = [self.get_node_coord(nodes[0])]
-
-            for node in nodes[1:-1]:
-                node_cord = self.get_node_coord(node)
+            route_nodes = []
+            normal_nodes = []
+            dirty_nodes = []
+            flood_area = False
+            for node in nodes:
                 if node in list_of_nodes:
-                    if self.check_node_proximity(pivot, node_cord, max_dist_flood):
-                        checked_nodes.append(node_cord)
-                        pivot = node_cord
+                    if not flood_area:
+                        dirty_nodes = []
+                        route_nodes.append((normal_nodes, False))
+                        flood_area = True
+
+                    dirty_nodes.append(node)
 
                 else:
-                    if self.check_node_proximity(pivot, node_cord, max_dist):
-                        checked_nodes.append(node_cord)
-                        pivot = node_cord
+                    if flood_area:
+                        normal_nodes = []
+                        route_nodes.append((dirty_nodes, True))
+                        flood_area = False
 
-            checked_nodes.append(self.get_node_coord(nodes[-1]))
-            return True, checked_nodes, self.node_distance(start_node, end_node)
+                    normal_nodes.append(node)
+            if flood_area:
+                route_nodes.append((dirty_nodes, True))
+            else:
+                route_nodes.append((normal_nodes, False))
 
-    def check_node_proximity(self, p1, p2, radius):
-        return self.euclidean_distance(p1, p2) > radius
+            complete_route = []
+            max_dist = .0005 * speed
+
+            for nodes_type in route_nodes:
+                node_list = nodes_type[0]
+                if nodes_type[1]:
+                    if len(node_list) < 2:
+                        complete_route.extend([self.get_node_coord(node) for node in node_list])
+                    else:
+                        start = self.get_node_coord(node_list[0])
+                        end = self.get_node_coord(node_list[-1])
+                        _, route, _ = self.generate_coordinates_for_air_movement(start, end,
+                                                                                 speed * (1 - speed_reduction / 100))
+                        complete_route.extend(route)
+                else:
+                    if len(node_list) < 3:
+                        complete_route.extend([self.get_node_coord(node) for node in node_list])
+                        continue
+
+                    complete_route.append(self.get_node_coord(node_list[0]))
+                    pivot = self.get_node_coord(node_list[0])
+
+                    for node in node_list[1:-1]:
+                        node_coord = self.get_node_coord(node)
+                        if self.check_node_proximity(pivot, node_coord, max_dist):
+                            pivot = node_coord
+                            complete_route.append(node_coord)
+
+                    complete_route.append(self.get_node_coord(node_list[-1]))
+
+            return True, complete_route, self.node_distance(start_node, end_node)
+
+    def check_node_proximity(self, p1, p2, max_dist):
+        return self.euclidean_distance(p1, p2) > max_dist
 
     def nodes_in_radius(self, coord, radius):
         """Get all the nodes in a circle around the coordinate given.
