@@ -48,7 +48,7 @@ def percepts(msg):
 def finish(msg):
     global process_finished
 
-    path = f'{root}{reports_folder}/{exp_name}_{str(current_prob)}.csv'
+    path = f'{root}{reports_folder}/PACKAGE_SIZE%API%{str(current_prob)}.csv'
 
     with open(path, 'w+') as report:
         for e in agent_package_sizes:

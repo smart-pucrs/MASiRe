@@ -55,7 +55,7 @@ def get_total_size(data):
 
 
 def save_results(prob):
-    path = f'{root}{reports_folder}/{exp_name}%{str(prob)}.csv'
+    path = f'{root}{reports_folder}/PACKAGE_SIZE%SIMULATOR%{str(prob)}.csv'
 
     with open(path, 'w+') as report:
         for e in results:

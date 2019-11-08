@@ -20,10 +20,6 @@ sshpass -p $PASSWORD ssh -tt $SERVER << EOF
     mkdir $DIR_SERVER_SCRIPTS/reports
 
     echo "[MAIN_SCRIPT] ## Run scripts"
-    python3 $DIR_SERVER_SCRIPTS/process_time_pass.py $args_time
-    python3 $DIR_SERVER_SCRIPTS/process_time_search.py $args_time
-    python3 $DIR_SERVER_SCRIPTS/package_size_api.py $args_package_size
-    python3 $DIR_SERVER_SCRIPTS/package_size_simulator.py $args_package_size
     python3 $DIR_SERVER_SCRIPTS/memory_cpu_complexity.py $args_complexity
     python3 $DIR_SERVER_SCRIPTS/memory_cpu_steps_amount.py $args_steps_amount
     python3 $DIR_SERVER_SCRIPTS/memory_cpu_maps.py

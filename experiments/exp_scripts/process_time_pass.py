@@ -43,7 +43,7 @@ def get_current_time():
 
 
 def save_results(agents_amount, prob):
-    path = f'{root}{reports_folder}/{exp_name}_{str(agents_amount)}_{str(prob)}.csv'
+    path = f'{root}{reports_folder}/PROCESS_TIME%PASS%{str(agents_amount)}_{str(prob)}.csv'
 
     with open(path, 'w+') as report:
         for e in results:

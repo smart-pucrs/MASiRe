@@ -53,7 +53,7 @@ def start_processes(experiment):
     process_finished = False
 
     report_proc = subprocess.Popen(
-        ['Desktop/DisasterSimulator/experiments/temp/util/report.sh', exp_name, str(experiment)])
+        ['Desktop/DisasterSimulator/experiments/temp/util/report.sh', 'STEPS', str(experiment)])
     null = open(os.devnull, 'w')
 
     log(f'{exp_name}_{experiment}', 'Start simulator process.')
