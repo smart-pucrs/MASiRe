@@ -1609,11 +1609,10 @@ class Cycle:
                 else:
                     self.agents_manager.edit(token, 'route', route)
                     self.agents_manager.edit(token, 'destination_distance', distance)
-
-            if self.agents_manager.get(token).destination_distance:
+            else:
                 self.agents_manager.update_location(token)
                 distance = self.map.node_distance(self.map.get_closest_node(*agent.location),
-                                                  self.map.get_closest_node(*destination))
+                                                    self.map.get_closest_node(*destination))
                 self.agents_manager.edit(token, 'destination_distance', distance)
 
                 self.agents_manager.discharge(token)
