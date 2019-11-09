@@ -383,8 +383,8 @@ class Checker:
         if flood['minPeriod'] > flood['maxPeriod']:
             return 0, 'Generate: MinPeriod from Flood can not be bigger than MaxPeriod from Flood.'
 
-        if flood['minPeriod'] <= 0:
-            return 0, 'Generate: MinPeriod from Flood can not be zero or negative.'
+        if flood['minPeriod'] < 0:
+            return 0, 'Generate: MinPeriod from Flood can not be negative.'
 
         if not isinstance(flood['circle'], dict):
             return 0, 'Generate: Circle from Flood is not a valid type.'

@@ -140,7 +140,7 @@ class Cycle:
             if self.steps[i]['flood'] is None:
                 continue
 
-            if self.steps[i]['flood'].active:
+            if self.steps[i]['flood'].active and not self.steps[i]['flood'].keeped:
                 self.steps[i]['flood'].period -= 1
 
                 if self.steps[i]['flood'].period == 0:
@@ -169,6 +169,33 @@ class Cycle:
                             if victim.active:
                                 if victim.lifetime > 0:
                                     victim.lifetime -= 1
+
+            elif self.steps[i]['flood'].active and self.steps[i]['flood'].keeped:
+                finished = True
+                for victim in self.steps[i]['victims']:
+                    if victim.active:
+                        finished = False
+                        if victim.lifetime > 0:
+                            victim.lifetime -= 1
+
+
+                for photo in self.steps[i]['photos']:
+                    if photo.active:
+                        finished = False
+
+                    for victim in photo.victims:
+                        if victim.active:
+                            finished = False
+                            if victim.lifetime > 0:
+                                victim.lifetime -= 1
+                
+                for water_sample in self.steps[i]['water_samples']:
+                    if water_sample.active:
+                        finished = False
+                        break
+
+                if finished:
+                    self.steps[i]['flood'].active = False
 
     def get_social_assets(self, tokens):
         result = []

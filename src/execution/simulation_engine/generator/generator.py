@@ -103,12 +103,18 @@ class Generator:
             else:
                 list_of_nodes: list = self.map.nodes_in_radius(dimensions['location'], dimensions['length'])
 
-        period: int = random.randint(self.generate_variables['flood']['minPeriod'],
-                                     self.generate_variables['flood']['maxPeriod'])
+        if self.generate_variables['flood']['minPeriod']:
+            period: int = random.randint(self.generate_variables['flood']['minPeriod'],
+                                        self.generate_variables['flood']['maxPeriod'])
+
+            keeped = False
+        else:
+            period = 0
+            keeped = True
 
         self.flood_id = self.flood_id + 1
 
-        return Flood(self.flood_id, period, dimensions, list_of_nodes)
+        return Flood(self.flood_id, period, keeped, dimensions, list_of_nodes)
 
     def generate_photos(self, nodes: list) -> list:
         """Generate a list of photo events inside the flood location.
