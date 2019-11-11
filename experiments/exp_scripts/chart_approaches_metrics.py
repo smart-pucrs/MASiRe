@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
-path_approach_1 = '/experiments/reports/approach1.txt'
-path_approach_2 = '/experiments/reports/approach2.txt'
+path_approach_1 = '/experiments/reports/approach_simple.txt'
+path_approach_2 = '/experiments/reports/approach_coalition.txt'
 
 def get_approach_metrics(path):
     # print('path: ',path)

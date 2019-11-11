@@ -1,0 +1,168 @@
+{
+  "map": {
+    "id": "2018-SampleSimulation",
+    "steps": 500,
+    "maps": [{
+      "osm": "files/brumadinho.osm",
+      "minLat": -20.1726,
+      "minLon": -44.2104,
+      "maxLat": -20.1136,
+      "maxLon": -44.1102,
+      "centerLon": -44.1603,
+      "centerLat": -20.1431
+    }],
+    "proximity": 1,
+    "randomSeed": 2019,
+    "speedReduction": 50
+  },
+  "socialAssets": {
+    "volunteer": {
+      "abilities": ["groundMovement", "carry", "physicalCapacity"],
+      "resources": ["strength"],
+      "minSize": 80,
+      "maxSize": 100,
+      "speed": 11,
+      "physicalCapacity": 600,
+      "virtualCapacity": 0
+    }
+  },
+  "agents": {
+    "drone": {
+      "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
+      "resources": ["battery", "memory"],
+      "size": 30,
+      "amount": 7,
+      "speed": 10,
+      "physicalCapacity": 500,
+      "virtualCapacity": 4096,
+      "battery": 50
+    },
+    "car": {
+      "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
+      "resources": ["battery", "strength"],
+      "size": 1200,
+      "amount": 23,
+      "speed": 10,
+      "physicalCapacity": 450,
+      "virtualCapacity": 0,
+      "battery": 150
+    },
+    "boat": {
+      "abilities": ["waterMovement"],
+      "resources": [],
+      "size": 600,
+      "amount": 1,
+      "speed": 10,
+      "physicalCapacity": 450,
+      "virtualCapacity": 0,
+      "battery": 150
+    }
+  },
+  "actions": {
+    "pass": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "move": {
+      "abilities": [["airMovement"], ["groundMovement"], ["waterMovement"]],
+      "resources": [[]]
+    },
+    "charge": {
+      "abilities": [["charge"]],
+      "resources": [["battery"]]
+    },
+    "rescueVictim": {
+      "abilities": [["carry","physicalCapacity"]],
+      "resources": [["strength"]]
+    },
+    "collectWater": {
+      "abilities": [["carry","physicalCapacity"]],
+      "resources": [[]]
+    },
+    "takePhoto": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "analyzePhoto": {
+      "abilities": [["virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "searchSocialAsset": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "requestSocialAsset": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverPhysical": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "receivePhysical": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "deliverVirtual": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "receiveVirtual": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "carry": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "getCarried": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverAgent": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverRequest": {
+      "abilities": [[]],
+      "resources": [[]]
+    }
+  },
+  "generate": {
+    "flood": {
+      "probability": 2,
+      "minPeriod": 0,
+      "maxPeriod": 0,
+      "circle": {
+        "minRadius": 1.0,
+        "maxRadius": 2.0
+      }
+    },
+    "photo": {
+      "minSize": 256,
+      "maxSize": 512,
+      "minAmount": 4,
+      "maxAmount": 10,
+      "victimProbability": 80
+    },
+    "victim": {
+      "minSize": 18,
+      "maxSize": 22,
+      "minAmount": 1,
+      "maxAmount": 3,
+      "minLifetime": 30,
+      "maxLifetime": 803
+    },
+    "waterSample": {
+      "minSize": 15,
+      "maxSize": 20,
+      "minAmount": 4,
+      "maxAmount": 8
+    },
+    "socialAsset": {
+      "minAmount": 0,
+      "maxAmount": 2,
+      "professions": ["volunteer"]
+    }
+  }
+}
