@@ -157,6 +157,7 @@ class Simulation:
         active_assets = self.cycler.get_active_assets_info()
 
         floods_amount = 0
+        victims_in_events = 0
         victims_in_photo = 0
         victims_saved = 0
         victims_dead_ignored = 0
@@ -166,14 +167,16 @@ class Simulation:
         photos_ignored = 0
         water_samples_collected = 0
         water_samples_ignored = 0
-
+        a = 0
         for i in range(current_step):
             if not self.cycler.steps[i]['flood']:
                 continue
 
             floods_amount += 1
+            victims_in_events += len(self.cycler.steps[i]['victims'])
 
             for victim in self.cycler.steps[i]['victims']:
+                a += 1
                 if not victim.active and victim.lifetime > 0:
                     victims_saved += 1
 
@@ -193,6 +196,7 @@ class Simulation:
                     photos_analyzed += 1
 
                     for victim in photo.victims:
+                        a += 1
                         if not victim.active and victim.lifetime > 0:
                             victims_saved += 1
 
@@ -205,6 +209,7 @@ class Simulation:
                         victims_in_photo += 1
 
                 else:
+                    a += len(photo.victims)
                     photos_ignored += 1
 
             for water_sample in self.cycler.steps[i]['water_samples']:
@@ -213,7 +218,7 @@ class Simulation:
 
                 else:
                     water_samples_ignored += 1
-
+                    
         return {
             'environment': {
                 'current_step': current_step,
@@ -221,8 +226,8 @@ class Simulation:
                 'delivered_items': delivered_items,
                 'floods_amount': floods_amount,
                 'total_victims': self.cycler.max_victims,
-                'victims_in_events': self.cycler.victims_in_events,
-                'victims_in_photos': self.cycler.victims_in_photos,
+                'victims_in_events': victims_in_events,
+                'victims_in_photos': victims_in_photo,
                 'victims_rescued_alive': victims_saved,
                 'victims_rescued_dead': victims_dead_delivered,
                 'victims_ignored': victims_dead_ignored,

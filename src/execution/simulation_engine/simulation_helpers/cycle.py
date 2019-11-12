@@ -19,11 +19,9 @@ class Cycle:
         self.map_percepts = config['map']
         self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
-        self.max_victims = generator.victim_in_event_id + generator.photo_victim_id
+        self.max_victims = generator.victim_id
         self.max_photos = generator.photo_id
         self.max_water_samples = generator.water_sample_id
-        self.victims_in_events = generator.victim_in_event_id
-        self.victims_in_photos = generator.photo_victim_id
         self.delivered_items = []
         self.current_step = 0
         self.match_history = []

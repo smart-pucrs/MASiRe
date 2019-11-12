@@ -16,7 +16,7 @@ class Generator:
         self.generate_variables: dict = config['generate']
         self.map = map
         self.flood_id: int = 0
-        self.victim_in_event_id: int = 0
+        self.victim_id: int = 0
         self.photo_victim_id: int = 0
         self.photo_id: int = 0
         self.water_sample_id: int = 0
@@ -164,8 +164,8 @@ class Generator:
             victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
             victim_location: tuple = self.map.get_node_coord(random.choice(nodes))
 
-            victims[i] = Victim(self.flood_id, self.victim_in_event_id, victim_size, victim_lifetime, victim_location, False)
-            self.victim_in_event_id = self.victim_in_event_id + 1
+            victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, victim_location, False)
+            self.victim_id = self.victim_id + 1
             i += 1
 
         return victims
@@ -191,8 +191,8 @@ class Generator:
             victim_size: int = random.randint(victim_min_size, victim_max_size)
             victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
 
-            victims[i] = Victim(self.flood_id, self.photo_victim_id, victim_size, victim_lifetime, location, True)
-            self.photo_victim_id = self.photo_victim_id + 1
+            victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, location, True)
+            self.victim_id = self.victim_id + 1
             i += 1
 
         return victims
