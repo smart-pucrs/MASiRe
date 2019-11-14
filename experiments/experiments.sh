@@ -1,15 +1,16 @@
 #! /bin/bash
 
 echo "[MAIN_SCRIPT] ## Start main script"
-SERVER="smart@192.168.1.110"
+SERVER="smart@10.32.160.100"
+URL="10.32.160.100"
 DIR_SERVER_SCRIPTS="Desktop/DisasterSimulator/experiments/temp"
 PASSWORD="Samsung2013"
 
-args_complexity="10 50 100"
-args_agents="10 20"
-args_steps_amount="50 100 150"
-args_package_size="10 100"
-args_time="10 100 10 50"
+args_complexity="5 10"
+args_agents="5 10"
+args_steps_amount="5 10"
+args_package_size="5 10"
+args_time_agent_complexity="5 10 5 10"
 
 echo "[MAIN_SCRIPT] ## Copy all script to server"
 sshpass -p $PASSWORD scp -r exp_scripts $SERVER:$DIR_SERVER_SCRIPTS
@@ -18,16 +19,19 @@ sshpass -p $PASSWORD ssh -tt $SERVER << EOF
 
     echo "[MAIN_SCRIPT] ## Create report folder"
     mkdir $DIR_SERVER_SCRIPTS/reports
-
     echo "[MAIN_SCRIPT] ## Run scripts"
-    python3 $DIR_SERVER_SCRIPTS/memory_cpu_complexity.py $args_complexity
-    python3 $DIR_SERVER_SCRIPTS/memory_cpu_steps_amount.py $args_steps_amount
-    python3 $DIR_SERVER_SCRIPTS/memory_cpu_maps.py
+    python3 $DIR_SERVER_SCRIPTS/memory_cpu_complexity.py $URL $args_complexity
+    python3 $DIR_SERVER_SCRIPTS/memory_cpu_steps_amount.py $URL $args_steps_amount
+    python3 $DIR_SERVER_SCRIPTS/memory_cpu_maps.py $URL 
+    python3 $DIR_SERVER_SCRIPTS/package_size_api.py $URL $args_package_size
+    python3 $DIR_SERVER_SCRIPTS/package_size_simulator.py $URL $args_package_size
+    python3 $DIR_SERVER_SCRIPTS/process_time_pass.py $URL $args_time_agent_complexity
+    python3 $DIR_SERVER_SCRIPTS/process_time_search.py $URL $args_time_agent_complexity
     exit
 EOF
-python3 exp_scripts/memory_cpu_local_agents.py $args_agents &
+python3 exp_scripts/memory_cpu_local_agents.py $URL $args_agents &
 sshpass -p $PASSWORD ssh -tt $SERVER << EOF
-    python3 $DIR_SERVER_SCRIPTS/memory_cpu_server_agents.py $args_agents
+    python3 $DIR_SERVER_SCRIPTS/memory_cpu_server_agents.py $URL $args_agents
     exit
 EOF
 

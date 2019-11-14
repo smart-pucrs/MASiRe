@@ -17,7 +17,7 @@ reports_folder = '/experiments/temp/reports'
 sim_path = root + '/src/execution/simulation.py'
 exp_name = 'PROCESS_TIME_SEARCH'
 
-base_url = '192.168.1.110'
+base_url = sys.argv[1]
 sim_port = 8910
 api_port = 12345
 secret = 'temp'
@@ -90,7 +90,7 @@ def start_processes(agents_amount, prob):
 
     sim_null = open(os.devnull, 'w')
     log(f'{exp_name}_{agents_amount}_{prob}', 'Start simulator process.')
-    sim_proc = subprocess.Popen(sim_command, stdout=sim_null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=sim_null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{agents_amount}_{prob}', 'Waiting for the simulation start...')
 

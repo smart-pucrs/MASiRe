@@ -1,0 +1,205 @@
+{
+  "map": {
+    "id": "2018-SampleSimulation",
+    "steps": 100,
+    "maps": [{
+      "osm": "files/brumadinho.osm",
+      "minLat": -20.1726,
+      "minLon": -44.2104,
+      "maxLat": -20.1136,
+      "maxLon": -44.1102,
+      "centerLon": -44.1603,
+      "centerLat": -20.1431
+    }],
+    "proximity": 1,
+    "randomSeed": 2018,
+    "speedReduction": 50
+  },
+  "socialAssets": {
+    "doctor": {
+      "abilities": ["move", "carry", "physicalCapacity"],
+      "resources": ["strength"],
+      "minSize": 80,
+      "maxSize": 100,
+      "speed": 11,
+      "physicalCapacity": 600,
+      "virtualCapacity": 0
+    },
+    "teacher": {
+      "abilities": ["move"],
+      "resources": [],
+      "minSize": 66,
+      "maxSize": 70,
+      "speed": 10,
+      "physicalCapacity": 550,
+      "virtualCapacity": 0
+    },
+    "nurse": {
+      "abilities": ["move", "carry", "physicalCapacity"],
+      "resources": ["strength"],
+      "minSize": 70,
+      "maxSize": 86,
+      "speed": 15,
+      "physicalCapacity": 800,
+      "virtualCapacity": 0
+    },
+    "pharmacist": {
+      "abilities": ["move", "carry", "physicalCapacity"],
+      "resources": ["strength"],
+      "minSize": 60,
+      "maxSize": 86,
+      "speed": 14,
+      "physicalCapacity": 500,
+      "virtualCapacity": 0
+    },
+    "photographer": {
+      "abilities": ["move", "virtualCapacity"],
+      "resources": ["memory"],
+      "minSize": 65,
+      "maxSize": 73,
+      "speed": 20,
+      "physicalCapacity": 500,
+      "virtualCapacity": 4096
+    }
+  },
+  "agents": {
+    "drone": {
+      "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
+      "resources": ["battery", "strength", "memory"],
+      "size": 30,
+      "amount": 1,
+      "speed": 10,
+      "physicalCapacity": 500,
+      "virtualCapacity": 4096,
+      "battery": 50
+    },
+    "car": {
+      "abilities": ["move", "charge", "carry", "physicalCapacity"],
+      "resources": ["battery", "strength"],
+      "size": 1200,
+      "amount": 0,
+      "speed": 7,
+      "physicalCapacity": 450,
+      "virtualCapacity": 0,
+      "battery": 150
+    },
+    "boat": {
+      "abilities": ["move", "charge", "carry", "virtualCapacity", "physicalCapacity"],
+      "resources": ["battery", "strength", "memory"],
+      "size": 8000,
+      "amount": 0,
+      "speed": 7,
+      "physicalCapacity": 1000,
+      "virtualCapacity": 128,
+      "battery": 200
+    }
+  },
+  "actions": {
+    "pass": {
+      "abilities": [],
+      "resources": []
+    },
+    "move": {
+      "abilities": ["move"],
+      "resources": []
+    },
+    "charge": {
+      "abilities": ["charge"],
+      "resources": ["battery"]
+    },
+    "rescueVictim": {
+      "abilities": ["carry"],
+      "resources": ["strength"]
+    },
+    "collectWater": {
+      "abilities": ["carry"],
+      "resources": []
+    },
+    "takePhoto": {
+      "abilities": ["carry", "virtualCapacity"],
+      "resources": ["memory"]
+    },
+    "analyzePhoto": {
+      "abilities": ["virtualCapacity"],
+      "resources": ["memory"]
+    },
+    "searchSocialAsset": {
+      "abilities": [],
+      "resources": []
+    },
+    "requestSocialAsset": {
+      "abilities": [],
+      "resources": []
+    }
+    ,
+    "deliverPhysical": {
+      "abilities": ["carry", "physicalCapacity"],
+      "resources": []
+    },
+    "receivePhysical": {
+      "abilities": ["carry", "physicalCapacity"],
+      "resources": []
+    },
+    "deliverVirtual": {
+      "abilities": ["carry", "virtualCapacity"],
+      "resources": ["memory"]
+    },
+    "receiveVirtual": {
+      "abilities": ["carry", "virtualCapacity"],
+      "resources": ["memory"]
+    },
+    "carry": {
+      "abilities": ["carry", "physicalCapacity"],
+      "resources": []
+    },
+    "getCarried": {
+      "abilities": [],
+      "resources": []
+    },
+    "deliverAgent": {
+      "abilities": [],
+      "resources": []
+    },
+    "deliverRequest": {
+      "abilities": [],
+      "resources": []
+    }
+  },
+  "generate": {
+    "flood": {
+      "probability": 100,
+      "minPeriod": 0,
+      "maxPeriod": 0,
+      "circle": {
+        "minRadius": 1.0,
+        "maxRadius": 1.0
+      }
+    },
+    "photo": {
+      "minSize": 256,
+      "maxSize": 512,
+      "minAmount": 0,
+      "maxAmount": 0,
+      "victimProbability": 0
+    },
+    "victim": {
+      "minSize": 18,
+      "maxSize": 22,
+      "minAmount": 0,
+      "maxAmount": 0,
+      "minLifetime": 20,
+      "maxLifetime": 30
+    },
+    "waterSample": {
+      "minSize": 15,
+      "maxSize": 20,
+      "minAmount": 1,
+      "maxAmount": 1
+    },
+    "socialAsset": {
+      "minAmount": 1,
+      "maxAmount": 1,
+      "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
+    }
+  }
+}

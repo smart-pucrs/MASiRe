@@ -8,6 +8,7 @@ import socketio
 import requests
 import json
 import sys
+import psutil
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
 temp_config = '/experiments/temp/util/temp-config.json'
@@ -15,7 +16,7 @@ default_config = '/experiments/temp/util/default-config.json'
 reports_folder = '/experiments/temp/reports'
 start_system_path = root + '/start_system.py'
 
-base_url = '192.168.1.110'
+base_url = sys.argv[1]
 api_port = 12345
 sim_port = 8910
 secret = 'temp'
@@ -30,7 +31,7 @@ agent_token = None
 agent_package_sizes = []
 
 process_finished = False
-experiments = [int(n) for n in sys.argv[1:]]
+experiments = [int(n) for n in sys.argv[2:]]
 current_prob = None
 
 
@@ -101,7 +102,7 @@ def start_processes(experiment):
     null = open(os.devnull, 'w')
     log(f'{exp_name}_{experiment}', 'Start simulator process.')
 
-    sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 

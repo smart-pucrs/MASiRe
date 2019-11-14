@@ -16,7 +16,7 @@ sim_path = root + '/src/execution/simulation.py'
 api_path = root + '/experiments/temp/util/fake_api.py'
 reports_folder = '/experiments/temp/reports'
 
-base_url = '192.168.1.110'
+base_url = sys.argv[1]
 sim_port = 8910
 api_port = 12345
 secret = 'temp'
@@ -28,7 +28,7 @@ api_command = ['python3', api_path, base_url, str(api_port), secret]
 socket = socketio.Client()
 sim_started = False
 actions = [{'token': secret, 'action': 'pass', 'parameters': []}]
-complexity_experiments = [int(n) for n in sys.argv[1:]]
+complexity_experiments = [int(n) for n in sys.argv[2:]]
 results = []
 default_steps = 0
 exp_name = 'PACKAGE_SIZE_SIMULATOR'
@@ -102,7 +102,7 @@ def start_processes(prob):
 
     sim_null = open(os.devnull, 'w')
     log(f'{exp_name}_{prob}', 'Start simulator process.')
-    sim_proc = subprocess.Popen(sim_command, stdout=sim_null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=sim_null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{prob}', 'Waiting for the simulation start...')
 

@@ -12,7 +12,8 @@
       "centerLat": -20.1431
     }],
     "proximity": 1,
-    "randomSeed": 2018
+    "randomSeed": 2018,
+    "speedReduction": 50
   },
   "socialAssets": {
     "doctor": {

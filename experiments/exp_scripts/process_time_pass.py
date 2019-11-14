@@ -16,7 +16,7 @@ reports_folder = '/experiments/temp/reports'
 api_path = root + '/experiments/temp/util/fake_api.py'
 sim_path = root + '/src/execution/simulation.py'
 
-base_url = '192.168.1.110'
+base_url = sys.argv[1]
 sim_port = 8910
 api_port = 12345
 secret = 'temp'
@@ -31,8 +31,10 @@ sim_started = False
 actions = []
 
 args = [int(n) for n in sys.argv[1:]]
-complexity_experiments = args[:int(len(args)/2)]
-agents_experiments = args[int(len(args)/2):]
+complexity_experiments = args[2:int((len(args)+1)/2)]
+agents_experiments = args[int((len(args)+1)/2):]
+
+print(complexity_experiments, '   ', agents_experiments)
 
 results = []
 default_steps = 0
@@ -90,7 +92,7 @@ def start_processes(agents_amount, prob):
 
     sim_null = open(os.devnull, 'w')
     log(f'{exp_name}_{agents_amount}_{prob}', 'Start simulator process.')
-    sim_proc = subprocess.Popen(sim_command, stdout=sim_null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=sim_null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{agents_amount}_{prob}', 'Waiting for the simulation start...')
 

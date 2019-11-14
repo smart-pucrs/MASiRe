@@ -8,6 +8,7 @@ import socketio
 import requests
 import json
 import psutil
+import sys
 
 root = str(pathlib.Path(__file__).resolve().parents[2])
 temp_config = '/experiments/temp/util/temp-config.json'
@@ -15,7 +16,7 @@ default_config = '/experiments/temp/util/default-config.json'
 start_system_path = root + '/start_system.py'
 exp_name = 'MEMORY_CPU_MAPS'
 
-base_url = '192.168.1.110'
+base_url = sys.argv[1]
 api_port = 12345
 connect_agent_url = f'http://{base_url}:{api_port}/connect_agent'
 sim_command = ['python3', start_system_path,
@@ -67,7 +68,7 @@ def start_processes(experiment):
     log(f'{exp_name}_{experiment}', 'Start simulator process.')
 
     null = open(os.devnull, 'w')
-    sim_proc = subprocess.Popen(sim_command, stdout=null, stderr=subprocess.STDOUT)
+    sim_proc = subprocess.Popen(sim_command)#, stdout=null, stderr=subprocess.STDOUT)
 
     log(f'{exp_name}_{experiment}', 'Waiting for the simulation start...')
 

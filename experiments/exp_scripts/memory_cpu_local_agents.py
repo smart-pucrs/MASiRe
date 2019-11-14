@@ -5,16 +5,16 @@ import time
 import sys
 import os
 
-server_url = 'http://192.168.1.110:12345'
+url = sys.argv[1]
+server_url = f'http://{url}:12345'
 register_event = 'register_agent'
 connect_agent_url = f'{server_url}/connect_agent'
 finished_process = False
-agents_amounts = [int(n) for n in sys.argv[1:]]
+agents_amounts = [int(n) for n in sys.argv[2:]]
 agent_name = 'fake_agent'
 agents = {}
 
 socket = socketio.Client()
-
 
 @socket.on('percepts')
 def finish_experiment(msg):
