@@ -178,7 +178,6 @@ class Cycle:
                         if victim.lifetime > 0:
                             victim.lifetime -= 1
 
-
                 for photo in self.steps[i]['photos']:
                     if photo.active:
                         finished = False

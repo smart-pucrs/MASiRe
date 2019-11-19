@@ -311,7 +311,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['flood', 'photo', 'victim', 'waterSample', 'socialAsset']
+        keys = ['flood', 'photo', 'victim', 'waterSample', 'socialAsset', 'step_unit']
 
         generate = json.load(open(self.config, 'r'))['generate']
 

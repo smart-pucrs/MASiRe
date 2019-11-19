@@ -104,8 +104,8 @@ class Generator:
                 list_of_nodes: list = self.map.nodes_in_radius(dimensions['location'], dimensions['length'])
 
         if self.generate_variables['flood']['minPeriod']:
-            period: int = random.randint(self.generate_variables['flood']['minPeriod'],
-                                        self.generate_variables['flood']['maxPeriod'])
+            period: int = int((random.randint(self.generate_variables['flood']['minPeriod'],
+                                        self.generate_variables['flood']['maxPeriod']) / self.generate_variables['step_unit']))
 
             keeped = False
         else:
@@ -161,7 +161,9 @@ class Generator:
         i: int = 0
         while i < amount:
             victim_size: int = random.randint(victim_min_size, victim_max_size)
-            victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
+            victim_lifetime: int = int(random.randint(victim_min_lifetime, victim_max_lifetime)
+                                       / self.generate_variables['step_unit'])
+
             victim_location: tuple = self.map.get_node_coord(random.choice(nodes))
 
             victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, victim_location, False)
@@ -189,7 +191,8 @@ class Generator:
         i: int = 0
         while i < amount:
             victim_size: int = random.randint(victim_min_size, victim_max_size)
-            victim_lifetime: int = random.randint(victim_min_lifetime, victim_max_lifetime)
+            victim_lifetime: int = int(random.randint(victim_min_lifetime, victim_max_lifetime)
+                                       / self.generate_variables['step_unit'])
 
             victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, location, True)
             self.victim_id = self.victim_id + 1

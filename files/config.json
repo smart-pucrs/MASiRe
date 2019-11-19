@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 100,
+    "steps": 50,
     "maps": [{
       "osm": "files/brumadinho.osm",
       "minLat": -20.1726,
@@ -67,7 +67,7 @@
       "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 0,
+      "amount": 1,
       "speed": 10,
       "physicalCapacity": 500,
       "virtualCapacity": 4096,
@@ -77,7 +77,7 @@
       "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
       "resources": ["battery", "strength"],
       "size": 1200,
-      "amount": 5,
+      "amount": 1,
       "speed": 10,
       "physicalCapacity": 450,
       "virtualCapacity": 0,
@@ -87,7 +87,7 @@
       "abilities": ["waterMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 8000,
-      "amount": 0,
+      "amount": 1,
       "speed": 7,
       "physicalCapacity": 1000,
       "virtualCapacity": 128,
@@ -200,6 +200,7 @@
       "minAmount": 0,
       "maxAmount": 2,
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
-    }
+    },
+    "step_unit": 5
   }
 }
