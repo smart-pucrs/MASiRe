@@ -1,21 +1,35 @@
 #container {
     width: 100%;
     height: 100%;
+    display: grid;
+    grid-template-columns: repeat(10, 10%);
+    grid-template-rows: repeat(10, 10%);
+}
+
+#simulation-box {
+    background-color: rgba(100,120,180,.7);
+    border-style: double;
+    z-index: 100000;
+    grid-column: 1 / 3;
+    grid-row: 1 / 11;
 }
 
 #mapid {
-    position: absolute;
+    grid-column: 3 / 11;
+    grid-row: 1 / 11;
     width: 100%;
     height: 100%;
 }
 
-#simulation-box {
-    position: absolute;
-    width: 20%;
+#entitys-box {
+    width: 100%;
     height: 100%;
-    background-color: rgba(100,120,180,.7);
-    border-style: double;
-    z-index: 100000;
+    grid-column: 3 / 11;
+    grid-row: 8 / 11;
+    background-color: gray;
+    display: grid;
+    grid-template-columns: repeat(5, 20%);
+    grid-template-rows: repeat(1, 100%);
 }
 
 .title {
@@ -39,6 +53,7 @@
 #speed-controller {
     margin: 0;
     font-size: 90%;
+    text-align: center;
 }
 
 /* - BUTTONS - */
@@ -67,18 +82,34 @@
 
 #matchs {
     width: 100%;
-    padding-left: 5px; 
+    padding-left: 5px;
+    text-align: center; 
 }
 
 #log-box {
-    position: relative;
     width: 100%;
     height: 40%;
     text-align: center;
 }
 
-textarea {
+#log {
     font-size: 10px;
     width: 97%;
     height: 60%;
+}
+
+#entity-box {
+    grid-column: 8 / 11;
+    grid-row: 8 / 11;
+    margin: 5px 5px 5px;
+    background-color: rgb(180,180,150);
+    border-radius: 5px;
+    border-style: outset;
+    z-index: 1000000;
+    overflow: scroll;
+    font-size: 20px;
+}
+
+#entity-list-info {
+    list-style-type: none;
 }

@@ -7,6 +7,7 @@ var stepSpeed = 1000;
 var logId = '#log';
 var btnLogId = '#btn-log';
 var btnPauseId = '#btn-pause';
+var entityBoxId = '#entity-box';
 var playing = true;
 var iconLength = [28, 35];
 var iconAncor = [17, 18];
@@ -215,6 +216,7 @@ function process_simulation_data(data) {
 
     let events = data['environment']['events'];
     let old_locations = [];
+    let marker;
     for (let i=0; i < events.length; i++) {
         event_location = events[i]['location'];
 
@@ -222,37 +224,45 @@ function process_simulation_data(data) {
         old_locations.push(event_location);
         event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-        if (events[i]['type'] == 'flood') {
-            L.marker(event_location_formatted, { icon: floodIcon }).addTo(variablesMarkerGroup);
-            L.circle(event_location_formatted, {
-                color: '#504E0F',
-                fillColor: '#504E0F',
-                fillOpacity: 0.65,
-                radius: events[i]['radius'] * 1000
-            }).addTo(variablesMarkerGroup);
-
-        } else if (events[i]['type'] == 'victim') {
-            if (events[i]['lifetime'] == 0) {
-                L.marker(event_location_formatted, { icon: victimIcon3 }).addTo(variablesMarkerGroup);
-            }
-            else if (events[i]['lifetime'] < 5) {
-                L.marker(event_location_formatted, { icon: victimIcon2 }).addTo(variablesMarkerGroup);
-            } else if (events[i]['lifetime'] < 10) {
-                L.marker(event_location_formatted, { icon: victimIcon1 }).addTo(variablesMarkerGroup);
-            } else {
-                L.marker(event_location_formatted, { icon: victimIcon0 }).addTo(variablesMarkerGroup);
-            }
-        } else if (events[i]['type'] == 'photo') {
-            L.marker(event_location_formatted, { icon: photoIcon }).addTo(variablesMarkerGroup);
-        } else {
-            L.marker(event_location_formatted, { icon: waterSampleIcon }).addTo(variablesMarkerGroup);
+        marker = null;
+        switch (events[i]['type']) {
+            case 'flood':
+                marker = L.marker(event_location_formatted, { icon: floodIcon });
+                L.circle(event_location_formatted, {
+                    color: '#504E0F',
+                    fillColor: '#504E0F',
+                    fillOpacity: 0.65,
+                    radius: events[i]['radius'] * 1000
+                }).addTo(variablesMarkerGroup);
+                break;
+            case 'victim':
+                if (events[i]['lifetime'] == 0) {
+                    marker = L.marker(event_location_formatted, { icon: victimIcon3 });
+                }
+                else if (events[i]['lifetime'] < 5) {
+                    marker = L.marker(event_location_formatted, { icon: victimIcon2 });
+                } else if (events[i]['lifetime'] < 10) {
+                    marker = L.marker(event_location_formatted, { icon: victimIcon1 });
+                } else {
+                    marker = L.marker(event_location_formatted, { icon: victimIcon0 });
+                }
+                break;
+            case 'photo':
+                marker = L.marker(event_location_formatted, { icon: photoIcon });
+                break;
+            case 'water_sample':
+                marker = L.marker(event_location_formatted, { icon: waterSampleIcon });
+                break;
+            default:
+                continue;
         }
 
-
+        marker.on('click', onClickMarker);
+        marker.info = events[i];
+        marker.addTo(variablesMarkerGroup);
     }
 
     let actors = data['actors'];
-
     $('#active-agents').text(actors.length);
 
     for (let i=0; i < actors.length; i++) {
@@ -261,43 +271,73 @@ function process_simulation_data(data) {
         agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
         agent_location_formated = [agent_location['lat'], agent_location['lon']];
+
+        marker = null;
         if (type == 'agent'){
             switch(actors[i]['role']){
                 case 'drone':
-                    L.marker(agent_location_formated, { icon: agentDroneIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: agentDroneIcon });
                     break;
                 case 'car':
-                    L.marker(agent_location_formated, { icon: agentCarIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
                     break;
                 case 'boat':
-                    L.marker(agent_location_formated, { icon: agentBoatIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
                     break;
                 default:
                     logError('Role not found.');
+                    continue;
             }
         }else{
             switch(actors[i]['profession']){
                 case 'doctor':
-                    L.marker(agent_location_formated, { icon: doctorIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
                     break;
                 case 'nurse':
-                    L.marker(agent_location_formated, { icon: nurseIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
                     break;
                 case 'pharmacist':
-                    L.marker(agent_location_formated, { icon: pharmacistIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: pharmacistIcon });
                     break;
                 case 'teacher':
-                    L.marker(agent_location_formated, { icon: teacherIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
                     break;
                 case 'photographer':
-                    L.marker(agent_location_formated, { icon: photographerIcon }).addTo(variablesMarkerGroup);
+                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
                     break;
                 default:
                     logError('Profession not found.');
+                    continue;
             }
         }
 
+        marker.on('click', onClickMarker);  
+        marker.info = actors[i];
+        marker.addTo(variablesMarkerGroup);
+
         printRoute(actors[i]['route']);
+    }
+}
+
+function onClickMarker(e){
+    $("#entity-list-info").empty();
+
+    if ($(entityBoxId).is(':hidden')){
+        console.log("asdasd");
+        $(entityBoxId).show();
+    }
+
+    for (let key in this.info){
+        switch (key) {
+            case 'location':
+                let value = "[ " + this.info[key]['lat'] + ", " + this.info[key]['lon'] + " ]";
+                $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
+                break;
+            case 'route':
+                continue;
+            default:
+                $("#entity-list-info").append("<li><b>"+key+":</b> "+this.info[key]+"</li>");
+        }
     }
 }
 
@@ -419,6 +459,8 @@ function logError(message) {
 function logCritical(message) {
     log('CRITICAL', message);
 }
+
+$(entityBoxId).hide();
 
 window.onload = function () {
     this.init();
