@@ -6,8 +6,9 @@ import socketio
 import time
 import requests
 import os
-import signal
+import logging
 
+from werkzeug.serving import run_simple
 from flask import Flask, render_template, jsonify
 from socketio.exceptions import ConnectionError as SocketError
 from monitor_engine.controllers.monitor_manager import MonitorManager
@@ -241,6 +242,9 @@ def init_monitor():
 
 
 if __name__ == "__main__":
+    stacktrace = logging.getLogger('werkzeug')
+    stacktrace.disabled = True
+
     if replay_mode:
         try:
             load_simulation()
@@ -260,4 +264,4 @@ if __name__ == "__main__":
                 time.sleep(1)
 
     print(f'Graphic Interface: Serving on http://{base_url}:{monitor_port}')
-    app.run(host=base_url, port=int(monitor_port))
+    run_simple(application=app, hostname=base_url, port=int(monitor_port), use_debugger=False)
