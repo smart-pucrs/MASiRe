@@ -107,7 +107,7 @@
     border-style: outset;
     z-index: 1000000;
     overflow: scroll;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 #entity-list-info {

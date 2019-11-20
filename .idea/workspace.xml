@@ -3,18 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_complexity.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_complexity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_maps.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_maps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_server_agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_server_agents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_steps_amount.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/memory_cpu_steps_amount.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/package_size_simulator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_pass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/process_time_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp_scripts/util/report.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/exp_scripts/util/report.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/experiments.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/experiments.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/graphics.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/static/style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

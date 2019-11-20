@@ -11,7 +11,9 @@ var entityBoxId = '#entity-box';
 var playing = true;
 var iconLength = [28, 35];
 var iconAncor = [17, 18];
+var currentEntity = {'type': null, 'id': null, 'active': false};
 
+// Markers Icons
 var floodIcon = L.icon({
     iconUrl: '/static/images/flood.png',
     iconSize: iconLength,
@@ -108,6 +110,9 @@ var centralIcon = L.icon({
     iconAnchor: [20, 25]
 });
 
+/**
+ * Start the draw the current match.
+ */
 function startMatch(){
     $.getJSON($SCRIPT_ROOT + '/current_match', function (data) {
         if (data['status']) {
@@ -121,6 +126,9 @@ function startMatch(){
     });
 }
 
+/**
+ * Get next step from the Flask and refresh the graphic interface.
+ */
 function nextStep() {
     $.getJSON($SCRIPT_ROOT + '/next_step', function (data) {
         if (data['status']) {
@@ -131,6 +139,10 @@ function nextStep() {
     });
 }
 
+
+/**
+ * Get previous step from the Flask and refresh the graphic interface.
+ */
 function prevStep() {
     $.getJSON($SCRIPT_ROOT + '/prev_step', function (data) {
         if (data['status']) {
@@ -141,14 +153,20 @@ function prevStep() {
     });
 }
 
+/**
+ * Set the information of the match, the map and all events.
+ */
 function handle_new_match(data) {
-    console.log('Handle ' + data);
     setMatchInfo(data['match_info']);
     setMapConfig(data['map_info']);
     process_simulation_data(data['step_info']);
 
 }
 
+
+/**
+ * Get next match and refresh the graphic interface.
+ */
 function nextMatch() {
     logNormal('Button NextMatch clicked.');
     $.getJSON($SCRIPT_ROOT + '/next_match', function (data) {
@@ -160,6 +178,9 @@ function nextMatch() {
     });
 }
 
+/**
+ * Get previous match and refresh the graphic interface.
+ */
 function prevMatch() {
     logNormal('Button PrevMatch clicked.');
     $.getJSON($SCRIPT_ROOT + '/prev_match', function (data) {
@@ -169,10 +190,16 @@ function prevMatch() {
     });
 }
 
+/**
+ * Set information in match fields.
+ */
 function setMatchInfo(match_info) {
     $('#current-match').text((match_info['current_match'] + 1) + ' of ' + match_info['total_matchs']);
 }
 
+/**
+ * Set information in Map fields.
+ */
 function setMapConfig(config) {
     if (mymap != null) {
         mymap.remove();
@@ -201,16 +228,18 @@ function setMapConfig(config) {
     L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
         console.info(e);
     }).addTo(constantsMarkerGroup);
-    console.log(config);
 
     $('#current-map').text(config['osm']);
 }
 
+/**
+ * Handle the step data drawing all markers in map.
+ */
 function process_simulation_data(data) {
-    console.log(data);
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
+    currentEntity['active'] = false;
 
     $('#step').text(data['environment']['step'] + ' of ' + data['total_steps']);
 
@@ -257,7 +286,13 @@ function process_simulation_data(data) {
                 continue;
         }
 
-        marker.on('click', onClickMarker);
+        if (events[i]['type'] == currentEntity['type']){
+            if (events[i]['identifier'] == currentEntity['id']){
+                setCurrentEntity(events[i]);
+            }
+        }
+
+        marker.on('click', function (e) {setCurrentEntity(e.sourceTarget.info)});  
         marker.info = events[i];
         marker.addTo(variablesMarkerGroup);
     }
@@ -311,36 +346,69 @@ function process_simulation_data(data) {
             }
         }
 
-        marker.on('click', onClickMarker);  
+        if (actors[i]['type'] == currentEntity['type']){
+            if (actors[i]['token'] == currentEntity['id']){
+                setCurrentEntity(actors[i]);
+            }
+        }
+
+        marker.on('click', onClickMarkerHandler);  
         marker.info = actors[i];
         marker.addTo(variablesMarkerGroup);
 
         printRoute(actors[i]['route']);
+
+    }
+
+    if (!currentEntity['active']){
+        $(entityBoxId).hide();
     }
 }
 
-function onClickMarker(e){
+/**
+ * Handler for all 'onClick' event from markers.
+ */
+function onClickMarkerHandler(event){
+    if (event.sourceTarget.info != undefined){
+        setCurrentEntity(event.sourceTarget.info);
+    }
+}
+
+/**
+ * Set information in entity info fields.
+ */
+function setCurrentEntity(info){
     $("#entity-list-info").empty();
 
     if ($(entityBoxId).is(':hidden')){
-        console.log("asdasd");
         $(entityBoxId).show();
     }
 
-    for (let key in this.info){
+    for (let key in info){
         switch (key) {
             case 'location':
-                let value = "[ " + this.info[key]['lat'] + ", " + this.info[key]['lon'] + " ]";
+                let value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
                 $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
                 break;
             case 'route':
                 continue;
             default:
-                $("#entity-list-info").append("<li><b>"+key+":</b> "+this.info[key]+"</li>");
+                $("#entity-list-info").append("<li><b>"+key+":</b> "+info[key]+"</li>");
         }
+    }
+
+    currentEntity['type'] = info['type'];
+    currentEntity['active'] = true;
+    if (info['type'] == 'agent' || info['type'] == 'social_asset'){
+        currentEntity['id'] = info['token'];
+    }else{
+        currentEntity['id'] = info['identifier'];
     }
 }
 
+/**
+ * Check whether the entered location is within the array given.
+ */
 function containsLocation(locations, location){
     for (let i=0; i < locations.length; i++){
         if (locations[i]['lat'] == location['lat']){
@@ -351,6 +419,9 @@ function containsLocation(locations, location){
     return false;
 }
 
+/**
+ * Format the location incrementing the lat coordination by 1/10000.
+ */
 function format_location(event_location, old_locations){
     let new_location = event_location;
     let alfa = 0.0001;
@@ -362,12 +433,14 @@ function format_location(event_location, old_locations){
     return new_location;
 }
 
+/**
+ * Initialize the simulator info fields.
+ */
 function init() {
     logNormal('Initializing variables.');
 
     $.getJSON($SCRIPT_ROOT + '/init',
         function (data) {
-            console.log(data)
             if (data['status'] == 0) {
                 logCritical(data['message']);
 
@@ -379,6 +452,9 @@ function init() {
         });
 }
 
+/**
+ * Draw the route given with red circles.
+ */
 function printRoute(route){
     for (let i=0; i<route.length; i++){
         L.circle([route[i]['lat'], route[i]['lon']], {
@@ -389,6 +465,9 @@ function printRoute(route){
 
 }
 
+/**
+ * Set simulation info fields.
+ */
 function setSimulationInfo(sim_info) {
     $('#simulation-url').text(sim_info['simulation_url']);
     $('#api-url').text(sim_info['api_url']);
@@ -398,6 +477,9 @@ function setSimulationInfo(sim_info) {
     $('#social-asset-timeout').text(sim_info['social_asset_timeout']);
 }
 
+/**
+ * Pause the next step interval.
+ */
 function pause() {
     if (playing) {
         logNormal('Paused.');
@@ -414,6 +496,9 @@ function pause() {
     }
 }
 
+/**
+ * Hide or Show the log field.
+ */
 function setLog() {
     if ($(logId).is(':hidden')) {
         logNormal('Hiding Log.');
@@ -428,6 +513,9 @@ function setLog() {
     }
 }
 
+/**
+ * Event handler for radio box field.
+ */
 $(function () {
     $('#speed input[type=radio]').change(function(){
         stepSpeed = parseInt(this.value);
@@ -442,6 +530,9 @@ $(function () {
     })
 })
 
+/**
+ * Add log in text area.
+ */
 function log(tag, message) {
     var oldText = $(logId).val();
     var formattedText = oldText + '\n[ ' + tag + ' ] ## ' + message;
