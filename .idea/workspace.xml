@@ -3,7 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/monitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/monitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/copycat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/copycat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/social_assets_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/social_assets_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_marker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/static/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/static/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/static/style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -99,7 +99,7 @@
 }
 
 #entity-box {
-    grid-column: 8 / 11;
+    grid-column: 7 / 11;
     grid-row: 8 / 11;
     margin: 5px 5px 5px;
     background-color: rgb(180,180,150);

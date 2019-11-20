@@ -87,7 +87,6 @@ class JsonFormatter:
                 return response
         except Exception as e:
             response['message'] = f'An error occurred during connection: {str(e)}.'
-
             Logger.error(f'Unknown error: {str(e)}.')
 
             return response
@@ -628,7 +627,9 @@ class JsonFormatter:
             formatted_list.append({
                 'id': social_asset.identifier,
                 'profession': social_asset.profession,
-                'location': self.format_location(social_asset.location)
+                'location': self.format_location(social_asset.location),
+                'abilities': social_asset.abilities,
+                'resources': social_asset.resources
             })
 
         return formatted_list

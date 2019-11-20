@@ -58,7 +58,7 @@ class CopyCat:
         return copy.deepcopy(response)
 
     def finish_social_asset_connections(self, tokens):
-        response = self.simulation.get_social_assets_by_tokens(tokens)
+        response = self.simulation.finish_social_assets_connections(tokens)
 
         return copy.deepcopy(response)
 

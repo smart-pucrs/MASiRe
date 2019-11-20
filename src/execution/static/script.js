@@ -392,6 +392,18 @@ function setCurrentEntity(info){
                 break;
             case 'route':
                 continue;
+            case 'social_assets':
+                let assets = [];
+                let location, temp;
+                console.log(info[key]);
+                for (let i=0; i<info[key].length; i++){
+                    temp = info[key][i];
+                    delete temp['location'];
+                    assets.push(temp);
+                }
+
+                $("#entity-list-info").append("<li><b>"+key+":</b> "+JSON.stringify(assets)+"</li>");
+                break;
             default:
                 $("#entity-list-info").append("<li><b>"+key+":</b> "+info[key]+"</li>");
         }

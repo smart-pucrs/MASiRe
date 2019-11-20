@@ -14,8 +14,9 @@ class Cycle:
         self.max_steps = config['map']['steps']
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
-        self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'])
         generator = Generator(config, self.map)
+        self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
+                                                         generator.generate_social_assets())
         self.map_percepts = config['map']
         self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
@@ -29,6 +30,8 @@ class Cycle:
     def restart(self, config_file):
         self.map.restart(config_file['map']['maps'][0], config_file['map']['proximity'])
         generator = Generator(config_file, self.map)
+        self.social_assets_manager = SocialAssetsManager(config_file['map'], config_file['socialAssets'],
+                                                         generator.generate_social_assets())
         self.map_percepts = config_file['map']
         self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
@@ -40,7 +43,6 @@ class Cycle:
         self.max_steps = config_file['map']['steps']
         self.cdm_location = (config_file['map']['maps'][0]['centerLat'], config_file['map']['maps'][0]['centerLon'])
         self.agents_manager.restart(config_file['agents'], self.cdm_location)
-        self.social_assets_manager = SocialAssetsManager(config_file['map'], config_file['socialAssets'])
 
     def connect_agent(self, token):
         return self.agents_manager.connect(token)
@@ -48,12 +50,10 @@ class Cycle:
     def connect_social_asset(self, main_token, token):
         social_asset_id = self.social_assets_manager.requests[main_token]
         social_asset = None
-        for event in self.steps[0:self.current_step]:
-            if event['flood']:
-                for temp in event['social_assets']:
-                    if temp.identifier == social_asset_id:
-                        social_asset = temp
-                        break
+        for temp in self.social_assets_manager.get_assets_markers():
+            if temp.identifier == social_asset_id:
+                social_asset = temp
+                break
 
         del self.social_assets_manager.requests[main_token]
         return self.social_assets_manager.connect(token, social_asset.identifier, social_asset.profession)
@@ -129,9 +129,6 @@ class Cycle:
         for photo in self.steps[self.current_step]['photos']:
             photo.active = True
 
-        for social_asset in self.steps[self.current_step]['social_assets']:
-            social_asset.active = True
-
     def check_steps(self):
         return self.current_step == self.max_steps
 
@@ -187,7 +184,7 @@ class Cycle:
                             finished = False
                             if victim.lifetime > 0:
                                 victim.lifetime -= 1
-                
+
                 for water_sample in self.steps[i]['water_samples']:
                     if water_sample.active:
                         finished = False
@@ -196,13 +193,15 @@ class Cycle:
                 if finished:
                     self.steps[i]['flood'].active = False
 
-    def get_social_assets(self, tokens):
+    def finish_social_assets_connections(self, tokens):
         result = []
 
         for token in tokens:
             agent = self.social_assets_manager.get(token)
             if agent is not None:
                 result.append(agent)
+
+        self.social_assets_manager.finish_connections()
 
         return result
 
@@ -1415,25 +1414,20 @@ class Cycle:
         if len(parameters) != 1:
             raise FailedWrongParam('Wrong amount of parameters were given.')
 
-        for event in self.steps[0:self.current_step]:
-            if event:
-                for social_asset in event['social_assets']:
-                    if social_asset.identifier == parameters[0]:
-                        if social_asset.active:
-                            social_asset.active = False
+        for social_asset in self.social_assets_manager.get_assets_markers():
+            if social_asset.identifier == parameters[0]:
+                if social_asset.active:
+                    agent = self.agents_manager.get(token)
+                    for asset in agent.social_assets:
+                        if asset.identifier == parameters[0]:
+                            self.social_assets_manager.set_marker_status(parameters[0], False)
                             self.social_assets_manager.requests[token] = parameters[0]
-                            agent = self.agents_manager.get(token)
-                            for asset in agent.social_assets:
-                                if asset.identifier == parameters[0]:
-                                    agent.social_assets.remove(asset)
+                            agent.social_assets.remove(asset)
+                            return
 
-                                    return
-
-                            raise FailedSocialAssetRequest('The agent dont know this social asset.')
-
-                        raise FailedSocialAssetRequest('The social asset given is not active.')
-
-        raise FailedSocialAssetRequest('The id given dont exits at the current step.')
+                    raise FailedSocialAssetRequest('The agent dont know this social asset.')
+                raise FailedSocialAssetRequest('The social asset is not active.')
+        raise FailedSocialAssetRequest('The id given dont exits.')
 
     def _execute_asset_action(self, token, action_name, parameters):
         self.social_assets_manager.edit(token, 'last_action', action_name)
@@ -1638,7 +1632,7 @@ class Cycle:
             else:
                 self.agents_manager.update_location(token)
                 distance = self.map.node_distance(self.map.get_closest_node(*agent.location),
-                                                    self.map.get_closest_node(*destination))
+                                                  self.map.get_closest_node(*destination))
                 self.agents_manager.edit(token, 'destination_distance', distance)
 
                 self.agents_manager.discharge(token)
@@ -1846,12 +1840,9 @@ class Cycle:
 
         social_assets = []
         agent = self.agents_manager.get(token)
-        for event in self.steps[0:self.current_step]:
-            if event:
-                for social_asset in event['social_assets']:
-                    if social_asset.active:
-                        if self.check_location(agent.location, social_asset.location, parameters[0]):
-                            social_assets.append(social_asset)
+        for social_asset in self.social_assets_manager.get_assets_markers():
+            if self.check_location(agent.location, social_asset.location, parameters[0]):
+                social_assets.append(social_asset)
 
         self.agents_manager.edit(token, 'social_assets', social_assets)
 
@@ -1861,13 +1852,11 @@ class Cycle:
 
         social_assets = []
         agent = self.agents_manager.get(token)
-        for event in self.steps[0:self.current_step]:
-            if event:
-                for social_asset in event['social_assets']:
-                    if self.check_location(agent.location, social_asset.location, parameters[0]):
-                        social_assets.append(social_asset)
+        for social_asset in self.social_assets_manager.get_assets_markers():
+            if self.check_location(agent.location, social_asset.location, parameters[0]):
+                social_assets.append(social_asset)
 
-        self.agents_manager.edit(token, 'social_assets', social_assets)
+        self.social_assets_manager.edit(token, 'social_assets', social_assets)
 
     def _update_photos_state(self, identifiers):
         for i in range(self.current_step):

@@ -9,15 +9,21 @@ Capacities = namedtuple('Capacities', 'abilities resources location profession s
 class SocialAssetsManager:
     """Class that will handle all the changes on the social assets inside the engine."""
 
-    def __init__(self, map_info, social_assets_info):
+    def __init__(self, map_info, social_assets_info, social_assets_markers):
         self.social_assets = {}
+        self.social_assets_markers = social_assets_markers
         self.cdm_location = [map_info['maps'][0]['centerLat'], map_info['maps'][0]['centerLon']]
         random.seed(map_info['randomSeed'])
         self.requests = {}
         self.social_assets_info = social_assets_info
 
-    def restart(self, map_info, social_assets_info):
+    def restart(self, map_info, social_assets_info, social_assets_markers):
         self.social_assets.clear()
+        self.social_assets_markers = social_assets_markers
+        self.cdm_location = [map_info['maps'][0]['centerLat'], map_info['maps'][0]['centerLon']]
+        random.seed(map_info['randomSeed'])
+        self.requests.clear()
+        self.social_assets_info = social_assets_info
 
     def connect(self, token, id, profession):
         abilities = self.social_assets_info[profession]['abilities']
@@ -35,6 +41,24 @@ class SocialAssetsManager:
         self.social_assets[token] = social_asset
 
         return self.social_assets[token]
+
+    def finish_connections(self):
+        for identifier in self.requests.values():
+            self.set_marker_status(identifier, True)
+
+        self.requests.clear()
+
+    def set_marker_status(self, identifier, status):
+        """Set the active attribute of the marker given.
+
+        :param identifier: id of asset marker.
+        :param status: true to enable marker, false to disable.
+        """
+
+        for marker in self.social_assets_markers:
+            if marker.identifier == identifier:
+                marker.active = status
+                break
 
     def disconnect(self, token):
         """Disconnect the social asset if it was connected.
@@ -162,3 +186,6 @@ class SocialAssetsManager:
         :param token: The identifier of the requested social asset."""
 
         self.social_assets[token].clear_virtual_storage()
+
+    def get_assets_markers(self):
+        return self.social_assets_markers

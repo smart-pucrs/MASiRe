@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 50,
+    "steps": 5,
     "maps": [{
       "osm": "files/brumadinho.osm",
       "minLat": -20.1726,
@@ -197,8 +197,7 @@
       "maxAmount": 8
     },
     "socialAsset": {
-      "minAmount": 0,
-      "maxAmount": 2,
+      "amount": 10,
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
     },
     "step_unit": 5

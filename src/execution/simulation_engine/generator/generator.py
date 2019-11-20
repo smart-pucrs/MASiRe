@@ -4,7 +4,7 @@ from simulation_engine.simulation_objects.photo import Photo
 from simulation_engine.simulation_objects.victim import Victim
 from simulation_engine.simulation_objects.water_sample import WaterSample
 
-from simulation_engine.simulation_objects.social_asset_layer import SocialAssetLayer
+from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
 
 
 class Generator:
@@ -14,6 +14,7 @@ class Generator:
         self.general_map_variables: dict = config['map']
         self.current_map_variables: dict = config['map']['maps'][0]
         self.generate_variables: dict = config['generate']
+        self.generate_assets_variables: dict = config['socialAssets']
         self.map = map
         self.flood_id: int = 0
         self.victim_id: int = 0
@@ -49,14 +50,13 @@ class Generator:
         flood_probability: int = self.generate_variables['flood']['probability']
         i: int = 1
         while i < steps_number:
-            event: dict = {'flood': None, 'victims': [], 'water_samples': [], 'photos': [], 'social_assets': []}
+            event: dict = {'flood': None, 'victims': [], 'water_samples': [], 'photos': []}
             if random.randint(1, 100) <= flood_probability:
                 event['flood'] = self.generate_flood()
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes)
                 event['water_samples']: list = self.generate_water_samples(nodes)
                 event['photos']: list = self.generate_photos(nodes)
-                event['social_assets'] = self.generate_social_assets()
 
             events[i] = event
             i += 1
@@ -222,22 +222,25 @@ class Generator:
         return water_samples
 
     def generate_social_assets(self):
-        amount: int = random.randint(self.generate_variables['socialAsset']['minAmount'],
-                                     self.generate_variables['socialAsset']['maxAmount'])
+        amount: int = self.generate_variables['socialAsset']['amount']
 
         social_assets: list = [0] * amount
 
         min_lat: float = self.current_map_variables['minLat']
         max_lat: float = self.current_map_variables['maxLat']
         min_lon: float = self.current_map_variables['minLon']
-        max_lon: float = self.current_map_variables['minLon']
+        max_lon: float = self.current_map_variables['maxLon']
 
         i: int = 0
         while i < amount:
             location: list = [random.uniform(min_lat, max_lat),
                               random.uniform(min_lon, max_lon)]
             profession: str = random.choice(self.generate_variables['socialAsset']['professions'])
-            social_assets[i] = SocialAssetLayer(self.flood_id, self.social_asset_id, location, profession)
+            abilities = self.generate_assets_variables[profession]['abilities']
+            resources = self.generate_assets_variables[profession]['resources']
+
+            social_assets[i] = SocialAssetMarker(self.flood_id, self.social_asset_id, location, profession,
+                                                 abilities, resources)
             self.social_asset_id += 1
             i += 1
 
