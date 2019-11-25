@@ -2,20 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/execution/simulation_engine/loader/loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/copycat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/copycat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_marker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/social_asset_marker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/static/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/static/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/startup/arguments_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/startup/arguments_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/startup/thread_starter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/startup/thread_starter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/Auto_Generate_Config_File_2018-SampleSimulation_at_16h_33min.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/Auto_Generate_Config_File_2018-SampleSimulation_at_16h_41min.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/Auto_Generate_Config_File_2018-SampleSimulation_at_16h_42min.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/Auto_Generate_Config_File_2018-SampleSimulation_at_16h_45min.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
