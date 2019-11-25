@@ -30,6 +30,8 @@ class Parser:
         self.parser.add_argument('-monitor', required=False, type=str, default='8000')
         self.parser.add_argument('-record', required=False, type=str, default='False')
         self.parser.add_argument('-sa_timeout', required=False, type=int, default=5)
+        self.parser.add_argument('-load_sim', required=False, type=bool, default=False)
+        self.parser.add_argument('-write_sim', required=False, type=bool, default=False)
         self.parser.add_argument('-secret', required=False, type=str, default='')
 
     def check_arguments(self):
@@ -95,6 +97,12 @@ class Parser:
         if str(args['log']).lower() != 'true' and str(args['log']).lower() != 'false':
             return 0, f'Invalid value for log argument: "{args["log"]}".'
 
+        if str(args['load_sim']).lower() != 'true' and str(args['load_sim']).lower() != 'false':
+            return 0, f'Invalid value for load_sim argument: "{args["load_sim"]}".'
+
+        if str(args['write_sim']).lower() != 'true' and str(args['write_sim']).lower() != 'false':
+            return 0, f'Invalid value for write_sim argument: "{args["write_sim"]}".'
+
         return 1, 'Arguments ok.'
 
     def get_argument(self, arg):
@@ -145,7 +153,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.conf, args.url, args.sp, args.ap, args.log, secret]
+        return [args.conf, args.url, args.sp, args.ap, args.log, args.load_sim, args.write_sim, secret]
 
     def get_api_arguments(self):
         """Return all the arguments necessary for the API.
@@ -176,3 +184,9 @@ class Parser:
 
         return [args.conf, args.url, args.sp, args.ap, args.pyv, args.g,
                 args.step_t, args.first_t, args.mtd, args.secret]
+
+    def check_load_sim(self):
+        """Check if the simulator need to load the events from a special config file.
+
+        :returns bool: True if need to load a file else False."""
+        return self.parser.parse_args().load_sim

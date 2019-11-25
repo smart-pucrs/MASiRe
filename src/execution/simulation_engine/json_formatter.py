@@ -10,9 +10,9 @@ from simulation_engine.simulation_helpers.logger import Logger
 class JsonFormatter:
     """Class that converts all the objects into JSON style dicts."""
 
-    def __init__(self, config):
+    def __init__(self, config, load_sim, write_sim):
         config_location = pathlib.Path(__file__).parents[3] / config
-        self.copycat = CopyCat(json.load(open(config_location, 'r')))
+        self.copycat = CopyCat(json.load(open(config_location, 'r')), load_sim, write_sim)
 
     def log(self):
         """Do the log and returns a JSON response.
@@ -267,6 +267,8 @@ class JsonFormatter:
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
 
+            import traceback
+            traceback.print_exc()
             return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
 
     def do_step(self, token_action_list):

@@ -20,7 +20,7 @@ class Map:
         :param proximity: The proximity allowed by the user to someone be considered on the same place as anotherone."""
 
         del self.router
-        map_location = str((pathlib.Path(__file__).parents[4] / map_config).absolute())
+        map_location = str((pathlib.Path(__file__).parents[4] / map_config['osm']).absolute())
         self.router = pyroutelib3.Router("car", map_location)
         self.proximity = proximity/1000
         self.map_config = map_config

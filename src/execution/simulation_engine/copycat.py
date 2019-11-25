@@ -6,10 +6,12 @@ from simulation_engine.simulation import Simulation
 class CopyCat:
     """Class that copy all the objects and responses from inside the engine to prevent from being changed."""
 
-    def __init__(self, config):
+    def __init__(self, config, load_sim, write_sim):
         self.config = config
+        self.load_sim = load_sim
+        self.write_sim = write_sim
         self.logs = {}
-        self.simulation = Simulation(config)
+        self.simulation = Simulation(config, load_sim, write_sim)
 
     def log(self):
         """Save the log from the simulation and remove the first map from the maps list on the configuration file.
@@ -20,6 +22,9 @@ class CopyCat:
 
         self.logs[self.config['map']['maps'][0]['osm']] = self.simulation.log()
         self.config['map']['maps'].pop(0)
+
+        if self.load_sim:
+            self.config['matchs'].pop(0)
 
         if not self.config['map']['maps']:
             return 0
@@ -32,7 +37,7 @@ class CopyCat:
         :return tuple, dict: First position holding the agents, second position the social assets, the third holding
         the current step and a dictionary with the report of the agents."""
 
-        response = self.simulation.restart(self.config)
+        response = self.simulation.restart(self.config, self.load_sim, self.write_sim)
         return copy.deepcopy(response)
 
     def connect_agent(self, token):

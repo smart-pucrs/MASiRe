@@ -25,11 +25,13 @@ class Starter:
         """Main function to start the hole system.
 
         Three main steps are defined here:
-        1 - Check if the configuration file was properly made
+        1 - Check if the configuration file was properly made or a special file are given to load the events in the simulation
         2 - Prepare the environment, either creating another interpreter or using the global one
         3 - Start the processes that will run the API and Simulation."""
 
-        self.check_configuration_file()
+        if not self.check_load_sim():
+            self.check_configuration_file()
+
         self.check_arguments()
         self.create_environment()
         arguments = self.get_arguments()
@@ -52,6 +54,13 @@ class Starter:
         test = self.parser.check_arguments()
         if not test[0]:
             exit(test[1])
+
+    def check_load_sim(self):
+        """Check if the simulator need to load the events from a special config file.
+
+        :returns bool: True if need to load a file else False."""
+
+        return self.parser.check_load_sim()
 
     def create_environment(self):
         """Prepare the global environment or create one and prepare it.

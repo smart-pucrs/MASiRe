@@ -1,6 +1,5 @@
 class SocialAssetMarker:
-    def __init__(self, flood_id: int, identifier: int, location: tuple, profession: str, abilities: list, resources: list):
-        self.flood_id: int = flood_id
+    def __init__(self, identifier: int, location: tuple, profession: str, abilities: list, resources: list):
         self.identifier: int = identifier
         self.location: tuple = location
         self.profession: str = profession

@@ -6,8 +6,8 @@ class Simulation:
     """Class that represents the engine of the simulation, connecting agents and social assets, doing steps and saving
     log information."""
 
-    def __init__(self, config):
-        self.cycler = Cycle(config)
+    def __init__(self, config, load_sim, write_sim):
+        self.cycler = Cycle(config, load_sim, write_sim)
         self.terminated = False
         self.actions_amount = 0
         self.actions_amount_by_step = []
@@ -70,17 +70,18 @@ class Simulation:
 
         return agents, step, self.cycler.current_step, map_percepts
 
-    def restart(self, config_file):
+    def restart(self, config_file, load_sim, write_sim):
         """Restart the simulation by regenerating all the simulation and reseting all the log variables.
 
-        :return tuple: First position holding the agents, second position the social assets and the third holding
-        the current step."""
+        :return tuple: First position holding the agents, second position the social assets, third position holding
+        the current step, fourth position holding the report for previous match and the the fifth holding the social asset
+        that need to be disconnected."""
 
         Logger.normal('Restart the simulation.')
 
         social_assets_tokens = self.cycler.get_assets_tokens()
         report = self.cycler.match_report()
-        self.cycler.restart(config_file)
+        self.cycler.restart(config_file, load_sim, write_sim)
         self.terminated = False
         self.actions_amount = 0
         self.actions_by_step.clear()
@@ -231,6 +232,7 @@ class Simulation:
                 'victims_rescued_alive': victims_saved,
                 'victims_rescued_dead': victims_dead_delivered,
                 'victims_ignored': victims_dead_ignored,
+                'total_photos': self.cycler.max_water_samples,
                 'photos_taken': photos_taken,
                 'photos_analysed': photos_analyzed,
                 'photos_ignored': photos_ignored,

@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 5,
+    "steps": 30,
     "maps": [{
       "osm": "files/brumadinho.osm",
       "minLat": -20.1726,
@@ -10,6 +10,15 @@
       "maxLon": -44.1102,
       "centerLon": -44.1603,
       "centerLat": -20.1431
+    },
+    {
+      "osm": "files/map-poa.osm",
+      "minLat": -30.1215,
+      "minLon": -51.2175,
+      "maxLat": -30.1101,
+      "maxLon": -51.1957,
+      "centerLon": -51.2066,
+      "centerLat": -30.1158
     }],
     "proximity": 1,
     "randomSeed": 2017,
@@ -67,7 +76,7 @@
       "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 1,
+      "amount": 5,
       "speed": 10,
       "physicalCapacity": 500,
       "virtualCapacity": 4096,
@@ -77,7 +86,7 @@
       "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
       "resources": ["battery", "strength"],
       "size": 1200,
-      "amount": 1,
+      "amount": 5,
       "speed": 10,
       "physicalCapacity": 450,
       "virtualCapacity": 0,
@@ -87,7 +96,7 @@
       "abilities": ["waterMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 8000,
-      "amount": 1,
+      "amount": 5,
       "speed": 7,
       "physicalCapacity": 1000,
       "virtualCapacity": 128,
@@ -130,8 +139,7 @@
     "requestSocialAsset": {
       "abilities": [[]],
       "resources": [[]]
-    }
-  ,
+    },
     "deliverPhysical": {
       "abilities": [["carry", "physicalCapacity"]],
       "resources": [[]]
@@ -167,7 +175,7 @@
   },
   "generate": {
     "flood": {
-      "probability": 10,
+      "probability": 50,
       "minPeriod": 45,
       "maxPeriod": 50,
       "circle": {
@@ -178,14 +186,14 @@
     "photo": {
       "minSize": 256,
       "maxSize": 512,
-      "minAmount": 1,
+      "minAmount": 3,
       "maxAmount": 3,
       "victimProbability": 100
     },
     "victim": {
       "minSize": 18,
       "maxSize": 22,
-      "minAmount": 1,
+      "minAmount": 3,
       "maxAmount": 3,
       "minLifetime": 20,
       "maxLifetime": 30
@@ -194,7 +202,7 @@
       "minSize": 15,
       "maxSize": 20,
       "minAmount": 4,
-      "maxAmount": 8
+      "maxAmount": 4
     },
     "socialAsset": {
       "amount": 10,

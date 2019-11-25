@@ -171,6 +171,7 @@ function nextMatch() {
     logNormal('Button NextMatch clicked.');
     $.getJSON($SCRIPT_ROOT + '/next_match', function (data) {
         if (data['status']) {
+            console.log(data);
             handle_new_match(data['data']);
         } else {
             logError(data['message']);

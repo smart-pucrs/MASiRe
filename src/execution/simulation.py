@@ -14,11 +14,10 @@ from flask_cors import CORS
 from werkzeug.serving import run_simple
 from simulation_engine.json_formatter import JsonFormatter
 
-config_path, base_url, simulation_port, api_port, log, secret = sys.argv[1:]
-
+config_path, base_url, simulation_port, api_port, log, load_sim, write_sim, secret = sys.argv[1:]
 
 app = Flask(__name__)
-formatter = JsonFormatter(config_path)
+formatter = JsonFormatter(config_path, load_sim.lower() == 'true', write_sim.lower() == 'true')
 
 
 @app.route('/start', methods=['POST'])

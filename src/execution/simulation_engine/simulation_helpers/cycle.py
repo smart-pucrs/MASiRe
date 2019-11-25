@@ -1,24 +1,48 @@
+import copy
+import datetime
+import json
+import os
+import pathlib
 from math import sqrt
 
 from simulation_engine.exceptions.exceptions import *
 from simulation_engine.generator.generator import Generator
+from simulation_engine.loader.loader import Loader
 from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
 
 
 class Cycle:
-    def __init__(self, config):
+    def __init__(self, config, load_sim, write_sim):
         self.map = Map(config['map']['maps'][0], config['map']['proximity'])
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
-        generator = Generator(config, self.map)
+
+        if load_sim:
+            generator = Loader(config)
+        else:
+            generator = Generator(config, self.map)
+
+        self.steps = generator.generate_events()
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
                                                          generator.generate_social_assets())
+
+        if write_sim:
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute
+            sim_id = config['map']['id']
+            path = pathlib.Path(__file__).parents[4] / 'files'
+
+            hour = '{:0>2d}'.format(hour)
+            minute = '{:0>2d}'.format(minute)
+
+            self.sim_file = str((path / f'Auto_Generate_Config_File_{sim_id}_at_{hour}h_{minute}min.txt'))
+            self.write_first_match(config, generator, self.sim_file)
+
         self.map_percepts = config['map']
-        self.steps = generator.generate_events()
         self.max_floods = generator.flood_id
         self.max_victims = generator.victim_id
         self.max_photos = generator.photo_id
@@ -27,22 +51,55 @@ class Cycle:
         self.current_step = 0
         self.match_history = []
 
-    def restart(self, config_file):
-        self.map.restart(config_file['map']['maps'][0], config_file['map']['proximity'])
-        generator = Generator(config_file, self.map)
-        self.social_assets_manager = SocialAssetsManager(config_file['map'], config_file['socialAssets'],
-                                                         generator.generate_social_assets())
-        self.map_percepts = config_file['map']
+    def restart(self, config, load_sim, write_sim):
+        self.map.restart(config['map']['maps'][0], config['map']['proximity'])
+
+        if load_sim:
+            generator = Loader(config)
+        else:
+            generator = Generator(config, self.map)
+
         self.steps = generator.generate_events()
+        self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
+                                                         generator.generate_social_assets())
+
+        if write_sim:
+            self.write_match(generator, self.sim_file)
+
+        self.map_percepts = config['map']
         self.max_floods = generator.flood_id
         self.max_victims = generator.victim_id
         self.max_photos = generator.photo_id
         self.max_water_samples = generator.water_sample_id
         self.delivered_items = []
         self.current_step = 0
-        self.max_steps = config_file['map']['steps']
-        self.cdm_location = (config_file['map']['maps'][0]['centerLat'], config_file['map']['maps'][0]['centerLon'])
-        self.agents_manager.restart(config_file['agents'], self.cdm_location)
+        self.max_steps = config['map']['steps']
+        self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
+        self.agents_manager.restart(config['agents'], self.cdm_location)
+
+    def write_first_match(self, config, generator, file_name):
+        config_copy = copy.deepcopy(config)
+        del config_copy['generate']
+
+        match = dict(steps=generator.get_json_events(self.steps),
+                     social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
+
+        config_copy['matchs'] = [match]
+
+        with open(file_name, 'w+') as file:
+            file.write(json.dumps(config_copy, sort_keys=False, indent=4))
+
+    def write_match(self, generator, file_name):
+        with open(file_name, 'r') as file:
+            config = json.loads(file.read())
+
+        match = dict(steps=generator.get_json_events(self.steps),
+                     social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
+
+        config['matchs'].append(match)
+
+        with open(file_name, 'w') as file:
+            file.write(json.dumps(config, sort_keys=False, indent=4))
 
     def connect_agent(self, token):
         return self.agents_manager.connect(token)
