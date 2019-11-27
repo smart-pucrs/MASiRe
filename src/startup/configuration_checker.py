@@ -360,7 +360,8 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['probability', 'minPeriod', 'maxPeriod', 'circle']
+        keys = ['probability', 'minPeriod', 'maxPeriod', 'circle',
+                'propagation', 'propagationInfo', 'movementRestrictions']
         sub_keys = ['minRadius', 'maxRadius']
 
         for key in keys:

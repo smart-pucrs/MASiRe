@@ -30,7 +30,7 @@ def test_generate_events():
 
 
 def test_generate_flood():
-    flood = g.generate_flood()
+    flood = g.generate_flood
     assert not flood.active
     assert 40 <= flood.period <= 80
 

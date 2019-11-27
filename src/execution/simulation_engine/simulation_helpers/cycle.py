@@ -143,17 +143,14 @@ class Cycle:
                 if step['flood'].active:
                     events.append(step['flood'])
 
-                if step['victims']:
                     for victim in step['victims']:
                         if victim.active:
                             events.append(victim)
 
-                if step['photos']:
                     for photo in step['photos']:
                         if photo.active:
                             events.append(photo)
 
-                if step['water_samples']:
                     for water_sample in step['water_samples']:
                         if water_sample.active:
                             events.append(water_sample)
@@ -194,12 +191,48 @@ class Cycle:
             if self.steps[i]['flood'] is None:
                 continue
 
-            if self.steps[i]['flood'].active and not self.steps[i]['flood'].keeped:
-                self.steps[i]['flood'].period -= 1
+            if self.steps[i]['propagation']:
+                new_victims = self.steps[i]['propagation'].pop(0)
+                for victim in new_victims:
+                    victim.active = True
 
-                if self.steps[i]['flood'].period == 0:
-                    self.steps[i]['flood'].active = False
+                self.steps[i]['victims'].extend(new_victims)
 
+            if self.steps[i]['flood'].keeped:
+                self.steps[i]['flood'].update_state()
+
+                if self.steps[i]['flood'].active:
+                    finished = True
+
+                    for victim in self.steps[i]['victims']:
+                        if victim.active:
+                            finished = False
+                            victim.lifetime -= 1
+
+                    for photo in self.steps[i]['photos']:
+                        if photo.active:
+                            finished = False
+
+                        for victim in photo.victims:
+                            if victim.active:
+                                finished = False
+                                victim.lifetime -= 1
+
+                            elif not photo.analyzed:
+                                finished = False
+
+                    for water_sample in self.steps[i]['water_samples']:
+                        if water_sample.active:
+                            finished = False
+                            break
+
+                    if finished:
+                        self.steps[i]['flood'].active = False
+
+            elif self.steps[i]['flood'].active:
+                self.steps[i]['flood'].update_state()
+
+                if not self.steps[i]['flood'].active:
                     for victim in self.steps[i]['victims']:
                         victim.active = False
 
@@ -215,40 +248,12 @@ class Cycle:
                 else:
                     for victim in self.steps[i]['victims']:
                         if victim.active:
-                            if victim.lifetime > 0:
-                                victim.lifetime -= 1
+                            victim.lifetime -= 1
 
                     for photo in self.steps[i]['photos']:
                         for victim in photo.victims:
                             if victim.active:
-                                if victim.lifetime > 0:
-                                    victim.lifetime -= 1
-
-            elif self.steps[i]['flood'].active and self.steps[i]['flood'].keeped:
-                finished = True
-                for victim in self.steps[i]['victims']:
-                    if victim.active:
-                        finished = False
-                        if victim.lifetime > 0:
-                            victim.lifetime -= 1
-
-                for photo in self.steps[i]['photos']:
-                    if photo.active:
-                        finished = False
-
-                    for victim in photo.victims:
-                        if victim.active:
-                            finished = False
-                            if victim.lifetime > 0:
                                 victim.lifetime -= 1
-
-                for water_sample in self.steps[i]['water_samples']:
-                    if water_sample.active:
-                        finished = False
-                        break
-
-                if finished:
-                    self.steps[i]['flood'].active = False
 
     def finish_social_assets_connections(self, tokens):
         result = []

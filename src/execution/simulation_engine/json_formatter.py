@@ -311,7 +311,8 @@ class JsonFormatter:
 
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
-
+            import traceback
+            traceback.print_exc()
             return {'status': 0, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):

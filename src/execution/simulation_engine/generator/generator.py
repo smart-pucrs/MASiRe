@@ -35,14 +35,14 @@ class Generator:
         steps_number: int = self.general_map_variables['steps']
         events = [0] * steps_number
 
-        flood = self.generate_flood()
+        flood, propagation = self.generate_flood()
         nodes: list = flood.list_of_nodes
         event: dict = {
             'flood': flood,
             'victims': self.generate_victims(nodes),
             'water_samples': self.generate_water_samples(nodes),
             'photos': self.generate_photos(nodes),
-            'social_assets': self.generate_social_assets()
+            'propagation': propagation
         }
 
         events[0] = event
@@ -50,13 +50,15 @@ class Generator:
         flood_probability: int = self.generate_variables['flood']['probability']
         i: int = 1
         while i < steps_number:
-            event: dict = {'flood': None, 'victims': [], 'water_samples': [], 'photos': []}
+            event: dict = {'flood': None, 'victims': [], 'water_samples': [], 'photos': [], 'propagation': []}
+
             if random.randint(1, 100) <= flood_probability:
-                event['flood'] = self.generate_flood()
+                event['flood'], propagation = self.generate_flood()
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes)
                 event['water_samples']: list = self.generate_water_samples(nodes)
                 event['photos']: list = self.generate_photos(nodes)
+                event['propagation']: list = propagation
 
             events[i] = event
             i += 1
@@ -91,16 +93,52 @@ class Generator:
 
         if self.generate_variables['flood']['minPeriod']:
             period: int = int((random.randint(self.generate_variables['flood']['minPeriod'],
-                                        self.generate_variables['flood']['maxPeriod']) / self.generate_variables['step_unit']))
+                                              self.generate_variables['flood']['maxPeriod']) / self.generate_variables[
+                                   'step_unit']))
 
             keeped = False
         else:
             period = 0
             keeped = True
 
+        propagation: list = []
+        nodes_propagation: list = []
+        max_propagation: float = 0.0
+        propagation_per_step: float = 0.0
+
+        if self.generate_variables['flood']['propagation']:
+            max_propagation = (self.generate_variables['flood']['propagationInfo']['maxPropagation'] / 100) * \
+                              dimensions['radius'] + dimensions['radius']
+            propagation_per_step = self.generate_variables['flood']['propagationInfo']['propagationPerStep'] \
+                                   / 100 * dimensions['radius']
+
+            victim_probability: int = self.generate_variables['flood']['propagationInfo']['victimsPerPropagationProbability']
+            old_nodes: list = list_of_nodes
+            new_nodes: list = []
+            difference: list = []
+
+            for prop in range(int(((self.generate_variables['flood']['propagationInfo']['maxPropagation'] / 100) *
+                                   dimensions['radius']) / propagation_per_step)):
+                new_nodes = self.map.nodes_in_radius(dimensions['location'],
+                                                     dimensions['radius'] + propagation_per_step * prop)
+                difference = self.get_difference(old_nodes, new_nodes)
+
+                if random.randint(0, 100) < victim_probability:
+                    if difference:
+                        propagation.append(self.generate_victims_in_propagation(difference))
+                    else:
+                        propagation.append(self.generate_victims_in_propagation(new_nodes))
+
+                nodes_propagation.append(difference)
+                old_nodes = new_nodes
+
         self.flood_id = self.flood_id + 1
 
-        return Flood(self.flood_id, period, keeped, dimensions, list_of_nodes)
+        return Flood(self.flood_id, period, keeped, dimensions, list_of_nodes, max_propagation,
+                     propagation_per_step, nodes_propagation), propagation
+
+    def get_difference(self, node_list1, node_list2):
+        return [node for node in node_list1 if node in node_list2]
 
     def generate_photos(self, nodes: list) -> list:
         """Generate a list of photo events inside the flood location.
@@ -143,6 +181,30 @@ class Generator:
 
         amount: int = random.randint(self.generate_variables['victim']['minAmount'],
                                      self.generate_variables['victim']['maxAmount'])
+        victims: list = [0] * amount
+        i: int = 0
+        while i < amount:
+            victim_size: int = random.randint(victim_min_size, victim_max_size)
+            victim_lifetime: int = int(random.randint(victim_min_lifetime, victim_max_lifetime)
+                                       / self.generate_variables['step_unit'])
+
+            victim_location: tuple = self.map.get_node_coord(random.choice(nodes))
+
+            victims[i] = Victim(self.flood_id, self.victim_id, victim_size, victim_lifetime, victim_location, False)
+            self.victim_id = self.victim_id + 1
+            i += 1
+
+        return victims
+
+    def generate_victims_in_propagation(self, nodes: list) -> list:
+        victim_min_size: int = self.generate_variables['victim']['minSize']
+        victim_max_size: int = self.generate_variables['victim']['maxSize']
+
+        victim_min_lifetime: int = self.generate_variables['victim']['minLifetime']
+        victim_max_lifetime: int = self.generate_variables['victim']['maxLifetime']
+
+        amount: int = random.randint(self.generate_variables['flood']['propagationInfo']['minVictimsPerPropagation'],
+                                     self.generate_variables['flood']['propagationInfo']['maxVictimsPerPropagation'])
         victims: list = [0] * amount
         i: int = 0
         while i < amount:
@@ -201,7 +263,8 @@ class Generator:
         while i < amount:
             water_sample_location: tuple = self.map.get_node_coord(random.choice(nodes))
             water_sample_size: int = random.randint(water_sample_min_size, water_sample_max_size)
-            water_samples[i] = WaterSample(self.flood_id, self.water_sample_id, water_sample_size, water_sample_location)
+            water_samples[i] = WaterSample(self.flood_id, self.water_sample_id, water_sample_size,
+                                           water_sample_location)
             self.water_sample_id = self.water_sample_id + 1
             i += 1
 
