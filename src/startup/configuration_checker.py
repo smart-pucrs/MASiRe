@@ -90,7 +90,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['id', 'steps', 'maps', 'proximity', 'randomSeed', 'speedReduction']
+        keys = ['id', 'steps', 'maps', 'proximity', 'randomSeed', 'movementRestrictions']
 
         map = json.load(open(self.config, 'r'))['map']
         for key in keys:
@@ -125,8 +125,23 @@ class Checker:
         if map['proximity'] <= 0:
             return 0, 'Map: Proximity can not be zero or negative.'
 
-        if map['speedReduction'] < 0:
-            return 0, 'Map: SpeedReduction can not be negative.'
+        if 'airMovement' not in map['movementRestrictions']:
+            return 0, 'Map: Air Movement are missing in Movement Restrictions'
+
+        if map['movementRestrictions']['airMovement'] < 0 or map['movementRestrictions']['airMovement'] > 100:
+            return 0, 'Map: Air Movement Restriction can not be less then 0 or bigger then 100.'
+
+        if 'waterMovement' not in map['movementRestrictions']:
+            return 0, 'Map: Water Movement is missing in Movement Restrictions'
+
+        if map['movementRestrictions']['waterMovement'] < 0 or map['movementRestrictions']['waterMovement'] > 100:
+            return 0, 'Map: Water Movement Restriction can not be less then 0 or bigger then 100.'
+
+        if 'groundMovement' not in map['movementRestrictions']:
+            return 0, 'Map: Ground Movement is missing in Movement Restrictions'
+
+        if map['movementRestrictions']['groundMovement'] < 0 or map['movementRestrictions']['groundMovement'] > 100:
+            return 0, 'Map: Ground Movement Restriction can not be less then 0 or bigger then 100.'
 
         return 1, 'Map: Ok.'
 
@@ -228,7 +243,8 @@ class Checker:
         :returns str: Appropriate message for the user understand his error."""
 
         keys = ['drone', 'car', 'boat']
-        sub_keys = ['abilities', 'resources', 'size', 'amount', 'speed', 'physicalCapacity', 'virtualCapacity', 'battery']
+        sub_keys = ['abilities', 'resources', 'size', 'amount', 'speed', 'physicalCapacity',
+                    'virtualCapacity', 'battery', 'batteryByMovement']
 
         agents = json.load(open(self.config, 'r'))['agents']
 
@@ -274,6 +290,9 @@ class Checker:
 
             if not isinstance(agents[key]['battery'], int):
                 return 0, f'Agents: Sub key Battery from {str(key).title()} is not a valid type.'
+
+            if not isinstance(agents[key]['batteryByMovement'], int):
+                return 0, f'Agents: Sub key Battery By Movement from {str(key).title()} is not a valid type.'
 
         return 1, 'Agents: Ok.'
 
@@ -360,8 +379,7 @@ class Checker:
         :returns int: Status where 1 is Ok and 0 is Not ok.
         :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['probability', 'minPeriod', 'maxPeriod', 'circle',
-                'propagation', 'propagationInfo', 'movementRestrictions']
+        keys = ['probability', 'minPeriod', 'maxPeriod', 'circle', 'propagation', 'propagationInfo']
         sub_keys = ['minRadius', 'maxRadius']
 
         for key in keys:

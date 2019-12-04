@@ -7,23 +7,28 @@ from itertools import zip_longest
 class Map:
     """Class that represents the map of the simulation, it holds all the functions about location and the map itself."""
 
-    def __init__(self, map_config, proximity):
+    def __init__(self, map_config, proximity, movement_restrictions):
         map_location = str((pathlib.Path(__file__).parents[4] / map_config['osm']).absolute())
         self.router = pyroutelib3.Router("car", map_location)
-        self.proximity = proximity/1000
+        self.measure_unit = 100000
+        self.proximity = proximity / self.measure_unit
         self.map_config = map_config
+        self.movement_restrictions = movement_restrictions
 
-    def restart(self, map_config, proximity):
+    def restart(self, map_config, proximity, movement_restrictions):
         """Restart the map by reseting all the variables and also deleting the router from memory to prevent errors.
 
         :param map_config: The location of the file with the osm map.
-        :param proximity: The proximity allowed by the user to someone be considered on the same place as anotherone."""
+        :param proximity: The proximity allowed by the user to someone be considered on the same place as anotherone.
+        :param movement_restrictions: Movement restrictions of the environment."""
 
         del self.router
         map_location = str((pathlib.Path(__file__).parents[4] / map_config['osm']).absolute())
         self.router = pyroutelib3.Router("car", map_location)
-        self.proximity = proximity/1000
+        self.measure_unit = 100000
+        self.proximity = proximity / self.measure_unit
         self.map_config = map_config
+        self.movement_restrictions = movement_restrictions
 
     def get_closest_node(self, lat, lon):
         """Get the closest node given the latitude and longitude given. It has some errors on the lib itself,

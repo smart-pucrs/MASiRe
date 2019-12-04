@@ -52,7 +52,7 @@ class Cycle:
         self.match_history = []
 
     def restart(self, config, load_sim, write_sim):
-        self.map.restart(config['map']['maps'][0], config['map']['proximity'])
+        self.map.restart(config['map']['maps'][0], config['map']['proximity'], config['map']['movementRestrictions'])
 
         if load_sim:
             generator = Loader(config)

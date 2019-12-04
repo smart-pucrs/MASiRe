@@ -22,6 +22,7 @@ class Generator:
         self.photo_id: int = 0
         self.water_sample_id: int = 0
         self.social_asset_id = 0
+        self.measure_unit = 100000
         random.seed(config['map']['randomSeed'])
 
     def generate_events(self) -> list:
@@ -74,7 +75,7 @@ class Generator:
 
         dimensions: dict = {'shape': 'circle', 'radius': (
             random.uniform(self.generate_variables['flood']['circle']['minRadius'],
-                           self.generate_variables['flood']['circle']['maxRadius'])
+                           self.generate_variables['flood']['circle']['maxRadius']) / self.measure_unit
         )}
 
         flood_lat: float = random.uniform(self.current_map_variables['minLat'], self.current_map_variables['maxLat'])
@@ -107,18 +108,14 @@ class Generator:
         propagation_per_step: float = 0.0
 
         if self.generate_variables['flood']['propagation']:
-            max_propagation = (self.generate_variables['flood']['propagationInfo']['maxPropagation'] / 100) * \
-                              dimensions['radius'] + dimensions['radius']
-            propagation_per_step = self.generate_variables['flood']['propagationInfo']['propagationPerStep'] \
-                                   / 100 * dimensions['radius']
+            prop_info = self.generate_variables['flood']['propagationInfo']
+            max_propagation = (prop_info['maxPropagation'] / 100) * dimensions['radius'] + dimensions['radius']
+            propagation_per_step = prop_info['propagationPerStep'] / 100 * dimensions['radius']
 
-            victim_probability: int = self.generate_variables['flood']['propagationInfo']['victimsPerPropagationProbability']
+            victim_probability: int = prop_info['victimsPerPropagationProbability']
             old_nodes: list = list_of_nodes
-            new_nodes: list = []
-            difference: list = []
 
-            for prop in range(int(((self.generate_variables['flood']['propagationInfo']['maxPropagation'] / 100) *
-                                   dimensions['radius']) / propagation_per_step)):
+            for prop in range(int(((prop_info['maxPropagation'] / 100) * dimensions['radius'] / propagation_per_step))):
                 new_nodes = self.map.nodes_in_radius(dimensions['location'],
                                                      dimensions['radius'] + propagation_per_step * prop)
                 difference = self.get_difference(old_nodes, new_nodes)
