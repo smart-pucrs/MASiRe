@@ -126,6 +126,14 @@ class Simulation:
 
         return actions_results, step, self.cycler.current_step, call_requests
 
+    def calculate_route(self, parameters):
+        """Return the route calculated with the parameters given.
+
+        :param parameters: Dict with the parameters to calculate the route.
+        :return list: List containing the coordinate of the route or a String with a error."""
+
+        return self.cycler.calculate_route(parameters)
+
     def get_map_percepts(self):
         """Get the constants information about the map.
 
@@ -134,9 +142,17 @@ class Simulation:
         return self.cycler.get_map_percepts()
 
     def match_report(self):
+        """Return a report of all agents from the current simulation match.
+
+        :return dict: Dict with the token agents as key and your report as value."""
+
         return self.cycler.match_report()
 
     def simulation_report(self):
+        """Return a report of all agents from all matchs.
+
+        :return dict: Dict with the token agents as key and tour report as value."""
+
         return self.cycler.simulation_report()
 
     def log(self):

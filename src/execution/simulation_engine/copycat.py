@@ -119,8 +119,25 @@ class CopyCat:
             copy.deepcopy(self.logs)
         ]
 
+    def calculate_route(self, parameters):
+        """Return the route calculated with the parameters given.
+
+        :param parameters: Dict with the parameters to calculate the route.
+        :return dict: Dictionary with the result of the operation, the route calculated, the distance od the route and
+        a message."""
+
+        return self.simulation.calculate_route(parameters)
+
     def match_report(self):
+        """Return a report of all agents from the current simulation match.
+
+        :return dict: Dict with the token agents as key and your report as value."""
+
         return self.simulation.match_report()
 
     def simulation_report(self):
+        """Return a report of all agents from all matchs.
+
+        :return dict: Dict with the token agents as key and tour report as value."""
+
         return self.simulation.simulation_report()

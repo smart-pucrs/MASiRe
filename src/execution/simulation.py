@@ -125,6 +125,21 @@ def do_actions():
     return jsonify(formatter.do_step(message['actions']))
 
 
+@app.route('/calculate_route', methods=['GET'])
+def calculate_route():
+    """Calculate a route using the current map in the simulation."""
+
+    message = request.get_json(force=True)
+
+    if 'secret' not in message:
+        return jsonify(status=0, message='This endpoint can not be accessed.')
+
+    if secret != message['secret']:
+        return jsonify(message='This endpoint can not be accessed.')
+
+    return jsonify(formatter.calculate_route(message['parameters']))
+
+
 @app.route('/restart', methods=['PUT'])
 def restart():
     """Restart the engine and save the log from the previous one."""

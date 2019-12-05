@@ -1464,6 +1464,8 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             last_action_result = 'unknownError'
             error_message = 'Unknown error: ' + str(e)
 
@@ -1738,17 +1740,16 @@ class Cycle:
             self.social_assets_manager.edit(token, 'destination_distance', 0)
 
         else:
-            if not asset.route or not self.map.check_location([*asset.route[-1][:-1]], destination):
-                nodes = []
-                events_area = []
-                for i in range(self.current_step):
-                    if self.steps[i]['flood'] and self.steps[i]['flood'].active:
-                        nodes.extend(self.steps[i]['flood'].list_of_nodes)
-                        events_area.append({'location': self.steps[i]['flood'].dimensions['location'],
-                                            'radius': self.steps[i]['flood'].dimensions['radius']})
+            nodes = []
+            events = []
+            for i in range(self.current_step):
+                if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                    nodes.extend(self.steps[i]['flood'].list_of_nodes)
+                    events.append(self.steps[i]['flood'].dimensions)
 
+            if not asset.route or not self.map.check_location([*asset.route[-1][:-1]], destination):
                 result, route, distance = self.map.get_route(asset.location, destination, asset.abilities,
-                                                             asset.speed, nodes, events_area)
+                                                             asset.speed, nodes, events)
 
                 if not result:
                     self.social_assets_manager.edit(token, 'route', [])
@@ -1760,6 +1761,21 @@ class Cycle:
                     self.social_assets_manager.edit(token, 'route', route)
                     self.social_assets_manager.edit(token, 'destination_distance', distance)
             else:
+                destiny = asset.route[0]
+                if destiny[2] != self.map.check_coord_in_events((destiny[:-1]), events):
+                    result, route, distance = self.map.get_route(asset.location, destination, asset.abilities,
+                                                                 asset.speed, nodes, events)
+
+                    if not result:
+                        self.social_assets_manager.edit(token, 'route', [])
+                        self.social_assets_manager.edit(token, 'destination_distance', 0)
+
+                        raise FailedNoRoute('Agent is not capable of entering Event locations.')
+
+                    else:
+                        self.social_assets_manager.edit(token, 'route', route)
+                        self.social_assets_manager.edit(token, 'destination_distance', distance)
+
                 self.social_assets_manager.update_location(token)
                 distance = self.map.euclidean_distance(asset.location, destination)
                 self.social_assets_manager.edit(token, 'destination_distance', distance)
@@ -1943,6 +1959,56 @@ class Cycle:
                     for victim in photo.victims:
                         victim.active = True
                         self.steps[i]['victims'].append(victim)
+
+    def calculate_route(self, parameters):
+        """Return the route calculated with the parameters given.
+
+        :param parameters: Dict with the parameters to calculate the route.
+        :return dict: Dictionary with the result of the operation, the route calculated, the distance od the route and
+        a message."""
+
+        response = dict(operation_result='success', route=[], distance=0, message='')
+
+        try:
+            if len(parameters) != 6:
+                print(len(parameters),parameters)
+                raise FailedWrongParam('More or less than 6 parameter was given.')
+
+            if parameters[4] not in self.map.movement_restrictions.keys():
+                raise FailedParameterType('The parameter "movement_type" is not a movement type valid.')
+
+            if parameters[5] <= 0:
+                raise FailedParameterType('The parameter "speed" can not be less or equal to 0.')
+
+            start = [parameters[0], parameters[1]]
+            end = [parameters[2], parameters[3]]
+            nodes = []
+            events = []
+
+            for i in range(self.current_step):
+                if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                    nodes.extend(self.steps[i]['flood'].list_of_nodes)
+                    events.append(self.steps[i]['flood'].dimensions)
+
+            result, route, distance = self.map.get_route(start, end, [parameters[4]], parameters[5], nodes, events)
+
+            if result:
+                response['operation_result'] = 'success'
+                response['route'] = route
+                response['distance'] = distance
+
+            else:
+                response['operation_result'] = 'noRoute'
+
+        except FailedParameterType as e:
+            response['operation_result'] = e.identifier
+            response['message'] = e.message
+
+        except Exception as e:
+            response['operation_result'] = 'unknownError'
+            response['message'] = str(e)
+
+        return response
 
     @staticmethod
     def check_location(l1, l2, radius):

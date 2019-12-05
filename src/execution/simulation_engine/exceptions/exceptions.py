@@ -127,3 +127,12 @@ class FailedNoMatch(Exception):
     def __str__(self):
         return 'FailedNoMatch: ' + self.message
 
+
+class FailedParameterType(Exception):
+
+    def __init__(self, message):
+        self.message = message
+        self.identifier = 'parameterType'
+
+    def __str__(self):
+        return 'FailedParameterType: ' + self.message

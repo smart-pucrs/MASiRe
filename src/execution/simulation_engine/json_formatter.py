@@ -267,9 +267,25 @@ class JsonFormatter:
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
 
-            import traceback
-            traceback.print_exc()
             return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
+
+    def calculate_route(self, parameters):
+        """Return the route calculated with the parameters given.
+
+        :param parameters: list with the parameters to calculate the route.
+        :return dict: Dictionary with the result of the operation, the route calculated, the distance od the route and
+        a message."""
+
+        Logger.normal('Route Calculator Service called.')
+
+        try:
+            response = self.copycat.calculate_route(parameters)
+            response['route'] = [self.format_location(coord) for coord in response['route']]
+
+            return {'status': 1, 'response': response}
+
+        except Exception as e:
+            return {'status': 0, 'message': f'Unknown Error: {str(e)}'}
 
     def do_step(self, token_action_list):
         """Do a step on the simulation.

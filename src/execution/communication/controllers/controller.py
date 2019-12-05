@@ -30,6 +30,10 @@ class Controller:
         else:
             self.started = True
 
+    def simulation_started(self):
+        """Get the state of the simulation"""
+        return self.started
+
     def set_processing_actions(self):
         """Set the processing_actions attribute.
 
@@ -344,6 +348,30 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
+    @staticmethod
+    def check_service_request(request):
+        """Check if the service request is valid.
+
+        :param request: The request object received on the API containing all the data and JSON.
+        :return tuple: First position with the status and the second position with the message."""
+
+        try:
+            message = request.get_json(force=True)
+
+            if 'service' not in message:
+                return 3, 'The object not contain "service" key'
+
+            if message['service'] not in ['getRoute']:
+                return 3, 'The service given not exists.'
+
+            if 'parameters' not in message:
+                return 3, 'The object not contain "parameters" key'
+
+            return 1, 'OK.'
+
+        except Exception as e:
+            return 5, f'Unknown error: {str(e)}'
+
     def do_action(self, request):
         """Save the action from either the agent or the social asset.
 
@@ -354,7 +382,7 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = json.loads(request) if isinstance(request, str) else json.loads(request.get_json(force=True))
+            obj = json.loads(request)
 
             if not self.started:
                 return 5, 'Simulation has not started.'
@@ -431,25 +459,39 @@ class Controller:
         return True
 
     def check_requests(self):
+        """Check if have some request for social assets."""
+
         return self.asset_request_manager.check_requests()
 
     def processing_asset_request(self):
+        """Check if the API still processing requests."""
+
         return self.asset_request_manager.processing()
 
     def format_actions_result(self, assets_response):
+        """Format the actions result of the agent that call a social asset in the current step."""
+
         return self.asset_request_manager.format_actions_result(assets_response)
 
     def get_social_assets_tokens(self):
+        """Return all social assets tokens."""
+
         return self.asset_request_manager.get_social_assets_tokens()
 
     def clear_social_assets(self, tokens):
+        """Disconnect all social asset from the simulator."""
+
         for token in tokens:
             self.disconnect_social_asset(token)
 
     def disconnect_social_asset(self, token):
+        """Disconnect a specific social asset."""
+
         self.manager.remove(token, 'social_asset')
 
     def add_monitor(self, request):
+        """Add a monitor to the simulator."""
+
         try:
             sid = request.sid
 
@@ -462,6 +504,8 @@ class Controller:
             return False, f'Error to connect monitor "{sid}": {str(e)}.'
 
     def rmv_monitor(self, request):
+        """Remove a monitor from the simulator."""
+
         try:
             sid = request.sid
 
@@ -474,4 +518,6 @@ class Controller:
             return False, f'Error to disconnect monitor "{sid}": {str(e)}.'
 
     def get_monitors_rooms(self):
+        """Return all rooms from the monitors."""
+
         return self.manager.get_monitors_rooms()
