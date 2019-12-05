@@ -226,10 +226,6 @@ function setMapConfig(config) {
     L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
     let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
-    L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
-        console.info(e);
-    }).addTo(constantsMarkerGroup);
-
     $('#current-map').text(config['osm']);
 }
 
@@ -262,7 +258,7 @@ function process_simulation_data(data) {
                     color: '#504E0F',
                     fillColor: '#504E0F',
                     fillOpacity: 0.65,
-                    radius: events[i]['radius'] * 1000
+                    radius: events[i]['radius'] * 109000
                 }).addTo(variablesMarkerGroup);
                 break;
             case 'victim':
@@ -384,30 +380,39 @@ function setCurrentEntity(info){
     if ($(entityBoxId).is(':hidden')){
         $(entityBoxId).show();
     }
+    let value;
 
     for (let key in info){
         switch (key) {
             case 'location':
-                let value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
-                $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
+                value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
                 break;
             case 'route':
-                continue;
+                value = []
+                for(let i=0; i<info[key].length; i++){
+                    value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
+                }
+                break;
+            case 'destination_distance':
+                value = (info[key] * 100).toFixed(2).toString() + ' km';
+                break;
             case 'social_assets':
-                let assets = [];
+                value = [];
                 let location, temp;
-                console.log(info[key]);
                 for (let i=0; i<info[key].length; i++){
                     temp = info[key][i];
                     delete temp['location'];
-                    assets.push(temp);
+                    value.push(temp);
                 }
 
-                $("#entity-list-info").append("<li><b>"+key+":</b> "+JSON.stringify(assets)+"</li>");
+                break;
+            case 'radius':
+                value = (info[key] * 100).toFixed(2).toString() + ' km';
                 break;
             default:
-                $("#entity-list-info").append("<li><b>"+key+":</b> "+info[key]+"</li>");
+                value = info[key];
         }
+        $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
     }
 
     currentEntity['type'] = info['type'];
