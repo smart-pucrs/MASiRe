@@ -1,4 +1,6 @@
 import math
+from builtins import list
+
 import pyroutelib3
 import pathlib
 from itertools import zip_longest
@@ -89,7 +91,7 @@ class Map:
 
         return self.get_node_coord(self.get_closest_node(lat, lon))
 
-    def get_route(self, start_coord, end_coord, abilities, speed, speed_reduction, list_of_nodes):
+    def get_route(self, start_coord, end_coord, abilities, speed, list_of_nodes, events_range):
         """Get the route for each kind of actor.
 
         For drones and boats, the route is a straight line from one point to another.
@@ -99,88 +101,243 @@ class Map:
         :param end_coord: The destination location.
         :param abilities: The kind of the actor, either drone, boat or car.
         :param speed: The speed of the actor.
-        :param speed_reduction: The speed reduction in flood area.
         :param list_of_nodes: The list of flooded nodes.
+        :param events_range: The list of all active events.
         :return tuple: First position containing if the path can be done, second with the list of locations the actor
         must go to get to its destination and the third position hold the distance to the destination."""
 
         if 'airMovement' in abilities:
-            return self.generate_coordinates_for_air_movement(start_coord, end_coord, speed)
+            return self.generate_air_route(start_coord, end_coord, speed, events_range)
 
         elif 'waterMovement' in abilities:
-            return self.generate_coordinates_for_water_movement(start_coord, end_coord, speed, list_of_nodes)
+            return self.generate_water_route(start_coord, end_coord, speed, events_range)
 
         else:
-            start_node = self.get_closest_node(*start_coord)
-            end_node = self.get_closest_node(*end_coord)
-
-            result, nodes = self.router.doRoute(start_node, end_node)
-
-            if result == 'no_route':
-                return self.generate_coordinates_for_air_movement(start_coord, end_coord, speed)
-
-            if len(nodes) < 3:
-                return True, [self.get_node_coord(node) for node in nodes], self.node_distance(start_node, end_node)
-
-            route_nodes = []
-            normal_nodes = []
-            dirty_nodes = []
-            flood_area = False
-            for node in nodes:
-                if node in list_of_nodes:
-                    if not flood_area:
-                        dirty_nodes = []
-                        route_nodes.append((normal_nodes, False))
-                        flood_area = True
-
-                    dirty_nodes.append(node)
-
-                else:
-                    if flood_area:
-                        normal_nodes = []
-                        route_nodes.append((dirty_nodes, True))
-                        flood_area = False
-
-                    normal_nodes.append(node)
-            if flood_area:
-                route_nodes.append((dirty_nodes, True))
-            else:
-                route_nodes.append((normal_nodes, False))
-
-            complete_route = []
-            max_dist = .0005 * speed
-
-            for nodes_type in route_nodes:
-                node_list = nodes_type[0]
-                if nodes_type[1]:
-                    if len(node_list) < 2:
-                        complete_route.extend([self.get_node_coord(node) for node in node_list])
-                    else:
-                        start = self.get_node_coord(node_list[0])
-                        end = self.get_node_coord(node_list[-1])
-                        _, route, _ = self.generate_coordinates_for_air_movement(start, end,
-                                                                                 speed * (1 - speed_reduction / 100))
-                        complete_route.extend(route)
-                else:
-                    if len(node_list) < 3:
-                        complete_route.extend([self.get_node_coord(node) for node in node_list])
-                        continue
-
-                    complete_route.append(self.get_node_coord(node_list[0]))
-                    pivot = self.get_node_coord(node_list[0])
-
-                    for node in node_list[1:-1]:
-                        node_coord = self.get_node_coord(node)
-                        if self.check_node_proximity(pivot, node_coord, max_dist):
-                            pivot = node_coord
-                            complete_route.append(node_coord)
-
-                    complete_route.append(self.get_node_coord(node_list[-1]))
-
-            return True, complete_route, self.node_distance(start_node, end_node)
+            return self.generate_ground_route(start_coord, end_coord, speed, list_of_nodes)
 
     def check_node_proximity(self, p1, p2, max_dist):
+        """ Check if the two node given is closest, considering the max distance given.
+
+        :param p1: Tuple with the latitude and longitude of the first point.
+        :param p2: Tuple with the latitude and longitude of the second point.
+        :param max_dist: Float with the max distance allowed.
+        :return: True if the two points is close else False.
+        """
         return self.euclidean_distance(p1, p2) > max_dist
+
+    def generate_ground_route(self, start_coord, end_coord, speed, list_of_nodes):
+        """ Generate route for ground movement.
+
+        Note: The route will considering the speed reduction of events area.
+
+        :param start_coord: Tuple with the latitude and longitude of the start point.
+        :param end_coord: Tuple with the latitude and longitude of the end point.
+        :param speed: Float that represent the speed of the vehicle.
+        :param list_of_nodes: List with all node in event area.
+        :return: Tuple with the first element as True if a route are found else False,
+                The second have the route end the last have distance between the start coord and the end coord
+        """
+        reduction = self.movement_restrictions['groundMovement'] / 100 * speed
+
+        start_node = self.get_closest_node(*start_coord)
+        end_node = self.get_closest_node(*end_coord)
+
+        result, nodes = self.router.doRoute(start_node, end_node)
+
+        if result == 'no_route':
+            return False, [], 0
+
+        elif len(nodes) <= 2:
+            if start_node in list_of_nodes:
+                return True, self.generate_straight_route(start_coord, end_coord, speed, True), \
+                       self.euclidean_distance(start_coord, end_coord)
+
+            return True, self.generate_straight_route(start_coord, end_coord, speed, False), \
+                   self.euclidean_distance(start_coord, end_coord)
+
+        route = []
+        min_dist = speed / self.measure_unit
+        current_node_coord = self.get_node_coord(nodes[0])
+        event_area = nodes[0] in list_of_nodes
+
+        for node in nodes[1:-1]:
+            node_coord = self.get_node_coord(node)
+
+            if self.is_out(node_coord):
+                continue
+
+            if node in list_of_nodes:
+                if self.movement_restrictions['groundMovement'] == 100:
+                    if route:
+                        return True, route, self.euclidean_distance(start_coord, route[-1])
+                    else:
+                        return False, [], 0
+
+                if not event_area:
+                    current_node_coord = node_coord
+                    event_area = True
+            else:
+                if event_area:
+                    event_area = False
+                    min_route = self.generate_straight_route(current_node_coord, node_coord, speed - reduction, True)
+
+                    route.extend(min_route)
+                    current_node_coord = node_coord
+
+                elif self.euclidean_distance(current_node_coord, node_coord) >= min_dist:
+                    # min_route = self.generate_straight_route(current_node_coord, node_coord, speed, False)
+
+                    # route.extend(min_route)
+                    route.append((*node_coord, False))
+                    current_node_coord = node_coord
+
+        if event_area:
+            route.extend(self.generate_straight_route(current_node_coord, end_coord, speed - reduction, True))
+        else:
+            route.extend(self.generate_straight_route(current_node_coord, end_coord, speed, False))
+
+        return True, route, self.euclidean_distance(start_coord, end_coord)
+
+    def generate_air_route(self, start_coord, end_coord, speed, events):
+        """ Generate route for air movement.
+
+        Note: The route will considering the speed reduction of events area.
+
+        :param start_coord: Tuple with the latitude and longitude of the start point.
+        :param end_coord: Tuple with the latitude and longitude of the end point.
+        :param speed: Float that represent the speed of the vehicle.
+        :param events: List with all active events.
+        :return: Tuple with the first element as True if a route are found else False,
+                The second have the route end the last have distance between the start coord and the end coord
+        """
+        events_in_range = self.filter_events_in_range(start_coord, end_coord, events)
+        if not events_in_range:
+            return True, self.generate_straight_route(start_coord, end_coord, speed, False), \
+                   self.euclidean_distance(start_coord, end_coord)
+
+        restricted_area = self.movement_restrictions['airMovement'] == 100
+
+        t = 0
+        route = []
+        in_event = False
+        current_coord = start_coord
+        reduction = self.movement_restrictions['airMovement'] / 100 * speed
+        dist_by_step = self.get_straight_factor(start_coord, end_coord, speed)
+        dist_with_reduction = 0 if restricted_area else self.get_straight_factor(start_coord, end_coord,
+                                                                                 speed - reduction)
+
+        while t < 1:
+            if self.check_coord_in_events(current_coord, events):
+                in_event = False
+                if restricted_area:
+                    if route:
+                        last_coord = route[-1][:-1]
+                        return True, route, self.euclidean_distance(start_coord, last_coord)
+                    else:
+                        return False, [], 0
+
+                t += dist_with_reduction
+            else:
+                in_event = True
+                t += dist_by_step
+
+            current_coord = (self.straight_equation(start_coord[0], end_coord[0], t),
+                             self.straight_equation(start_coord[1], end_coord[1], t),
+                             in_event)
+
+            route.append(current_coord)
+
+        if t - 1 < 0:
+            route.append((*end_coord, in_event))
+        else:
+            route[-1] = (*end_coord, in_event)
+
+        return True, route, self.euclidean_distance(start_coord, end_coord)
+
+    def generate_water_route(self, start_coord, end_coord, speed, events):
+        """ Generate route for water movement.
+
+        Note: The route will considering the speed reduction of events area.
+
+        :param start_coord: Tuple with the latitude and longitude of the start point.
+        :param end_coord: Tuple with the latitude and longitude of the end point.
+        :param speed: Float that represent the speed of the vehicle.
+        :param events: List with all active events.
+        :return: Tuple with the first element as True if a route are found else False,
+                The second have the route end the last have distance between the start coord and the end coord
+        """
+        if self.movement_restrictions['waterMovement'] == 100:
+            return False, [], 0
+
+        events_in_range = self.filter_events_in_range(start_coord, end_coord, events)
+        if not events_in_range:
+            return False, [], 0
+
+        if not self.check_coord_in_events(start_coord, events):
+            return False, [], 0
+
+        t = 0
+        route = []
+        reduction = self.movement_restrictions['waterMovement'] * 0.01 * speed
+        dist_per_step = self.get_straight_factor(start_coord, end_coord, speed - reduction)
+        current_coord = start_coord
+
+        while t < 1:
+            if self.check_coord_in_events(current_coord, events):
+                if route:
+                    last_coord = route[-1][:-1]
+                    return True, route, self.euclidean_distance(start_coord, last_coord)
+                else:
+                    return False, [], 0
+
+            t += dist_per_step
+
+            current_coord = (self.straight_equation(start_coord[0], end_coord[0], t),
+                             self.straight_equation(start_coord[1], end_coord[1], t),
+                             True)
+
+            route.append(current_coord)
+
+        return True, route, self.euclidean_distance(start_coord, end_coord)
+
+    def check_coord_in_events(self, coord, events):
+        for event in events:
+            if self.euclidean_distance(coord, event['location']) < event['radius']:
+                return True
+
+        return False
+
+    def get_straight_factor(self, start, end, speed):
+        """Calculate the the factor of each step between the start and end point considering the speed.
+
+        Note: This value will be used to calculate a specific line coordinate between the two points.
+
+        :param start: Tuple with the latitude and longitude of the start point.
+        :param end: Tuple with the latitude and longitude of the end point.
+        :param speed: The velocity of the vehicle.
+        """
+        return 1 / ((self.euclidean_distance(start, end) * self.measure_unit) / speed)
+
+    def filter_events_in_range(self, start_coord, end_coord, events):
+        """ Filter all events that will intersect the route.
+
+        Note: considering a straight route.
+
+        :param start_coord: Tuple with the latitude and longitude of the start point.
+        :param end_coord: Tuple with the latitude and longitude of the end point.
+        :param events: List with all active events.
+        :return: List with the events that intersect the route
+        """
+        events_in_range = []
+
+        for event in events:
+            if self.euclidean_distance(start_coord, event['location']) < event['radius']:
+                events_in_range.append(event)
+
+            elif self.euclidean_distance(end_coord, event['location']) < event['radius']:
+                events_in_range.append(event)
+
+        return events_in_range
 
     def nodes_in_radius(self, coord, radius):
         """Get all the nodes in a circle around the coordinate given.
@@ -191,8 +348,9 @@ class Map:
 
         result = []
         for node in self.router.rnodes:
-            if self.router.distance(self.node_to_radian(node), self.coords_to_radian(coord)) <= radius:
-                if not self.is_out(self.get_node_coord(node)):
+            node_coord = self.get_node_coord(node)
+            if self.euclidean_distance(node_coord, coord) <= radius:
+                if not self.is_out(node_coord):
                     result.append(node)
         return result
 
@@ -226,134 +384,43 @@ class Map:
 
         return self.router.distance(self.node_to_radian(node_x), self.node_to_radian(node_y))
 
-    def generate_coordinates_for_air_movement(self, start, end, speed):
-        """Generate a straight line connecting two locations.
+    def generate_straight_route(self, start, end, speed, event_area):
+        """ Generate a straight route between the start coord to the end coord using the speed in each step.
 
-        :param start: The start location.
-        :param end: The destination location.
-        :param speed: The speed of the drone.
-        :return tuple: First position holding True if there is a path else False, second position holding the list with
-        all the locations the drone have to go to reach the destination and the thirhd position with the euclidean
-        distance between the two locations."""
+        :param start: Tuple with the latitude and longitude of the start point.
+        :param end: Tuple with the latitude and longitude of the end point.
+        :param speed: Float that represent the speed of the vehicle.
+        :param event_area: Bool with True if the straight is in event area else False.
+        :return: List with the route from start coord and end coord.
+        """
+        x_start, y_start = start
+        x_end, y_end = end
 
-        actual_x, actual_y = start
+        route = []
+        points_amount = round((self.euclidean_distance(start, end) * self.measure_unit) / speed)
 
-        if actual_x > end[0]:
-            x_axis = self.decrease_until_reached(actual_x, end[0], speed) or [end[0]]
-        else:
-            x_axis = self.increase_until_reached(actual_x, end[0], speed) or [end[0]]
-
-        if actual_y > end[1]:
-            y_axis = self.decrease_until_reached(actual_y, end[1], speed) or [end[1]]
-        else:
-            y_axis = self.increase_until_reached(actual_y, end[1], speed) or [end[1]]
-
-        longest = y_axis[-1] if len(x_axis) > len(y_axis) else x_axis[-1]
-        distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
-
-        return True, list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
-
-    def generate_coordinates_for_water_movement(self, start, end, speed, list_of_nodes=None):
-        """Generate a straight line connecting two locations.
-
-        Note: A boat can only move through flooded nodes.
-
-        :param start: The start location.
-        :param end: The destination location.
-        :param speed: The speed of the boat.
-        :param list_of_nodes: List of all the flooded nodes.
-        :return tuple: First position holding True if there is a path else False, second position holding the list with
-        all the locations the drone have to go to reach the destination and the thirhd position with the euclidean
-        distance between the two locations."""
-
-        start_node = self.get_closest_node(*start)
-        end_node = self.get_closest_node(*end)
-
-        if start_node in list_of_nodes:
-            if end_node in list_of_nodes:
-                actual_x, actual_y = start
-
-                if actual_x > end[0]:
-                    x_axis = self.decrease_until_reached(actual_x, end[0], speed, list_of_nodes) or [end[0]]
-                else:
-                    x_axis = self.increase_until_reached(actual_x, end[0], speed, list_of_nodes) or [end[0]]
-
-                if actual_y > end[1]:
-                    y_axis = self.decrease_until_reached(actual_y, end[1], speed, list_of_nodes) or [end[1]]
-                else:
-                    y_axis = self.increase_until_reached(actual_y, end[1], speed, list_of_nodes) or [end[1]]
-
-                longest = y_axis[-1] if len(x_axis) > len(y_axis) else x_axis[-1]
-                distance = self.router.distance(self.coords_to_radian(start), self.coords_to_radian(end))
-
-                return True, list(zip_longest(x_axis, y_axis, fillvalue=longest)), distance
-        return False, [], 0
-
-    def decrease_until_reached(self, start, end, speed, list_of_nodes=None):
-        """Generate a list of points from one point to another.
-
-        This method will decrease the start point until it is considered to be equal to the end point.
-
-        :param start: The start point.
-        :param end: The end point.
-        :param speed: The speed of the actor.
-        :param list_of_nodes: The list of the flooded nodes for boats.
-        :return list|None: List of all the points until reaching the destination."""
-
-        if start == end:
+        if not points_amount:
             return [end]
 
-        points = []
-        while True:
-            if start - .0005 * speed <= end:
-                points.append(end)
-                break
-            else:
-                start -= .0005 * speed
+        unit = 1 / points_amount
 
-            if list_of_nodes:
-                node = self.get_closest_node(start, end)
-                if node in list_of_nodes:
-                    points.append(start)
-                else:
-                    return None
-            else:
-                points.append(start)
+        for i in range(1, points_amount + 1):
+            route.append((self.straight_equation(x_start, x_end, i * unit),
+                          self.straight_equation(y_start, y_end, i * unit),
+                          event_area))
 
-        return points
+        return route
 
-    def increase_until_reached(self, start, end, speed, list_of_nodes=None):
-        """Generate a list of points from one point to another.
+    @staticmethod
+    def straight_equation(x, y, t):
+        """ Calculate the point value of the straight equation.
 
-        This method will increase the start point until it is considered to be equal to the end point.
-
-        :param start: The start point.
-        :param end: The end point.
-        :param speed: The speed of the actor.
-        :param list_of_nodes: The list of the flooded nodes for boats.
-        :return list|None: List of all the points until reaching the destination."""
-
-        if start == end:
-            return [end]
-
-        points = []
-        while True:
-            if start + .0005 * speed >= end:
-                points.append(end)
-                break
-            else:
-                start += .0005 * speed
-
-            if list_of_nodes:
-                node = self.get_closest_node(start, end)
-                if node in list_of_nodes:
-                    points.append(start)
-                else:
-                    return None
-            else:
-                points.append(start)
-
-        return points
+        :param x: Float represent the first point.
+        :param y: Float represent the second point.
+        :param t: Float represent the local of the straight, 0 to 1
+        :return: Float represent the value of the straight equation in the point t.
+        """
+        return x * (1 - t) + y * t
 
     @staticmethod
     def euclidean_distance(a, b):

@@ -1,7 +1,7 @@
 from collections import namedtuple
 from simulation_engine.simulation_objects.agent import Agent
 
-Role = namedtuple('Role', 'abilities resources size name battery speed physical_capacity virtual_capacity')
+Role = namedtuple('Role', 'abilities resources size name battery battery_by_movement speed physical_capacity virtual_capacity')
 
 
 class AgentsManager:
@@ -41,6 +41,7 @@ class AgentsManager:
                 roles_info[role]['size'],
                 role,
                 roles_info[role]['battery'],
+                roles_info[role]['batteryByMovement'],
                 roles_info[role]['speed'],
                 roles_info[role]['physicalCapacity'],
                 roles_info[role]['virtualCapacity'])
@@ -187,7 +188,7 @@ class AgentsManager:
         :param token: The identifier of the requested agent."""
 
         if self.agents[token].route:
-            location = self.agents[token].route.pop(0)
+            location = self.agents[token].route.pop(0)[:-1]
             self.agents[token].location = location
 
     def clear_physical_storage(self, token):

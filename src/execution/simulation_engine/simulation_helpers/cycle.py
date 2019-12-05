@@ -1,7 +1,6 @@
 import copy
 import datetime
 import json
-import os
 import pathlib
 from math import sqrt
 
@@ -15,7 +14,7 @@ from simulation_engine.simulation_helpers.social_assets_manager import SocialAss
 
 class Cycle:
     def __init__(self, config, load_sim, write_sim):
-        self.map = Map(config['map']['maps'][0], config['map']['proximity'])
+        self.map = Map(config['map']['maps'][0], config['map']['proximity'], config['map']['movementRestrictions'])
         self.actions = config['actions']
         self.max_steps = config['map']['steps']
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
@@ -1673,30 +1672,46 @@ class Cycle:
             self.agents_manager.edit(token, 'destination_distance', 0)
 
         else:
-            if not agent.route or not self.map.check_location([*agent.route[-1]], destination):
-                nodes = []
-                for i in range(self.current_step):
-                    if self.steps[i]['flood'] and self.steps[i]['flood'].active:
-                        nodes.extend(self.steps[i]['flood'].list_of_nodes)
+            nodes = []
+            events = []
 
-                result, route, distance = self.map.get_route(agent.location, destination, agent.abilities, agent.speed,
-                                                             self.map_percepts['speedReduction'], nodes)
+            for i in range(self.current_step):
+                if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                    nodes.extend(self.steps[i]['flood'].list_of_nodes)
+                    events.append(self.steps[i]['flood'].dimensions)
+
+            if not agent.route or not self.map.check_location([*agent.route[-1][:-1]], destination):
+                result, route, distance = self.map.get_route(agent.location, destination, agent.abilities,
+                                                             agent.speed, nodes, events)
 
                 if not result:
                     self.agents_manager.edit(token, 'route', [])
                     self.agents_manager.edit(token, 'destination_distance', 0)
 
-                    raise FailedNoRoute('No route are found.')
+                    raise FailedNoRoute('Agent is not capable of entering Event locations.')
 
                 else:
                     self.agents_manager.edit(token, 'route', route)
                     self.agents_manager.edit(token, 'destination_distance', distance)
             else:
-                self.agents_manager.update_location(token)
-                distance = self.map.node_distance(self.map.get_closest_node(*agent.location),
-                                                  self.map.get_closest_node(*destination))
-                self.agents_manager.edit(token, 'destination_distance', distance)
+                destiny = agent.route[0]
+                if destiny[2] != self.map.check_coord_in_events((destiny[:-1]), events):
+                    result, route, distance = self.map.get_route(agent.location, destination, agent.abilities,
+                                                                 agent.speed, nodes, events)
 
+                    if not result:
+                        self.agents_manager.edit(token, 'route', [])
+                        self.agents_manager.edit(token, 'destination_distance', 0)
+
+                        raise FailedNoRoute('Agent is not capable of entering Event locations.')
+
+                    else:
+                        self.agents_manager.edit(token, 'route', route)
+                        self.agents_manager.edit(token, 'destination_distance', distance)
+
+                self.agents_manager.update_location(token)
+                distance = self.map.euclidean_distance(agent.location, destination)
+                self.agents_manager.edit(token, 'destination_distance', distance)
                 self.agents_manager.discharge(token)
 
     def _move_asset(self, token, parameters):
@@ -1723,29 +1738,30 @@ class Cycle:
             self.social_assets_manager.edit(token, 'destination_distance', 0)
 
         else:
-            if not asset.route:
+            if not asset.route or not self.map.check_location([*asset.route[-1][:-1]], destination):
                 nodes = []
+                events_area = []
                 for i in range(self.current_step):
                     if self.steps[i]['flood'] and self.steps[i]['flood'].active:
                         nodes.extend(self.steps[i]['flood'].list_of_nodes)
+                        events_area.append({'location': self.steps[i]['flood'].dimensions['location'],
+                                            'radius': self.steps[i]['flood'].dimensions['radius']})
 
-                result, route, distance = self.map.get_route(asset.location, destination, 'car', asset.speed,
-                                                             self.map_percepts['speedReduction'], nodes)
+                result, route, distance = self.map.get_route(asset.location, destination, asset.abilities,
+                                                             asset.speed, nodes, events_area)
 
                 if not result:
                     self.social_assets_manager.edit(token, 'route', [])
                     self.social_assets_manager.edit(token, 'destination_distance', 0)
 
-                    raise FailedNoRoute('Asset is not capable of entering flood locations.')
+                    raise FailedNoRoute('Agent is not capable of entering Event locations.')
 
                 else:
                     self.social_assets_manager.edit(token, 'route', route)
                     self.social_assets_manager.edit(token, 'destination_distance', distance)
-
-            if self.social_assets_manager.get(token).destination_distance:
+            else:
                 self.social_assets_manager.update_location(token)
-                _, _, distance = self.map.get_route(asset.location, destination, 'car', asset.speed,
-                                                    self.map_percepts['speedReduction'], [])
+                distance = self.map.euclidean_distance(asset.location, destination)
                 self.social_assets_manager.edit(token, 'destination_distance', distance)
 
     def _rescue_victim_agent(self, token, parameters):
@@ -1873,7 +1889,6 @@ class Cycle:
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
-
         self.agents_manager.clear_virtual_storage(token)
 
     def _analyze_photo_asset(self, token, parameters):
@@ -1893,7 +1908,6 @@ class Cycle:
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
-
         self.social_assets_manager.clear_virtual_storage(token)
 
     def _search_social_asset_agent(self, token, parameters):

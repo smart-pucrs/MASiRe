@@ -5,7 +5,7 @@ class Agent:
     """Class that represents the Agent inside the simulation."""
 
     def __init__(self, token, cdm_location, abilities, resources, size,
-                 role_name, battery, speed, physical_capacity, virtual_capacity):
+                 role_name, battery, battery_by_movement, speed, physical_capacity, virtual_capacity):
         self.token = token
         self.type = 'agent'
         self.is_active = True
@@ -19,6 +19,7 @@ class Agent:
         self.resources = resources
         self.max_charge = battery
         self.actual_battery = battery
+        self.battery_by_movement = battery_by_movement
         self.speed = speed
         self.route = []
         self.destination_distance = 0
@@ -46,7 +47,8 @@ class Agent:
     def check_battery(self):
         """Check if the agent supports another discharge."""
 
-        return self.actual_battery - int(self.speed / 5) if self.actual_battery - int(self.speed / 5) > 0 else 0
+        return self.actual_battery - self.battery_by_movement \
+            if self.actual_battery - self.battery_by_movement > 0 else 0
 
     def charge(self):
         """Charge the agent battery to its full capacity."""
