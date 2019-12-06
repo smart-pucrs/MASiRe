@@ -32,7 +32,8 @@ else:
     base_url, monitor_port, api_port, record, config, secret = sys.argv[1:]
     replay_mode = False
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='monitor_engine/graphic_interface/templates',
+            static_folder='monitor_engine/graphic_interface/static')
 socket = socketio.Client()
 manager = None
 
