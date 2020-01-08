@@ -19,6 +19,7 @@ class Controller:
         self.agents_amount = int(agents_amount)
         self.secret = internal_secret
         self.processing_actions = False
+        self.match = 0
 
     def set_started(self):
         """Set the started attribute.
@@ -234,8 +235,6 @@ class Controller:
         :return tuple: First position with the status and the second position with the message."""
 
         try:
-            obj = msg
-
             if not self.started:
                 return 5, 'Simulation has not started.'
 
@@ -245,28 +244,28 @@ class Controller:
             if not self.processing_asset_request():
                 return 5, 'There is no social asset request.'
 
-            if not isinstance(obj, dict):
+            if not isinstance(msg, dict):
                 return 4, 'Object is not a dictionary.'
 
-            if 'token' not in obj:
+            if 'token' not in msg:
                 return 3, 'Object does not contain "token" as key.'
 
-            social_asset = self.manager.get(obj['token'], 'social_asset')
+            social_asset = self.manager.get(msg['token'], 'social_asset')
             if social_asset is None:
                 return 5, 'Social asset was not connected.'
 
-            if not self.manager.edit(obj['token'], 'registered', True, 'social_asset'):
+            if not self.manager.edit(msg['token'], 'registered', True, 'social_asset'):
                 return 0, 'Error while editing token.'
 
-            if self.manager.get(obj['token'], 'socket') is not None:
+            if self.manager.get(msg['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(obj['token'], request.sid, 'socket'):
+            if not self.manager.add(msg['token'], request.sid, 'socket'):
                 return 0, 'Error while adding token.'
 
-            main_token = self.asset_request_manager.get_main_token(obj['token'])
+            main_token = self.asset_request_manager.get_main_token(msg['token'])
 
-            return 1, (main_token, obj['token'])
+            return 1, (main_token, msg['token'])
 
         except json.JSONDecodeError:
             return 2, 'Object format is not JSON.'
@@ -521,3 +520,13 @@ class Controller:
         """Return all rooms from the monitors."""
 
         return self.manager.get_monitors_rooms()
+
+    def get_current_match(self):
+        """Return the current match number."""
+
+        return self.match
+
+    def new_match(self):
+        """Increase the current match by 1 unit."""
+
+        self.match += 1

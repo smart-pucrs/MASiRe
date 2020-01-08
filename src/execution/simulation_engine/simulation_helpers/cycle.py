@@ -2033,7 +2033,8 @@ class Cycle:
                     'maxLon': self.map_percepts['maps'][0]['maxLon'],
                     'centerLat': self.map_percepts['maps'][0]['centerLat'],
                     'centerLon': self.map_percepts['maps'][0]['centerLon'],
-                    'osm': self.map_percepts['maps'][0]['osm']}
+                    'osm': self.map_percepts['maps'][0]['osm'],
+                    'name': self.map_percepts['maps'][0]['name']}
 
         return percepts
 
