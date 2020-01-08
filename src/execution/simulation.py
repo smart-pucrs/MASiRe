@@ -13,11 +13,14 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.serving import run_simple
 from simulation_engine.json_formatter import JsonFormatter
+from communication.helpers.logger import Logger
 
 config_path, base_url, simulation_port, api_port, log, load_sim, write_sim, secret = sys.argv[1:]
+load_sim_bool = load_sim.lower() == 'true'
+write_sim_bool = write_sim.lower() == 'true'
 
 app = Flask(__name__)
-formatter = JsonFormatter(config_path, load_sim.lower() == 'true', write_sim.lower() == 'true')
+formatter = JsonFormatter(config_path, load_sim_bool, write_sim_bool)
 
 
 @app.route('/start', methods=['POST'])
@@ -209,12 +212,11 @@ if __name__ == '__main__':
     app.config['JSON_SORT_KEYS'] = False
 
     CORS(app)
-    print('Simulation', end=': ')
     try:
         if requests.post(f'http://{base_url}:{api_port}/start_connections', json={'secret': secret, 'back': 0}):
-            print(f'Serving on http://{base_url}:{simulation_port}')
+            Logger.normal(f'Simulation: Serving on http://{base_url}:{simulation_port}')
             run_simple(application=app, hostname=base_url, port=int(simulation_port), use_reloader=False, use_debugger=False)
         else:
-            print('Errors occurred during startup.')
+            Logger.critical('Errors occurred during startup.')
     except requests.exceptions.ConnectionError:
-        print('API is not online.')
+        Logger.critical('API is not online.')

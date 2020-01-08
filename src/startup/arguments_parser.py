@@ -27,8 +27,8 @@ class Parser:
         self.parser.add_argument('-first_t', required=False, type=int, default=20)
         self.parser.add_argument('-mtd', required=False, type=str, default='time')
         self.parser.add_argument('-log', required=False, type=str, default='true')
-        self.parser.add_argument('-monitor', required=False, type=str, default='8000')
-        self.parser.add_argument('-record', required=False, type=str, default='False')
+        self.parser.add_argument('-mp', required=False, type=str, default='8000')
+        self.parser.add_argument('-record', required=False, type=str, default='True')
         self.parser.add_argument('-sa_timeout', required=False, type=int, default=5)
         self.parser.add_argument('-load_sim', required=False, type=bool, default=False)
         self.parser.add_argument('-write_sim', required=False, type=bool, default=False)
@@ -136,7 +136,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.monitor, args.ap, args.record, args.conf, secret]
+        return [args.url, args.mp, args.ap, args.record, args.conf, secret]
 
     def get_simulation_arguments(self):
         """Return all the arguments necessary for the Simulation.
@@ -170,7 +170,7 @@ class Parser:
         if args.url == 'localhost':
             args.url = '127.0.0.1'
 
-        return [args.url, args.ap, args.sp, args.step_t, args.first_t, args.mtd, args.log, args.sa_timeout, secret]
+        return [args.url, args.ap, args.sp, args.mp, args.step_t, args.first_t, args.mtd, args.log, args.sa_timeout, secret]
 
     def get_arguments(self):
         """Return all the arguments.

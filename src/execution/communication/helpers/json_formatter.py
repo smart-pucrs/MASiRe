@@ -120,80 +120,29 @@ def event_error_format(message):
 
 
 def initial_percepts_monitor_format(response):
-    info = {'status': 0, 'map_percepts': None, 'message': ''}
-
-    if response:
-        if response['status']:
-            if 'map_percepts' in response:
-                info['map_percepts'] = response['map_percepts']
-                info['status'] = 1
-            else:
-                info['message'] = 'Error formatting initial_percepts into API.'
-        else:
-            info['message'] = response['message']
-    else:
-        info['message'] = 'Empty simulation response.'
-
-    return info
+    # return {'map': response['map_percepts'], 'agent': response['agent_percepts']}
+    return response['map_percepts']
 
 
 def percepts_monitor_format(response):
-    info = {'status': 0, 'actors': None, 'environment': None, 'message': ''}
-
-    if response:
-        if response['status']:
-            if 'actors' not in response:
-                info['message'] = 'Error formatting percepts into API, key "actors" not found in response.'
-            elif 'environment' not in response:
-                info['message'] = 'Error formatting percepts into API, key "environment" not found in response.'
-            else:
-                info['status'] = 1
-
-                actors = []
-                for actor in response['actors']:
-                    if 'agent' in actor:
-                        actors.append(monitor_agent_info(actor['agent']))
-                    else:
-                        actors.append(monitor_asset_info(actor['asset']))
-
-                info['actors'] = actors
-                info['environment'] = response['environment']
+    actors = []
+    for actor in response['actors']:
+        if 'agent' in actor:
+            actors.append(monitor_agent_info(actor['agent']))
         else:
-            info['message'] = response['message']
-    else:
-        info['message'] = 'Empty simulation response.'
+            actors.append(monitor_asset_info(actor['asset']))
 
-    return info
+    environment = response['environment']
+
+    return {'environment': environment, 'actors': actors}
 
 
 def end_monitor_format(response):
-    info = {'status': 0, 'report': None, 'message': ''}
-
-    if response:
-        if response['status']:
-            info['status'] = 1
-            info['report'] = response['report']
-        else:
-            info['message'] = response['message']
-    else:
-        info['message'] = 'Empty simulation response.'
-
-    return info
+    return response['report']
 
 
 def bye_monitor_format(response):
-    info = {'status': 0, 'report': None, 'message': ''}
-
-    if response:
-        if response['status']:
-            info['status'] = 1
-            info['report'] = response['report']
-        else:
-            info['message'] = response['message']
-    else:
-        info['message'] = 'Empty simulation response.'
-
-    return info
+    return response['report']
 
 
 def event_error_monitor_format(message):

@@ -151,7 +151,7 @@ class Checker:
                 :returns int: Status where 1 is Ok and 0 is Not ok.
                 :returns str: Appropriate message for the user understand his error."""
 
-        keys = ['osm', 'minLat', 'maxLat', 'minLon', 'maxLon', 'centerLat', 'centerLon']
+        keys = ['name', 'osm', 'minLat', 'maxLat', 'minLon', 'maxLon', 'centerLat', 'centerLon']
 
         maps = json.load(open(self.config, 'r'))['map']['maps']
         for map in maps:

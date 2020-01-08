@@ -18,7 +18,7 @@ from communication.controllers.controller import Controller
 from communication.helpers import json_formatter
 from communication.helpers.logger import Logger
 
-base_url, api_port, simulation_port, step_time, first_step_time, method, log, social_assets_timeout, secret, agents_amount = sys.argv[1:]
+base_url, api_port, simulation_port, monitor_port, step_time, first_step_time, method, log, social_assets_timeout, secret, agents_amount = sys.argv[1:]
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
@@ -35,6 +35,28 @@ percepts_event = 'percepts'
 end_event = 'end'
 bye_event = 'bye'
 error_event = 'error'
+
+
+@app.route('/sim_config', methods=['GET'])
+def sim_config():
+    """Return the bases information of the simulator.
+    """
+
+    simulation_url = f'http://{base_url}:{simulation_port}'
+    api_url = f'http://{base_url}:{api_port}'
+
+    response = dict(
+        simulation_url=simulation_url,
+        api_url=api_url,
+        max_agents=agents_amount,
+        first_step_time=first_step_time,
+        step_time=step_time,
+        social_asset_timeout=social_assets_timeout
+    )
+
+    Logger.normal('Sending simulation config to GUI.')
+
+    return jsonify(response)
 
 
 @app.route('/start_connections', methods=['POST'])
@@ -119,7 +141,7 @@ def first_step_button_controller():
     """Wait for the user to press any button, the recommended is 'Enter', but there are no restrictions."""
 
     sys.stdin = open(0)
-    print('When you are ready press "Enter"')
+    Logger.normal('When you are ready press "Enter"')
     sys.stdin.read(1)
 
     requests.get(f'http://{base_url}:{api_port}/start_step_cycle', json=secret)
@@ -141,8 +163,8 @@ def start_step_cycle():
 
     sim_response = requests.post(f'http://{base_url}:{simulation_port}/start', json={'secret': secret}).json()
 
-    notify_monitors(initial_percepts_event, sim_response)
-    notify_monitors(percepts_event, sim_response)
+    notify_monitor(initial_percepts_event, sim_response)
+    notify_monitor(percepts_event, sim_response)
     notify_actors(percepts_event, sim_response)
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
@@ -227,14 +249,7 @@ def disconnect_monitor(data):
 
 @app.route('/simulation_info', methods=['GET'])
 def simulation_info():
-    data = {
-        'simulation_url': 'http://' + base_url + ':' + simulation_port,
-        'api_url': 'http://' + base_url + ':' + api_port,
-        'max_agents': agents_amount,
-        'first_step_time': first_step_time,
-        'step_time': step_time,
-        'social_asset_timeout': social_assets_timeout
-    }
+
 
     return jsonify(data)
 
@@ -353,7 +368,7 @@ def finish_step():
 
         if sim_response['status'] == 0:
             Logger.critical('An internal error occurred. Shutting down...')
-            notify_monitors(error_event, {'message': 'An internal error occurred. Shutting down...'})
+            notify_monitor(error_event, {'message': 'An internal error occurred. Shutting down...'})
 
             requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True})
             multiprocessing.Process(target=auto_destruction, daemon=True).start()
@@ -363,7 +378,7 @@ def finish_step():
 
             sim_response = requests.put(f'http://{base_url}:{simulation_port}/restart', json={'secret': secret}).json()
 
-            notify_monitors(end_event, sim_response['report'])
+            notify_monitor(end_event, sim_response['report'])
             notify_actors(end_event, sim_response['report'])
 
             if sim_response['status'] == 0:
@@ -371,7 +386,7 @@ def finish_step():
 
                 sim_response = requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, 'api': True}).json()
 
-                notify_monitors(bye_event, sim_response)
+                notify_monitor(bye_event, sim_response)
                 notify_actors(bye_event, sim_response)
 
                 multiprocessing.Process(target=auto_destruction, daemon=True).start()
@@ -380,10 +395,11 @@ def finish_step():
                 Logger.normal('Restart the simulation.')
 
                 controller.clear_social_assets(sim_response['assets_tokens'])
+                controller.new_match()
 
-                notify_monitors(initial_percepts_event, sim_response['initial_percepts'])
+                notify_monitor(initial_percepts_event, sim_response['initial_percepts'])
                 notify_actors(initial_percepts_event, sim_response['initial_percepts'])
-                notify_monitors(percepts_event, sim_response['percepts'])
+                notify_monitor(percepts_event, sim_response['percepts'])
                 notify_actors(percepts_event, sim_response['percepts'])
 
                 controller.set_processing_actions()
@@ -391,7 +407,7 @@ def finish_step():
 
         else:
             controller.set_processing_actions()
-            notify_monitors(percepts_event, sim_response)
+            notify_monitor(percepts_event, sim_response)
 
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')
@@ -569,25 +585,43 @@ def send_initial_percepts(token, info):
     socket.emit(initial_percepts_event, response, room=room)
 
 
-def notify_monitors(event, response):
-    Logger.normal('Update monitors.')
+def notify_monitor(event, response):
+    """ Update data into the monitor."""
 
-    rooms = controller.get_monitors_rooms()
+    Logger.normal('Update monitor.')
+
+    url = f'http://{base_url}:{monitor_port}/simulator'
 
     if event == initial_percepts_event:
         info = json_formatter.initial_percepts_monitor_format(response)
+        match = controller.get_current_match()
+        url = f'{url}/match/{match}/info/map'
+
     elif event == percepts_event:
         info = json_formatter.percepts_monitor_format(response)
+        match = controller.get_current_match()
+        url = f'{url}/match/{match}/step'
+
     elif event == end_event:
         info = json_formatter.end_monitor_format(response)
-    elif event == bye_event:
-        info = json_formatter.bye_monitor_format(response)
-    else:
-        info = json_formatter.event_error_monitor_format(response)
-        event = error_event
+        match = controller.get_current_match()
+        url = f'{url}/match/{match}/info/report'
 
-    for room in rooms:
-        socket.emit(event, info, room=room)
+    elif event == bye_event:
+        info = json_formatter.end_monitor_format(response)
+        url = f'{url}/info/report'
+
+    else:
+        Logger.error('Event type in "notify monitor" not found.')
+        return
+
+    monitor_response = requests.post(url, json=info)
+
+    if not monitor_response:
+        print(url)
+        print(monitor_response.text)
+        Logger.error('Error sending data to monitor.')
+
 
 
 def notify_actors(event, response):
@@ -694,5 +728,5 @@ def auto_destruction():
 if __name__ == '__main__':
     app.config['SECRET_KEY'] = secret
     app.config['JSON_SORT_KEYS'] = False
-    print(f'API: Serving on http://{base_url}:{api_port}')
+    Logger.normal(f'API: Serving on http://{base_url}:{api_port}')
     socket.run(app=app, host=base_url, port=api_port)
