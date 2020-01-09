@@ -21,6 +21,15 @@ class MonitorManager:
     def set_match_report(self, match, report_info):
         self.matches[match].report = report_info
 
+    def get_total_steps(self):
+        if len(self.matches) == 0:
+            return 0
+
+        return len(self.matches[0].steps)
+
+    def get_total_matches(self):
+        return len(self.matches)
+
     def get_match_map(self, match):
         return self.matches[match].map_config
 

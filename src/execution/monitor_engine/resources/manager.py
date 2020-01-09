@@ -53,6 +53,12 @@ class SimulationManager(Resource):
 
             abort(404, message='The monitor dont have the report of the simulation yet.')
 
+        elif id_attribute == 'matches':
+            response = dict(total_matches=monitor_manager.get_total_matches(),
+                            total_steps=monitor_manager.get_total_steps())
+
+            return response, 200
+
         else:
             abort(404, message=f'End point "{id_attribute}" dont exists.')
 
