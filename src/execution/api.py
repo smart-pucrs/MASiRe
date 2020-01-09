@@ -212,48 +212,6 @@ def connect_agent():
     return jsonify(response)
 
 
-@socket.on('connect')
-def connect():
-    Logger.connect(request.sid)
-
-
-@socket.on('disconnect')
-def disconnect():
-    Logger.disconnect(request.sid)
-
-
-@socket.on('message')
-def message(msg):
-    Logger.message(msg)
-
-
-@socket.on('connect_monitor')
-def connect_monitor(data):
-    ok, message = controller.add_monitor(request)
-
-    if ok:
-        Logger.normal(message)
-    else:
-        Logger.error(message)
-
-
-@socket.on('disconnect_monitor')
-def disconnect_monitor(data):
-    ok, message = controller.rmv_monitor(request)
-
-    if ok:
-        Logger.normal(message)
-    else:
-        Logger.error(message)
-
-
-@app.route('/simulation_info', methods=['GET'])
-def simulation_info():
-
-
-    return jsonify(data)
-
-
 @socket.on('register_agent')
 def register_agent(msg):
     """Connect the socket of the agent.
@@ -618,10 +576,7 @@ def notify_monitor(event, response):
     monitor_response = requests.post(url, json=info)
 
     if not monitor_response:
-        print(url)
-        print(monitor_response.text)
         Logger.error('Error sending data to monitor.')
-
 
 
 def notify_actors(event, response):
