@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7d6132a5-0aaa-46bb-8804-99d15cb223db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/files/new_config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/files/one_map_config.json" afterDir="false" />
+    <list default="true" id="0f115ece-2b46-4efe-b166-556b10856827" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/generator/generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/json_formatter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_helpers/cycle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/flood.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/simulation_engine/simulation_objects/flood.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/startup/configuration_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/startup/configuration_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/unity/simulation/test_generator_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/unity/simulation/test_generator_simulation.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,10 +30,6 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/files" />
-      <recent name="$PROJECT_DIR$/src/tests/unity/simulation" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/experiments" />
       <recent name="$PROJECT_DIR$/experiments/exp_scripts/util" />
@@ -50,18 +37,10 @@
       <recent name="$PROJECT_DIR$/src/execution/monitor_engine/helpers" />
       <recent name="$PROJECT_DIR$" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/files" />
+      <recent name="$PROJECT_DIR$/src/tests/unity/simulation" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.teste">
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -201,6 +180,16 @@
     </recent_temporary>
   </component>
   <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
     <option name="showServicesTree" value="false" />
   </component>
   <component name="SvnConfiguration">

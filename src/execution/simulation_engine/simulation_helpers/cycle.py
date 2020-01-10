@@ -1464,8 +1464,6 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
-            import traceback
-            traceback.print_exc()
             last_action_result = 'unknownError'
             error_message = 'Unknown error: ' + str(e)
 
@@ -1971,7 +1969,6 @@ class Cycle:
 
         try:
             if len(parameters) != 6:
-                print(len(parameters),parameters)
                 raise FailedWrongParam('More or less than 6 parameter was given.')
 
             if parameters[4] not in self.map.movement_restrictions.keys():
