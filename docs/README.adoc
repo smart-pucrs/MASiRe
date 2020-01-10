@@ -25,5 +25,5 @@ After having the environment configured, you can run the simulation in a termina
 == Contributing to this Project
 
 João Vitor Bernardi Severo
-
+Vinicius Chrisosthemos Teixeira
 
