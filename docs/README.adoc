@@ -26,4 +26,5 @@ After having the environment configured, you can run the simulation in a termina
 
 João Vitor Bernardi Severo
 
+Vinicius Chrisosthemos Teixeira
 
