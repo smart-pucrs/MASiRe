@@ -24,7 +24,7 @@ def record_simulation():
 
 
 def load_simulation(replay_file_name):
-    replay_path = os.getcwd() + '/replays/' + replay_file_name
+    replay_path = f'{os.getcwd()}/{replay_file_name}'
     replay_data = json.loads(open(replay_path, 'r').read())
 
     monitor_manager.load_simulation(replay_data)
