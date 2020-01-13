@@ -602,7 +602,7 @@ class Cycle:
                         raise FailedNoMatch('No other agent or social asset wants be delivered.')
 
                 else:
-                    FailedWrongParam('More or less than 1 parameter was given.')
+                    raise FailedWrongParam('More or less than 1 parameter was given.')
 
             elif action_name == 'deliverRequest':
                 if len(parameters) == 1:
@@ -641,7 +641,7 @@ class Cycle:
                         raise FailedNoMatch('No other agent or social asset wants deliver the agent.')
 
                 else:
-                    FailedWrongParam('More or less than 1 parameter was given.')
+                    raise FailedWrongParam('More or less than 1 parameter was given.')
 
         except FailedCapacity as e:
             last_action_result = e.identifier
@@ -649,11 +649,11 @@ class Cycle:
 
         except FailedLocation as e:
             last_action_result = e.identifier
-            last_action_result = e.identifier
+            error_message = e.message
 
         except FailedUnknownToken as e:
             last_action_result = e.identifier
-            last_action_result = e.identifier
+            error_message = e.message
 
         except FailedWrongParam as e:
             last_action_result = e.identifier
@@ -1004,7 +1004,7 @@ class Cycle:
                         raise FailedNoMatch('No other agent or social asset wants be delivered.')
 
                 else:
-                    FailedWrongParam('More or less than 1 parameter was given.')
+                    raise FailedWrongParam('More or less than 1 parameter was given.')
 
             elif action_name == 'deliverRequest':
                 if len(parameters) == 1:
@@ -1038,7 +1038,7 @@ class Cycle:
                         raise FailedNoMatch('No other agent or social asset wants deliver the agent.')
 
                 else:
-                    FailedWrongParam('More or less than 1 parameter was given.')
+                    raise FailedWrongParam('More or less than 1 parameter was given.')
 
         except FailedCapacity as e:
             last_action_result = e.identifier
@@ -1214,7 +1214,6 @@ class Cycle:
             self.social_assets_manager.edit(receiving_asset.token, 'last_action', 'receivePhysical')
             self.social_assets_manager.edit(receiving_asset.token, 'last_action_result', 'success')
 
-
         else:
             raise FailedLocation('The social asset is not located near the desired social asset.')
 
@@ -1284,8 +1283,6 @@ class Cycle:
 
             self.social_assets_manager.edit(receiving_asset.token, 'last_action', 'receiveVirtual')
             self.social_assets_manager.edit(receiving_asset.token, 'last_action_result', 'success')
-
-
         else:
             raise FailedLocation('The agent is not located near the desired agent.')
 
@@ -1309,9 +1306,6 @@ class Cycle:
                 'kind': parameters[0],
                 'items': delivered_items,
                 'step': self.current_step})
-
-
-
         else:
             raise FailedLocation('The social asset is not located at the CDM.')
 
