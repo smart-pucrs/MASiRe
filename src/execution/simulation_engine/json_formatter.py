@@ -414,7 +414,7 @@ class JsonFormatter:
         json_route = [self.format_location(location) for location in agent.route]
 
         json_social_assets = self.jsonify_social_assets(agent.social_assets)
-        
+
         return {
             'token': agent.token,
             'type': agent.type,
