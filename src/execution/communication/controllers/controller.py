@@ -147,7 +147,7 @@ class Controller:
                 return 3, 'The key "main_token" is not in the message.'
 
             if 'step' not in obj:
-                return 3, 'The key "main_token" is not in the message.'
+                return 3, 'The key "step" is not in the message.'
 
             main_token = obj['main_token']
             step = obj['step']
@@ -178,13 +178,12 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_agent_registration(self, request, msg):
+    def do_agent_registration(self, request):
         """Do the registration of the agent.
 
         After several validations, agent is edited as registered on the manager.
 
         :param request: The request object received on the API containing all the data and JSON.
-        :param msg: The message with the token to connect the agent.
         :return tuple: First position with the status and the second position with the message."""
 
         try:
@@ -197,27 +196,27 @@ class Controller:
             if self.start_time + self.time_limit <= time.time():
                 return 5, 'Connection time ended.'
 
-            if not isinstance(msg, dict):
+            if not isinstance(request, dict):
                 return 4, 'Object is not a dictionary.'
 
-            if 'token' not in msg:
+            if 'token' not in request:
                 return 3, 'Object does not contain "token" as key.'
 
-            agent = self.manager.get(msg['token'], 'agent')
+            agent = self.manager.get(request['token'], 'agent')
 
             if agent is None:
                 return 5, 'Agent was not connected.'
 
-            if not self.manager.edit(msg['token'], 'registered', True, 'agent'):
+            if not self.manager.edit(request['token'], 'registered', True, 'agent'):
                 return 0, 'Error while editing token.'
 
-            if self.manager.get(msg['token'], 'socket') is not None:
+            if self.manager.get(request['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(msg['token'], request.sid, 'socket'):
+            if not self.manager.add(request['token'], request['sid'], 'socket'):
                 return 0, 'Error while adding token.'
 
-            return 1, msg['token']
+            return 1, request['token']
 
         except json.JSONDecodeError:
             return 2, 'Object format is not JSON.'
@@ -225,13 +224,12 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_social_asset_registration(self, request, msg):
+    def do_social_asset_registration(self, request):
         """Do the registration of the social asset.
 
         After several validations, social asset is edited as registered on the manager.
 
-        :param request: The request object received on the API containing all the data and JSON.
-        :param msg: The message with the token to connect the agent.
+        :param request: The message with the token to connect the agent.
         :return tuple: First position with the status and the second position with the message."""
 
         try:
@@ -244,28 +242,28 @@ class Controller:
             if not self.processing_asset_request():
                 return 5, 'There is no social asset request.'
 
-            if not isinstance(msg, dict):
+            if not isinstance(request, dict):
                 return 4, 'Object is not a dictionary.'
 
-            if 'token' not in msg:
+            if 'token' not in request:
                 return 3, 'Object does not contain "token" as key.'
 
-            social_asset = self.manager.get(msg['token'], 'social_asset')
+            social_asset = self.manager.get(request['token'], 'social_asset')
             if social_asset is None:
                 return 5, 'Social asset was not connected.'
 
-            if not self.manager.edit(msg['token'], 'registered', True, 'social_asset'):
+            if not self.manager.edit(request['token'], 'registered', True, 'social_asset'):
                 return 0, 'Error while editing token.'
 
-            if self.manager.get(msg['token'], 'socket') is not None:
+            if self.manager.get(request['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(msg['token'], request.sid, 'socket'):
+            if not self.manager.add(request['token'], request['sid'], 'socket'):
                 return 0, 'Error while adding token.'
 
-            main_token = self.asset_request_manager.get_main_token(msg['token'])
+            main_token = self.asset_request_manager.get_main_token(request['token'])
 
-            return 1, (main_token, msg['token'])
+            return 1, (main_token, request['token'])
 
         except json.JSONDecodeError:
             return 2, 'Object format is not JSON.'
@@ -488,39 +486,6 @@ class Controller:
 
         self.manager.remove(token, 'social_asset')
 
-    def add_monitor(self, request):
-        """Add a monitor to the simulator."""
-
-        try:
-            sid = request.sid
-
-            if self.manager.add_monitor(sid):
-                return True, f'Monitor "{sid}" connected.'
-
-            return False, f'Error to connect monitor "{sid}".'
-
-        except Exception as e:
-            return False, f'Error to connect monitor "{sid}": {str(e)}.'
-
-    def rmv_monitor(self, request):
-        """Remove a monitor from the simulator."""
-
-        try:
-            sid = request.sid
-
-            if self.manager.rmv_monitor(sid):
-                return True, f'Monitor "{sid}" disconnected.'
-
-            return False, f'Error to disconnect monitor "{sid}".'
-
-        except Exception as e:
-            return False, f'Error to disconnect monitor "{sid}": {str(e)}.'
-
-    def get_monitors_rooms(self):
-        """Return all rooms from the monitors."""
-
-        return self.manager.get_monitors_rooms()
-
     def get_current_match(self):
         """Return the current match number."""
 
@@ -530,3 +495,9 @@ class Controller:
         """Increase the current match by 1 unit."""
 
         self.match += 1
+
+    def start_social_asset_request(self, response):
+        self.asset_request_manager.start_new_asset_request(response)
+
+    def finish_assets_connections(self):
+        self.asset_request_manager.reset()

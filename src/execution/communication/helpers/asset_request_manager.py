@@ -16,8 +16,8 @@ class AssetRequestManager:
 
         for token in response['requests']:
             self.main_tokens[token] = None
-        self.current_step = response['environment']['step'] - 1
-        self.response = response
+        self.current_step = response['current_step']
+        self.response = response['messages']
         self.processing_requests = True
 
     def reset(self):

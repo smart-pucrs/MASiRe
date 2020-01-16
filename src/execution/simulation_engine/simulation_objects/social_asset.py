@@ -61,7 +61,7 @@ class SocialAsset:
 
         size = item.size
         if size > self.virtual_storage:
-            raise FailedCapacity('The asset does not have enough physical storage.')
+            raise FailedCapacity('The asset does not have enough virtual storage.')
 
         self.virtual_storage -= size
         self.virtual_storage_vector.append(item)
@@ -181,13 +181,6 @@ class SocialAsset:
         will not be active."""
 
         self.is_active = False
-        self.last_action_result = False
-        self.physical_storage = 0
-        self.virtual_storage = 0
-        self.destination_distance = 0
-        self.route.clear()
-        self.physical_storage_vector.clear()
-        self.virtual_storage_vector.clear()
 
     def __repr__(self):
         return str(self.__dict__.copy())

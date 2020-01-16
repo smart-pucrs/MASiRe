@@ -24,7 +24,7 @@ def initial_percepts_format(response, token):
                         break
 
             if not info['agent_percepts']:
-                return event_error_format('Actor not found in response.')
+                return event_error_format('Actor not found in response. ')
 
             info['map_percepts'] = format_map_percepts_agents(response['map_percepts'])
             response['agents'].pop(found_index)
@@ -77,10 +77,9 @@ def percepts_format(response, token):
             response['actors'].pop(found_index)
             info['environment'] = response['environment']
 
+            return info
         else:
-            event_error_format(response['message'])
-
-        return info
+            return event_error_format(response['message'])
 
     else:
         return event_error_format('Empty simulation response. ')
@@ -92,11 +91,11 @@ def end_format(response, token):
             if token in response['report'].keys():
                 return {'type': 'end', 'report': response['report'][token]}
 
-            return event_error_format('Report not found.')
+            return event_error_format('Report not found. ')
         else:
             return event_error_format(response['message'])
     else:
-        return event_error_format('Empty simulation response.')
+        return event_error_format('Empty simulation response. ')
 
 
 def bye_format(response, token):
@@ -105,11 +104,11 @@ def bye_format(response, token):
             if token in response['report'].keys():
                 return {'type': 'bye', 'report': response['report'][token]}
 
-            return event_error_format('Report not found.')
+            return event_error_format('Report not found. ')
         else:
             return event_error_format(response['message'])
     else:
-        return event_error_format('Empty simulation response.')
+        return event_error_format('Empty simulation response. ')
 
 
 def event_error_format(message):

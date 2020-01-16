@@ -86,6 +86,8 @@ class JsonFormatter:
 
                 return response
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             response['message'] = f'An error occurred during connection: {str(e)}.'
             Logger.error(f'Unknown error: {str(e)}.')
 
@@ -318,8 +320,11 @@ class JsonFormatter:
             if response[3]:
                 Logger.normal('A social asset request connection will start.')
 
-                return {'status': 2, 'requests': response[3], 'actors': json_actors,
-                        'environment': environment, 'message': 'Step completed.'}
+                messages = {'environment': environment, 'actors': json_actors}
+                current_step = response[2] - 1
+
+                return {'status': 2, 'requests': response[3], 'messages': messages,
+                        'current_step': current_step, 'message': 'Step completed.'}
 
             Logger.normal('Step processed.')
 
@@ -413,7 +418,7 @@ class JsonFormatter:
         json_route = [self.format_location(location) for location in agent.route]
 
         json_social_assets = self.jsonify_social_assets(agent.social_assets)
-
+        print(agent)
         return {
             'token': agent.token,
             'type': agent.type,
@@ -574,6 +579,7 @@ class JsonFormatter:
         :return list: List of all the items converted to JSON."""
 
         json_items = []
+
         for item in items:
             if item.type == 'victim':
                 json_item = {

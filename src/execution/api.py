@@ -180,21 +180,19 @@ def connect_agent():
     message and the corresponding status."""
 
     response = {'status': 1, 'result': True, 'message': 'Error.'}
+    connecting_agent = True
 
-    obj = request.get_json(force=True)
-    agent = False
-
-    if 'main_token' in obj:
+    if controller.processing_asset_request():
         Logger.normal('Try to connect a social asset.')
         status, message = controller.do_social_asset_connection(request)
+        connecting_agent = False
 
     else:
         Logger.normal('Try to connect a agent.')
         status, message = controller.do_agent_connection(request)
-        agent = True
 
     if status != 1:
-        if agent:
+        if connecting_agent:
             Logger.error(f'Error to connect the agent: {message}')
         else:
             Logger.error(f'Error to connect the social asset: {message}')
@@ -202,7 +200,7 @@ def connect_agent():
         response['status'] = status
         response['result'] = False
     else:
-        if agent:
+        if connecting_agent:
             Logger.normal('Agent connected.')
         else:
             Logger.normal('Social asset connected.')
@@ -221,19 +219,21 @@ def register_agent(msg):
     Note: The agent must be registered to connect the socket."""
 
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
-    social_asset_request = False
+    registering_agent = True
+
+    msg['sid'] = request.sid
 
     if controller.processing_asset_request():
-        social_asset_request = True
+        registering_agent = False
         Logger.normal('Try to register and connect the social asset socket.')
-        status, message = controller.do_social_asset_registration(request, msg)
+        status, message = controller.do_social_asset_registration(msg)
     else:
         Logger.normal('Try to register and connect the agent socket.')
-        status, message = controller.do_agent_registration(request, msg)
+        status, message = controller.do_agent_registration(msg)
 
     if status == 1:
         try:
-            if social_asset_request:
+            if not registering_agent:
                 main_token = message[0]
                 token = message[1]
                 sim_response = requests.post(f'http://{base_url}:{simulation_port}/register_asset',
@@ -370,7 +370,7 @@ def finish_step():
             if sim_response['status'] == 2:
                 Logger.normal('Open connections for the social assets.')
 
-                controller.asset_request_manager.start_new_asset_request(sim_response)
+                controller.start_social_asset_request(sim_response)
                 multiprocessing.Process(target=step_controller, args=(request_queue, 2), daemon=True).start()
 
             else:
@@ -398,7 +398,7 @@ def handle_response():
 
     response = controller.format_actions_result(sim_response)
     notify_actors(percepts_event, response)
-    controller.asset_request_manager.reset()
+    controller.finish_asset_connections()
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 

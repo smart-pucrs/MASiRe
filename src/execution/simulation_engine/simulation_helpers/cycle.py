@@ -104,6 +104,12 @@ class Cycle:
         return self.agents_manager.connect(token)
 
     def connect_social_asset(self, main_token, token):
+        if main_token not in self.agents_manager.get_tokens():
+            raise Exception(f'"{main_token}" token not exists.')
+
+        if main_token not in self.social_assets_manager.requests.keys():
+            raise Exception(f'"{main_token}" dont request a social asset.')
+
         social_asset_id = self.social_assets_manager.requests[main_token]
         social_asset = None
         for temp in self.social_assets_manager.get_assets_markers():
@@ -137,7 +143,7 @@ class Cycle:
 
     def get_step(self):
         events = []
-        for step in self.steps[0:self.current_step]:
+        for step in self.steps[:(self.current_step+1)]:
             if step['flood']:
                 if step['flood'].active:
                     events.append(step['flood'])
@@ -305,6 +311,7 @@ class Cycle:
                 principal, secondary = self._execute_agent_special_action(token, action, param, special_action_tokens)
 
             else:
+                print('---> ', token)
                 assets_tokens.remove(token)
                 principal, secondary = self._execute_asset_special_action(token, action, param, special_action_tokens)
 
@@ -1747,7 +1754,7 @@ class Cycle:
                     self.social_assets_manager.edit(token, 'route', [])
                     self.social_assets_manager.edit(token, 'destination_distance', 0)
 
-                    raise FailedNoRoute('Agent is not capable of entering Event locations.')
+                    raise FailedNoRoute('Asset is not capable of entering Event locations.')
 
                 else:
                     self.social_assets_manager.edit(token, 'route', route)
@@ -1762,7 +1769,7 @@ class Cycle:
                         self.social_assets_manager.edit(token, 'route', [])
                         self.social_assets_manager.edit(token, 'destination_distance', 0)
 
-                        raise FailedNoRoute('Agent is not capable of entering Event locations.')
+                        raise FailedNoRoute('Asset is not capable of entering Event locations.')
 
                     else:
                         self.social_assets_manager.edit(token, 'route', route)

@@ -170,7 +170,7 @@ class SocialAssetsManager:
         :param token: The identifier of the requested social asset."""
 
         if self.social_assets[token].route:
-            location = self.social_assets[token].route.pop(0)
+            location = self.social_assets[token].route.pop(0)[:-1]
             self.social_assets[token].location = location
 
     def clear_physical_storage(self, token):

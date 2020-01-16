@@ -112,7 +112,7 @@ class Simulation:
         if self.terminated:
             return None
 
-        actions_results, call_requests = self.cycler.execute_actions(token_action_list)
+        actions_results, requests = self.cycler.execute_actions(token_action_list)
         step = self.cycler.get_step()
 
         self.cycler.current_step += 1
@@ -120,11 +120,11 @@ class Simulation:
 
         if self.cycler.check_steps():
             self.terminated = True
-            return actions_results, step, self.cycler.current_step, call_requests
+            return actions_results, step, self.cycler.current_step, requests
 
         self.cycler.activate_step()
 
-        return actions_results, step, self.cycler.current_step, call_requests
+        return actions_results, step, self.cycler.current_step, requests
 
     def calculate_route(self, parameters):
         """Return the route calculated with the parameters given.
