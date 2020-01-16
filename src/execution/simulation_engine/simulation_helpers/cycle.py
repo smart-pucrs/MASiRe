@@ -311,7 +311,6 @@ class Cycle:
                 principal, secondary = self._execute_agent_special_action(token, action, param, special_action_tokens)
 
             else:
-                print('---> ', token)
                 assets_tokens.remove(token)
                 principal, secondary = self._execute_asset_special_action(token, action, param, special_action_tokens)
 

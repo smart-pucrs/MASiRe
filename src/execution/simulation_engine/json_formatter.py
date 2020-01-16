@@ -86,8 +86,6 @@ class JsonFormatter:
 
                 return response
         except Exception as e:
-            import traceback
-            traceback.print_exc()
             response['message'] = f'An error occurred during connection: {str(e)}.'
             Logger.error(f'Unknown error: {str(e)}.')
 
@@ -332,8 +330,6 @@ class JsonFormatter:
 
         except Exception as e:
             Logger.error(f'Unknown error: {str(e)}.')
-            import traceback
-            traceback.print_exc()
             return {'status': 0, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):
@@ -418,7 +414,7 @@ class JsonFormatter:
         json_route = [self.format_location(location) for location in agent.route]
 
         json_social_assets = self.jsonify_social_assets(agent.social_assets)
-        print(agent)
+        
         return {
             'token': agent.token,
             'type': agent.type,
