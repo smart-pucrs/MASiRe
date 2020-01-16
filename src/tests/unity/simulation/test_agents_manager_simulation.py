@@ -12,7 +12,7 @@ from src.execution.simulation_engine.simulation_helpers.agents_manager import Ag
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
 config_json = json.load(open(config_path, 'r'))
-cdm_loc = config_json['map']['centerLat'], config_json['map']['centerLon']
+cdm_loc = config_json['map']['maps'][0]['centerLat'], config_json['map']['maps'][0]['centerLon']
 manager = AgentsManager(config_json['agents'], cdm_loc)
 
 
@@ -166,7 +166,7 @@ def test_deliver_virtual():
 
 
 def test_edit_agent():
-    manager.edit('token1', 'route', [(10, 10)])
+    manager.edit('token1', 'route', [(10, 10, False)])
     assert manager.get('token1').route
 
 

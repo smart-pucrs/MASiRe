@@ -16,7 +16,7 @@ from src.execution.simulation_engine.generator.generator import Generator
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
 config_json = json.load(open(config_path, 'r'))
-simulation_map = Map(config_json['map']['maps'][0], config_json['map']['proximity'])
+simulation_map = Map(config_json['map']['maps'][0], config_json['map']['proximity'], config_json['map']['movementRestrictions'])
 g = Generator(config_json, simulation_map)
 nodes = None
 
@@ -30,9 +30,9 @@ def test_generate_events():
 
 
 def test_generate_flood():
-    flood = g.generate_flood
-    assert not flood.active
-    assert 40 <= flood.period <= 80
+    flood = g.generate_flood()
+    assert not flood[0].active
+    assert 40 <= flood[0].period <= 80
 
 
 def test_generate_victims():

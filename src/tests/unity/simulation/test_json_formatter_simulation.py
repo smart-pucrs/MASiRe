@@ -14,18 +14,20 @@ from src.execution.simulation_engine.json_formatter import JsonFormatter
 
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
-formatter = JsonFormatter(config_path)
+formatter = JsonFormatter(config_path, False, False)
 
 
 class Item:
     def __init__(self, type):
         self.type = type
         self.token = 'Mock'
+        self.flood_id = 0
         self.identifier = 0
         self.location = [10, 10]
         self.profession = type
         self.victims = []
         self.size = 10
+        self.min_size = 10
         self.lifetime = 10
         self.social_assets = []
         self.physical_storage_vector = []
@@ -53,19 +55,6 @@ class Item:
         self.social_assets = []
 
 
-def test_restart():
-    resp = formatter.restart()
-    assert resp['status']
-
-
-def test_log():
-    log = formatter.log()
-    assert log['status']
-    assert log['message'] == 'New match generated.'
-
-    log = formatter.log()
-    assert not log['status']
-    assert log['message'] == 'No more maps available for matches.'
 
 
 def test_connect_agent():
@@ -75,7 +64,8 @@ def test_connect_agent():
 
 
 def test_connect_social_asset():
-    resp = formatter.connect_social_asset('token1_asset')
+    formatter.copycat.simulation.cycler.social_assets_manager.requests['token1_agent'] = 0
+    resp = formatter.connect_social_asset('token1_agent', 'token1_asset')
     assert resp['status']
     assert resp['message'] == 'Social asset connected.'
 
@@ -99,10 +89,13 @@ def test_do_step():
         {'token': 'token3_agent', 'action': 'pass', 'parameters': []},
         {'token': 'token3_asset', 'action': 'rescueVictim', 'parameters': []}
     ]
+
     formatter.connect_agent('token2_agent')
-    formatter.connect_social_asset('token2_asset')
+    formatter.copycat.simulation.cycler.social_assets_manager.requests['token2_agent'] = 1
+    formatter.connect_social_asset('token2_agent', 'token2_asset')
     formatter.connect_agent('token3_agent')
-    formatter.connect_social_asset('token3_asset')
+    formatter.copycat.simulation.cycler.social_assets_manager.requests['token3_agent'] = 2
+    formatter.connect_social_asset('token3_agent', 'token3_asset')
 
     resp = formatter.do_step(actions_tokens_list)
     assert resp['status']
@@ -112,12 +105,11 @@ def test_do_step():
     resp = formatter.do_step(actions_tokens_list)
     assert resp['status']
     assert resp['message'] == 'Simulation finished.'
-    assert not resp['actors']
-    assert not resp['event']
 
 
 def test_jsonify_agent():
     agent = formatter.copycat.simulation.cycler.agents_manager.get_active_info()[0]
+    agent.clear_physical_storage()
 
     agent_formatted = formatter.jsonify_agent(agent)
     assert agent_formatted['token'] == agent.token
@@ -176,19 +168,15 @@ def test_jsonify_assets():
 
 
 def test_jsonify_events():
-    event = formatter.copycat.simulation.cycler.steps[0]
+    formatter.copycat.simulation.cycler.current_step = 0
+    formatter.copycat.simulation.cycler.activate_step()
+    event = formatter.copycat.simulation.cycler.get_step()
 
     event_formatted = formatter.jsonify_events(event)
-    assert event_formatted['flood']
-    assert event_formatted['victims']
-    assert event_formatted['photos']
-    assert event_formatted['water_samples']
+    assert len(event_formatted) != 0
 
-    event_formatted = formatter.jsonify_events({'flood':None})
-    assert not event_formatted['flood']
-    assert not event_formatted['victims']
-    assert not event_formatted['photos']
-    assert not event_formatted['water_samples']
+    event_formatted = formatter.jsonify_events([])
+    assert len(event_formatted) == 0
 
 
 def test_jsonify_delivered_items():
@@ -214,7 +202,7 @@ def test_jsonify_delivered_items():
 
 
 def test_jsonify_action_token_by_step():
-    action_token_by_step = [(1, [('pass', 'token1')]), (2, [('pass', 'token2')])]
+    action_token_by_step = [(1, [('token1', 'pass')]), (2, [('token2', 'pass')])]
 
     result = formatter.jsonify_action_token_by_step(action_token_by_step)
 
@@ -257,9 +245,21 @@ def test_jsonify_actions_by_step():
     assert result[1]['actions'] == ['rescueVictim', 'deliverPhysical']
 
 
+def test_restart():
+    resp = formatter.restart()
+    assert resp['status']
+
+
+def test_log():
+    log = formatter.log()
+    assert log['status']
+    assert log['message'] == 'New match generated.'
+
+    log = formatter.log()
+    assert not log['status']
+    assert log['message'] == 'No more maps available for matches.'
+
 if __name__ == '__main__':
-    test_restart()
-    test_log()
     test_connect_agent()
     test_connect_social_asset()
     test_disconnect_agent()
@@ -274,3 +274,5 @@ if __name__ == '__main__':
     test_jsonify_action_token_by_step()
     test_jsonify_amount_of_actions_by_step()
     test_jsonify_actions_by_step()
+    test_restart()
+    test_log()

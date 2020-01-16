@@ -11,10 +11,12 @@ if str(engine_path.absolute()) not in sys.path:
 
 import json
 from src.execution.simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
+from src.execution.simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
 config_json = json.load(open(config_path, 'r'))
-manager = SocialAssetsManager(config_json['map'], config_json['socialAssets'])
+assets = [SocialAssetMarker(1, (10, 10), 'photographer', [], [])]
+manager = SocialAssetsManager(config_json['map'], config_json['socialAssets'], assets)
 
 
 class Item:
@@ -24,7 +26,7 @@ class Item:
 
 
 def test_connect_asset():
-    assert manager.connect('token')
+    assert manager.connect('token', 1, 'photographer')
     assert len(manager.get_tokens()) == 1
 
 
@@ -34,7 +36,7 @@ def test_disconnect_asset():
 
 
 def test_add_physical_to_active_asset():
-    assert manager.connect('token1')
+    assert manager.connect('token1', 2, 'photographer')
     assert manager.add_physical('token1', Item(10)) is None
 
 
@@ -69,7 +71,7 @@ def test_add_virtual_to_inactive_asset():
         assert False
 
     except Exception as e:
-        if str(e).endswith('The asset does not have enough physical storage.'):
+        if str(e).endswith('The asset does not have enough virtual storage.'):
             assert True
         else:
             assert False
@@ -184,26 +186,8 @@ def test_clear_asset_virtual_storage():
 
 
 def test_restart():
-    manager.restart(config_json['map'], config_json['socialAssets'])
-    assert len(manager.get_tokens()) == 2
-    assert manager.get('token').is_active
-    assert manager.get('token1').is_active
-
-
-def test_generate_objects():
-    objects = manager.generate_objects(config_json['map'], config_json['socialAssets'])
-
-    for obj in objects:
-        if getattr(obj, 'profession') != 'doctor' and getattr(obj, 'profession') != 'teacher' and getattr(obj, 'profession') != 'nurse':
-            assert False
-
-        if 80 > getattr(obj, 'size') > 100:
-            assert False
-
-        if getattr(obj, 'speed') != 11:
-            assert False
-
-    assert True
+    manager.restart(config_json['map'], config_json['socialAssets'], assets)
+    assert len(manager.get_tokens()) == 0
 
 
 if __name__ == '__main__':

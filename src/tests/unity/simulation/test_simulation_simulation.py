@@ -15,7 +15,7 @@ from src.execution.simulation_engine.simulation import Simulation
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
 config_json = json.load(open(config_path, 'r'))
-simulation = Simulation(config_json)
+simulation = Simulation(config_json, False, False)
 
 
 def test_connect_agent():
@@ -23,7 +23,8 @@ def test_connect_agent():
 
 
 def test_connect_social_asset():
-    assert simulation.connect_social_asset('token1_asset')
+    simulation.cycler.social_assets_manager.requests['token1_agent'] = 0
+    assert simulation.connect_social_asset('token1_agent', 'token1_asset')
 
 
 def test_disconnect_agent():
@@ -35,11 +36,12 @@ def test_disconnect_social_asset():
 
 
 def test_start():
-    agents, assets, step = simulation.start()
+    agents, step_info, current_step, map_percepts = simulation.start()
     assert not agents
-    assert not assets
-    assert step
-    assert step['flood'].active
+    assert step_info[0].type == 'flood'
+    assert step_info[0].active
+    assert current_step == 1
+    assert map_percepts
 
 
 def test_do_step():
@@ -50,14 +52,18 @@ def test_do_step():
         {'token': 'token3_asset', 'action': 'rescueVictim', 'parameters': []}
     ]
 
+    simulation.cycler.social_assets_manager.requests['token2_agent'] = 0
+    simulation.cycler.social_assets_manager.requests['token3_agent'] = 1
     simulation.connect_agent('token2_agent')
-    simulation.connect_social_asset('token2_asset')
+    simulation.connect_social_asset('token2_agent', 'token2_asset')
     simulation.connect_agent('token3_agent')
-    simulation.connect_social_asset('token3_asset')
+    simulation.connect_social_asset('token3_agent', 'token3_asset')
 
-    action_results, step = simulation.do_step(actions_tokens_list)
+    action_results, step_info, current_step, requests = simulation.do_step(actions_tokens_list)
     assert action_results
-    assert step
+    assert step_info
+    assert current_step == 2
+    assert not requests
 
     simulation.terminated = True
     resp = simulation.do_step(actions_tokens_list)
@@ -69,9 +75,8 @@ def test_do_step():
 def test_log():
     log = simulation.log()
     assert simulation.cycler.current_step == 2
-    assert len(simulation.cycler.steps[0]['water_samples']) == log['environment']['water_samples_ignored']
+    assert len(simulation.cycler.steps[0]['water_samples']) == log['environment']['mud_samples_ignored']
     assert len(simulation.cycler.steps[0]['photos']) == log['environment']['photos_ignored']
-    assert len(simulation.cycler.steps[0]['water_samples']) == log['environment']['water_samples_ignored']
     assert log['environment']['floods_amount'] == 1
     assert log['agents']['active_agents_amount'] == 2
     assert log['agents']['agents_amount'] == 3
@@ -82,10 +87,12 @@ def test_log():
 
 
 def test_restart():
-    agents, assets, step = simulation.restart(config_json)
+    agents, step_info, current_step, map_percepts, report, assets_tokens = simulation.restart(config_json, False, False)
     assert len(agents) == 3
-    assert len(assets) == 3
-    assert step
+    assert len(assets_tokens) == 2
+    assert step_info
+    assert current_step == 1
+    assert report
     assert not simulation.actions_amount
     assert not simulation.actions_amount_by_step
     assert not simulation.actions_by_step

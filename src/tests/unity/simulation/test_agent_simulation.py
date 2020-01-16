@@ -20,28 +20,33 @@ class Item:
 
 
 def test_size():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
 
     assert agent.size == 40
 
 
 def test_discharge():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
-
-    agent.destination_distance = 10
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.discharge()
+    assert agent.actual_battery == 19
 
-    assert agent.actual_battery == 18
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 5, 10, 50, 50)
+    agent.discharge()
+    assert agent.actual_battery == 15
+
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 10, 50, 50)
+    agent.discharge()
+    assert agent.actual_battery == 10
 
 
 def test_check_battery():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
 
-    assert agent.check_battery() == 18
+    assert agent.check_battery() == 19
 
 
 def test_charge():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
 
     agent.discharge()
     agent.charge()
@@ -50,7 +55,7 @@ def test_charge():
 
 
 def test_add_physical_item():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
 
     assert agent.physical_storage == 40
@@ -58,7 +63,7 @@ def test_add_physical_item():
 
 
 def test_add_physical_item_capacity_error():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     try:
         agent.add_physical_item(Item(60))
         assert False
@@ -68,7 +73,7 @@ def test_add_physical_item_capacity_error():
 
 
 def test_add_virtual_item():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
 
     assert agent.virtual_storage == 40
@@ -76,7 +81,7 @@ def test_add_virtual_item():
 
 
 def test_add_virtual_item_capacity_error():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     try:
         agent.add_virtual_item(Item(60))
         assert False
@@ -86,7 +91,7 @@ def test_add_virtual_item_capacity_error():
 
 
 def test_remove_physical_item_amount_equals_to_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
     agent.remove_physical_item('item', 1)
 
@@ -95,7 +100,7 @@ def test_remove_physical_item_amount_equals_to_content():
 
 
 def test_remove_physical_item_amount_equals_zero():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
 
     agent.remove_physical_item('item', 0)
@@ -105,7 +110,7 @@ def test_remove_physical_item_amount_equals_zero():
 
 
 def test_remove_physical_item_amount_greater_than_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
 
     agent.remove_physical_item('item', 3)
@@ -115,7 +120,7 @@ def test_remove_physical_item_amount_greater_than_content():
 
 
 def test_remove_physical_item_amount_minor_than_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
     agent.add_physical_item(Item(10))
 
@@ -126,7 +131,7 @@ def test_remove_physical_item_amount_minor_than_content():
 
 
 def test_remove_physical_item_empty_vector():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
 
     try:
         agent.remove_physical_item('item', 1)
@@ -137,7 +142,7 @@ def test_remove_physical_item_empty_vector():
 
 
 def test_remove_virtual_item_amount_equals_to_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
     agent.remove_virtual_item('item', 1)
 
@@ -146,7 +151,7 @@ def test_remove_virtual_item_amount_equals_to_content():
 
 
 def test_remove_virtual_item_amount_equals_zero():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
 
     agent.remove_virtual_item('item', 0)
@@ -156,7 +161,7 @@ def test_remove_virtual_item_amount_equals_zero():
 
 
 def test_remove_virtual_item_amount_greater_than_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
 
     agent.remove_virtual_item('item', 3)
@@ -166,7 +171,7 @@ def test_remove_virtual_item_amount_greater_than_content():
 
 
 def test_remove_virtual_item_amount_minor_than_content():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
     agent.add_virtual_item(Item(10))
 
@@ -177,7 +182,7 @@ def test_remove_virtual_item_amount_minor_than_content():
 
 
 def test_remove_virtual_item_empty_vector():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
 
     try:
         agent.remove_virtual_item('item', 1)
@@ -188,7 +193,7 @@ def test_remove_virtual_item_empty_vector():
 
 
 def test_clear_empty_physical_storage():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.clear_physical_storage()
 
     assert agent.physical_storage == 50
@@ -196,7 +201,7 @@ def test_clear_empty_physical_storage():
 
 
 def test_clear_non_empty_physical_storage():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_physical_item(Item(10))
     agent.clear_physical_storage()
 
@@ -205,7 +210,7 @@ def test_clear_non_empty_physical_storage():
 
 
 def test_clear_empty_virtual_storage():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.clear_virtual_storage()
 
     assert agent.virtual_storage == 50
@@ -213,7 +218,7 @@ def test_clear_empty_virtual_storage():
 
 
 def test_clear_non_empty_virtual_storage():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.add_virtual_item(Item(10))
     agent.clear_virtual_storage()
 
@@ -222,7 +227,7 @@ def test_clear_non_empty_virtual_storage():
 
 
 def test_disconnect():
-    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 10, 50, 50)
+    agent = Agent('test_agent', (10, 10), [], [], 40, 'drone', 20, 1, 10, 50, 50)
     agent.disconnect()
 
     assert not agent.is_active

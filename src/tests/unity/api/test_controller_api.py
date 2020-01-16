@@ -22,7 +22,7 @@ class RequestMock:
         return self.json
 
 
-controller = Controller(2, 2, 30, 'secret')
+controller = Controller(2, 30, 'secret')
 
 
 def test_check_secret():
@@ -69,138 +69,92 @@ def test_do_internal_verification():
 
 
 def test_do_agent_connection():
-    controller.started = True
-    controller.terminated = False
-    controller.start_timer()
-    assert controller.do_agent_connection(RequestMock('{: "wrong format" :}'))[0] == 2
-    assert controller.do_agent_connection(RequestMock('"name"'))[0] == 4
+    controller.started = False
+    controller.terminated = True
 
+    assert controller.do_agent_connection(RequestMock({'name': 'name'}))[0] == 5
+    controller.started = True
+    assert controller.do_agent_connection(RequestMock('"name"'))[0] == 5
+    controller.terminated = False
+    assert controller.do_agent_connection(RequestMock('"name"'))[0] == 5
     controller.finish_connection_timer()
     assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent"}'))[1] == 'Connection time ended.'
-
-    controller.terminated = True
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent"}'))[1] == 'Simulation already terminated.'
-
-    controller.started = False
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent"}'))[1] == 'Simulation has not started.'
+    controller.start_timer()
+    assert controller.do_agent_connection(RequestMock('string'))[1] == 'Object is not a dictionary.'
 
     controller.started = True
     controller.terminated = False
     controller.start_timer()
 
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent"}'))[0] == 1
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent"}'))[1] == 'Agent already connected.'
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent2"}'))[0] == 1
-    assert controller.do_agent_connection(RequestMock('{"name": "TesterAgent3"}'))[1] == 'All possible agents already connected.'
+    assert controller.do_agent_connection(RequestMock({"name": "TesterAgent"}))[0] == 1
+    assert controller.do_agent_connection(RequestMock({"name": "TesterAgent"}))[1] == 'Agent already connected.'
+    assert controller.do_agent_connection(RequestMock({"name": "TesterAgent2"}))[0] == 1
+    assert controller.do_agent_connection(RequestMock({"name": "TesterAgent3"}))[1] == 'All possible agents already connected.'
 
 
 def test_do_asset_connection():
-    controller.started = True
-    controller.terminated = False
-
-    assert controller.do_social_asset_connection(RequestMock('{: "wrong format" :}'))[0] == 2
-    assert controller.do_social_asset_connection(RequestMock('"name"'))[0] == 4
-
-    controller.terminated = True
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset"}'))[1] == 'Simulation already terminated.'
+    step = 3
+    fake_response = {'requests': ['token1'], 'messages': None, 'current_step': step, 'environment': None}
 
     controller.started = False
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset"}'))[1] == 'Simulation has not started.'
+    controller.terminated = True
 
+    assert controller.do_social_asset_connection(RequestMock(" empty "))[1] == 'Simulation has not started.'
     controller.started = True
+    assert controller.do_social_asset_connection(RequestMock(" empty "))[1] == 'Simulation already terminated.'
     controller.terminated = False
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset"}'))[0] == 1
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset"}'))[1] == 'Social asset already connected.'
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset2"}'))[0] == 1
-    assert controller.do_social_asset_connection(RequestMock('{"name": "TesterAsset3"}'))[1] == 'All possible social assets already connected.'
+    assert controller.do_social_asset_connection(RequestMock(" empty "))[1] == 'There is no social asset request.'
+    controller.start_social_asset_request(fake_response)
+    assert controller.do_social_asset_connection(RequestMock(" empty "))[1] == 'Object is not a dictionary.'
+    assert controller.do_social_asset_connection(RequestMock({'step': step, 'name': 'asset1'}))[1] == 'The key "main_token" is not in the message.'
+    assert controller.do_social_asset_connection(RequestMock({'main_token': 'token1', 'name': 'asset1'}))[1] == 'The key "step" is not in the message.'
+    assert controller.do_social_asset_connection(RequestMock({'main_token': 'wrongToken', 'step': step, 'name': 'asset1'}))[1] == 'There is no social asset request for this token.'
+    assert controller.do_social_asset_connection(RequestMock({'main_token': 'token1', 'step': -step, 'name': 'asset1'}))[1] == 'Wrong step.'
+
+    assert controller.do_social_asset_connection(RequestMock({'main_token': 'token1', 'step': step, 'name': 'asset1'}))[0] == 1
+    assert controller.do_social_asset_connection(RequestMock({'main_token': 'token1', 'step': step, 'name': 'asset1'}))[1] == 'Social asset already connected.'
 
 
 def test_do_agent_registration():
-    controller.started = True
-    controller.terminated = False
-    controller.start_timer()
-    token = list(controller.manager.agents_manager.agents.keys())[0]
-    assert controller.do_agent_registration(RequestMock('{"token": "' + token + '"}'))[0] == 1
-
-    assert controller.do_agent_registration(RequestMock('{"token": "' + token + '"}'))[1] == 'Agent already registered.'
-    assert controller.do_agent_registration(RequestMock('{"token": "Unconnected"}'))[1] == 'Agent was not connected.'
-    assert controller.do_agent_registration(RequestMock('{"non_token_key": ""}'))[1] == 'Object does not contain "token" as key.'
-    assert controller.do_agent_registration(RequestMock('"non_dict"'))[1] == 'Object is not a dictionary.'
-
-    assert controller.do_agent_registration(RequestMock('{: "wrong format" :}'))[0] == 2
-    assert controller.do_agent_registration(RequestMock('"name"'))[0] == 4
-
-    controller.finish_connection_timer()
-    assert controller.do_agent_registration(RequestMock('{"name": "TesterAgent"}'))[1] == 'Connection time ended.'
-
-    controller.terminated = True
-    assert controller.do_agent_registration(RequestMock('{"name": "TesterAgent"}'))[1] == 'Simulation already terminated.'
-
     controller.started = False
-    assert controller.do_agent_registration(RequestMock('{"name": "TesterAgent"}'))[1] == 'Simulation has not started.'
+    controller.terminated = True
+    token = list(controller.manager.agents_manager.agents.keys())[0]
+
+    assert controller.do_agent_registration({'token': token})[1] == 'Simulation has not started.'
+    controller.started = True
+    assert controller.do_agent_registration({'token': token})[1] == 'Simulation already terminated.'
+    controller.terminated = False
+    controller.finish_connection_timer()
+    assert controller.do_agent_registration({'token': token})[1] == 'Connection time ended.'
+    controller.start_timer()
+    assert controller.do_agent_registration('not a dictionary')[1] == 'Object is not a dictionary.'
+    print(type({'not_token_key': token}))
+    assert controller.do_agent_registration({'not_token_key': token})[1] == 'Object does not contain "token" as key.'
+    assert controller.do_agent_registration({'token': 'wrong token'})[1] == 'Agent was not connected.'
+
+    assert controller.do_agent_registration({'token': token, 'sid': 10})[0] == 1
+    assert controller.do_agent_registration({'token': token, 'sid': 10})[1] == 'Socket already registered.'
 
 
 def test_do_asset_registration():
-    controller.started = True
-    controller.terminated = False
+    controller.started = False
+    controller.terminated = True
     token = list(controller.manager.social_assets_manager.social_assets.keys())[0]
-    assert controller.do_social_asset_registration(RequestMock('{"token": "' + token + '"}'))[0] == 1
 
-    assert controller.do_social_asset_registration(RequestMock('{"token": "' + token + '"}'))[1] == 'Social asset already registered.'
-    assert controller.do_social_asset_registration(RequestMock('{"token": "Unconnected"}'))[1] == 'Social asset was not connected.'
-    assert controller.do_social_asset_registration(RequestMock('{"non_token_key": ""}'))[1] == 'Object does not contain "token" as key.'
-    assert controller.do_social_asset_registration(RequestMock('"non_dict"'))[1] == 'Object is not a dictionary.'
-
-    assert controller.do_social_asset_registration(RequestMock('{: "wrong format" :}'))[0] == 2
-    assert controller.do_social_asset_registration(RequestMock('"name"'))[0] == 4
-
-    controller.terminated = True
-    assert controller.do_social_asset_registration(RequestMock('{"name": "TesterAsset"}'))[1] == 'Simulation already terminated.'
-
-    controller.started = False
-    assert controller.do_social_asset_registration(RequestMock('{"name": "TesterAsset"}'))[1] == 'Simulation has not started.'
-    
-    
-def test_do_agent_socket_connection():
+    assert controller.do_social_asset_registration(' not started ')[1] == 'Simulation has not started.'
     controller.started = True
+    assert controller.do_social_asset_registration(' terminated ')[1] == 'Simulation already terminated.'
     controller.terminated = False
-    controller.start_timer()
-    registered_token = list(controller.manager.agents_manager.agents.keys())[0]
-    non_registered_token = list(controller.manager.agents_manager.agents.keys())[1]
-    assert controller.do_agent_socket_connection(RequestMock(), '{"token": "' + registered_token + '"}')[0] == 1
-    assert controller.do_agent_socket_connection(RequestMock(), '{"token": "' + registered_token + '"}')[1] == 'Socket already registered.'
-    assert controller.do_agent_socket_connection(RequestMock(), '{"token": "' + non_registered_token + '"}')[1] == 'Agent was not registered.'
-    assert controller.do_agent_socket_connection(RequestMock(), '{"token": "non_connected"}')[1] == 'Agent was not connected.'
-    assert controller.do_agent_socket_connection(RequestMock(), '{"non_token_key": ""}')[1] == 'Object does not contain "token" as key.'
-    assert controller.do_agent_socket_connection(RequestMock(), '"non_dict_obj"')[1] == 'Object is not a dictionary.'
+    controller.finish_assets_connections()
+    assert controller.do_social_asset_registration(' terminated ')[1] == 'There is no social asset request.'
+    controller.start_social_asset_request({'requests': ['token1'], 'messages': None, 'current_step': 3, 'environment': None})
 
-    controller.finish_connection_timer()
-    assert controller.do_agent_socket_connection(RequestMock(), '""')[1] == 'Connection time ended.'
+    assert controller.do_social_asset_registration('{"token": "not a dict"}')[1] == 'Object is not a dictionary.'
+    assert controller.do_social_asset_registration({'not_token_key': ''})[1] == 'Object does not contain "token" as key.'
+    assert controller.do_social_asset_registration({'token': 'not_connected'})[1] == 'Social asset was not connected.'
 
-    controller.terminated = True
-    assert controller.do_agent_socket_connection(RequestMock(), '""')[1] == 'Simulation already terminated.'
-
-    controller.started = False
-    assert controller.do_agent_socket_connection(RequestMock(), '""')[1] == 'Simulation has not started.'
-
-
-def test_do_asset_socket_connection():
-    controller.started = True
-    controller.terminated = False
-    registered_token = list(controller.manager.social_assets_manager.social_assets.keys())[0]
-    non_registered_token = list(controller.manager.social_assets_manager.social_assets.keys())[1]
-    assert controller.do_social_asset_socket_connection(RequestMock(), '{"token": "' + registered_token + '"}')[0] == 1
-    assert controller.do_social_asset_socket_connection(RequestMock(), '{"token": "' + registered_token + '"}')[1] == 'Socket already registered.'
-    assert controller.do_social_asset_socket_connection(RequestMock(), '{"token": "' + non_registered_token + '"}')[1] == 'Social asset was not registered.'
-    assert controller.do_social_asset_socket_connection(RequestMock(), '{"token": "non_connected"}')[1] == 'Social asset was not connected.'
-    assert controller.do_social_asset_socket_connection(RequestMock(), '{"non_token_key": ""}')[1] == 'Object does not contain "token" as key.'
-    assert controller.do_social_asset_socket_connection(RequestMock(), '"non_dict_obj"')[1] == 'Object is not a dictionary.'
-
-    controller.terminated = True
-    assert controller.do_social_asset_socket_connection(RequestMock(), '""')[1] == 'Simulation already terminated.'
-
-    controller.started = False
-    assert controller.do_social_asset_socket_connection(RequestMock(), '""')[1] == 'Simulation has not started.'
+    assert controller.do_social_asset_registration({'token': token, 'sid': 15})[0] == 1
+    assert controller.do_social_asset_registration({'token': token, 'sid': 15})[1] == 'Socket already registered.'
 
 
 def test_do_agent_socket_disconnection():
