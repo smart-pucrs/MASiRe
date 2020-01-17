@@ -40,18 +40,6 @@ def test_add_physical_to_active_asset():
     assert manager.add_physical('token1', Item(10)) is None
 
 
-def test_add_physical_to_inactive_asset():
-    try:
-        manager.add_physical('token', Item(10))
-        assert False
-
-    except Exception as e:
-        if str(e).endswith('The asset does not have enough physical storage.'):
-            assert True
-        else:
-            assert False
-
-
 def test_add_physical_to_no_existing_asset():
     try:
         manager.add_physical('token2', Item(10))
@@ -65,18 +53,6 @@ def test_add_virtual_to_active_asset():
     assert manager.add_virtual('token1', Item(10)) is None
 
 
-def test_add_virtual_to_inactive_asset():
-    try:
-        manager.add_virtual('token', Item(10))
-        assert False
-
-    except Exception as e:
-        if str(e).endswith('The asset does not have enough virtual storage.'):
-            assert True
-        else:
-            assert False
-
-
 def test_add_virtual_to_no_existing_asset():
     try:
         manager.add_virtual('token2', Item(10))
@@ -88,10 +64,6 @@ def test_add_virtual_to_no_existing_asset():
 
 def test_add_asset_to_active_asset():
     assert manager.add('token1', Item(10)) is None
-
-
-def test_add_asset_to_inactive_asset():
-    assert manager.add('token', Item(10)) is None
 
 
 def test_add_asset_to_no_existing_asset():
@@ -160,7 +132,7 @@ def test_deliver_virtual():
 
 
 def test_edit_asset():
-    manager.edit('token1', 'route', [(10, 10)])
+    manager.edit('token1', 'route', [(10, 10, False)])
     assert manager.get('token1').route
 
 
@@ -194,13 +166,10 @@ if __name__ == '__main__':
     test_connect_asset()
     test_disconnect_asset()
     test_add_physical_to_active_asset()
-    test_add_physical_to_inactive_asset()
     test_add_physical_to_no_existing_asset()
     test_add_virtual_to_active_asset()
-    test_add_virtual_to_inactive_asset()
     test_add_virtual_to_no_existing_asset()
     test_add_asset_to_active_asset()
-    test_add_asset_to_inactive_asset()
     test_add_asset_to_no_existing_asset()
     test_get_asset()
     test_get_tokens()
