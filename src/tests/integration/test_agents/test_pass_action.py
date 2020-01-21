@@ -4,31 +4,41 @@ import socketio
 
 
 agent = {'name': 'pass_action_test'}
+fake = {'name': 'fake'}
 wait = True
 responses = []
 
 
 socket = socketio.Client()
+fake_socket = socketio.Client()
 token = None
+fake_token = None
 counter = 0
 max_iter = 16
 
 
 def connect_agent():
-    global token
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+    global token, fake_token
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    socket.emit('register_agent', data={'token': token})
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=fake).json()
+    fake_token = response['message']
+    fake_socket.emit('register_agent', data={'token': fake_token})
 
 
-@socket.on('action_results')
+@fake_socket.on('percepts')
+def pass_action(msg):
+    fake_socket.emit('send_action', data=json.dumps({'token': fake_token, 'action': 'pass', 'parameters': []}))
+
+
+@socket.on('percepts')
 def action_result(msg):
     global counter
     msg = json.loads(msg)
 
-    if msg['environment']['step'] == 1:
-        socket.emit('send_action', json.dumps({'token': token, 'action': 'pass', 'parameters': []}))
     if counter == max_iter:
         socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
     else:
@@ -49,11 +59,13 @@ def quit_program(*args):
 
 def test_cycle():
     socket.connect('http://127.0.0.1:12345')
+    fake_socket.connect('http://127.0.0.1:12345')
     connect_agent()
     while wait:
         pass
 
     socket.disconnect()
+    fake_socket.disconnect()
     assert all(responses)
 
 

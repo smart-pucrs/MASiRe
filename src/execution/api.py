@@ -221,15 +221,13 @@ def register_agent(msg):
     response = {'type': 'initial_percepts', 'status': 0, 'result': False, 'message': 'Error.'}
     registering_agent = True
 
-    msg['sid'] = request.sid
-
     if controller.processing_asset_request():
         registering_agent = False
         Logger.normal('Try to register and connect the social asset socket.')
-        status, message = controller.do_social_asset_registration(msg)
+        status, message = controller.do_social_asset_registration(msg, request.sid)
     else:
         Logger.normal('Try to register and connect the agent socket.')
-        status, message = controller.do_agent_registration(msg)
+        status, message = controller.do_agent_registration(msg, request.sid)
 
     if status == 1:
         try:

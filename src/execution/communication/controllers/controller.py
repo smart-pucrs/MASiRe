@@ -178,7 +178,7 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_agent_registration(self, request):
+    def do_agent_registration(self, request, sid):
         """Do the registration of the agent.
 
         After several validations, agent is edited as registered on the manager.
@@ -213,7 +213,7 @@ class Controller:
             if self.manager.get(request['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(request['token'], request['sid'], 'socket'):
+            if not self.manager.add(request['token'], sid, 'socket'):
                 return 0, 'Error while adding token.'
 
             return 1, request['token']
@@ -224,7 +224,7 @@ class Controller:
         except Exception as e:
             return 0, f'Unknown error: {str(e)}'
 
-    def do_social_asset_registration(self, request):
+    def do_social_asset_registration(self, request, sid):
         """Do the registration of the social asset.
 
         After several validations, social asset is edited as registered on the manager.
@@ -258,7 +258,7 @@ class Controller:
             if self.manager.get(request['token'], 'socket') is not None:
                 return 5, 'Socket already registered.'
 
-            if not self.manager.add(request['token'], request['sid'], 'socket'):
+            if not self.manager.add(request['token'], sid, 'socket'):
                 return 0, 'Error while adding token.'
 
             main_token = self.asset_request_manager.get_main_token(request['token'])

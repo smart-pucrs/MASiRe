@@ -3,7 +3,25 @@
   <component name="ChangeListManager">
     <list default="true" id="0f115ece-2b46-4efe-b166-556b10856827" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/unity/simulation/test_assets_manager_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/unity/simulation/test_assets_manager_simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/new_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/new_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/execution/communication/controllers/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/execution/communication/controllers/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/agents_test_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/agents_test_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_analyze_photo_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_analyze_photo_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_carry_agent_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_carry_agent_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_charge_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_charge_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_collect_water_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_collect_water_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_physical_agent_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_physical_agent_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_physical_cdm_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_physical_cdm_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_virtual_agent_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_virtual_agent_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_virtual_cdm_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_deliver_virtual_cdm_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_move_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_move_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_pass_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_pass_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_random_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_random_actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_rescue_victim_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_rescue_victim_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_search_social_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_search_social_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents/test_take_photo_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents/test_take_photo_action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/integration/test_agents_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/integration/test_agents_actions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,20 +242,20 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="372" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1579259602527">
+    <state x="372" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1579519338137">
       <screen x="67" y="193" width="1299" height="741" />
     </state>
-    <state x="372" y="391" key="com.intellij.ide.util.TipDialog/67.193.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579259602527" />
+    <state x="372" y="391" key="com.intellij.ide.util.TipDialog/67.193.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579519338137" />
     <state x="1817" y="289" key="com.intellij.ide.util.TipDialog/67.27.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579172386278" />
     <state x="67" y="27" width="1299" height="741" key="dock-window-1" timestamp="1579172391352">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="67" y="193" width="1299" height="741" key="dock-window-1/67.193.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579002475578" />
     <state x="67" y="27" width="1299" height="741" key="dock-window-1/67.27.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579172391352" />
-    <state x="0" y="126" width="1350" height="810" maximized="true" key="dock-window-2" timestamp="1579259606534">
+    <state x="0" y="126" width="1350" height="810" maximized="true" key="dock-window-2" timestamp="1579519357177">
       <screen x="67" y="193" width="1299" height="741" />
     </state>
-    <state x="290" y="193" width="920" height="741" maximized="true" key="dock-window-2/67.193.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579259606534" />
+    <state x="290" y="193" width="920" height="741" maximized="true" key="dock-window-2/67.193.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579519357177" />
     <state x="0" y="126" width="1350" height="810" maximized="true" key="dock-window-2/67.27.1299.741/1366.0.1920.1080@1366.0.1920.1080" timestamp="1579172421165" />
     <state x="2327" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1579173834599">
       <screen x="1366" y="0" width="1920" height="1080" />

@@ -1,0 +1,680 @@
+{
+    "environment": {
+        "current_step": 20,
+        "max_steps": 20,
+        "delivered_items": [],
+        "floods_amount": 11,
+        "total_victims": 22,
+        "victims_in_events": 11,
+        "victims_in_photos": 11,
+        "victims_rescued_alive": 0,
+        "victims_rescued_dead": 0,
+        "victims_dead_ignored": 0,
+        "victims_ignored": 11,
+        "total_photos": 11,
+        "photos_taken": 0,
+        "photos_analysed": 0,
+        "photos_ignored": 11,
+        "total_mud_samples": 11,
+        "mud_samples_collected": 0,
+        "mud_samples_ignored": 11
+    },
+    "agents": {
+        "active_agents_amount": 2,
+        "agents_amount": 2,
+        "active_agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 2000,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "deliverVirtual",
+                "last_action_result": "wrongParam",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 2000,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ],
+        "agents": [
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 2000,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "deliverVirtual",
+                "last_action_result": "wrongParam",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            },
+            {
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                "type": "agent",
+                "active": true,
+                "carried": false,
+                "role": "drone",
+                "size": 30,
+                "abilities": [
+                    "airMovement",
+                    "charge",
+                    "carry",
+                    "virtualCapacity",
+                    "physicalCapacity"
+                ],
+                "resources": [
+                    "battery",
+                    "strength",
+                    "memory"
+                ],
+                "max_charge": 50,
+                "speed": 2000,
+                "physical_capacity": 500,
+                "virtual_capacity": 4096,
+                "last_action": "pass",
+                "last_action_result": "success",
+                "location": {
+                    "lat": -20.1431,
+                    "lon": -44.1603
+                },
+                "route": [],
+                "destination_distance": 0,
+                "battery": 50,
+                "physical_storage": 500,
+                "physical_storage_vector": [],
+                "virtual_storage": 4096,
+                "virtual_storage_vector": [],
+                "social_assets": []
+            }
+        ]
+    },
+    "assets": {
+        "active_assets_amount": 0,
+        "assets_amount": 0,
+        "active_assets": [],
+        "assets": []
+    },
+    "actions": {
+        "amount_of_actions_executed": 40,
+        "amount_of_actions_by_step": [
+            {
+                "step": 1,
+                "actions_amount": 2
+            },
+            {
+                "step": 2,
+                "actions_amount": 2
+            },
+            {
+                "step": 3,
+                "actions_amount": 2
+            },
+            {
+                "step": 4,
+                "actions_amount": 2
+            },
+            {
+                "step": 5,
+                "actions_amount": 2
+            },
+            {
+                "step": 6,
+                "actions_amount": 2
+            },
+            {
+                "step": 7,
+                "actions_amount": 2
+            },
+            {
+                "step": 8,
+                "actions_amount": 2
+            },
+            {
+                "step": 9,
+                "actions_amount": 2
+            },
+            {
+                "step": 10,
+                "actions_amount": 2
+            },
+            {
+                "step": 11,
+                "actions_amount": 2
+            },
+            {
+                "step": 12,
+                "actions_amount": 2
+            },
+            {
+                "step": 13,
+                "actions_amount": 2
+            },
+            {
+                "step": 14,
+                "actions_amount": 2
+            },
+            {
+                "step": 15,
+                "actions_amount": 2
+            },
+            {
+                "step": 16,
+                "actions_amount": 2
+            },
+            {
+                "step": 17,
+                "actions_amount": 2
+            },
+            {
+                "step": 18,
+                "actions_amount": 2
+            },
+            {
+                "step": 19,
+                "actions_amount": 2
+            },
+            {
+                "step": 20,
+                "actions_amount": 2
+            }
+        ],
+        "actions_by_step": [
+            {
+                "step": 1,
+                "actions": [
+                    "charge",
+                    "pass"
+                ]
+            },
+            {
+                "step": 2,
+                "actions": [
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 3,
+                "actions": [
+                    "searchSocialAsset",
+                    "pass"
+                ]
+            },
+            {
+                "step": 4,
+                "actions": [
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 5,
+                "actions": [
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 6,
+                "actions": [
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 7,
+                "actions": [
+                    "takePhoto",
+                    "pass"
+                ]
+            },
+            {
+                "step": 8,
+                "actions": [
+                    "carry",
+                    "pass"
+                ]
+            },
+            {
+                "step": 9,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 10,
+                "actions": [
+                    "charge",
+                    "pass"
+                ]
+            },
+            {
+                "step": 11,
+                "actions": [
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 12,
+                "actions": [
+                    "searchSocialAsset",
+                    "pass"
+                ]
+            },
+            {
+                "step": 13,
+                "actions": [
+                    "charge",
+                    "pass"
+                ]
+            },
+            {
+                "step": 14,
+                "actions": [
+                    "carry",
+                    "pass"
+                ]
+            },
+            {
+                "step": 15,
+                "actions": [
+                    "move",
+                    "pass"
+                ]
+            },
+            {
+                "step": 16,
+                "actions": [
+                    "pass",
+                    "pass"
+                ]
+            },
+            {
+                "step": 17,
+                "actions": [
+                    "carry",
+                    "pass"
+                ]
+            },
+            {
+                "step": 18,
+                "actions": [
+                    "deliverPhysical",
+                    "pass"
+                ]
+            },
+            {
+                "step": 19,
+                "actions": [
+                    "deliverVirtual",
+                    "pass"
+                ]
+            },
+            {
+                "step": 20,
+                "actions": [
+                    "collectWater",
+                    "pass"
+                ]
+            }
+        ],
+        "action_token_by_step": [
+            {
+                "step": 1,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "charge"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 2,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 3,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "searchSocialAsset"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 4,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 5,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 6,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 7,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "takePhoto"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 8,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "carry"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 9,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 10,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "charge"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 11,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 12,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "searchSocialAsset"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 13,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "charge"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 14,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "carry"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 15,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "move"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 16,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "pass"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 17,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "carry"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 18,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "deliverPhysical"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 19,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "deliverVirtual"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            },
+            {
+                "step": 20,
+                "token_action": [
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoicmFuZG9tX2FjdGlvbl90ZXN0In0.23OSx7ziaEr4Q-4t2U0JR156_zEbjmXwpUJtkf6AJaI",
+                        "action": "collectWater"
+                    },
+                    {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZmFrZSJ9.RveZSvAbYJNpryPK2Um-IVsSFE6JnxY73S31BKfbbcU",
+                        "action": "pass"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+========================================================================================================================
+

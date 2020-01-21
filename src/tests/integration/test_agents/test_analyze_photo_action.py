@@ -4,20 +4,28 @@ import socketio
 
 
 agent = {'name': 'analyze_action_test'}
+agent_pass_action = {'name': 'pass_action'}
 wait = True
 responses = []
 
 
 socket = socketio.Client()
+pass_action_socket = socketio.Client()
 token = None
+token_pass_action = None
+photo_loc = []
 
 
-def connect_agent():
-    global token
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+def connect_agents():
+    global token, token_pass_action
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    socket.emit('register_agent', data={'token': token})
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent_pass_action).json()
+    token_pass_action = response['message']
+    pass_action_socket.emit('register_agent', data={'token': token_pass_action})
 
 
 def get_photo_loc(msg):
@@ -35,14 +43,19 @@ def get_photo_loc(msg):
 
 
 def calculate_distance(x, y):
-    return ((x[0] - y[0]) ** 2 + (x[0] - y[0]) ** 2) ** 0.5
+    return ((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2) ** 0.5
 
 
-@socket.on('action_results')
+@pass_action_socket.on('percepts')
+def pass_action(result):
+    pass_action_socket.emit('send_action', json.dumps({'token': token_pass_action, 'action': 'pass', 'parameters': []}))
+
+
+@socket.on('percepts')
 def action_result(result):
+    global photo_loc
     msg = json.loads(result)
-    responses.append(msg['agent']['last_action_result'])
-
+    responses.append(msg['agent']['last_action_result'] == 'success')
     if msg['environment']['step'] == 1:
         photo_loc = get_photo_loc(msg)
         socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': photo_loc}))
@@ -58,7 +71,7 @@ def action_result(result):
             socket.emit('send_action', json.dumps({'token': token, 'action': 'takePhoto', 'parameters': []}))
 
     else:
-        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': []}))
+        socket.emit('send_action', json.dumps({'token': token, 'action': 'move', 'parameters': photo_loc}))
 
 
 @socket.on('simulation_ended')
@@ -74,11 +87,14 @@ def quit_program(*args):
 
 def test_cycle():
     socket.connect('http://127.0.0.1:12345')
-    connect_agent()
+    pass_action_socket.connect('http://127.0.0.1:12345')
+    connect_agents()
+
     while wait:
         pass
 
     socket.disconnect()
+    pass_action_socket.disconnect()
 
     assert all(responses)
 

@@ -4,21 +4,29 @@ import socketio
 
 
 agent = {'name': 'water_action_test'}
+fake = {'name': 'fake'}
+
 wait = True
 responses = []
 
 
 socket = socketio.Client()
+fake_socket = socketio.Client()
 token = None
+fake_token = None
 water_loc = None
 
 
 def connect_agent():
-    global token
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+    global token, fake_token
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    socket.emit('register_agent', data={'token': token})
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=fake).json()
+    fake_token = response['message']
+    fake_socket.emit('register_agent', data={'token': fake_token})
 
 
 def get_water_loc(msg):
@@ -39,12 +47,16 @@ def calculate_distance(x, y):
     return ((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2) ** 0.5
 
 
-@socket.on('action_results')
+@fake_socket.on('percepts')
+def pass_action(msg):
+    socket.emit('send_action', data=json.dumps({'token': fake_token, 'action': 'pass', 'parameters': []}))
+
+
+@socket.on('percepts')
 def action_result(msg):
     global water_loc
-    print(msg)
     msg = json.loads(msg)
-    responses.append(msg['agent']['last_action_result'])
+    responses.append(msg['agent']['last_action_result'] == 'success')
 
     if msg['environment']['step'] == 1:
         water_loc = get_water_loc(msg)
@@ -74,11 +86,15 @@ def quit_program(*args):
 
 def test_cycle():
     socket.connect('http://127.0.0.1:12345')
+    fake_socket.connect('http://127.0.0.1:12345')
     connect_agent()
+
     while wait:
         pass
 
     socket.disconnect()
+    fake_socket.disconnect()
+
     assert all(responses)
 
 

@@ -32,7 +32,8 @@ def collect_modules():
             if filename.startswith('test_') and filename.endswith('.py'):
                 modules.append(str((tests_dir / filename).absolute()))
 
-    return modules
+    # return modules
+    return ['/home/vinicius/Desktop/DisasterSimulator/src/tests/integration/test_agents/test_analyze_photo_action.py']
 
 
 def execute_modules():
@@ -53,11 +54,11 @@ def execute_modules():
     tests_passed = []
     modules = collect_modules()
     for module in modules:
-        null = open(os.devnull, 'w')
-        system_proc = subprocess.Popen(command, stdout=null, stderr=subprocess.STDOUT)
+        # null = open(os.devnull, 'w')
+        system_proc = subprocess.Popen(command)
         time.sleep(10)
 
-        test_proc = subprocess.Popen([venv_path, module], stdout=subprocess.PIPE)
+        test_proc = subprocess.Popen([venv_path, module])
         out, err = test_proc.communicate()
 
         passed = True if re.findall('True', out.decode('utf-8')) else False

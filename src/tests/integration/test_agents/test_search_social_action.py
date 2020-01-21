@@ -4,39 +4,43 @@ import socketio
 
 
 agent = {'name': 'search_action_test'}
-asset = {'name': 'search_action_test2'}
+fake = {'name': 'fake'}
 wait = True
 responses = []
 
 
 socket = socketio.Client()
-other_socket = socketio.Client()
+fake_socket = socketio.Client()
 token = None
+fake_token = None
 
 
 def connect_agent():
-    global token
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+    global token, fake_token
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    socket.emit('register_agent', data={'token': token})
 
-    response = requests.post('http://127.0.0.1:12345/connect_asset', json=json.dumps(asset)).json()
-    other_token = response['message']
-    requests.post('http://127.0.0.1:12345/register_asset', json=json.dumps({'token': other_token}))
-    other_socket.emit('connect_registered_asset', data=json.dumps({'token': other_token}))
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=fake).json()
+    fake_token = response['message']
+    fake_socket.emit('register_agent', data={'token': fake_token})
 
 
-@socket.on('simulation_started')
-def simulation_started(msg):
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': token, 'action': 'searchSocialAsset', 'parameters': ['doctor']}))
+@fake_socket.on('percepts')
+def pass_action(msg):
+    socket.emit('send_action', data=json.dumps({'token': fake_token, 'action': 'pass', 'parameters': []}))
 
 
-@socket.on('action_results')
+@socket.on('percepts')
 def action_result(msg):
     msg = json.loads(msg)
-    responses.append(msg['agent']['last_action_result'])
-    socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
+    responses.append(msg['agent']['last_action_result'] == 'success')
+
+    if msg['environment']['step'] == 1:
+        socket.emit('send_action', data=json.dumps({'token': token, 'action': 'searchSocialAsset', 'parameters': [1000]}))
+
+    else:
+        socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
 
 @socket.on('simulation_ended')
@@ -52,13 +56,13 @@ def quit_program(*args):
 
 def test_cycle():
     socket.connect('http://127.0.0.1:12345')
-    other_socket.connect('http://127.0.0.1:12345')
+    fake_socket.connect('http://127.0.0.1:12345')
     connect_agent()
     while wait:
         pass
 
     socket.disconnect()
-    other_socket.disconnect()
+    fake_socket.disconnect()
     assert all(responses)
 
 

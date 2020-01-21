@@ -5,42 +5,48 @@ import random
 
 
 agent = {'name': 'random_action_test'}
+fake = {'name': 'fake'}
 actions = ['move', 'pass', 'rescueVictim', 'takePhoto', 'analyzePhoto', 'collectWater',
            'deliverPhysical', 'deliverVirtual', 'searchSocialAsset', 'carry', 'getCarried', 'charge']
 wait = True
 responses = []
 
 socket = socketio.Client()
+fake_socket = socketio.Client()
 token = None
+fake_token = None
 
 
 def connect_agent():
-    global token
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+    global token, fake_token
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    socket.emit('register_agent', data={'token': token})
+
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=fake).json()
+    fake_token = response['message']
+    fake_socket.emit('register_agent', data={'token': fake_token})
 
 
-@socket.on('action_results')
+@fake_socket.on('percepts')
+def pass_action(msg):
+    fake_socket.emit('send_action', data=json.dumps({'token': fake_token, 'action': 'pass', 'parameters': []}))
+
+
+@socket.on('percepts')
 def action_result(msg):
     msg = json.loads(msg)
+
     try:
-        if msg['environment']['step'] == 1:
-            action = random.choice(actions)
-            requests.post('http://127.0.0.1:12345/send_action',
-                          json=json.dumps({'token': token, 'action': action, 'parameters': []}))
-
-        else:
-            action = random.choice(actions)
-            socket.emit('send_action', json.dumps({'token': token, 'action': action, 'parameters': []}))
-            responses.append(True)
-
+        action = random.choice(actions)
+        socket.emit('send_action', json.dumps({'token': token, 'action': action, 'parameters': []}))
+        responses.append(True)
     except:
         responses.append(False)
 
 
-@socket.on('simulation_ended')
+@socket.on('bye')
 def simulation_ended(*args):
     global wait
     wait = False
@@ -53,10 +59,13 @@ def quit_program(*args):
 
 def test_cycle():
     socket.connect('http://127.0.0.1:12345')
+    fake_socket.connect('http://127.0.0.1:12345')
+
     connect_agent()
     while wait:
         pass
 
+    fake_socket.disconnect()
     socket.disconnect()
     assert all(responses)
 

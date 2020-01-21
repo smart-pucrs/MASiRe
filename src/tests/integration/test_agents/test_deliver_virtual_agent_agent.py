@@ -18,38 +18,31 @@ receiving_token = None
 
 delivery_location = None
 collected = False
+photo_location = None
 
 
 def connect_actors():
     global delivering_token, receiving_token
 
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(delivering_agent)).json()
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=delivering_agent).json()
     delivering_token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': delivering_token}))
-    delivering_socket.emit('connect_registered_agent', data=json.dumps({'token': delivering_token}))
+    delivering_socket.emit('register_agent', data={'token': delivering_token})
 
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(receiving_agent)).json()
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=receiving_agent).json()
     receiving_token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': receiving_token}))
-    receiving_socket.emit('connect_registered_agent', data=json.dumps({'token': receiving_token}))
-
-
-@delivering_socket.on('simulation_started')
-def delivering_simulation_started(msg):
-    photo_loc = get_photo_loc(msg)
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': delivering_token, 'action': 'move', 'parameters': photo_loc}))
+    receiving_socket.emit('register_agent', data={'token': receiving_token})
 
 
 def get_photo_loc(msg):
-    msg = json.loads(msg)
-    my_location = msg['agent']['location']
+    my_location = [msg['agent']['location']['lat'], msg['agent']['location']['lon']]
     min_distance = 999999999
     photo_loc = None
-    for photo in msg['event']['photos']:
-        actual_distance = calculate_distance(my_location, photo['location'])
-        if actual_distance < min_distance:
-            min_distance = actual_distance
-            photo_loc = photo['location']
+    for event in msg['environment']['events']:
+        if event['type'] == 'photo':
+            actual_distance = calculate_distance(my_location, [event['location']['lat'], event['location']['lon']])
+            if actual_distance < min_distance:
+                min_distance = actual_distance
+                photo_loc = [event['location']['lat'], event['location']['lon']]
 
     return photo_loc
 
@@ -58,49 +51,54 @@ def calculate_distance(x, y):
     return ((x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2) ** 0.5
 
 
-@receiving_socket.on('simulation_started')
-def receiving_simulation_started(msg):
-    global delivery_location
-
-    msg = json.loads(msg)
-    delivery_location = msg['agent']['location']
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': receiving_token, 'action': 'pass', 'parameters': []}))
-
-
-@delivering_socket.on('action_results')
+@delivering_socket.on('percepts')
 def delivering_action_results(msg):
-    global collected
+    global collected, photo_location
     msg = json.loads(msg)
 
-    responses.append(msg['agent']['last_action_result'])
+    responses.append(msg['agent']['last_action_result'] == 'success')
 
-    if msg['agent']['last_action'] == 'deliverVirtual':
+    if msg['environment']['step'] == 1:
+        photo_location = get_photo_loc(msg)
+        delivering_socket.emit('send_action', json.dumps(
+            {'token': delivering_token, 'action': 'move', 'parameters': photo_location}))
+
+    elif msg['agent']['last_action'] == 'deliverVirtual':
         delivering_socket.emit('disconnect_registered_agent', data=json.dumps({'token': delivering_token}), callback=quit_program)
 
-    if not msg['agent']['route']:
+    elif not msg['agent']['route']:
         if msg['agent']['last_action'] == 'takePhoto':
             collected = True
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': delivering_token, 'action': 'move', 'parameters': delivery_location}))
+            delivering_socket.emit('send_action', json.dumps({'token': delivering_token, 'action': 'move', 'parameters': ['cdm']}))
 
         elif not collected:
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': delivering_token, 'action': 'takePhoto', 'parameters': []}))
+            delivering_socket.emit('send_action', json.dumps({'token': delivering_token,
+                                                              'action': 'takePhoto', 'parameters': []}))
 
         elif msg['agent']['last_action'] == 'move':
-            requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': delivering_token, 'action': 'deliverVirtual', 'parameters': ['photo', 1, receiving_token]}))
+            delivering_socket.emit('send_action', json.dumps({'token': delivering_token, 'action': 'deliverVirtual',
+                                                              'parameters': ['photo', 1, receiving_token]}))
 
     else:
-        requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': delivering_token, 'action': 'move', 'parameters': []}))
+        if collected:
+            delivering_socket.emit('send_action', json.dumps(
+                {'token': delivering_token, 'action': 'move', 'parameters': ['cdm']}))
+
+        else:
+            delivering_socket.emit('send_action', json.dumps({'token': delivering_token, 'action': 'move', 'parameters': photo_location}))
 
 
-@receiving_socket.on('action_results')
+@receiving_socket.on('percepts')
 def receiving_action_results(msg):
     msg = json.loads(msg)
 
-    if msg['agent']['last_action_result'] and msg['agent']['last_action'] == 'receiveVirtual':
+    if msg['agent']['last_action_result'] == 'success' and msg['agent']['last_action'] == 'receiveVirtual':
         responses.append(True)
-        receiving_socket.emit('disconnect_registered_agent', data=json.dumps({'token': receiving_token}), callback=quit_program)
-
-    requests.post('http://127.0.0.1:12345/send_action', json=json.dumps({'token': receiving_token, 'action': 'receiveVirtual', 'parameters': [delivering_token]}))
+        receiving_socket.emit('disconnect_registered_agent', data=json.dumps(
+            {'token': receiving_token}), callback=quit_program)
+    else:
+        receiving_socket.emit('send_action', data=json.dumps(
+            {'token': receiving_token, 'action': 'receiveVirtual', 'parameters': [delivering_token]}))
 
 
 def quit_program(msg):

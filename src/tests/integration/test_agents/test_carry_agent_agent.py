@@ -19,18 +19,16 @@ carried_token = None
 def connect_actors():
     global token, carried_token
 
-    response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(agent)).json()
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=agent).json()
     token = response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': token}))
-    carrying_socket.emit('connect_registered_agent', data=json.dumps({'token': token}))
+    carrying_socket.emit('register_agent', data={'token': token})
 
-    carried_response = requests.post('http://127.0.0.1:12345/connect_agent', json=json.dumps(carried_agent)).json()
-    carried_token = carried_response['message']
-    requests.post('http://127.0.0.1:12345/register_agent', json=json.dumps({'token': carried_token}))
-    carried_socket.emit('connect_registered_agent', data=json.dumps({'token': carried_token}))
+    response = requests.post('http://127.0.0.1:12345/connect_agent', json=carried_agent).json()
+    carried_token = response['message']
+    carried_socket.emit('register_agent', data={'token': carried_token})
 
 
-@carrying_socket.on('action_results')
+@carrying_socket.on('percepts')
 def carry_action_results(msg):
     msg = json.loads(msg)
 
@@ -38,11 +36,11 @@ def carry_action_results(msg):
         carrying_socket.emit('send_action', json.dumps({'token': token, 'action': 'carry', 'parameters': [carried_token]}))
 
     else:
-        responses.append(msg['agent']['last_action_result'])
+        responses.append(msg['agent']['last_action_result'] == 'success')
         carrying_socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
 
-@carried_socket.on('action_results')
+@carried_socket.on('percepts')
 def carried_action_results(msg):
     msg = json.loads(msg)
 
@@ -51,7 +49,7 @@ def carried_action_results(msg):
                             json.dumps({'token': carried_token, 'action': 'getCarried', 'parameters': [token]}))
 
     else:
-        responses.append(msg['agent']['last_action_result'])
+        responses.append(msg['agent']['last_action_result'] == 'success')
         carried_socket.emit('disconnect_registered_agent', data=json.dumps({'token': token}), callback=quit_program)
 
 
