@@ -292,6 +292,11 @@ function setMapConfig(config) {
     L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
     let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
+    L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
+        console.info(e);
+    }).addTo(constantsMarkerGroup);
+    console.log(config);
+
     $('#current-map').text(config['osm']);
 }
 
