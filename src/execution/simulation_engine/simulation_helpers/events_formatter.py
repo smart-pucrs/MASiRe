@@ -18,8 +18,8 @@ def format_flood(flood: Flood) -> dict:
         'identifier': identifier,
         'period': period,
         'keeped': keeped,
-        'dimensions': dimensions,
-        'list_of_nodes': list_of_nodes
+        'dimensions': dimensions
+        # 'list_of_nodes': list_of_nodes
     }
 
 

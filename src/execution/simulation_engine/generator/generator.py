@@ -39,6 +39,7 @@ class Generator:
         flood, propagation = self.generate_flood()
         nodes: list = flood.list_of_nodes
         event: dict = {
+            'step': 0, 
             'flood': flood,
             'victims': self.generate_victims(nodes),
             'water_samples': self.generate_water_samples(nodes),
@@ -51,9 +52,10 @@ class Generator:
         flood_probability: int = self.generate_variables['flood']['probability']
         i: int = 1
         while i < steps_number:
-            event: dict = {'flood': None, 'victims': [], 'water_samples': [], 'photos': [], 'propagation': []}
+            event: dict = {'step': -1, 'flood': None, 'victims': [], 'water_samples': [], 'photos': [], 'propagation': []}
 
             if random.randint(1, 100) <= flood_probability:
+                event['step'] = i
                 event['flood'], propagation = self.generate_flood()
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes)
@@ -300,7 +302,9 @@ class Generator:
             events_dict = None
 
             if event['flood'] is not None:
-                events_dict = dict(flood=formatter.format_flood(event['flood']))
+                events_dict = dict()
+                events_dict['step'] = event['step']
+                events_dict['flood'] = formatter.format_flood(event['flood'])
                 events_dict['victims'] = formatter.format_victims(event['victims'])
                 events_dict['photos'] = formatter.format_photos(event['photos'])
                 events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])

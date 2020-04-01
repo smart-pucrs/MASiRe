@@ -79,6 +79,9 @@ class Cycle:
     def write_first_match(self, config, generator, file_name):
         config_copy = copy.deepcopy(config)
         del config_copy['generate']
+        del config_copy['socialAssets']
+        del config_copy['agents']
+        del config_copy['actions']
 
         match = dict(steps=generator.get_json_events(self.steps),
                      social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
