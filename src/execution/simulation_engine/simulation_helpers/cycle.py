@@ -6,7 +6,8 @@ from math import sqrt
 
 from simulation_engine.exceptions.exceptions import *
 from simulation_engine.generator.generator import Generator
-from simulation_engine.loader.loader import Loader
+from simulation_engine.generator.loader import Loader
+# from simulation_engine.loader.loader import Loader
 from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
@@ -21,7 +22,9 @@ class Cycle:
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
 
         if load_sim:
-            generator = Loader(config)
+            # print("aqui: ",config)
+            path_to_events = pathlib.Path(__file__).parents[4] / config['map']['maps'][0]['events']
+            generator = Loader(config, self.map, path_to_events)
         else:
             generator = Generator(config, self.map)
 
@@ -198,13 +201,14 @@ class Cycle:
         for i in range(self.current_step):
             if self.steps[i]['flood'] is None:
                 continue
+            
+            # TODO: fix this, not right the propagation
+            # if self.steps[i]['propagation']:
+            #     new_victims = self.steps[i]['propagation'].pop(0)
+            #     for victim in new_victims:
+            #         victim.active = True
 
-            if self.steps[i]['propagation']:
-                new_victims = self.steps[i]['propagation'].pop(0)
-                for victim in new_victims:
-                    victim.active = True
-
-                self.steps[i]['victims'].extend(new_victims)
+            #     self.steps[i]['victims'].extend(new_victims)
 
             if self.steps[i]['flood'].keeped:
                 self.steps[i]['flood'].update_state()

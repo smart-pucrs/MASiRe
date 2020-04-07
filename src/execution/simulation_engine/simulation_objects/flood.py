@@ -13,6 +13,26 @@ class Flood:
         self.max_propagation = max_propagation
         self.propagation_per_step = propagation_per_step
         self.nodes_per_propagation = nodes_per_propagation
+      
+    # def __init__(self, flood):
+    #     self.identifier: int = flood['identifier']
+    #     self.active: bool = False
+    #     self.type: str = 'flood'
+    #     self.initial_position = initial_position
+    #     self.dimensions: dict = dimensions
+    #     self.list_of_nodes: list = list_of_nodes
+    #     self.period: int = flood['period']
+    #     self.keeped: bool = flood['keeped']
+    #     self.max_propagation = flood['dimensions']
+    #     self.propagation_per_step = flood['list_of_nodes']
+    #     self.nodes_per_propagation = nodes_per_propagation
+    
+    # def __init__(self, *flood, **kwargs):
+    #     for attr in flood:
+    #         for key in attr:
+    #             setattr(self, key, attr[key])
+    #     for key in kwargs:
+    #         setattr(self, key, kwargs[key])
 
     def update_state(self):
         if not self.keeped:

@@ -29,8 +29,8 @@ class Starter:
         2 - Prepare the environment, either creating another interpreter or using the global one
         3 - Start the processes that will run the API and Simulation."""
 
-        if not self.check_load_sim():
-            self.check_configuration_file()
+        # if not self.check_load_sim():
+        #     self.check_configuration_file()
 
         self.check_arguments()
         self.create_environment()

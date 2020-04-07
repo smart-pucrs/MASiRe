@@ -6,29 +6,29 @@ from simulation_engine.simulation_objects.victim import Victim
 from simulation_engine.simulation_objects.water_sample import WaterSample
 
 from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
+from simulation_engine.generator.genarator_base import GeneratorBase
 
-
-class Loader:
+class Loader(GeneratorBase):
     """Class that generate all the events step, by step or separated if needed."""
 
-    def __init__(self, config):
-        self.config: dict = config
-        self.flood_id: int = 0
-        self.victim_id: int = 0
-        self.photo_id: int = 0
-        self.water_sample_id: int = 0
-        self.social_asset_id: int = 0
-        random.seed(config['map']['randomSeed'])
+    def __init__(self, config, map, path_to_events):
+        super(Loader, self).__init__(config, map)
+        self.events = json.load(open(path_to_events, 'r'))
 
     def generate_events(self) -> list:
-        events: list = [0] * len(self.config['matchs'][0]['steps'])
-
-        for idx, step in enumerate(self.config['matchs'][0]['steps']):
+        events: list = [0] * len(self.events['matchs'][0]['steps'])
+        
+        for idx, step in enumerate(self.events['matchs'][0]['steps']):
             sim_step = dict(flood=None, victims=[], photos=[], water_samples=[])
 
             if step is not None:
+                # sim_step['flood'] = Flood(step['flood'])
+                # print("Teste: ", sim_step['flood'].__dict__)
+                # sim_step['flood'] = Flood(step['flood']['identifier'], step['flood']['period'], step['flood']['keeped'],
+                #                           step['flood']['dimensions'], step['flood']['list_of_nodes'])
+                sim_step['step'] = step['step']
                 sim_step['flood'] = Flood(step['flood']['identifier'], step['flood']['period'], step['flood']['keeped'],
-                                          step['flood']['dimensions'], step['flood']['list_of_nodes'])
+                                          step['flood']['dimensions'], self.get_nodes(step['flood']['dimensions']['location'],step['flood']['dimensions']['shape'],step['flood']['dimensions']['radius']),0.0,0.0,[])
                 self.flood_id += 1
 
                 sim_step['victims'] = [Victim(victim['flood_id'], victim['identifier'], victim['size'], victim['lifetime'],
@@ -57,9 +57,9 @@ class Loader:
         return events
 
     def generate_social_assets(self) -> list:
-        social_assets: list = [0] * len(self.config['matchs'][0]['social_assets'])
+        social_assets: list = [0] * len(self.events['matchs'][0]['social_assets'])
 
-        for idx, asset in enumerate(self.config['matchs'][0]['social_assets']):
+        for idx, asset in enumerate(self.events['matchs'][0]['social_assets']):
             social_assets[idx] = SocialAssetMarker(asset['identifier'], asset['location'],
                                                    asset['profession'], asset['abilities'], asset['resources'])
 
