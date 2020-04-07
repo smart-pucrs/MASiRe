@@ -1,0 +1,183 @@
+{
+  "map": {
+    "id": "2018-SampleSimulation",
+    "steps": 20,
+    "maps": [{
+      "name": "Brumadinho",
+      "osm": "files/brumadinho.osm",
+      "events": "files/paams.txt",
+      "minLat": -20.1726,
+      "minLon": -44.2104,
+      "maxLat": -20.1136,
+      "maxLon": -44.1102,
+      "centerLon": -44.1603,
+      "centerLat": -20.1431
+    }],
+    "proximity": 1,
+    "randomSeed": 2019,
+    "movementRestrictions": {
+      "airMovement": 0,
+      "groundMovement": 0,
+      "waterMovement": 0
+    }
+  },
+  "socialAssets": {
+    "nurse": {
+      "abilities": ["groundMovement", "carry", "physicalCapacity"],
+      "resources": ["strength"],
+      "minSize": 70,
+      "maxSize": 86,
+      "speed": 15,
+      "physicalCapacity": 800,
+      "virtualCapacity": 0
+    },
+    "vonlunteerFirefighter": {
+      "abilities": ["groundMovement", "virtualCapacity"],
+      "resources": ["memory"],
+      "minSize": 65,
+      "maxSize": 73,
+      "speed": 20,
+      "physicalCapacity": 500,
+      "virtualCapacity": 4096
+    }
+  },
+  "agents": {
+    "drone": {
+      "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
+      "resources": ["battery", "strength", "memory"],
+      "size": 30,
+      "amount": 7,
+      "speed": 2000,
+      "physicalCapacity": 500,
+      "virtualCapacity": 4096,
+      "battery": 50,
+      "batteryByMovement": 0
+    },
+    "car": {
+      "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
+      "resources": ["battery", "strength"],
+      "size": 1200,
+      "amount": 30,
+      "speed": 200,
+      "physicalCapacity": 450,
+      "virtualCapacity": 0,
+      "battery": 150,
+      "batteryByMovement": 1
+    }
+  },
+  "actions": {
+    "pass": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "move": {
+      "abilities": [["airMovement"], ["groundMovement"], ["waterMovement"]],
+      "resources": [[]]
+    },
+    "charge": {
+      "abilities": [["charge"]],
+      "resources": [["battery"]]
+    },
+    "rescueVictim": {
+      "abilities": [["carry"]],
+      "resources": [["strength"]]
+    },
+    "collectWater": {
+      "abilities": [["carry"]],
+      "resources": [[]]
+    },
+    "takePhoto": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "analyzePhoto": {
+      "abilities": [["virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "searchSocialAsset": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "requestSocialAsset": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverPhysical": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "receivePhysical": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "deliverVirtual": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "receiveVirtual": {
+      "abilities": [["carry", "virtualCapacity"]],
+      "resources": [["memory"]]
+    },
+    "carry": {
+      "abilities": [["carry", "physicalCapacity"]],
+      "resources": [[]]
+    },
+    "getCarried": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverAgent": {
+      "abilities": [[]],
+      "resources": [[]]
+    },
+    "deliverRequest": {
+      "abilities": [[]],
+      "resources": [[]]
+    }
+  },
+  "generate": {
+    "flood": {
+      "probability": 50,
+      "minPeriod": 0,
+      "maxPeriod": 0,
+      "circle": {
+        "minRadius": 2000.0,
+        "maxRadius": 2000.0
+      },
+      "propagation": false,
+      "propagationInfo": {
+        "maxPropagation": 20,
+        "propagationPerStep": 4,
+        "minVictimsPerPropagation": 1,
+        "maxVictimsPerPropagation": 2,
+        "victimsPerPropagationProbability": 100
+      }
+    },
+    "photo": {
+      "minSize": 256,
+      "maxSize": 512,
+      "minAmount": 1,
+      "maxAmount": 1,
+      "victimProbability": 100
+    },
+    "victim": {
+      "minSize": 18,
+      "maxSize": 22,
+      "minAmount": 1,
+      "maxAmount": 1,
+      "minLifetime": 20,
+      "maxLifetime": 30
+    },
+    "waterSample": {
+      "minSize": 15,
+      "maxSize": 20,
+      "minAmount": 1,
+      "maxAmount": 1
+    },
+    "socialAsset": {
+      "amount": 10,
+      "professions": ["nurse", "vonlunteerFirefighter"]
+    },
+    "step_unit": 1
+  }
+}
