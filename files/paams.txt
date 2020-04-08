@@ -6,6 +6,7 @@
             {
                 "name": "Brumadinho",
                 "osm": "files/brumadinho.osm",
+                "events": "files/paams.txt",
                 "minLat": -20.1726,
                 "minLon": -44.2104,
                 "maxLat": -20.1136,
@@ -39,18 +40,23 @@
                                 -20.1259509,
                                 -44.1166589
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 1,
-                            "identifier": 0,
-                            "size": 19,
-                            "lifetime": 30,
+                            "identifier": 9,
+                            "size": 21,
+                            "lifetime": 25,
                             "location": [
-                                -20.1264176,
-                                -44.113766
+                                -20.1422537,
+                                -44.1256195
                             ],
                             "in_photo": false
                         }
@@ -60,24 +66,24 @@
                             "type": "photo",
                             "flood_id": 1,
                             "identifier": 0,
-                            "size": 490,
+                            "size": 401,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 1,
-                                    "identifier": 1,
-                                    "size": 18,
-                                    "lifetime": 25,
+                                    "identifier": 10,
+                                    "size": 20,
+                                    "lifetime": 30,
                                     "location": [
-                                        -20.1416615,
-                                        -44.1280486
+                                        -20.1229016,
+                                        -44.1259222
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1416615,
-                                -44.1280486
+                                -20.1229016,
+                                -44.1259222
                             ]
                         }
                     ],
@@ -86,18 +92,132 @@
                             "type": "water_sample",
                             "flood_id": 1,
                             "identifier": 0,
-                            "size": 18,
+                            "size": 19,
                             "location": [
-                                -20.1239328,
-                                -44.1273537
+                                -20.1221656,
+                                -44.126848
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 1,
+                            "identifier": 0,
+                            "size": 19,
+                            "lifetime": 30,
+                            "location": [
+                                -20.1194087,
+                                -44.1310957
+                            ],
+                            "in_photo": false
+                        }
+                    ]
+                },
+                {
+                    "step": 1,
+                    "flood": {
+                        "type": "flood",
+                        "identifier": 2,
+                        "period": 0,
+                        "keeped": true,
+                        "dimensions": {
+                            "shape": "circle",
+                            "radius": 0.02,
+                            "location": [
+                                -20.1429278,
+                                -44.1785034
+                            ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
+                        }
+                    },
+                    "victims": [
+                        {
+                            "type": "victim",
+                            "flood_id": 2,
+                            "identifier": 18,
+                            "size": 18,
+                            "lifetime": 26,
+                            "location": [
+                                -20.1413584,
+                                -44.1795836
+                            ],
+                            "in_photo": false
+                        }
+                    ],
+                    "photos": [
+                        {
+                            "type": "photo",
+                            "flood_id": 2,
+                            "identifier": 1,
+                            "size": 478,
+                            "victims": [
+                                {
+                                    "type": "victim",
+                                    "flood_id": 2,
+                                    "identifier": 19,
+                                    "size": 19,
+                                    "lifetime": 24,
+                                    "location": [
+                                        -20.1611982,
+                                        -44.1767067
+                                    ],
+                                    "in_photo": true
+                                }
+                            ],
+                            "location": [
+                                -20.1611982,
+                                -44.1767067
+                            ]
+                        }
+                    ],
+                    "water_samples": [
+                        {
+                            "type": "water_sample",
+                            "flood_id": 2,
+                            "identifier": 1,
+                            "size": 20,
+                            "location": [
+                                -20.1336856,
+                                -44.1778386
+                            ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 2,
+                            "identifier": 11,
+                            "size": 19,
+                            "lifetime": 29,
+                            "location": [
+                                -20.1373618,
+                                -44.1879842
+                            ],
+                            "in_photo": false
+                        },
+                        {
+                            "type": "victim",
+                            "flood_id": 2,
+                            "identifier": 12,
+                            "size": 18,
+                            "lifetime": 22,
+                            "location": [
+                                -20.1480711,
+                                -44.1915504
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
                 null,
                 null,
                 {
-                    "step": 3,
+                    "step": 4,
                     "flood": {
                         "type": "flood",
                         "identifier": 3,
@@ -107,21 +227,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1449974,
-                                -44.1665116
+                                -20.1204967,
+                                -44.1802016
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 3,
-                            "identifier": 4,
-                            "size": 19,
-                            "lifetime": 29,
+                            "identifier": 27,
+                            "size": 21,
+                            "lifetime": 21,
                             "location": [
-                                -20.1342828,
-                                -44.1669574
+                                -20.1281805,
+                                -44.1762024
                             ],
                             "in_photo": false
                         }
@@ -131,24 +256,24 @@
                             "type": "photo",
                             "flood_id": 3,
                             "identifier": 2,
-                            "size": 412,
+                            "size": 425,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 3,
-                                    "identifier": 5,
-                                    "size": 20,
-                                    "lifetime": 20,
+                                    "identifier": 28,
+                                    "size": 19,
+                                    "lifetime": 23,
                                     "location": [
-                                        -20.1354104,
-                                        -44.1700652
+                                        -20.1213853,
+                                        -44.1851863
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1354104,
-                                -44.1700652
+                                -20.1213853,
+                                -44.1851863
                             ]
                         }
                     ],
@@ -157,16 +282,43 @@
                             "type": "water_sample",
                             "flood_id": 3,
                             "identifier": 2,
-                            "size": 20,
+                            "size": 17,
                             "location": [
-                                -20.1345192,
-                                -44.1667181
+                                -20.1180978,
+                                -44.181713
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 3,
+                            "identifier": 20,
+                            "size": 22,
+                            "lifetime": 30,
+                            "location": [
+                                -20.1199028,
+                                -44.1624767
+                            ],
+                            "in_photo": false
+                        },
+                        {
+                            "type": "victim",
+                            "flood_id": 3,
+                            "identifier": 21,
+                            "size": 20,
+                            "lifetime": 28,
+                            "location": [
+                                -20.1235337,
+                                -44.1800161
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
+                null,
                 {
-                    "step": 4,
+                    "step": 6,
                     "flood": {
                         "type": "flood",
                         "identifier": 4,
@@ -176,21 +328,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1281956,
-                                -44.1159815
+                                -20.1236473,
+                                -44.202212
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 4,
-                            "identifier": 6,
-                            "size": 19,
-                            "lifetime": 25,
+                            "identifier": 35,
+                            "size": 22,
+                            "lifetime": 23,
                             "location": [
-                                -20.1295466,
-                                -44.1346321
+                                -20.1393845,
+                                -44.1936697
                             ],
                             "in_photo": false
                         }
@@ -200,24 +357,24 @@
                             "type": "photo",
                             "flood_id": 4,
                             "identifier": 3,
-                            "size": 345,
+                            "size": 363,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 4,
-                                    "identifier": 7,
-                                    "size": 20,
-                                    "lifetime": 22,
+                                    "identifier": 36,
+                                    "size": 21,
+                                    "lifetime": 25,
                                     "location": [
-                                        -20.1197549,
-                                        -44.1324369
+                                        -20.1170974,
+                                        -44.1941964
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1197549,
-                                -44.1324369
+                                -20.1170974,
+                                -44.1941964
                             ]
                         }
                     ],
@@ -226,16 +383,31 @@
                             "type": "water_sample",
                             "flood_id": 4,
                             "identifier": 3,
-                            "size": 20,
+                            "size": 15,
                             "location": [
-                                -20.1356659,
-                                -44.1104312
+                                -20.1303175,
+                                -44.1996552
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 4,
+                            "identifier": 29,
+                            "size": 22,
+                            "lifetime": 25,
+                            "location": [
+                                -20.1424902,
+                                -44.2002557
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
+                null,
                 {
-                    "step": 5,
+                    "step": 8,
                     "flood": {
                         "type": "flood",
                         "identifier": 5,
@@ -245,21 +417,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.15833,
-                                -44.1437033
+                                -20.1222247,
+                                -44.1821381
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 5,
-                            "identifier": 8,
-                            "size": 20,
-                            "lifetime": 27,
+                            "identifier": 46,
+                            "size": 22,
+                            "lifetime": 30,
                             "location": [
-                                -20.1433507,
-                                -44.1450815
+                                -20.1188022,
+                                -44.1735792
                             ],
                             "in_photo": false
                         }
@@ -269,24 +446,24 @@
                             "type": "photo",
                             "flood_id": 5,
                             "identifier": 4,
-                            "size": 274,
+                            "size": 407,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 5,
-                                    "identifier": 9,
-                                    "size": 20,
-                                    "lifetime": 23,
+                                    "identifier": 47,
+                                    "size": 18,
+                                    "lifetime": 26,
                                     "location": [
-                                        -20.1549851,
-                                        -44.1624194
+                                        -20.1296662,
+                                        -44.1992286
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1549851,
-                                -44.1624194
+                                -20.1296662,
+                                -44.1992286
                             ]
                         }
                     ],
@@ -295,17 +472,42 @@
                             "type": "water_sample",
                             "flood_id": 5,
                             "identifier": 4,
-                            "size": 18,
+                            "size": 16,
                             "location": [
-                                -20.1556076,
-                                -44.1547037
+                                -20.1207786,
+                                -44.1630215
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 5,
+                            "identifier": 37,
+                            "size": 18,
+                            "lifetime": 20,
+                            "location": [
+                                -20.1279387,
+                                -44.1760737
+                            ],
+                            "in_photo": false
+                        },
+                        {
+                            "type": "victim",
+                            "flood_id": 5,
+                            "identifier": 38,
+                            "size": 18,
+                            "lifetime": 22,
+                            "location": [
+                                -20.1188433,
+                                -44.1787433
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
-                null,
                 {
-                    "step": 7,
+                    "step": 9,
                     "flood": {
                         "type": "flood",
                         "identifier": 6,
@@ -315,21 +517,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1428539,
-                                -44.1863014
+                                -20.1249519,
+                                -44.1764277
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 6,
-                            "identifier": 10,
-                            "size": 22,
-                            "lifetime": 28,
+                            "identifier": 55,
+                            "size": 20,
+                            "lifetime": 30,
                             "location": [
-                                -20.1275235,
-                                -44.1980216
+                                -20.1284928,
+                                -44.1747245
                             ],
                             "in_photo": false
                         }
@@ -339,24 +546,24 @@
                             "type": "photo",
                             "flood_id": 6,
                             "identifier": 5,
-                            "size": 292,
+                            "size": 357,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 6,
-                                    "identifier": 11,
-                                    "size": 19,
+                                    "identifier": 56,
+                                    "size": 18,
                                     "lifetime": 23,
                                     "location": [
-                                        -20.1513923,
-                                        -44.1701394
+                                        -20.1277524,
+                                        -44.17602
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1513923,
-                                -44.1701394
+                                -20.1277524,
+                                -44.17602
                             ]
                         }
                     ],
@@ -365,18 +572,34 @@
                             "type": "water_sample",
                             "flood_id": 6,
                             "identifier": 5,
-                            "size": 15,
+                            "size": 19,
                             "location": [
-                                -20.1497793,
-                                -44.1803154
+                                -20.1289108,
+                                -44.1640306
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 6,
+                            "identifier": 48,
+                            "size": 22,
+                            "lifetime": 20,
+                            "location": [
+                                -20.1284928,
+                                -44.1747245
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
                 null,
                 null,
+                null,
+                null,
                 {
-                    "step": 10,
+                    "step": 14,
                     "flood": {
                         "type": "flood",
                         "identifier": 7,
@@ -386,21 +609,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1681739,
-                                -44.143738
+                                -20.1465109,
+                                -44.1962843
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 7,
-                            "identifier": 12,
-                            "size": 21,
-                            "lifetime": 22,
+                            "identifier": 63,
+                            "size": 19,
+                            "lifetime": 27,
                             "location": [
-                                -20.1665349,
-                                -44.1534292
+                                -20.1484237,
+                                -44.1926303
                             ],
                             "in_photo": false
                         }
@@ -410,24 +638,24 @@
                             "type": "photo",
                             "flood_id": 7,
                             "identifier": 6,
-                            "size": 389,
+                            "size": 412,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 7,
-                                    "identifier": 13,
-                                    "size": 21,
-                                    "lifetime": 21,
+                                    "identifier": 64,
+                                    "size": 18,
+                                    "lifetime": 27,
                                     "location": [
-                                        -20.1697879,
-                                        -44.1493308
+                                        -20.1508821,
+                                        -44.2053265
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1697879,
-                                -44.1493308
+                                -20.1508821,
+                                -44.2053265
                             ]
                         }
                     ],
@@ -436,16 +664,30 @@
                             "type": "water_sample",
                             "flood_id": 7,
                             "identifier": 6,
-                            "size": 18,
+                            "size": 20,
                             "location": [
-                                -20.1612032,
-                                -44.1269571
+                                -20.1369682,
+                                -44.1983373
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 7,
+                            "identifier": 57,
+                            "size": 22,
+                            "lifetime": 27,
+                            "location": [
+                                -20.1429298,
+                                -44.1875572
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
                 {
-                    "step": 11,
+                    "step": 15,
                     "flood": {
                         "type": "flood",
                         "identifier": 8,
@@ -455,21 +697,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1682749,
-                                -44.1235507
+                                -20.1342673,
+                                -44.1257489
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 8,
-                            "identifier": 14,
-                            "size": 19,
-                            "lifetime": 25,
+                            "identifier": 71,
+                            "size": 21,
+                            "lifetime": 21,
                             "location": [
-                                -20.1615773,
-                                -44.1321275
+                                -20.1260197,
+                                -44.1126984
                             ],
                             "in_photo": false
                         }
@@ -479,24 +726,24 @@
                             "type": "photo",
                             "flood_id": 8,
                             "identifier": 7,
-                            "size": 299,
+                            "size": 416,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 8,
-                                    "identifier": 15,
-                                    "size": 18,
-                                    "lifetime": 22,
+                                    "identifier": 72,
+                                    "size": 20,
+                                    "lifetime": 20,
                                     "location": [
-                                        -20.1616346,
-                                        -44.1168802
+                                        -20.1440195,
+                                        -44.1349638
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1616346,
-                                -44.1168802
+                                -20.1440195,
+                                -44.1349638
                             ]
                         }
                     ],
@@ -505,16 +752,31 @@
                             "type": "water_sample",
                             "flood_id": 8,
                             "identifier": 7,
-                            "size": 20,
+                            "size": 17,
                             "location": [
-                                -20.1519688,
-                                -44.1302165
+                                -20.121811,
+                                -44.1265215
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 8,
+                            "identifier": 65,
+                            "size": 20,
+                            "lifetime": 27,
+                            "location": [
+                                -20.1361158,
+                                -44.1410936
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
+                null,
                 {
-                    "step": 12,
+                    "step": 17,
                     "flood": {
                         "type": "flood",
                         "identifier": 9,
@@ -524,21 +786,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1550668,
-                                -44.1855331
+                                -20.1600467,
+                                -44.1431821
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 9,
-                            "identifier": 16,
-                            "size": 18,
-                            "lifetime": 28,
+                            "identifier": 81,
+                            "size": 19,
+                            "lifetime": 25,
                             "location": [
-                                -20.1530552,
-                                -44.1717495
+                                -20.1579097,
+                                -44.1278588
                             ],
                             "in_photo": false
                         }
@@ -548,24 +815,24 @@
                             "type": "photo",
                             "flood_id": 9,
                             "identifier": 8,
-                            "size": 374,
+                            "size": 434,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 9,
-                                    "identifier": 17,
-                                    "size": 22,
+                                    "identifier": 82,
+                                    "size": 19,
                                     "lifetime": 24,
                                     "location": [
-                                        -20.1688129,
-                                        -44.178859
+                                        -20.1410615,
+                                        -44.1371119
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1688129,
-                                -44.178859
+                                -20.1410615,
+                                -44.1371119
                             ]
                         }
                     ],
@@ -574,18 +841,43 @@
                             "type": "water_sample",
                             "flood_id": 9,
                             "identifier": 8,
-                            "size": 19,
+                            "size": 18,
                             "location": [
-                                -20.1533419,
-                                -44.1701248
+                                -20.1432567,
+                                -44.1408763
                             ]
+                        }
+                    ],
+                    "propagation": [
+                        {
+                            "type": "victim",
+                            "flood_id": 9,
+                            "identifier": 73,
+                            "size": 20,
+                            "lifetime": 24,
+                            "location": [
+                                -20.1525136,
+                                -44.1575079
+                            ],
+                            "in_photo": false
+                        },
+                        {
+                            "type": "victim",
+                            "flood_id": 9,
+                            "identifier": 74,
+                            "size": 21,
+                            "lifetime": 30,
+                            "location": [
+                                -20.1536717,
+                                -44.1395736
+                            ],
+                            "in_photo": false
                         }
                     ]
                 },
                 null,
-                null,
                 {
-                    "step": 15,
+                    "step": 19,
                     "flood": {
                         "type": "flood",
                         "identifier": 10,
@@ -595,21 +887,26 @@
                             "shape": "circle",
                             "radius": 0.02,
                             "location": [
-                                -20.1365816,
-                                -44.1665089
+                                -20.1187494,
+                                -44.1686902
                             ]
+                        },
+                        "propagation2": {
+                            "max": 0.024,
+                            "perStep": 0.0008,
+                            "victimProbability": 100
                         }
                     },
                     "victims": [
                         {
                             "type": "victim",
                             "flood_id": 10,
-                            "identifier": 18,
-                            "size": 20,
-                            "lifetime": 24,
+                            "identifier": 89,
+                            "size": 18,
+                            "lifetime": 28,
                             "location": [
-                                -20.1496826,
-                                -44.1641794
+                                -20.1337612,
+                                -44.1692367
                             ],
                             "in_photo": false
                         }
@@ -619,24 +916,24 @@
                             "type": "photo",
                             "flood_id": 10,
                             "identifier": 9,
-                            "size": 307,
+                            "size": 414,
                             "victims": [
                                 {
                                     "type": "victim",
                                     "flood_id": 10,
-                                    "identifier": 19,
-                                    "size": 21,
+                                    "identifier": 90,
+                                    "size": 22,
                                     "lifetime": 23,
                                     "location": [
-                                        -20.1210558,
-                                        -44.154469
+                                        -20.1238082,
+                                        -44.1640709
                                     ],
                                     "in_photo": true
                                 }
                             ],
                             "location": [
-                                -20.1210558,
-                                -44.154469
+                                -20.1238082,
+                                -44.1640709
                             ]
                         }
                     ],
@@ -645,93 +942,50 @@
                             "type": "water_sample",
                             "flood_id": 10,
                             "identifier": 9,
-                            "size": 20,
+                            "size": 16,
                             "location": [
-                                -20.1240818,
-                                -44.1623971
+                                -20.1209391,
+                                -44.181863
                             ]
                         }
-                    ]
-                },
-                null,
-                null,
-                {
-                    "step": 18,
-                    "flood": {
-                        "type": "flood",
-                        "identifier": 11,
-                        "period": 0,
-                        "keeped": true,
-                        "dimensions": {
-                            "shape": "circle",
-                            "radius": 0.02,
-                            "location": [
-                                -20.165664,
-                                -44.1218716
-                            ]
-                        }
-                    },
-                    "victims": [
+                    ],
+                    "propagation": [
                         {
                             "type": "victim",
-                            "flood_id": 11,
-                            "identifier": 20,
-                            "size": 18,
-                            "lifetime": 24,
+                            "flood_id": 10,
+                            "identifier": 83,
+                            "size": 22,
+                            "lifetime": 20,
                             "location": [
-                                -20.1676127,
-                                -44.1227407
+                                -20.120501,
+                                -44.1612745
                             ],
                             "in_photo": false
                         }
-                    ],
-                    "photos": [
-                        {
-                            "type": "photo",
-                            "flood_id": 11,
-                            "identifier": 10,
-                            "size": 278,
-                            "victims": [
-                                {
-                                    "type": "victim",
-                                    "flood_id": 11,
-                                    "identifier": 21,
-                                    "size": 21,
-                                    "lifetime": 27,
-                                    "location": [
-                                        -20.150587,
-                                        -44.1118563
-                                    ],
-                                    "in_photo": true
-                                }
-                            ],
-                            "location": [
-                                -20.150587,
-                                -44.1118563
-                            ]
-                        }
-                    ],
-                    "water_samples": [
-                        {
-                            "type": "water_sample",
-                            "flood_id": 11,
-                            "identifier": 10,
-                            "size": 15,
-                            "location": [
-                                -20.1509748,
-                                -44.11375
-                            ]
-                        }
                     ]
-                },
-                null
+                }
             ],
             "social_assets": [
                 {
                     "identifier": 0,
                     "location": [
-                        -20.147711591589573,
-                        -44.15219669265175
+                        -20.138331932660606,
+                        -44.11722706924684
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 1,
+                    "location": [
+                        -20.168177093078004,
+                        -44.17264151335465
                     ],
                     "profession": "nurse",
                     "abilities": [
@@ -744,40 +998,26 @@
                     ]
                 },
                 {
-                    "identifier": 1,
-                    "location": [
-                        -20.116133678978564,
-                        -44.11071140820819
-                    ],
-                    "profession": "vonlunteerFirefighter",
-                    "abilities": [
-                        "groundMovement",
-                        "virtualCapacity"
-                    ],
-                    "resources": [
-                        "memory"
-                    ]
-                },
-                {
                     "identifier": 2,
                     "location": [
-                        -20.114209549704604,
-                        -44.13285457965772
+                        -20.17111324620129,
+                        -44.19710609114913
                     ],
-                    "profession": "vonlunteerFirefighter",
+                    "profession": "nurse",
                     "abilities": [
                         "groundMovement",
-                        "virtualCapacity"
+                        "carry",
+                        "physicalCapacity"
                     ],
                     "resources": [
-                        "memory"
+                        "strength"
                     ]
                 },
                 {
                     "identifier": 3,
                     "location": [
-                        -20.11557706170475,
-                        -44.147840454282836
+                        -20.15586541046475,
+                        -44.17186610065614
                     ],
                     "profession": "vonlunteerFirefighter",
                     "abilities": [
@@ -791,8 +1031,8 @@
                 {
                     "identifier": 4,
                     "location": [
-                        -20.15108360536229,
-                        -44.13253564688376
+                        -20.126154428679165,
+                        -44.20771468821338
                     ],
                     "profession": "vonlunteerFirefighter",
                     "abilities": [
@@ -806,8 +1046,8 @@
                 {
                     "identifier": 5,
                     "location": [
-                        -20.160236104735215,
-                        -44.15722999348131
+                        -20.156310077877244,
+                        -44.14157281636566
                     ],
                     "profession": "nurse",
                     "abilities": [
@@ -822,23 +1062,24 @@
                 {
                     "identifier": 6,
                     "location": [
-                        -20.16916694850849,
-                        -44.19244367655214
+                        -20.118358336467335,
+                        -44.20465340622823
                     ],
-                    "profession": "vonlunteerFirefighter",
+                    "profession": "nurse",
                     "abilities": [
                         "groundMovement",
-                        "virtualCapacity"
+                        "carry",
+                        "physicalCapacity"
                     ],
                     "resources": [
-                        "memory"
+                        "strength"
                     ]
                 },
                 {
                     "identifier": 7,
                     "location": [
-                        -20.151952159871463,
-                        -44.19847555859096
+                        -20.132371458269528,
+                        -44.19148246744162
                     ],
                     "profession": "vonlunteerFirefighter",
                     "abilities": [
@@ -852,33 +1093,31 @@
                 {
                     "identifier": 8,
                     "location": [
-                        -20.163716415376243,
-                        -44.150123131554246
+                        -20.140748563543426,
+                        -44.13270094350912
                     ],
-                    "profession": "nurse",
+                    "profession": "vonlunteerFirefighter",
                     "abilities": [
                         "groundMovement",
-                        "carry",
-                        "physicalCapacity"
+                        "virtualCapacity"
                     ],
                     "resources": [
-                        "strength"
+                        "memory"
                     ]
                 },
                 {
                     "identifier": 9,
                     "location": [
-                        -20.150552680953144,
-                        -44.210262144530816
+                        -20.153263392200046,
+                        -44.146213754107286
                     ],
-                    "profession": "nurse",
+                    "profession": "vonlunteerFirefighter",
                     "abilities": [
                         "groundMovement",
-                        "carry",
-                        "physicalCapacity"
+                        "virtualCapacity"
                     ],
                     "resources": [
-                        "strength"
+                        "memory"
                     ]
                 }
             ]

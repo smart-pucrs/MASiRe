@@ -28,7 +28,7 @@ class GeneratorBase(object):
         random.seed(config['map']['randomSeed'])
 
     @abstractmethod
-    def generate_events(self) -> list:
+    def generate_events(self, map) -> list:
         raise NotImplementedError("Must override to generate events")
 
     @abstractmethod
@@ -40,6 +40,39 @@ class GeneratorBase(object):
         if shape == 'circle':
             list_of_nodes: list = self.map.nodes_in_radius(position, radius)
         return list_of_nodes
+
+    def generate_propagation(self, prop, dimension, nodes, map) -> (float,float,list,list):
+        if prop['perStep'] == 0:
+            return (0.0,0.0,[],[])
+        
+        propagation: list = []
+        nodes_propagation: list = []
+        max_propagation: float = 0.0
+        propagation_per_step: float = 0.0
+        
+        max_propagation = (prop['max'] / 100) * dimension['radius'] + dimension['radius']
+        propagation_per_step = prop['perStep'] / 100 * dimension['radius']
+
+        prob_victim: int = prop['victimProbability']
+        old_nodes: list = nodes
+
+        for prop in range(int(((prop['max'] / 100) * dimension['radius'] / propagation_per_step))):
+            new_nodes = map.nodes_in_radius(dimension['location'],
+                                                    dimension['radius'] + propagation_per_step * prop)
+            difference = self.get_difference(old_nodes, new_nodes)
+
+            # if random.randint(0, 100) < prob_victim:
+            #     if difference:
+            #         propagation.append(self.generate_victims_in_propagation(difference))
+            #     else:
+            #         propagation.append(self.generate_victims_in_propagation(new_nodes))
+
+            nodes_propagation.append(difference)
+            old_nodes = new_nodes
+        return (max_propagation, propagation_per_step, nodes_propagation, propagation)
+
+    def get_difference(self, node_list1, node_list2):
+        return [node for node in node_list1 if node in node_list2]
 
     @staticmethod
     def get_json_events(events):

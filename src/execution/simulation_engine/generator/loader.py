@@ -15,7 +15,7 @@ class Loader(GeneratorBase):
         super(Loader, self).__init__(config, map)
         self.events = json.load(open(path_to_events, 'r'))
 
-    def generate_events(self) -> list:
+    def generate_events(self, map) -> list:
         events: list = [0] * len(self.events['matchs'][0]['steps'])
         
         for idx, step in enumerate(self.events['matchs'][0]['steps']):
@@ -26,13 +26,21 @@ class Loader(GeneratorBase):
                 # print("Teste: ", sim_step['flood'].__dict__)
                 # sim_step['flood'] = Flood(step['flood']['identifier'], step['flood']['period'], step['flood']['keeped'],
                 #                           step['flood']['dimensions'], step['flood']['list_of_nodes'])
+                nodes = self.get_nodes(step['flood']['dimensions']['location'],step['flood']['dimensions']['shape'],step['flood']['dimensions']['radius'])
+                (max_propagation, propagation_per_step, nodes_propagation, propagation) = self.generate_propagation(step['flood']['propagation2'], step['flood']['dimensions'], nodes, map)
+                
                 sim_step['step'] = step['step']
                 sim_step['flood'] = Flood(step['flood']['identifier'], step['flood']['period'], step['flood']['keeped'],
-                                          step['flood']['dimensions'], self.get_nodes(step['flood']['dimensions']['location'],step['flood']['dimensions']['shape'],step['flood']['dimensions']['radius']),0.0,0.0,[])
+                                          step['flood']['dimensions'], nodes, max_propagation, propagation_per_step, step['flood']['propagation2']['victimProbability'], nodes_propagation)
+                # sim_step['propagation'] = propagation
                 self.flood_id += 1
 
                 sim_step['victims'] = [Victim(victim['flood_id'], victim['identifier'], victim['size'], victim['lifetime'],
                                               victim['location'], victim['in_photo']) for victim in step['victims']]
+                self.victim_id += len(sim_step['victims'])
+
+                sim_step['propagation']: [Victim(victim['flood_id'], victim['identifier'], victim['size'], victim['lifetime'],
+                                              victim['location'], victim['in_photo']) for victim in step['propagation']]
                 self.victim_id += len(sim_step['victims'])
 
                 photos = []

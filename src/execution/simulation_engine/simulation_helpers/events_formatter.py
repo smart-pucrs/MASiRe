@@ -18,14 +18,18 @@ def format_flood(flood: Flood) -> dict:
         'identifier': identifier,
         'period': period,
         'keeped': keeped,
-        'dimensions': dimensions
+        'dimensions': dimensions,    
+        'propagation2': {
+            'max': flood.max_propagation,
+            'perStep': flood.propagation_per_step,
+            'victimProbability': flood.victim_probability
+        }
         # 'list_of_nodes': list_of_nodes
     }
 
 
 def format_victims(victims: list) -> list:
     json_victims = []
-
     for victim in victims:
         json_victims.append(format_victim(victim))
 

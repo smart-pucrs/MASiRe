@@ -28,7 +28,7 @@ class Cycle:
         else:
             generator = Generator(config, self.map)
 
-        self.steps = generator.generate_events()
+        self.steps = generator.generate_events(self.map)
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
                                                          generator.generate_social_assets())
 
@@ -203,12 +203,12 @@ class Cycle:
                 continue
             
             # TODO: fix this, not right the propagation
-            # if self.steps[i]['propagation']:
-            #     new_victims = self.steps[i]['propagation'].pop(0)
-            #     for victim in new_victims:
-            #         victim.active = True
+            if self.steps[i]['propagation']:
+                new_victims = self.steps[i]['propagation'].pop(0)
+                for victim in new_victims:
+                    victim.active = True
 
-            #     self.steps[i]['victims'].extend(new_victims)
+                self.steps[i]['victims'].extend(new_victims)
 
             if self.steps[i]['flood'].keeped:
                 self.steps[i]['flood'].update_state()

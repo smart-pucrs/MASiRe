@@ -1,3 +1,5 @@
+import json
+
 class Victim:
     """Class that represents a victim inside the simulation."""
 
@@ -11,3 +13,5 @@ class Victim:
         self.lifetime: int = lifetime
         self.in_photo: bool = photo
 
+    def to_json(self):
+        return json.dumps(self.__dict__)

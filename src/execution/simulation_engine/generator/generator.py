@@ -25,7 +25,7 @@ class Generator:
         self.measure_unit = 100000
         random.seed(config['map']['randomSeed'])
 
-    def generate_events(self) -> list:
+    def generate_events(self, map) -> list:
         """Generate all the events based on probabilities.
 
         If the probability of a flood to occur is bigger than the drawn number, an event is created. Except the first
@@ -108,13 +108,16 @@ class Generator:
         nodes_propagation: list = []
         max_propagation: float = 0.0
         propagation_per_step: float = 0.0
+        victim_probability: int = 0
+
+        self.flood_id = self.flood_id + 1
 
         if self.generate_variables['flood']['propagation']:
             prop_info = self.generate_variables['flood']['propagationInfo']
             max_propagation = (prop_info['maxPropagation'] / 100) * dimensions['radius'] + dimensions['radius']
             propagation_per_step = prop_info['propagationPerStep'] / 100 * dimensions['radius']
 
-            victim_probability: int = prop_info['victimsPerPropagationProbability']
+            victim_probability = prop_info['victimsPerPropagationProbability']
             old_nodes: list = list_of_nodes
 
             for prop in range(int(((prop_info['maxPropagation'] / 100) * dimensions['radius'] / propagation_per_step))):
@@ -131,10 +134,9 @@ class Generator:
                 nodes_propagation.append(difference)
                 old_nodes = new_nodes
 
-        self.flood_id = self.flood_id + 1
-
+        
         return Flood(self.flood_id, period, keeped, dimensions, list_of_nodes, max_propagation,
-                     propagation_per_step, nodes_propagation), propagation
+                     propagation_per_step, victim_probability, nodes_propagation), propagation
 
     def get_difference(self, node_list1, node_list2):
         return [node for node in node_list1 if node in node_list2]
@@ -308,7 +310,7 @@ class Generator:
                 events_dict['victims'] = formatter.format_victims(event['victims'])
                 events_dict['photos'] = formatter.format_photos(event['photos'])
                 events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
-
+                events_dict['propagation'] = formatter.format_victims(event['propagation'][0])
             json_events.append(events_dict)
 
         return json_events

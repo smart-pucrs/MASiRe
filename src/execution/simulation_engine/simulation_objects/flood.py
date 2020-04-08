@@ -2,7 +2,7 @@ class Flood:
     """Class that represents a flood inside the simulation."""
 
     def __init__(self, identifier: int, period: int, keeped: bool, dimensions: dict, list_of_nodes: list,
-                 max_propagation: float, propagation_per_step: float, nodes_per_propagation: list):
+                 max_propagation: float, propagation_per_step: float, victim_probability: int, nodes_per_propagation: list):
         self.identifier: int = identifier
         self.active: bool = False
         self.type: str = 'flood'
@@ -12,6 +12,7 @@ class Flood:
         self.keeped: bool = keeped
         self.max_propagation = max_propagation
         self.propagation_per_step = propagation_per_step
+        self.victim_probability = victim_probability
         self.nodes_per_propagation = nodes_per_propagation
       
     # def __init__(self, flood):
