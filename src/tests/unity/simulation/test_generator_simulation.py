@@ -12,6 +12,8 @@ if str(engine_path.absolute()) not in sys.path:
 import json
 from src.execution.simulation_engine.simulation_helpers.map import Map
 from src.execution.simulation_engine.generator.generator import Generator
+from src.execution.simulation_engine.generator.loader import Loader
+from src.execution.simulation_engine.simulation_helpers.cycle import Cycle
 
 
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
@@ -21,12 +23,32 @@ g = Generator(config_json, simulation_map)
 nodes = None
 
 
+# def test_generate_events():
+#     global nodes
+#     events = g.generate_events()
+#     nodes = events[0]['flood'].list_of_nodes
+#     assert len(events) == 10
+#     assert events[0]['flood'] is not None
+
 def test_generate_events():
-    global nodes
-    events = g.generate_events()
-    nodes = events[0]['flood'].list_of_nodes
-    assert len(events) == 10
-    assert events[0]['flood'] is not None
+    cycle = Cycle(config_json, False, False) 
+
+    generator = Generator(config_json, simulation_map)
+    events_1 = generator.generate_events(simulation_map)
+
+    path = pathlib.Path(__file__).parents[4] / "src/tests/unity/test_events_file.txt"
+    Loader.write_first_match(config_json,cycle.steps, cycle.social_assets_manager, generator, path)
+
+    loader = Loader(config_json, simulation_map, path)
+    events_2 = loader.generate_events(simulation_map)  
+
+    for i, e in enumerate(events_1):
+        assert e['step'] == events_2[i]['step']
+        if e['step'] >= 0:
+            assert e['flood'].identifier == events_2[i]['flood'].identifier
+            assert len(e['photos']) == len(events_2[i]['photos'])
+            assert len(e['water_samples']) == len(events_2[i]['water_samples'])
+            assert len(e['propagation']) == len(events_2[i]['propagation'])
 
 
 def test_generate_flood():

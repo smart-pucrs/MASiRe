@@ -7,6 +7,8 @@ from simulation_engine.simulation_objects.water_sample import WaterSample
 
 from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
 from simulation_engine.generator.genarator_base import GeneratorBase
+import simulation_engine.simulation_helpers.events_formatter as formatter
+import copy
 
 class Loader(GeneratorBase):
     """Class that generate all the events step, by step or separated if needed."""
@@ -16,12 +18,18 @@ class Loader(GeneratorBase):
         self.events = json.load(open(path_to_events, 'r'))
 
     def generate_events(self, map) -> list:
-        events: list = [0] * len(self.events['matchs'][0]['steps'])
-        
-        for idx, step in enumerate(self.events['matchs'][0]['steps']):
-            sim_step = dict(flood=None, victims=[], photos=[], water_samples=[],propagation=[])
+        template = dict(step=-1, flood=None, victims=[], photos=[], water_samples=[],propagation=[])
+        events: list = [template] * self.events['map']['steps']
+
+
+        steps = iter(self.events['matchs'][0]['steps'])
+        # for idx, step in enumerate(self.events['matchs'][0]['steps']):
+        for step in steps:
+            
+            sim_step = dict(step=-1,flood=None, victims=[], photos=[], water_samples=[],propagation=[])
 
             if step is not None:
+                idx = step['step']
                 # sim_step['flood'] = Flood(step['flood'])
                 # print("Teste: ", sim_step['flood'].__dict__)
                 # sim_step['flood'] = Flood(step['flood']['identifier'], step['flood']['period'], step['flood']['keeped'],
@@ -60,8 +68,7 @@ class Loader(GeneratorBase):
                                              sample['location']) for sample in step['water_samples']]
                 self.water_sample_id += len(sim_step['water_samples'])
 
-            events[idx] = sim_step
-
+                events[idx] = sim_step
         return events
 
     def generate_social_assets(self) -> list:
@@ -72,3 +79,53 @@ class Loader(GeneratorBase):
                                                    asset['profession'], asset['abilities'], asset['resources'])
 
         return social_assets
+
+    @staticmethod
+    def write_first_match(config, steps, social_assets, generator, file_name):
+        config_copy = copy.deepcopy(config)
+        del config_copy['generate']
+        del config_copy['socialAssets']
+        del config_copy['agents']
+        del config_copy['actions']
+
+        match = dict(steps=Loader.get_json_events(steps),
+                     social_assets=generator.get_json_social_assets(social_assets.social_assets_markers))
+
+        config_copy['matchs'] = [match]
+
+        with open(file_name, 'w+') as file:
+            file.write(json.dumps(config_copy, sort_keys=False, indent=4))
+
+    def write_match(self, generator, file_name):
+        with open(file_name, 'r') as file:
+            config = json.loads(file.read())
+
+        match = dict(steps=generator.get_json_events(self.steps),
+                     social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
+
+        config['matchs'].append(match)
+
+        with open(file_name, 'w') as file:
+            file.write(json.dumps(config, sort_keys=False, indent=4))
+
+    @staticmethod
+    def get_json_events(events):
+        json_events = []
+
+        for event in events:
+            events_dict = None
+
+            if event['flood'] is not None:
+                events_dict = dict()
+                events_dict['step'] = event['step']
+                events_dict['flood'] = formatter.format_flood(event['flood'])
+                events_dict['victims'] = formatter.format_victims(event['victims'])
+                events_dict['photos'] = formatter.format_photos(event['photos'])
+                events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
+                if len(event['propagation']) >= 1:
+                    events_dict['propagation'] = formatter.format_victims(event['propagation'][0])
+                else:
+                    events_dict['propagation'] = []
+            json_events.append(events_dict)
+
+        return json_events
