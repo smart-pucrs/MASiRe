@@ -19,7 +19,7 @@ class Loader(GeneratorBase):
         events: list = [0] * len(self.events['matchs'][0]['steps'])
         
         for idx, step in enumerate(self.events['matchs'][0]['steps']):
-            sim_step = dict(flood=None, victims=[], photos=[], water_samples=[])
+            sim_step = dict(flood=None, victims=[], photos=[], water_samples=[],propagation=[])
 
             if step is not None:
                 # sim_step['flood'] = Flood(step['flood'])
