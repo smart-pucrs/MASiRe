@@ -15,6 +15,8 @@ from werkzeug.serving import run_simple
 from simulation_engine.json_formatter import JsonFormatter
 from communication.helpers.logger import Logger
 
+logging.basicConfig(format="[SIMULATOR] [%(levelname)s] %(message)s",level=logging.DEBUG)
+
 config_path, base_url, simulation_port, api_port, log, load_sim, write_sim, secret = sys.argv[1:]
 load_sim_bool = load_sim.lower() == 'true'
 write_sim_bool = write_sim.lower() == 'true'

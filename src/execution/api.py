@@ -6,6 +6,7 @@ Note: any changes on the control functions must be done carefully."""
 import os
 import sys
 import json
+import logging
 import time
 import queue
 import signal
@@ -17,6 +18,8 @@ from flask import Flask, request, jsonify
 from communication.controllers.controller import Controller
 from communication.helpers import json_formatter
 from communication.helpers.logger import Logger
+
+logging.basicConfig(format="[API] [%(levelname)s] %(message)s",level=logging.DEBUG)
 
 base_url, api_port, simulation_port, monitor_port, step_time, first_step_time, method, log, social_assets_timeout, secret, agents_amount = sys.argv[1:]
 

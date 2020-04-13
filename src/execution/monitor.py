@@ -8,6 +8,8 @@ from monitor_engine.helpers.logger import Logger
 from flask_restful import Api
 from monitor_engine.resources.manager import SimulationManager, MatchInfoManager, MatchStepManager
 
+logging.basicConfig(format="[MONITOR] [%(levelname)s] %(message)s",level=logging.DEBUG)
+
 arguments = sys.argv[1:]
 
 if len(arguments) == 3:
