@@ -6,26 +6,26 @@ from simulation_engine.simulation_objects.water_sample import WaterSample
 from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
 
 
-def format_flood(flood: Flood) -> dict:
-    identifier: int = flood.identifier
-    period: int = flood.period
-    keeped: bool = flood.keeped
-    dimensions: dict = flood.dimensions
-    list_of_nodes: list = flood.list_of_nodes
+# def format_flood(flood: Flood) -> dict:
+#     identifier: int = flood.identifier
+#     period: int = flood.period
+#     keeped: bool = flood.keeped
+#     dimensions: dict = flood.dimensions
+#     list_of_nodes: list = flood.list_of_nodes
 
-    return {
-        'type': 'flood',
-        'identifier': identifier,
-        'period': period,
-        'keeped': keeped,
-        'dimensions': dimensions,    
-        'propagation2': {
-            'max': flood.max_propagation,
-            'perStep': flood.propagation_per_step,
-            'victimProbability': flood.victim_probability
-        }
-        # 'list_of_nodes': list_of_nodes
-    }
+#     return {
+#         'type': 'flood',
+#         'identifier': identifier,
+#         'period': period,
+#         'keeped': keeped,
+#         'dimensions': dimensions,    
+#         'propagation2': {
+#             'max': flood.max_propagation,
+#             'perStep': flood.propagation_per_step,
+#             'victimProbability': flood.victim_probability
+#         }
+#         # 'list_of_nodes': list_of_nodes
+#     }
 
 
 def format_victims(victims: list) -> list:

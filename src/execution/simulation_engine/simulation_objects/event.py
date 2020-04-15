@@ -1,13 +1,28 @@
+import json
 from abc import ABCMeta, abstractmethod
+from .victim import Victim
 
 class Event(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, id):
-        self.__active = False
-        self.__identifier = id
-    def __init__(self):
-        self.__active = False
+    def __init__(self, id:int, step:int, end: int, dimension: dict, propagation: dict,  **kwargs):
+        self.active: bool = False
+        self.type: str = 'flood'
+        self.id = id
+        self.step = step
+        self.end: int = end
+        self.dimension: dict = dimension
+        self.nodes: list = []
+
+        if propagation is not None:
+            # max = (propagation['max'] / 100) * dimension['radius'] + dimension['radius']
+            # perStep = propagation['perStep'] / 100 * dimension['radius']
+            # self.propagation = Propagation(max, perStep)
+            self.propagation = Propagation(propagation['max'], propagation['perStep'])
+        else:
+            self.propagation = propagation
+
+        self.keeped = False
     
     def update_state(self, current_step):
         self.__active = self.expires <= current_step
@@ -22,9 +37,50 @@ class Event(object):
     def is_activated(self):
         return self.__active
     
+    def affect_map(self, map, generator):
+        self.nodes = generator.get_nodes(self.dimension['location'], self.dimension['shape'],self.dimension['radius'])
+        if self.propagation is not None:
+            self.propagation.affect_map(self.dimension,self.nodes,map,generator)
+
+        return self.propagation
 
     @abstractmethod
     def propagate(self, map) -> list:
         raise NotImplementedError("Must override propagation")
 
+    def __lt__(self, other):
+        return self.step <= other.step
+
+    def dict(self):
+        event = self.__dict__.copy()
+        del event['active']
+        del event['keeped']
+        del event['nodes']
+        return event
+
+    def to_json(self):
+        return json.dumps(self.dict(),default=lambda o: o.__dict__)
+
+    def __str__(self):
+        return self.to_json()
+
+
+class Propagation():
+    def __init__(self, max, per_step):
+        self.max = max
+        self.perStep = per_step
+        self.nodesPerStep = []
     
+    def affect_map(self, dimension, nodes, map, generator):
+        self.nodesPerStep = generator.generate_propagation(dimension['location'], dimension['radius'], self.max, self.perStep, nodes, map) 
+
+    def dict(self):
+        prop = self.__dict__.copy()
+        del prop['nodesPerStep']
+        return prop
+
+    def to_json(self):
+        return json.dumps(self.dict())
+
+    def __str__(self):
+        return self.to_json()   

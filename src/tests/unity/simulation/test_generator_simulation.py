@@ -45,7 +45,7 @@ def test_generate_events():
     for i, e in enumerate(events_1):
         assert e['step'] == events_2[i]['step']
         if e['step'] >= 0:
-            assert e['flood'].identifier == events_2[i]['flood'].identifier
+            assert e['flood'].id == events_2[i]['flood'].id
             assert len(e['photos']) == len(events_2[i]['photos'])
             assert len(e['water_samples']) == len(events_2[i]['water_samples'])
             assert len(e['propagation']) == len(events_2[i]['propagation'])

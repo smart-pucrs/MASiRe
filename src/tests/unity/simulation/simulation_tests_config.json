@@ -190,7 +190,7 @@
         "minRadius": 2000.0,
         "maxRadius": 2000.0
       },
-      "propagation": false,
+      "propagation": true,
       "propagationInfo": {
         "maxPropagation": 20,
         "propagationPerStep": 4,

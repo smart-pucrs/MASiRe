@@ -6,9 +6,11 @@ from simulation_engine.simulation_objects.photo import Photo
 from simulation_engine.simulation_objects.victim import Victim
 from simulation_engine.simulation_objects.water_sample import WaterSample
 from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
+from ..simulation_objects.event import Event
+from .genarator_base import GeneratorBase
 
 
-class Generator:
+class Generator(GeneratorBase):
     """Class that generate all the events step, by step or separated if needed."""
 
     def __init__(self, config, map):
@@ -36,8 +38,9 @@ class Generator:
         steps_number: int = self.general_map_variables['steps']
         events = [0] * steps_number
 
-        flood, propagation = self.generate_flood()
-        nodes: list = flood.list_of_nodes
+        flood, propagation = self.generate_event(0)
+        flood.affect_map(map, self)
+        nodes: list = flood.nodes
         event: dict = {
             'step': 0, 
             'flood': flood,
@@ -56,7 +59,8 @@ class Generator:
 
             if random.randint(1, 100) <= flood_probability:
                 event['step'] = i
-                event['flood'], propagation = self.generate_flood()
+                event['flood'], propagation = self.generate_event(i)
+                event['flood'].affect_map(map, self)
                 nodes: list = event['flood'].list_of_nodes
                 event['victims']: list = self.generate_victims(nodes)
                 event['water_samples']: list = self.generate_water_samples(nodes)
@@ -68,7 +72,7 @@ class Generator:
 
         return events
 
-    def generate_flood(self) -> Flood:
+    def generate_event(self, step) -> Event:
         """Generate one flood.
 
         Note: The only shape available currently is the circle.
@@ -112,17 +116,20 @@ class Generator:
 
         self.flood_id = self.flood_id + 1
 
+        d_prop: dict = None
         if self.generate_variables['flood']['propagation']:
+            d_prop = {}
             prop_info = self.generate_variables['flood']['propagationInfo']
-            max_propagation = (prop_info['maxPropagation'] / 100) * dimensions['radius'] + dimensions['radius']
-            propagation_per_step = prop_info['propagationPerStep'] / 100 * dimensions['radius']
+            d_prop['max'] = (prop_info['maxPropagation'] / 100) * dimensions['radius'] + dimensions['radius']
+            d_prop['perStep'] = prop_info['propagationPerStep'] / 100 * dimensions['radius']
 
             victim_probability = prop_info['victimsPerPropagationProbability']
             old_nodes: list = list_of_nodes
 
-            for prop in range(int(((prop_info['maxPropagation'] / 100) * dimensions['radius'] / propagation_per_step))):
+            until = range(int(((prop_info['maxPropagation'] / 100) * dimensions['radius'] / d_prop['perStep'])))
+            for prop in until:
                 new_nodes = self.map.nodes_in_radius(dimensions['location'],
-                                                     dimensions['radius'] + propagation_per_step * prop)
+                                                     dimensions['radius'] + d_prop['perStep'] * prop)
                 difference = self.get_difference(old_nodes, new_nodes)
 
                 if random.randint(0, 100) < victim_probability:
@@ -134,9 +141,10 @@ class Generator:
                 nodes_propagation.append(difference)
                 old_nodes = new_nodes
 
+            d_prop['max'] = prop_info['maxPropagation']
+            d_prop['perStep'] = prop_info['propagationPerStep']
         
-        return Flood(self.flood_id, period, keeped, dimensions, list_of_nodes, max_propagation,
-                     propagation_per_step, victim_probability, nodes_propagation), propagation
+        return Event(self.flood_id, step, step+period, dimensions, d_prop), propagation
 
     def get_difference(self, node_list1, node_list2):
         return [node for node in node_list1 if node in node_list2]
@@ -163,7 +171,7 @@ class Generator:
             if random.randint(0, 100) <= victim_probability:
                 photo_victims = self.generate_photo_victims(photo_location)
 
-            photos[i] = Photo(self.flood_id, self.photo_id, photo_size, photo_victims, photo_location)
+            photos[i] = Photo(self.flood_id, self.photo_id, photo_size, photo_location, photo_victims)
             self.photo_id = self.photo_id + 1
             i += 1
 
