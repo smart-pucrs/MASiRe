@@ -78,7 +78,7 @@ class Loader(GeneratorBase):
         del config_copy['actions']
 
         match = dict(steps=Loader.get_json_events(steps),
-                     social_assets=generator.get_json_social_assets(social_assets.social_assets_markers))
+                     social_assets=generator.get_json_social_assets(social_assets))
 
         config_copy['matchs'] = [match]
 

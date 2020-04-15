@@ -50,6 +50,7 @@ def test_generate_events():
 
 def test_generate_social_assets():
     generator = Generator(config_json, simulation_map)
+    generator.generate_events(simulation_map)
     social_assets_1 = generator.generate_social_assets()
 
     path = pathlib.Path(__file__).parents[4] / "src/tests/unity/test_events_file.txt"
