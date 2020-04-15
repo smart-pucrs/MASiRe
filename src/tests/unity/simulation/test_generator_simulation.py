@@ -72,17 +72,23 @@ def test_generate_flood():
 
 
 def test_generate_victims():
-    victims = g.generate_victims(nodes)
+    generator = Generator(config_json, simulation_map)
+    events = generator.generate_events(simulation_map)
+    victims = generator.generate_victims(events[0]['flood'].nodes)
     assert 20 <= len(victims) <= 40
 
 
 def test_generate_photos():
-    photos = g.generate_photos(nodes)
+    generator = Generator(config_json, simulation_map)
+    events = generator.generate_events(simulation_map)
+    photos = g.generate_photos(events[0]['flood'].nodes)
     assert 20 <= len(photos) <= 40
 
 
 def test_generate_water_samples():
-    water_samples = g.generate_water_samples(nodes)
+    generator = Generator(config_json, simulation_map)
+    events = generator.generate_events(simulation_map)
+    water_samples = g.generate_water_samples(events[0]['flood'].nodes)
     assert 20 <= len(water_samples) <= 40
 
 
