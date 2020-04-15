@@ -15,9 +15,6 @@ class Event(object):
         self.nodes: list = []
 
         if propagation is not None:
-            # max = (propagation['max'] / 100) * dimension['radius'] + dimension['radius']
-            # perStep = propagation['perStep'] / 100 * dimension['radius']
-            # self.propagation = Propagation(max, perStep)
             self.propagation = Propagation(propagation['max'], propagation['perStep'])
         else:
             self.propagation = propagation
