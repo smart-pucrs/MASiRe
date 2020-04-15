@@ -17,7 +17,7 @@ from src.execution.simulation_engine.generator.generator import Generator
 config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
 config_json = json.load(open(config_path, 'r'))
 simulation_map = Map(config_json['map']['maps'][0], config_json['map']['proximity'], config_json['map']['movementRestrictions'])
-nodes = Generator(config_json, simulation_map).generate_events(simulation_map)[0]['flood'].list_of_nodes
+nodes = Generator(config_json, simulation_map).generate_events(simulation_map)[0]['flood'].nodes
 node = None
 
 

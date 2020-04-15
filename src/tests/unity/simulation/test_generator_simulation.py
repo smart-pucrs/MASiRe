@@ -31,13 +31,11 @@ nodes = None
 #     assert events[0]['flood'] is not None
 
 def test_generate_events():
-    cycle = Cycle(config_json, False, False) 
-
     generator = Generator(config_json, simulation_map)
     events_1 = generator.generate_events(simulation_map)
 
-    path = pathlib.Path(__file__).parents[4] / "src/tests/unity/test_events_file.txt"
-    Loader.write_first_match(config_json,cycle.steps, cycle.social_assets_manager, generator, path)
+    path = pathlib.Path(__file__).parents[4] / "src/tests/unity/test_events_same.txt"
+    Loader.write_first_match(config_json,events_1, generator.generate_social_assets(), generator, path)
 
     loader = Loader(config_json, simulation_map, path)
     events_2 = loader.generate_events(simulation_map)  
@@ -50,11 +48,26 @@ def test_generate_events():
             assert len(e['water_samples']) == len(events_2[i]['water_samples'])
             assert len(e['propagation']) == len(events_2[i]['propagation'])
 
+def test_generate_social_assets():
+    generator = Generator(config_json, simulation_map)
+    social_assets_1 = generator.generate_social_assets()
+
+    path = pathlib.Path(__file__).parents[4] / "src/tests/unity/test_events_file.txt"
+
+    loader = Loader(config_json, simulation_map, path)
+    social_assets_2 = loader.generate_social_assets() 
+
+    for i, sa in enumerate(social_assets_1):
+        assert len(sa.abilities) == len(social_assets_2[i].abilities)
+        assert sa.location[0] == social_assets_2[i].location[0]
+        assert sa.location[1] == social_assets_2[i].location[1]
+        assert len(sa.resources) == len(social_assets_2[i].resources)
 
 def test_generate_flood():
-    flood = g.generate_flood()
-    assert not flood[0].active
-    assert 40 <= flood[0].period <= 80
+    flood, prop = g.generate_event(step=26)
+    assert "flood" == flood.type
+    assert not flood.active
+    assert 26+40 <= flood.end <= 26+80
 
 
 def test_generate_victims():
