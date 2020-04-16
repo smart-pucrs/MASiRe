@@ -2,6 +2,7 @@ import copy
 import datetime
 import json
 import pathlib
+import logging
 from math import sqrt
 
 from simulation_engine.exceptions.exceptions import *
@@ -12,6 +13,7 @@ from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
 
+logger = logging.getLogger(__name__)
 
 class Cycle:
     def __init__(self, config, load_sim, write_sim):
@@ -22,7 +24,6 @@ class Cycle:
         self.agents_manager = AgentsManager(config['agents'], self.cdm_location)
 
         if load_sim:
-            # print("aqui: ",config)
             path_to_events = pathlib.Path(__file__).parents[4] / config['map']['maps'][0]['events']
             generator = Loader(config, self.map, path_to_events)
         else:
@@ -42,7 +43,7 @@ class Cycle:
             minute = '{:0>2d}'.format(minute)
 
             self.sim_file = str((path / f'Auto_Generate_Config_File_{sim_id}_at_{hour}h_{minute}min.txt'))
-            self.write_first_match(config, generator, self.sim_file)
+            Loader.write_first_match(config, self.steps, self.social_assets_manager.social_assets_markers, generator, self.sim_file)
 
         self.map_percepts = config['map']
         self.max_floods = generator.flood_id
@@ -79,20 +80,20 @@ class Cycle:
         self.cdm_location = (config['map']['maps'][0]['centerLat'], config['map']['maps'][0]['centerLon'])
         self.agents_manager.restart(config['agents'], self.cdm_location)
 
-    def write_first_match(self, config, generator, file_name):
-        config_copy = copy.deepcopy(config)
-        del config_copy['generate']
-        del config_copy['socialAssets']
-        del config_copy['agents']
-        del config_copy['actions']
+    # def write_first_match(self, config, generator, file_name):
+    #     config_copy = copy.deepcopy(config)
+    #     del config_copy['generate']
+    #     del config_copy['socialAssets']
+    #     del config_copy['agents']
+    #     del config_copy['actions']
 
-        match = dict(steps=generator.get_json_events(self.steps),
-                     social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
+    #     match = dict(steps=generator.get_json_events(self.steps),
+    #                  social_assets=generator.get_json_social_assets(self.social_assets_manager.social_assets_markers))
 
-        config_copy['matchs'] = [match]
+    #     config_copy['matchs'] = [match]
 
-        with open(file_name, 'w+') as file:
-            file.write(json.dumps(config_copy, sort_keys=False, indent=4))
+    #     with open(file_name, 'w+') as file:
+    #         file.write(json.dumps(config_copy, sort_keys=False, indent=4))
 
     def write_match(self, generator, file_name):
         with open(file_name, 'r') as file:
@@ -202,7 +203,6 @@ class Cycle:
             if self.steps[i]['flood'] is None:
                 continue
             
-            # TODO: fix this, not right the propagation
             if self.steps[i]['propagation']:
                 new_victims = self.steps[i]['propagation'].pop(0)
                 for victim in new_victims:
@@ -681,8 +681,9 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            logger.critical(e,exc_info=True)
             last_action_result = 'unknownError'
-            error_message = 'Unknown error: ' + str(e)
+            error_message = 'Unknown errooooor: ' + str(e)
 
         finally:
             self.agents_manager.edit(token, 'last_action_result', last_action_result)
@@ -1082,8 +1083,9 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            logger.critical(e,exc_info=True)
             last_action_result = 'unknownError'
-            error_message = 'Unknown error: ' + str(e)
+            error_message = 'Unknown erroor: ' + str(e)
 
         finally:
             self.social_assets_manager.edit(token, 'last_action_result', last_action_result)
@@ -1471,8 +1473,9 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            logger.critical(e,exc_info=True)
             last_action_result = 'unknownError'
-            error_message = 'Unknown error: ' + str(e)
+            error_message = 'Unknown errooor: ' + str(e)
 
         finally:
             self.agents_manager.edit(token, 'last_action_result', last_action_result)
@@ -1601,8 +1604,9 @@ class Cycle:
             error_message = e.message
 
         except Exception as e:
+            logger.critical(e, exc_info=True)
             last_action_result = 'unknownError'
-            error_message = 'Unknown error: ' + str(e)
+            error_message = 'Unknown erroooooor: ' + str(e)
 
         finally:
             self.social_assets_manager.edit(token, 'last_action_result', last_action_result)

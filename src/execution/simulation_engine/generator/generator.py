@@ -61,7 +61,7 @@ class Generator(GeneratorBase):
                 event['step'] = i
                 event['flood'], propagation = self.generate_event(i)
                 event['flood'].affect_map(map, self)
-                nodes: list = event['flood'].list_of_nodes
+                nodes: list = event['flood'].nodes
                 event['victims']: list = self.generate_victims(nodes)
                 event['water_samples']: list = self.generate_water_samples(nodes)
                 event['photos']: list = self.generate_photos(nodes)
@@ -304,24 +304,24 @@ class Generator(GeneratorBase):
 
         return social_assets
 
-    @staticmethod
-    def get_json_events(events):
-        json_events = []
+    # @staticmethod
+    # def get_json_events(events):
+    #     json_events = []
 
-        for event in events:
-            events_dict = None
+    #     for event in events:
+    #         events_dict = None
 
-            if event['flood'] is not None:
-                events_dict = dict()
-                events_dict['step'] = event['step']
-                events_dict['flood'] = formatter.format_flood(event['flood'])
-                events_dict['victims'] = formatter.format_victims(event['victims'])
-                events_dict['photos'] = formatter.format_photos(event['photos'])
-                events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
-                events_dict['propagation'] = formatter.format_victims(event['propagation'][0])
-            json_events.append(events_dict)
+    #         if event['flood'] is not None:
+    #             events_dict = dict()
+    #             events_dict['step'] = event['step']
+    #             events_dict['flood'] = formatter.format_flood(event['flood'])
+    #             events_dict['victims'] = formatter.format_victims(event['victims'])
+    #             events_dict['photos'] = formatter.format_photos(event['photos'])
+    #             events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
+    #             events_dict['propagation'] = formatter.format_victims(event['propagation'][0])
+    #         json_events.append(events_dict)
 
-        return json_events
+        # return json_events
 
     @staticmethod
     def get_json_social_assets(social_assets):

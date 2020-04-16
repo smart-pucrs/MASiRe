@@ -91,24 +91,24 @@ class GeneratorBase(object):
     def get_difference(self, node_list1, node_list2):
         return [node for node in node_list1 if node in node_list2]
 
-    @staticmethod
-    def get_json_events(events):
-        json_events = []
+    # @staticmethod
+    # def get_json_events(events):
+    #     json_events = []
 
-        for event in events:
-            events_dict = None
+    #     for event in events:
+    #         events_dict = None
 
-            if event['flood'] is not None:
-                events_dict = dict()
-                events_dict['step'] = event['step']
-                events_dict['flood'] = formatter.format_flood(event['flood'])
-                events_dict['victims'] = formatter.format_victims(event['victims'])
-                events_dict['photos'] = formatter.format_photos(event['photos'])
-                events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
+    #         if event['flood'] is not None:
+    #             events_dict = dict()
+    #             events_dict['step'] = event['step']
+    #             events_dict['flood'] = formatter.format_flood(event['flood'])
+    #             events_dict['victims'] = formatter.format_victims(event['victims'])
+    #             events_dict['photos'] = formatter.format_photos(event['photos'])
+    #             events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
 
-            json_events.append(events_dict)
+    #         json_events.append(events_dict)
 
-        return json_events
+    #     return json_events
 
     @staticmethod
     def get_json_social_assets(social_assets):

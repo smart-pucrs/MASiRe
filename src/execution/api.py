@@ -20,6 +20,7 @@ from communication.helpers import json_formatter
 from communication.helpers.logger import Logger
 
 logging.basicConfig(format="[API] [%(levelname)s] %(message)s",level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 base_url, api_port, simulation_port, monitor_port, step_time, first_step_time, method, log, social_assets_timeout, secret, agents_amount = sys.argv[1:]
 
@@ -320,13 +321,13 @@ def finish_step():
         controller.set_processing_actions()
         tokens_actions_list = [*controller.manager.get_actions('agent'), *controller.manager.get_actions('social_asset')]
 
-        Logger.normal('Send the actions for the simulation.')
+        logger.info('sending actions to the simulation engine')
         sim_response = requests.post(f'http://{base_url}:{simulation_port}/do_actions', json={'actions': tokens_actions_list, 'secret': secret}).json()
-        Logger.normal('Receive the actions results from the simulation.')
+        logger.info('receiving actions results')
         controller.manager.clear_workers()
 
         if sim_response['status'] == 0:
-            Logger.critical('An internal error occurred. Shutting down...')
+            logger.critical('An internal error occurred. Shutting down...')
             notify_monitor(error_event, {'message': 'An internal error occurred. Shutting down...'})
 
             requests.get(f'http://{base_url}:{simulation_port}/terminate', json={'secret': secret, Logger.TAG_NORMAL: True})
@@ -381,7 +382,7 @@ def finish_step():
                 multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 
     except requests.exceptions.ConnectionError:
-        Logger.critical('Error to process the agents actions.')
+        logger.critical('Error to process the agents actions.',exc_info=True)
 
         pass
 
@@ -546,12 +547,14 @@ def send_initial_percepts(token, info):
 
 def notify_monitor(event, response):
     """ Update data into the monitor."""
-
+    # TODO: for now does nothing
+    return 
     Logger.normal('Update monitor.')
 
     url = f'http://{base_url}:{monitor_port}/simulator'
 
     if event == initial_percepts_event:
+        logger.debug(response)
         info = json_formatter.initial_percepts_monitor_format(response)
         match = controller.get_current_match()
         url = f'{url}/match/{match}/info/map'

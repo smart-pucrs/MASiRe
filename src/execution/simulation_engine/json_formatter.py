@@ -5,12 +5,15 @@ import pathlib
 import traceback
 from simulation_engine.copycat import CopyCat
 from simulation_engine.simulation_helpers.logger import Logger
+import logging
 
+logger = logging.getLogger(__name__)
 
 class JsonFormatter:
     """Class that converts all the objects into JSON style dicts."""
 
     def __init__(self, config, load_sim, write_sim):
+        self.logger = logging.getLogger(__name__) 
         config_location = pathlib.Path(__file__).parents[3] / config
         self.copycat = CopyCat(json.load(open(config_location, 'r')), load_sim, write_sim)
 
@@ -54,6 +57,7 @@ class JsonFormatter:
                     'report': report_response, 'percepts': percepts, 'message': message}
 
         except Exception as e:
+            logger.critical(e,exc_info=True)
             Logger.critical(f'Error to restart the simulation, Error: {str(e)}.')
 
             return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
@@ -248,7 +252,7 @@ class JsonFormatter:
         :return dict: Dictionary with status representing if any errors were found, the list of agents and social assets,
         the event with the flood, victims, photos and water samples and a general message."""
 
-        Logger.normal('Try to start the simulation.')
+        logger.info('Try to start the simulation.')
 
         try:
             response = self.copycat.start()
@@ -265,7 +269,7 @@ class JsonFormatter:
                     'map_percepts': map_percepts, 'message': message}
 
         except Exception as e:
-            Logger.error(f'Unknown error: {str(e)}.')
+            logger.error(e,exc_info=True)
 
             return {'status': 0, 'message': f'An error occurred during restart: "{str(e)}"'}
 
@@ -328,8 +332,8 @@ class JsonFormatter:
 
             return {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Step completed.'}
 
-        except Exception as e:
-            Logger.error(f'Unknown error: {str(e)}.')
+        except Exception as e:            
+            logger.error(e,exc_info=True)
             return {'status': 0, 'message': f'An error occurred during step: "{str(e)}"'}
 
     def save_logs(self):
@@ -504,14 +508,14 @@ class JsonFormatter:
 
             if event.type == 'flood':
                 flood = {
-                    'identifier': event.identifier,
+                    'identifier': event.id,
                     'type': 'flood',
-                    'location': self.format_location(event.dimensions['location']),
-                    'shape': event.dimensions['shape']
+                    'location': self.format_location(event.dimension['location']),
+                    'shape': event.dimension['shape']
                 }
 
-                if event.dimensions['shape'] == 'circle':
-                    flood['radius'] = event.dimensions['radius']
+                if event.dimension['shape'] == 'circle':
+                    flood['radius'] = event.dimension['radius']
 
                 formatted_list.append(flood)
 
@@ -580,7 +584,7 @@ class JsonFormatter:
             if item.type == 'victim':
                 json_item = {
                     'flood_id': item.flood_id,
-                    'identifier': item.identifier,
+                    'identifier': item.id,
                     'type': 'victim',
                     'location': self.format_location(item.location),
                     'size': item.size,

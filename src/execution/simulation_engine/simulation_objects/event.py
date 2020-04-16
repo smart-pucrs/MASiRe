@@ -17,7 +17,7 @@ class Event(object):
         if propagation is not None:
             self.propagation = Propagation(propagation['max'], propagation['perStep'])
         else:
-            self.propagation = propagation
+            self.propagation = Propagation(0,0)
 
         self.keeped = False
     
@@ -36,10 +36,13 @@ class Event(object):
     
     def affect_map(self, map, generator):
         self.nodes = generator.get_nodes(self.dimension['location'], self.dimension['shape'],self.dimension['radius'])
-        if self.propagation is not None:
-            self.propagation.affect_map(self.dimension,self.nodes,map,generator)
-
+        self.propagation.affect_map(self.dimension,self.nodes,map,generator)
         return self.propagation
+
+    def update_state(self):
+        if len(self.propagation.nodesPerStep) > 0:
+            self.nodes.extend(self.propagation.propagate())
+            self.dimension['radius'] = self.dimension['radius'] * ((self.propagation.perStep/100)+1)
 
     @abstractmethod
     def propagate(self, map) -> list:
@@ -70,6 +73,9 @@ class Propagation():
     
     def affect_map(self, dimension, nodes, map, generator):
         self.nodesPerStep = generator.generate_propagation(dimension['location'], dimension['radius'], self.max, self.perStep, nodes, map) 
+
+    def propagate(self):
+        return self.nodesPerStep.pop(0)
 
     def dict(self):
         prop = self.__dict__.copy()

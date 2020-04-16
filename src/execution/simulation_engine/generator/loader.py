@@ -1,6 +1,7 @@
 import random
 import json
 import copy
+import logging
 from simulation_engine.simulation_objects.flood import Flood
 from simulation_engine.simulation_objects.photo import Photo
 from simulation_engine.simulation_objects.victim import Victim
@@ -11,6 +12,7 @@ from simulation_engine.generator.genarator_base import GeneratorBase
 import simulation_engine.simulation_helpers.events_formatter as formatter
 from ..simulation_objects.event import Event
 
+logger = logging.getLogger(__name__)
 
 class Loader(GeneratorBase):
     """Class that generate all the events step, by step or separated if needed."""
@@ -44,9 +46,8 @@ class Loader(GeneratorBase):
             for photo in e['photos']:
                 victims_in_photo = [Victim(**victim, photo=True) for victim in photo['victims']]
 
-                photos.append(Photo(photo['flood_id'], photo['identifier'], photo['size'], victims_in_photo,
-                                    photo['location']))
-            sim_step['photos'] = photos
+                photos.append(Photo(photo['flood_id'], photo['identifier'], photo['size'], photo['location'], victims_in_photo))
+                sim_step['photos'] = photos
 
             sim_step['water_samples'] = [WaterSample(**sample) for sample in e['water_samples']]
         return events
