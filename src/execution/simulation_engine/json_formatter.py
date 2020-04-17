@@ -584,7 +584,7 @@ class JsonFormatter:
             if item.type == 'victim':
                 json_item = {
                     'flood_id': item.flood_id,
-                    'identifier': item.id,
+                    'identifier': item.identifier,
                     'type': 'victim',
                     'location': self.format_location(item.location),
                     'size': item.size,

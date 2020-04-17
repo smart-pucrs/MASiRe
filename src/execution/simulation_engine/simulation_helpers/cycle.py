@@ -62,7 +62,7 @@ class Cycle:
         else:
             generator = Generator(config, self.map)
 
-        self.steps = generator.generate_events()
+        self.steps = generator.generate_events(self.map)
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
                                                          generator.generate_social_assets())
 
@@ -1688,8 +1688,8 @@ class Cycle:
 
             for i in range(self.current_step):
                 if self.steps[i]['flood'] and self.steps[i]['flood'].active:
-                    nodes.extend(self.steps[i]['flood'].list_of_nodes)
-                    events.append(self.steps[i]['flood'].dimensions)
+                    nodes.extend(self.steps[i]['flood'].nodes)
+                    events.append(self.steps[i]['flood'].dimension)
 
             if not agent.route or not self.map.check_location([*agent.route[-1][:-1]], destination):
                 result, route, distance = self.map.get_route(agent.location, destination, agent.abilities,
@@ -1795,7 +1795,7 @@ class Cycle:
 
         agent = self.agents_manager.get(token)
 
-        for i in range(self.current_step):
+        for i in range(self.current_step+1):
             for victim in self.steps[i]['victims']:
                 if victim.active and self.map.check_location(victim.location, agent.location):
                     victim.active = False
