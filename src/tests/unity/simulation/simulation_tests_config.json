@@ -78,8 +78,8 @@
   },
   "agents": {
     "drone": {
-      "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
-      "resources": ["battery", "strength", "memory"],
+      "abilities": ["airMovement", "charge", "carry", "virtualCapacity"],
+      "resources": ["battery", "memory"],
       "size": 30,
       "amount": 5,
       "speed": 7,
