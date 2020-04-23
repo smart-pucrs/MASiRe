@@ -9,9 +9,10 @@ from flask_restful import Api
 from monitor_engine.resources.manager import SimulationManager, MatchInfoManager, MatchStepManager
 
 logging.basicConfig(format="[MONITOR] [%(levelname)s] %(message)s",level=logging.DEBUG)
+logging.getLogger(__name__)
 
 arguments = sys.argv[1:]
-
+print("All: ",arguments)
 if len(arguments) == 3:
     replay, base_url, monitor_port = arguments
     replay_mode = True

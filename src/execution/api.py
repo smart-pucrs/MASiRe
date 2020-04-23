@@ -40,11 +40,13 @@ end_event = 'end'
 bye_event = 'bye'
 error_event = 'error'
 
+monitor_connected = False
 
 @app.route('/sim_config', methods=['GET'])
 def sim_config():
     """Return the bases information of the simulator.
     """
+    global monitor_connected
 
     simulation_url = f'http://{base_url}:{simulation_port}'
     api_url = f'http://{base_url}:{api_port}'
@@ -58,6 +60,7 @@ def sim_config():
         social_asset_timeout=social_assets_timeout
     )
 
+    monitor_connected = True
     Logger.normal('Sending simulation config to GUI.')
 
     return jsonify(response)
@@ -90,7 +93,7 @@ def start_connections():
 
     try:
         valid, message = controller.do_internal_verification(request)
-
+        
         if not valid:
             return jsonify(message=f'This endpoint can not be accessed. {message}')
 
@@ -548,7 +551,9 @@ def send_initial_percepts(token, info):
 def notify_monitor(event, response):
     """ Update data into the monitor."""
     # TODO: for now does nothing
-    return 
+    global monitor_connected
+    if not monitor_connected: 
+        return 
     Logger.normal('Update monitor.')
 
     url = f'http://{base_url}:{monitor_port}/simulator'
