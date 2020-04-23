@@ -23,8 +23,9 @@ class CopyCat:
         self.logs[self.config['map']['maps'][0]['osm']] = self.simulation.log()
         self.config['map']['maps'].pop(0)
 
-        if self.load_sim:
-            self.config['matchs'].pop(0)
+        # TODO: fix this
+        # if self.load_sim:
+        #     self.config['matchs'].pop(0)
 
         if not self.config['map']['maps']:
             return 0
