@@ -16,6 +16,7 @@ from simulation_engine.json_formatter import JsonFormatter
 from communication.helpers.logger import Logger
 
 logging.basicConfig(format="[SIMULATOR] [%(levelname)s] %(message)s",level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 config_path, base_url, simulation_port, api_port, log, load_sim, write_sim, secret = sys.argv[1:]
 load_sim_bool = load_sim.lower() == 'true'
@@ -216,9 +217,9 @@ if __name__ == '__main__':
     CORS(app)
     try:
         if requests.post(f'http://{base_url}:{api_port}/start_connections', json={'secret': secret, 'back': 0}):
-            Logger.normal(f'Simulation: Serving on http://{base_url}:{simulation_port}')
+            logger.info(f'Simulation: Serving on http://{base_url}:{simulation_port}')
             run_simple(application=app, hostname=base_url, port=int(simulation_port), use_reloader=False, use_debugger=False)
         else:
-            Logger.critical('Errors occurred during startup.')
+            logger.critical('Errors occurred during startup.')
     except requests.exceptions.ConnectionError:
-        Logger.critical('API is not online.')
+        logger.critical('API is not online.')
