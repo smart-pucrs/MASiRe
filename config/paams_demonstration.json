@@ -5,10 +5,10 @@
     "maps": [{
       "name": "Brumadinho",
       "osm": "files/brumadinho.osm",
-      "events": "files/paams.txt",
+      "events": "config/events/paams_demonstration_events.txt",
       "minLat": -20.1726,
       "minLon": -44.2104,
-      "maxLat": -20.1136,
+      "maxLat": -20.098549,
       "maxLon": -44.1102,
       "centerLon": -44.1603,
       "centerLat": -20.1431
