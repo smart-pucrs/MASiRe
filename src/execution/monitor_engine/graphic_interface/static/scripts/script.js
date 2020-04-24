@@ -147,6 +147,18 @@ function startMatch(){
     });
 }
 
+var pos_lat, pos_lon;
+document.getElementById("mapid").addEventListener("contextmenu", function (event) {
+    // Prevent the browser's context menu from appearing
+    event.preventDefault();
+
+    // Add marker
+    // L.marker([lat, lng], ....).addTo(map);
+    alert('Lat: '+pos_lat + '\nLon:' + pos_lon);
+
+    return false; // To disable default popup.
+});
+
 /**
  * Get next step from the Flask and refresh the graphic interface.
  */
@@ -296,6 +308,11 @@ function setMapConfig(config) {
         console.info(e);
     }).addTo(constantsMarkerGroup);
     console.log(config);
+
+    mymap.addEventListener('mousemove', function(ev) {
+        pos_lat = ev.latlng.lat;
+        pos_lon = ev.latlng.lng;
+    });
 
     $('#current-map').text(config['osm']);
 }
