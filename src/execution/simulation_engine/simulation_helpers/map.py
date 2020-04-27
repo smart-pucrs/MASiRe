@@ -1,10 +1,12 @@
 import math
 from builtins import list
+import logging
 
 import pyroutelib3
 import pathlib
 from itertools import zip_longest
 
+logger = logging.getLogger(__name__)
 
 class Map:
     """Class that represents the map of the simulation, it holds all the functions about location and the map itself."""
@@ -180,7 +182,7 @@ class Map:
                 if event_area:
                     event_area = False
                     min_route = self.generate_straight_route(current_node_coord, node_coord, speed - reduction, True)
-
+                    
                     route.extend(min_route)
                     current_node_coord = node_coord
 
@@ -400,7 +402,7 @@ class Map:
         points_amount = round((self.euclidean_distance(start, end) * self.measure_unit) / speed)
 
         if not points_amount:
-            return [end]
+            return [(*end,event_area)]
 
         unit = 1 / points_amount
 
