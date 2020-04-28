@@ -1,7 +1,7 @@
 {
     "map": {
         "id": "2018-SampleSimulation",
-        "steps": 20,
+        "steps": 100,
         "maps": [
             {
                 "name": "Brumadinho",
@@ -220,11 +220,11 @@
                     ]
                 },
                 {
-                    "step": 4,
+                    "step": 19,
                     "flood": {
                         "type": "flood",
                         "id": 3,
-                        "step": 4,
+                        "step": 19,
                         "end": 4,
                         "dimension": {
                             "shape": "circle",
@@ -389,11 +389,11 @@
                     ]
                 },
                 {
-                    "step": 8,
+                    "step": 32,
                     "flood": {
                         "type": "flood",
                         "id": 5,
-                        "step": 8,
+                        "step": 32,
                         "end": 8,
                         "dimension": {
                             "shape": "circle",

@@ -1,7 +1,7 @@
 {
   "map": {
     "id": "2018-SampleSimulation",
-    "steps": 20,
+    "steps": 100,
     "maps": [{
       "name": "Brumadinho",
       "osm": "files/brumadinho.osm",
@@ -46,7 +46,7 @@
       "abilities": ["airMovement", "charge", "carry", "virtualCapacity", "physicalCapacity"],
       "resources": ["battery", "strength", "memory"],
       "size": 30,
-      "amount": 7,
+      "amount": 3,
       "speed": 2000,
       "physicalCapacity": 500,
       "virtualCapacity": 4096,
@@ -57,7 +57,7 @@
       "abilities": ["groundMovement", "charge", "carry", "physicalCapacity"],
       "resources": ["battery", "strength"],
       "size": 1200,
-      "amount": 30,
+      "amount": 7,
       "speed": 200,
       "physicalCapacity": 450,
       "virtualCapacity": 0,
