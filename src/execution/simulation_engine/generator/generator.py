@@ -1,11 +1,11 @@
 import random
 import simulation_engine.simulation_helpers.events_formatter as formatter
 
-from simulation_engine.simulation_objects.flood import Flood
-from simulation_engine.simulation_objects.photo import Photo
-from simulation_engine.simulation_objects.victim import Victim
-from simulation_engine.simulation_objects.water_sample import WaterSample
-from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
+from ..simulation_objects.flood import Flood
+from ..simulation_objects.photo import Photo
+from ..simulation_objects.victim import Victim
+from ..simulation_objects.water_sample import WaterSample
+from ..simulation_objects.social_asset_marker import SocialAssetMarker
 from ..simulation_objects.event import Event
 from .genarator_base import GeneratorBase
 
@@ -14,8 +14,8 @@ class Generator(GeneratorBase):
     """Class that generate all the events step, by step or separated if needed."""
 
     def __init__(self, config, map):
-        self.general_map_variables: dict = config['map']
-        self.current_map_variables: dict = config['map']['maps'][0]
+        self.steps = config['map']['steps']
+        self.area = {attr:config['map']['maps'][0][attr] for attr in ['minLat','maxLat','minLon','maxLon']} 
         self.generate_variables: dict = config['generate']
         self.generate_assets_variables: dict = config['socialAssets']
         self.map = map
@@ -35,8 +35,7 @@ class Generator(GeneratorBase):
 
         :return list: All the steps containing either a dictionary with the event or a dictionary with a None flood."""
 
-        steps_number: int = self.general_map_variables['steps']
-        events = [0] * steps_number
+        events = [0] * self.steps
 
         flood, propagation = self.generate_event(0)
         flood.affect_map(map, self)
@@ -54,7 +53,7 @@ class Generator(GeneratorBase):
 
         flood_probability: int = self.generate_variables['flood']['probability']
         i: int = 1
-        while i < steps_number:
+        while i < self.steps:
             event: dict = {'step': -1, 'flood': None, 'victims': [], 'water_samples': [], 'photos': [], 'propagation': []}
 
             if random.randint(1, 100) <= flood_probability:
@@ -84,8 +83,8 @@ class Generator(GeneratorBase):
                            self.generate_variables['flood']['circle']['maxRadius']) / self.measure_unit
         )}
 
-        flood_lat: float = random.uniform(self.current_map_variables['minLat'], self.current_map_variables['maxLat'])
-        flood_lon: float = random.uniform(self.current_map_variables['minLon'], self.current_map_variables['maxLon'])
+        flood_lat: float = random.uniform(self.area['minLat'], self.area['maxLat'])
+        flood_lon: float = random.uniform(self.area['minLon'], self.area['maxLon'])
 
         dimensions['location']: tuple = self.map.align_coords(flood_lat, flood_lon)
 
@@ -281,15 +280,10 @@ class Generator(GeneratorBase):
 
         social_assets: list = [0] * amount
 
-        min_lat: float = self.current_map_variables['minLat']
-        max_lat: float = self.current_map_variables['maxLat']
-        min_lon: float = self.current_map_variables['minLon']
-        max_lon: float = self.current_map_variables['maxLon']
-
         i: int = 0
         while i < amount:
-            location: list = [random.uniform(min_lat, max_lat),
-                              random.uniform(min_lon, max_lon)]
+            location: list = [random.uniform(self.area['minLat'], self.area['maxLat']),
+                              random.uniform(self.area['minLon'], self.area['maxLon'])]
             profession: str = random.choice(self.generate_variables['socialAsset']['professions'])
             abilities = self.generate_assets_variables[profession]['abilities']
             resources = self.generate_assets_variables[profession]['resources']
