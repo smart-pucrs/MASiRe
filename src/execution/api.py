@@ -559,7 +559,7 @@ def notify_monitor(event, response):
     url = f'http://{base_url}:{monitor_port}/simulator'
 
     if event == initial_percepts_event:
-        logger.debug(response)
+        # logger.debug(response)
         info = json_formatter.initial_percepts_monitor_format(response)
         match = controller.get_current_match()
         url = f'{url}/match/{match}/info/map'

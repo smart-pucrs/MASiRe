@@ -377,7 +377,7 @@ class JsonFormatter:
 
             with open(str((path / f'LOG FILE {map_log} at {hour}h {minute}min.txt').absolute()), 'w') as file:
                 file.write(json.dumps(logs[log], sort_keys=False, indent=4))
-                file.write('\n\n' + '=' * 120 + '\n\n')
+                # file.write('\n\n' + '=' * 120 + '\n\n')
 
     def jsonify_agents(self, agents_list):
         """Transform a list of agents objects into JSON objects.
