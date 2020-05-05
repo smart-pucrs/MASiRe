@@ -8,3 +8,15 @@ class WaterSample:
         self.type: str = 'water_sample'
         self.size: int = size
         self.location: tuple = location
+
+    def dict(self):
+        sample = self.__dict__.copy()
+        del sample['active']
+        del sample['type']
+        return sample
+
+    def to_json(self):
+        return json.dumps(self.dict())
+
+    def __str__(self):
+        return self.to_json()

@@ -1,4 +1,4 @@
-# from execution.simulation_engine.simulation_objects.victim import Victim
+import json
 
 class Photo:
     """Class that represents a photo event inside the simulation."""
@@ -12,4 +12,16 @@ class Photo:
         self.location: tuple = location
         self.victims: list = victims
         self.analyzed: bool = False
-        
+    
+    def dict(self):
+        photo = self.__dict__.copy()
+        del photo['active']
+        del photo['type']
+        del photo['analyzed']
+        return photo
+
+    def to_json(self):
+        return json.dumps(self.dict())
+
+    def __str__(self):
+        return self.to_json()

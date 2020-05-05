@@ -1,24 +1,18 @@
-import random
 import json
 import copy
 import logging
-from simulation_engine.simulation_objects.flood import Flood
-from simulation_engine.simulation_objects.photo import Photo
-from simulation_engine.simulation_objects.victim import Victim
-from simulation_engine.simulation_objects.water_sample import WaterSample
 
-from simulation_engine.simulation_objects.social_asset_marker import SocialAssetMarker
-from simulation_engine.generator.genarator_base import GeneratorBase
-import simulation_engine.simulation_helpers.events_formatter as formatter
+from .genarator_base import GeneratorBase
+from ..simulation_objects.photo import Photo
+from ..simulation_objects.victim import Victim
+from ..simulation_objects.water_sample import WaterSample
 from ..simulation_objects.event import Event
+from ..simulation_objects.social_asset_marker import SocialAssetMarker
 
 logger = logging.getLogger(__name__)
 
 class Loader(GeneratorBase):
-    """Class that generate all the events step, by step or separated if needed."""
-
     def __init__(self, config, map, path_to_events):
-        super(Loader, self).__init__(config, map)
         events_file = json.load(open(path_to_events, 'r'))
         self.number_steps = events_file['map']['steps']
         self.events = events_file['matchs'][0]['steps']
@@ -26,20 +20,18 @@ class Loader(GeneratorBase):
 
     def generate_events(self, map) -> list:
         template = dict(step=-1, flood=None, victims=[], photos=[], water_samples=[],propagation=[])
-        # events: list = [template.copy()] * self.number_steps
         events: list = [template.copy() for i in range(self.number_steps)]
 
         for e in iter(self.events):  
             if e is None: 
                 continue          
-            e_obj = self.__prepare_event(e)
+            e_obj = Event(**e['flood'])
             e_obj.affect_map(map, self)
 
             sim_step = events[e_obj.step]
             sim_step['step'] = e['step']
             sim_step['flood'] = e_obj
             sim_step['victims'] = [Victim(**victim, photo=False) for victim in e['victims']]
-            # sim_step['propagation'] = [Victim(**victim, photo=False) for victim in e['propagation']]
             sim_step['propagation'] = [[Victim(**victim, photo=False) for victim in s] for s in e['propagation']]
 
             photos = []
@@ -51,15 +43,6 @@ class Loader(GeneratorBase):
 
             sim_step['water_samples'] = [WaterSample(**sample) for sample in e['water_samples']]
         return events
-
-    def __prepare_event(self, info):
-        config = {}
-        config['step'] = info['step']
-        config['id'] = info['flood']['id']
-        config['end'] = info['flood']['end']
-        config['dimension'] = info['flood']['dimension']
-        config['propagation'] = info['flood']['propagation']
-        return Event(**config)
 
     def generate_social_assets(self) -> list:
         social_assets: list = [0] * len(self.social_assets)
@@ -109,13 +92,13 @@ class Loader(GeneratorBase):
                 events_dict = dict()
                 events_dict['step'] = event['step']
                 events_dict['flood'] = event['flood'].dict()
-                events_dict['victims'] = formatter.format_victims(event['victims'])
-                events_dict['photos'] = formatter.format_photos(event['photos'])
-                events_dict['water_samples'] = formatter.format_water_samples(event['water_samples'])
+                events_dict['victims'] = [victim.dict() for victim in event['victims']]
+                events_dict['photos'] = [photo.dict() for photo in event['photos']]
+                events_dict['water_samples'] = [sample.dict() for sample in event['water_samples']]
                 if len(event['propagation']) >= 1:
                     prop = []
                     for s in range(len(event['propagation'])):
-                        prop.append(formatter.format_victims(event['propagation'][s]))
+                        prop.append([victim.dict() for victim in event['propagation'][s]])
                     events_dict['propagation'] = prop
                 else:
                     events_dict['propagation'] = []

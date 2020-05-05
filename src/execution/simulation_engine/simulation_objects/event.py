@@ -35,7 +35,7 @@ class Event(object):
         return self.__active
     
     def affect_map(self, map, generator):
-        self.nodes = generator.get_nodes(self.dimension['location'], self.dimension['shape'],self.dimension['radius'])
+        self.nodes = generator.get_nodes(self.dimension['location'], self.dimension['shape'],self.dimension['radius'],map)
         self.propagation.affect_map(self.dimension,self.nodes,map,generator)
         return self.propagation
 
