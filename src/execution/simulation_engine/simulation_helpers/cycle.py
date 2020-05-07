@@ -46,10 +46,10 @@ class Cycle:
             Loader.write_first_match(config, self.steps, self.social_assets_manager.social_assets_markers, generator, self.sim_file)
 
         self.map_percepts = config['map']
-        self.max_floods = generator.flood_id
-        self.max_victims = generator.victim_id
-        self.max_photos = generator.photo_id
-        self.max_water_samples = generator.water_sample_id
+        # self.max_floods = generator.flood_id
+        # self.max_victims = generator.victim_id
+        # self.max_photos = generator.photo_id
+        # self.max_water_samples = generator.water_sample_id
         self.delivered_items = []
         self.current_step = 0
         self.match_history = []

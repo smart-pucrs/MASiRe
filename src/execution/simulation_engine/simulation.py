@@ -236,25 +236,29 @@ class Simulation:
 
                 else:
                     water_samples_ignored += 1
-                    
+
+        # from .simulation_helpers.report import total_events, total_victims, total_photos, total_samples   
+        from simulation_engine.simulation_helpers.report import Report   
+        report = Report()  
+            
         return {
             'environment': {
                 'current_step': current_step,
                 'max_steps': max_steps,
                 'delivered_items': delivered_items,
-                'floods_amount': floods_amount,
-                'total_victims': self.cycler.max_victims,
+                'floods_amount': report.total_events,
+                'total_victims': report.total_victims,
                 'victims_in_events': victims_in_events,
                 'victims_in_photos': victims_in_photo,
                 'victims_rescued_alive': victims_saved,
                 'victims_rescued_dead': victims_dead_delivered,
                 'victims_dead_ignored': victims_dead_ignored,
                 'victims_ignored': victims_ignored,
-                'total_photos': self.cycler.max_water_samples,
+                'total_photos': report.total_photos,
                 'photos_taken': photos_taken,
                 'photos_analysed': photos_analyzed,
                 'photos_ignored': photos_ignored,
-                'total_mud_samples': self.cycler.max_water_samples,
+                'total_mud_samples': report.total_samples,
                 'mud_samples_collected': water_samples_collected,
                 'mud_samples_ignored': water_samples_ignored
             },

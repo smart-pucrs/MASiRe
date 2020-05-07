@@ -69,6 +69,13 @@ class Generator(GeneratorBase):
             events[i] = event
             i += 1
 
+        from simulation_engine.simulation_helpers.report import Report 
+        report = Report()
+        report.total_events = self.flood_id
+        report.total_victims = self.victim_id
+        report.total_photos = self.photo_id
+        report.total_samples = self.water_sample_id
+
         return events
 
     def generate_event(self, step) -> Event:

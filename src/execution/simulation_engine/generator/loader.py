@@ -19,6 +19,9 @@ class Loader(GeneratorBase):
         self.social_assets = events_file['matchs'][0]['social_assets']
 
     def generate_events(self, map) -> list:
+        # from simulation_engine.simulation_helpers.report import total_events, total_victims, total_photos, total_samples 
+        from simulation_engine.simulation_helpers.report import Report 
+        report = Report()
         template = dict(step=-1, flood=None, victims=[], photos=[], water_samples=[],propagation=[])
         events: list = [template.copy() for i in range(self.number_steps)]
 
@@ -26,17 +29,24 @@ class Loader(GeneratorBase):
             if e is None: 
                 continue          
             e_obj = Event(**e['flood'])
+            report.total_events += 1
+            report.total_victims += len(e['victims'])
+            report.total_photos += len(e['photos'])
+            report.total_samples += len(e['water_samples'])
             e_obj.affect_map(map, self)
 
             sim_step = events[e_obj.step]
             sim_step['step'] = e['step']
             sim_step['flood'] = e_obj
-            sim_step['victims'] = [Victim(**victim, photo=False) for victim in e['victims']]
+            sim_step['victims'] = [Victim(**victim, photo=False) for victim in e['victims']]            
             sim_step['propagation'] = [[Victim(**victim, photo=False) for victim in s] for s in e['propagation']]
+            for p in sim_step['propagation']:
+                report.total_victims += len(p)
 
             photos = []
             for photo in e['photos']:
                 victims_in_photo = [Victim(**victim, photo=True) for victim in photo['victims']]
+                report.total_victims += len(photo['victims'])
 
                 photos.append(Photo(photo['flood_id'], photo['identifier'], photo['size'], photo['location'], victims_in_photo))
                 sim_step['photos'] = photos
