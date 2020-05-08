@@ -5,7 +5,7 @@
     "maps": [{
       "name": "Brumadinho",
       "osm": "files/brumadinho.osm",
-      "events": "config/events/paams_demonstration_events.txt",
+      "events": "config/events/paams_demo.txt",
       "minLat": -20.1726,
       "minLon": -44.2104,
       "maxLat": -20.098549,
@@ -17,7 +17,7 @@
     "randomSeed": 2019,
     "movementRestrictions": {
       "airMovement": 0,
-      "groundMovement": 0,
+      "groundMovement": 70,
       "waterMovement": 0
     }
   },
@@ -58,7 +58,7 @@
       "resources": ["battery", "strength"],
       "size": 1200,
       "amount": 7,
-      "speed": 200,
+      "speed": 800,
       "physicalCapacity": 450,
       "virtualCapacity": 0,
       "battery": 150,

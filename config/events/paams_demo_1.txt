@@ -1,0 +1,281 @@
+{
+    "map": {
+        "id": "2018-SampleSimulation",
+        "steps": 100,
+        "maps": [
+            {
+                "name": "Brumadinho",
+                "osm": "files/brumadinho.osm",
+                "events": "config/events/paams_demonstration_events.txt",
+                "minLat": -20.1726,
+                "minLon": -44.2104,
+                "maxLat": -20.098549,
+                "maxLon": -44.1102,
+                "centerLon": -44.1603,
+                "centerLat": -20.1431
+            }
+        ],
+        "proximity": 1,
+        "randomSeed": 2019,
+        "movementRestrictions": {
+            "airMovement": 0,
+            "groundMovement": 0,
+            "waterMovement": 0
+        }
+    },
+    "matchs": [
+        {
+            "steps": [
+                {
+                    "step": 0,
+                    "flood": {
+                        "type": "flood",
+                        "id": 1,
+                        "step": 0,
+                        "end": 0,
+                        "dimension": {
+                            "shape": "circle",
+                            "radius": 0.02,
+                            "location": [
+                                -20.106056,
+                                -44.129826
+                            ]
+                        },
+                        "propagation": {
+                            "max": 20,
+                            "perStep": 1
+                        }
+                    },
+                    "victims": [
+                        {
+                            "type": "victim",
+                            "flood_id": 1,
+                            "identifier": 9,
+                            "size": 21,
+                            "lifetime": 25,
+                            "location": [
+                                -20.106694,
+                                -44.135821
+                            ],
+                            "in_photo": false
+                        }
+                    ],
+                    "photos": [
+                        {
+                            "type": "photo",
+                            "flood_id": 1,
+                            "identifier": 0,
+                            "size": 401,
+                            "victims": [
+                                {
+                                    "type": "victim",
+                                    "flood_id": 1,
+                                    "identifier": 10,
+                                    "size": 20,
+                                    "lifetime": 30,
+                                    "location": [
+                                        -20.1229016,
+                                        -44.1259222
+                                    ],
+                                    "in_photo": true
+                                }
+                            ],
+                            "location": [
+                                -20.1229016,
+                                -44.1259222
+                            ]
+                        }
+                    ],
+                    "water_samples": [
+                        {
+                            "type": "water_sample",
+                            "flood_id": 1,
+                            "identifier": 0,
+                            "size": 19,
+                            "location": [
+                                -20.1221656,
+                                -44.126848
+                            ]
+                        }
+                    ],
+                    "propagation": [
+                        [],
+                        [],
+                        [],
+                        [],
+                        [
+                            {
+                                "type": "victim",
+                                "flood_id": 1,
+                                "identifier": 8,
+                                "size": 18,
+                                "lifetime": 30,
+                                "location": [
+                                    -20.108970,
+                                    -44.134100
+                                ],
+                                "in_photo": false
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "social_assets": [
+                {
+                    "identifier": 0,
+                    "location": [
+                        -20.138331932660606,
+                        -44.11722706924684
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 1,
+                    "location": [
+                        -20.168177093078004,
+                        -44.17264151335465
+                    ],
+                    "profession": "nurse",
+                    "abilities": [
+                        "groundMovement",
+                        "carry",
+                        "physicalCapacity"
+                    ],
+                    "resources": [
+                        "strength"
+                    ]
+                },
+                {
+                    "identifier": 2,
+                    "location": [
+                        -20.17111324620129,
+                        -44.19710609114913
+                    ],
+                    "profession": "nurse",
+                    "abilities": [
+                        "groundMovement",
+                        "carry",
+                        "physicalCapacity"
+                    ],
+                    "resources": [
+                        "strength"
+                    ]
+                },
+                {
+                    "identifier": 3,
+                    "location": [
+                        -20.15586541046475,
+                        -44.17186610065614
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 4,
+                    "location": [
+                        -20.126154428679165,
+                        -44.20771468821338
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 5,
+                    "location": [
+                        -20.156310077877244,
+                        -44.14157281636566
+                    ],
+                    "profession": "nurse",
+                    "abilities": [
+                        "groundMovement",
+                        "carry",
+                        "physicalCapacity"
+                    ],
+                    "resources": [
+                        "strength"
+                    ]
+                },
+                {
+                    "identifier": 6,
+                    "location": [
+                        -20.118358336467335,
+                        -44.20465340622823
+                    ],
+                    "profession": "nurse",
+                    "abilities": [
+                        "groundMovement",
+                        "carry",
+                        "physicalCapacity"
+                    ],
+                    "resources": [
+                        "strength"
+                    ]
+                },
+                {
+                    "identifier": 7,
+                    "location": [
+                        -20.132371458269528,
+                        -44.19148246744162
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 8,
+                    "location": [
+                        -20.140748563543426,
+                        -44.13270094350912
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                },
+                {
+                    "identifier": 9,
+                    "location": [
+                        -20.153263392200046,
+                        -44.146213754107286
+                    ],
+                    "profession": "vonlunteerFirefighter",
+                    "abilities": [
+                        "groundMovement",
+                        "virtualCapacity"
+                    ],
+                    "resources": [
+                        "memory"
+                    ]
+                }
+            ]
+        }
+    ]
+}
