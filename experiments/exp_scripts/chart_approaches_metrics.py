@@ -30,7 +30,14 @@ approaches = pd.concat([approach1,approach2])
 approaches.columns = ['Amount','Approach','Metrics']
 
 fig, ax = plt.subplots(1,1)
-g = sns.catplot(ax=ax, x='Metrics', y='Amount', hue="Approach", data=approaches,kind="bar", palette="muted")
-ax.set_xlabel('Metrics of the Simulator')
-ax.set_xticklabels(ax.get_xticklabels(),rotation=80)
-fig.savefig(root+'/experiments/reports/Comparison-Metrics-Approaches.png',bbox_inches="tight")
+
+# g = sns.catplot(ax=ax, x='Metrics', y='Amount', hue="Approach", data=approaches,kind="bar", palette="muted")
+# ax.set_xlabel('Metrics of the Simulator')
+# ax.set_xticklabels(ax.get_xticklabels(),rotation=80)
+# fig.savefig(root+'/experiments/reports/Comparison-Metrics-Approaches.png',bbox_inches="tight")
+
+sns.catplot(x='Metrics', y='Amount', hue="Approach", data=approaches,kind="bar", palette="muted")
+plt.xlabel = 'Metrics of the Simulator'
+locs, labels = plt.xticks()
+plt.xticks(locs,labels,rotation=80)
+plt.savefig(root+'/experiments/reports/Comparison-Metrics-Approaches.png',bbox_inches="tight")
