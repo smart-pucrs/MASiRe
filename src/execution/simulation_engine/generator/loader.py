@@ -30,9 +30,9 @@ class Loader(GeneratorBase):
                 continue          
             e_obj = Event(**e['flood'])
             report.total_events += 1
-            report.total_victims += len(e['victims'])
-            report.total_photos += len(e['photos'])
-            report.total_samples += len(e['water_samples'])
+            report.victims.known = len(e['victims'])
+            report.photos.request = len(e['photos'])
+            report.samples.request = len(e['water_samples'])
             e_obj.affect_map(map, self)
 
             sim_step = events[e_obj.step]
@@ -41,12 +41,12 @@ class Loader(GeneratorBase):
             sim_step['victims'] = [Victim(**victim, photo=False) for victim in e['victims']]            
             sim_step['propagation'] = [[Victim(**victim, photo=False) for victim in s] for s in e['propagation']]
             for p in sim_step['propagation']:
-                report.total_victims += len(p)
+                report.victims.known = len(p)
 
             photos = []
             for photo in e['photos']:
                 victims_in_photo = [Victim(**victim, photo=True) for victim in photo['victims']]
-                report.total_victims += len(photo['victims'])
+                report.victims.hidden = len(photo['victims'])
 
                 photos.append(Photo(photo['flood_id'], photo['identifier'], photo['size'], photo['location'], victims_in_photo))
                 sim_step['photos'] = photos

@@ -12,6 +12,8 @@ from simulation_engine.generator.loader import Loader
 from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
+from simulation_engine.simulation_helpers.report import Report 
+
 
 logger = logging.getLogger(__name__)
 
@@ -1793,12 +1795,17 @@ class Cycle:
         if parameters:
             raise FailedWrongParam('Parameters were given.')
 
+        report = Report()
         agent = self.agents_manager.get(token)
 
         for i in range(self.current_step+1):
             for victim in self.steps[i]['victims']:
                 if victim.active and self.map.check_location(victim.location, agent.location):
                     victim.active = False
+                      
+                    if (victim.lifetime <= 0): report.victims.dead = 1
+                    else: report.victims.alive = 1
+
                     self.agents_manager.add_physical(token, victim)
 
                     return
@@ -1817,12 +1824,15 @@ class Cycle:
         if parameters:
             raise FailedWrongParam('Parameters were given.')
 
+        report = Report()
         asset = self.social_assets_manager.get(token)
 
         for i in range(self.current_step):
             for victim in self.steps[i]['victims']:
                 if victim.active and self.map.check_location(victim.location, asset.location):
                     victim.active = False
+                    if (victim.lifetime <= 0): report.victims.dead = 1
+                    else: report.victims.alive = 1
                     self.social_assets_manager.add_physical(token, victim)
 
                     return
@@ -1840,12 +1850,13 @@ class Cycle:
     def _collect_water_agent(self, token, parameters):
         if parameters:
             raise FailedWrongParam('Parameters were given.')
-
+        report = Report()
         agent = self.agents_manager.get(token)
         for i in range(self.current_step):
             for water_sample in self.steps[i]['water_samples']:
                 if water_sample.active and self.map.check_location(water_sample.location, agent.location):
                     water_sample.active = False
+                    report.samples.collected = 1
                     self.agents_manager.add_physical(token, water_sample)
 
                     return
@@ -1855,12 +1866,13 @@ class Cycle:
     def _collect_water_asset(self, token, parameters):
         if parameters:
             raise FailedWrongParam('Parameters were given.')
-
+        report = Report()
         asset = self.social_assets_manager.get(token)
         for i in range(self.current_step):
             for water_sample in self.steps[i]['water_samples']:
                 if water_sample.active and self.map.check_location(water_sample.location, asset.location):
                     water_sample.active = False
+                    report.samples.collected = 1
                     self.social_assets_manager.add_physical(token, water_sample)
 
                     return
@@ -1870,12 +1882,13 @@ class Cycle:
     def _take_photo_agent(self, token, parameters):
         if parameters:
             raise FailedWrongParam('Parameters were given.')
-
+        report = Report()
         agent = self.agents_manager.get(token)
         for i in range(self.current_step):
             for photo in self.steps[i]['photos']:
                 if photo.active and self.map.check_location(photo.location, agent.location):
                     photo.active = False
+                    report.photos.collected = 1
                     self.agents_manager.add_virtual(token, photo)
 
                     return
@@ -1891,6 +1904,7 @@ class Cycle:
             for photo in self.steps[i]['photos']:
                 if photo.active and self.map.check_location(photo.location, asset.location):
                     photo.active = False
+                    report.photos.collected = 1
                     self.social_assets_manager.add_virtual(token, photo)
 
                     return
@@ -1905,12 +1919,13 @@ class Cycle:
         if len(agent.virtual_storage_vector) == 0:
             raise FailedItemAmount('The agent has no photos to analyze.')
 
+        report = Report()
         photo_identifiers = []
         victim_identifiers = []
         for photo in agent.virtual_storage_vector:
             for victim in photo.victims:
                 victim_identifiers.append(victim.identifier)
-
+            report.photos.analysed = 1
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
@@ -1919,6 +1934,7 @@ class Cycle:
     def _analyze_photo_asset(self, token, parameters):
         if parameters:
             raise FailedWrongParam('Parameters were given.')
+        report = Report()
 
         asset = self.social_assets_manager.get(token)
         if len(asset.virtual_storage_vector) == 0:
@@ -1929,7 +1945,7 @@ class Cycle:
         for photo in asset.virtual_storage_vector:
             for victim in photo.victims:
                 victim_identifiers.append(victim.identifier)
-
+            report.photos.analysed = 1
             photo_identifiers.append(photo.identifier)
 
         self._update_photos_state(photo_identifiers)
