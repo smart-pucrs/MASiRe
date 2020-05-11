@@ -1,5 +1,5 @@
 MASiRe -- MAS in Response
-==================
+=========================
 :toc:
 :toc-placement: preamble
 :ages: AGES
