@@ -7,6 +7,8 @@ Disaster Simulator
 This is the source code of the Disaster Simulator for Multi-Agent System, currently supporting flooding environments. This simulator is inspired by the https://multiagentcontest.org/2018/[Multi-Agent Programming Contest (MAPC)] and was initially developed by a team of students of http://www.ages.pucrs.br/[AGES] at PUCRS.
 In this repository, you will find all the information required to run the simulator. 
 
+[[img/maisre-screenshot.png]]
+
 // Need some preamble to get TOC:
 {empty}
 
