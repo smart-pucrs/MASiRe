@@ -408,6 +408,12 @@ function process_simulation_data(data) {
                 case 'collector':
                     marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
                     break;
+                case 'truck':
+                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
+                    break;
+                case 'ugv':
+                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
+                    break;
                 default:
                     logError('Role not found.');
                     continue;
