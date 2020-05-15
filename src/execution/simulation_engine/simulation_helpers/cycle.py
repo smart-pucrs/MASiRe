@@ -1652,11 +1652,11 @@ class Cycle:
         if parameters:
             raise FailedWrongParam('Parameters were given.')
 
-        if self.map.check_location(self.agents_manager.get(token).location, self.cdm_location):
-            self.agents_manager.charge(token)
-
-        else:
-            raise FailedLocation('The agent is not located at the CDM.')
+        self.agents_manager.charge(token)
+        # if self.map.check_location(self.agents_manager.get(token).location, self.cdm_location):
+        #     self.agents_manager.charge(token)
+        # else:
+        #     raise FailedLocation('The agent is not located at the CDM.')
 
     def _move_agent(self, token, parameters):
         if len(parameters) == 1:
