@@ -15,7 +15,8 @@ class JsonFormatter:
     def __init__(self, config, load_sim, write_sim):
         self.logger = logging.getLogger(__name__) 
         config_location = pathlib.Path(__file__).parents[3] / config
-        self.copycat = CopyCat(json.load(open(config_location, 'r')), load_sim, write_sim)
+        # self.copycat = CopyCat(json.load(open(config_location, 'r')), load_sim, write_sim)
+        self.copycat = CopyCat(json.load(open(config, 'r')), load_sim, write_sim)
 
     def log(self):
         """Do the log and returns a JSON response.
@@ -30,7 +31,7 @@ class JsonFormatter:
         """Restart the simulation and returns a JSON response.
 
         All the agents, social assets and events are converted, the copycat class prevents from the formatter changing
-        the objects inside the engine.
+        the objects inside the engine. 
 
         :return dict: Dictionary with status representing if any errors were found, the list of agents and social assets,
         the event with the flood, victims, photos and water samples and a general message."""
