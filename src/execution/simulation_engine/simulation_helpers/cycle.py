@@ -1261,25 +1261,25 @@ class Cycle:
     def _deliver_virtual_agent_agent(self, token, parameters):
         delivering_agent = self.agents_manager.get(token)
         receiving_agent = self.agents_manager.get(parameters[2])
-        if self.map.check_location(delivering_agent.location, receiving_agent.location):
-            amount = 0 if parameters[1] < 0 else parameters[1]
+        # if self.map.check_location(delivering_agent.location, receiving_agent.location):
+        amount = 0 if parameters[1] < 0 else parameters[1]
 
-            items = [item for item in delivering_agent.virtual_storage_vector if item.type == parameters[0]]
-            if not items:
-                raise FailedItemAmount('The agent has no virtual items of this kind to deliver.')
+        items = [item for item in delivering_agent.virtual_storage_vector if item.type == parameters[0]]
+        if not items:
+            raise FailedItemAmount('The agent has no virtual items of this kind to deliver.')
 
-            if receiving_agent.virtual_storage < amount * items[0].size:
-                raise FailedCapacity('The receiving agent does not have enough virtual storage.')
+        if receiving_agent.virtual_storage < amount * items[0].size:
+            raise FailedCapacity('The receiving agent does not have enough virtual storage.')
 
-            removed_items = self.agents_manager.deliver_virtual(delivering_agent.token, parameters[0], amount)
-            for item in removed_items:
-                self.agents_manager.add_virtual(receiving_agent.token, item)
+        removed_items = self.agents_manager.deliver_virtual(delivering_agent.token, parameters[0], amount)
+        for item in removed_items:
+            self.agents_manager.add_virtual(receiving_agent.token, item)
 
-            self.agents_manager.edit(receiving_agent.token, 'last_action', 'receiveVirtual')
-            self.agents_manager.edit(receiving_agent.token, 'last_action_result', 'success')
+        self.agents_manager.edit(receiving_agent.token, 'last_action', 'receiveVirtual')
+        self.agents_manager.edit(receiving_agent.token, 'last_action_result', 'success')
 
-        else:
-            raise FailedLocation('The agent is not located near the desired agent.')
+        # else:
+        #     raise FailedLocation('The agent is not located near the desired agent.')
 
     def _deliver_virtual_agent_asset(self, token, parameters):
         delivering_agent = self.agents_manager.get(token)
