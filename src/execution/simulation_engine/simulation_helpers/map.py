@@ -115,7 +115,7 @@ class Map:
             return self.generate_water_route(start_coord, end_coord, speed, events_range)
 
         else:
-            return self.generate_ground_route(start_coord, end_coord, speed, list_of_nodes)
+            return self.generate_ground_route(start_coord, end_coord, speed, list_of_nodes, events_range)
 
     def check_node_proximity(self, p1, p2, max_dist):
         """ Check if the two node given is closest, considering the max distance given.
@@ -127,7 +127,7 @@ class Map:
         """
         return self.euclidean_distance(p1, p2) > max_dist
 
-    def generate_ground_route(self, start_coord, end_coord, speed, list_of_nodes):
+    def generate_ground_route(self, start_coord, end_coord, speed, list_of_nodes, events):
         """ Generate route for ground movement.
 
         Note: The route will considering the speed reduction of events area.
@@ -141,6 +141,12 @@ class Map:
         """
         reduction = self.movement_restrictions['groundMovement'] / 100 * speed
 
+        # if self.check_coord_in_events(start_coord, events) and self.check_coord_in_events(start_coord, events):
+        #     start_node = start_coord
+        #     end_node = end_coord
+        # else:
+        #     start_node = self.get_closest_node(*start_coord)
+        #     end_node = self.get_closest_node(*end_coord)
         start_node = self.get_closest_node(*start_coord)
         end_node = self.get_closest_node(*end_coord)
 

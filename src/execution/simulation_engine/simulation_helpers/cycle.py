@@ -380,6 +380,7 @@ class Cycle:
                         special_action_tokens.remove(match)
                         if self.agents_manager.get(parameters[0]) is not None:
                             self.agents_manager.add_physical(token, self.agents_manager.get(parameters[0]))
+                            logger.debug(f"token carry: {parameters[0]}")
                             self.agents_manager.edit(parameters[0], 'carried', True)
                             self.agents_manager.edit(parameters[0], 'last_action', 'getCarried')
                             self.agents_manager.edit(parameters[0], 'last_action_result', 'success')
@@ -416,8 +417,9 @@ class Cycle:
                     if match is not None:
                         special_action_tokens.remove(match)
                         if self.agents_manager.get(parameters[0]) is not None:
-                            self.agents_manager.add_physical(parameters[0],
-                                                             self.agents_manager.get(token))
+                            self.agents_manager.edit(token, 'carried', True)
+                            self.agents_manager.add_physical(parameters[0], self.agents_manager.get(token))
+                            logger.debug(f"token get carried: {parameters[0]}")
                             self.agents_manager.edit(parameters[0], 'last_action_result', 'success')
                             self.agents_manager.edit(parameters[0], 'last_action', 'carry')
                             secondary_result = {

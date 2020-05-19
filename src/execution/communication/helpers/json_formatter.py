@@ -247,6 +247,7 @@ def agent_variables(agent):
         'last_action_result': agent['last_action_result'],
         'location': agent['location'],
         'route': agent['route'],
+        'carried': agent['carried'],
         'destination_distance': agent['destination_distance'],
         'battery': agent['battery'],
         'physical_storage': agent['physical_storage'],
