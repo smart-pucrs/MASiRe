@@ -100,6 +100,7 @@ class AssetRequestManager:
 
         agents_responses.extend(assets_response['actors'])
         self.response['actors'] = agents_responses
+        self.response['status'] = assets_response['status']
 
         return self.response
 

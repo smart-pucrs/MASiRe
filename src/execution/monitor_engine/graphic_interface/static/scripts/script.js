@@ -414,6 +414,9 @@ function process_simulation_data(data) {
                 case 'ugv':
                     marker = L.marker(agent_location_formated, { icon: nurseIcon });
                     break;
+                case 'helicopter':
+                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
+                    break;
                 default:
                     logError('Role not found.');
                     continue;
@@ -434,6 +437,9 @@ function process_simulation_data(data) {
                     break;
                 case 'photographer':
                     marker = L.marker(agent_location_formated, { icon: photographerIcon });
+                    break;
+                case 'vonlunteer':
+                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
                     break;
                 default:
                     logError('Profession not found.');

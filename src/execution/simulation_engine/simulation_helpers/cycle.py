@@ -1757,8 +1757,8 @@ class Cycle:
             events = []
             for i in range(self.current_step):
                 if self.steps[i]['flood'] and self.steps[i]['flood'].active:
-                    nodes.extend(self.steps[i]['flood'].list_of_nodes)
-                    events.append(self.steps[i]['flood'].dimensions)
+                    nodes.extend(self.steps[i]['flood'].nodes)
+                    events.append(self.steps[i]['flood'].dimension)
 
             if not asset.route or not self.map.check_location([*asset.route[-1][:-1]], destination):
                 result, route, distance = self.map.get_route(asset.location, destination, asset.abilities,

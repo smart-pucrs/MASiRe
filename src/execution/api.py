@@ -26,6 +26,8 @@ base_url, api_port, simulation_port, monitor_port, step_time, first_step_time, m
 
 app = Flask(__name__)
 socket = SocketIO(app=app)
+logging.getLogger('socketio').setLevel(logging.ERROR)
+logging.getLogger('engineio').setLevel(logging.ERROR)
 
 controller = Controller(agents_amount, first_step_time, secret)
 every_agent_registered = Queue()
@@ -403,7 +405,7 @@ def handle_response():
 
     response = controller.format_actions_result(sim_response)
     notify_actors(percepts_event, response)
-    controller.finish_asset_connections()
+    controller.finish_assets_connections()
 
     multiprocessing.Process(target=step_controller, args=(actions_queue, 1), daemon=True).start()
 

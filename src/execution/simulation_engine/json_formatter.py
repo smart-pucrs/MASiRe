@@ -326,8 +326,10 @@ class JsonFormatter:
                 messages = {'environment': environment, 'actors': json_actors}
                 current_step = response[2] - 1
 
+                # return {'status': 2, 'requests': response[3], 'messages': messages,
+                #         'current_step': current_step, 'message': 'Step completed.'}
                 return {'status': 2, 'requests': response[3], 'messages': messages,
-                        'current_step': current_step, 'message': 'Step completed.'}
+                        'current_step': current_step, 'message': 'Step completed.','actors': json_actors,'environment': environment}
 
             Logger.normal('Step processed.')
 
