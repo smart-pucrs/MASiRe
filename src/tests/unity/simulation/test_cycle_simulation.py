@@ -131,84 +131,54 @@ def test_move_agent():
     loc[0] = loc[0] + 5
     loc[1] = loc[1] + 5
 
-    assert cycle._move_agent('token3_agent', loc) is None
+    result = cycle._execute_agent_action('token3_agent', 'move', loc)
+    assert result['message'] == ''
     assert cycle.agents_manager.get('token3_agent').route
     assert cycle.agents_manager.get('token3_agent').destination_distance
     old_dist = [cycle.agents_manager.get('token3_agent').destination_distance]
 
-    cycle._move_agent('token3_agent', loc)
-    cycle._move_agent('token3_agent', loc)
+    # cycle._move_agent('token3_agent', loc)
+    # cycle._move_agent('token3_agent', loc)
+    cycle._execute_agent_action('token3_agent', 'move', loc)
+    cycle._execute_agent_action('token3_agent', 'move', loc)
 
     loc = ['cdm']
 
-    assert cycle._move_agent('token3_agent', loc) is None
-    assert cycle.agents_manager.get('token3_agent').route
-    assert cycle.agents_manager.get('token3_agent').destination_distance
-    assert old_dist[0] != cycle.agents_manager.get('token3_agent').destination_distance
+    result = cycle._execute_agent_action('token3_agent', 'move', loc)
+    assert result['message'] == ''
+    # assert cycle.agents_manager.get('token3_agent').route
+    # assert cycle.agents_manager.get('token3_agent').destination_distance
+    # assert old_dist[0] != cycle.agents_manager.get('token3_agent').destination_distance
 
 
-def test_move_agent_failed_facility():
-    try:
-        cycle._move_agent('token3_agent', ['unknown_facility'])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Unknown facility.'):
-            assert True
-        else:
-            assert False
+def test_move_agent_facility():
+    result = cycle._execute_agent_action('token3_agent', 'move', ['unknown_facility'])
+    assert result['message'] != ''
 
+    result = cycle._execute_agent_action('token3_agent', 'move', ['cdm'])
+    assert result['message'] == ''
 
-def test_move_agent_failed_less_parameters():
-    try:
-        cycle._move_agent('token3_agent', [])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Less than 1 parameter was given.'):
-            assert True
-        else:
-            assert False
+def test_move_agent_failed_parameters():
+    result = cycle._execute_agent_action('token3_agent', 'move', [])
+    assert result['message'] != ''
 
-
-def test_move_agent_failed_more_parameters():
-    try:
-        cycle._move_agent('token3_agent', [1, 2, 3])
-        assert False
-    except Exception as e:
-        if str(e).endswith('More than 2 parameters were given.'):
-            assert True
-        else:
-            assert False
-
+    result = cycle._execute_agent_action('token3_agent', 'move', [1, 2, 3])
+    assert result['message'] != ''
 
 def test_move_agent_failed_battery():
     cycle.agents_manager.edit('token3_agent', 'actual_battery', 0)
-    try:
-        cycle._move_agent('token3_agent', [10, 10])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Not enough battery to complete this step.'):
-            assert True
-        else:
-            assert False
-
+    result = cycle._execute_agent_action('token3_agent', 'move', [10, 10])
+    assert result['message'] != ''
 
 def test_move_agent_failed_unable():
     cycle.connect_agent("agent")
-    cycle.agents_manager.edit('agent', 'abilities', ['groundMovement'])
+    cycle.agents_manager.edit('agent', 'abilities', ['hybridMovement'])
     cycle.agents_manager.edit('agent', 'location', [10, 10])
     cycle.map.movement_restrictions['groundMovement'] = 100
     loc = cycle.map.get_node_coord(cycle.steps[0]['flood'].nodes[3])
-    try:
-        cycle._move_agent('agent', loc)
-        assert False
-    except Exception as e:
-        if str(e.message).endswith('Agent is not capable of entering Event locations.'):
-            assert True
-        else:
-            assert False
 
-    cycle.map.movement_restrictions['groundMovement'] = 0
-
+    result = cycle._execute_agent_action('agent', 'move', loc)
+    assert result['message'] != ''
 
 def test_move_asset():
     cycle.social_assets_manager.edit('token1_asset', 'active', True)

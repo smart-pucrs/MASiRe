@@ -17,6 +17,7 @@ class Map:
         self.measure_unit = 100000
         self.proximity = proximity / self.measure_unit
         self.map_config = map_config
+        self.cdm_location = (map_config['centerLat'], map_config['centerLon'])
         self.movement_restrictions = movement_restrictions
 
     def restart(self, map_config, proximity, movement_restrictions):
@@ -32,6 +33,7 @@ class Map:
         self.measure_unit = 100000
         self.proximity = proximity / self.measure_unit
         self.map_config = map_config
+        self.cdm_location = (map_config['centerLat'], map_config['centerLon'])
         self.movement_restrictions = movement_restrictions
 
     def get_closest_node(self, lat, lon):

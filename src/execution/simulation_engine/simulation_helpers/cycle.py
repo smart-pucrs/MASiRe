@@ -5,7 +5,7 @@ import pathlib
 import logging
 from math import sqrt
 
-from simulation_engine.exceptions.exceptions import *
+from ..exceptions.exceptions import *
 from simulation_engine.generator.generator import Generator
 from simulation_engine.generator.loader import Loader
 # from simulation_engine.loader.loader import Loader
@@ -13,6 +13,7 @@ from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
 from simulation_engine.simulation_helpers.report import Report 
+from ..actions.move import Move
 
 
 logger = logging.getLogger(__name__)
@@ -1407,12 +1408,22 @@ class Cycle:
 
         error_message = ''
         last_action_result = 'success'
+
+        action = Move(self.agents_manager.get(token),self.actions['move']['abilities'],self.actions['move']['resources'], parameters)
+
         try:
             if action_name == 'charge':
                 self._charge_agent(token, parameters)
 
             elif action_name == 'move':
-                self._move_agent(token, parameters)
+                # self._move_agent(token, parameters)
+                nodes = []
+                events = []
+                for i in range(self.current_step):
+                    if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                        nodes.extend(self.steps[i]['flood'].nodes)
+                        events.append(self.steps[i]['flood'].dimension)
+                action.do(self.map, nodes, events)
 
             elif action_name == 'rescueVictim':
                 self._rescue_victim_agent(token, parameters)
@@ -1437,6 +1448,9 @@ class Cycle:
             error_message = e.message
 
         except FailedWrongParam as e:
+            last_action_result = e.identifier
+            error_message = e.message
+        except FailedParameterType as e:
             last_action_result = e.identifier
             error_message = e.message
 
