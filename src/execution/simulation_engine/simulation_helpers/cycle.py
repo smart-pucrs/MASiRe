@@ -13,7 +13,9 @@ from simulation_engine.simulation_helpers.agents_manager import AgentsManager
 from simulation_engine.simulation_helpers.map import Map
 from simulation_engine.simulation_helpers.social_assets_manager import SocialAssetsManager
 from simulation_engine.simulation_helpers.report import Report 
-from ..actions.move import Move
+from ..actions.action import *
+from ..actions.move import *
+from ..actions.deliver_virtual import *
 
 
 logger = logging.getLogger(__name__)
@@ -293,8 +295,22 @@ class Cycle:
         requests_action = ['requestSocialAsset']
 
         action_results = []
+        sync_actions = []
         for token_action_param in token_action_dict:
             token, action, parameters = token_action_param.values()
+            if action in ['move', 'deliverVirtual', 'receiveVirtual']:
+                tes = Action.__subclasses__()
+                action_obj = Action.create_action(self.agents_manager.get(token),action,self.actions[action]['abilities'],self.actions[action]['resources'], parameters)
+                matched = False
+                if (action_obj.is_ok and action_obj.need_sync):
+                    for acts in sync_actions:
+                        if action_obj.match(acts[0]):
+                            acts.append(action_obj)
+                            matched = True
+                    if (not matched):
+                        sync_actions.append([action_obj])
+                agents_tokens.remove(action_obj.agent.token)
+                continue
 
             if action in special_actions:
                 special_action_tokens.append([token, action, parameters])
@@ -312,6 +328,16 @@ class Cycle:
             else:
                 action_results.append(self._execute_asset_action(token, action, parameters))
                 assets_tokens.remove(token)
+
+        nodes = []
+        events = []
+        for i in range(self.current_step):
+            if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                nodes.extend(self.steps[i]['flood'].nodes)
+                events.append(self.steps[i]['flood'].dimension)
+        action_results.extend(self._execute_sync_actions(sync_actions))
+        # for special_action in sync_actions:
+        #     special_action.do(self.map, nodes, events)
 
         while special_action_tokens:
             token, action, param = special_action_tokens.pop(0)
@@ -341,6 +367,24 @@ class Cycle:
             action_results.append(self._execute_asset_action(token, 'inactive', []))
 
         return action_results, requests
+
+    def _execute_sync_actions(self, actions):    
+        action_results = []
+        for sync_actions in actions:
+            sync = SyncActions(*sync_actions)
+            try:     
+                nodes = []
+                events = []
+                for i in range(self.current_step):
+                    if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                        nodes.extend(self.steps[i]['flood'].nodes)
+                        events.append(self.steps[i]['flood'].dimension)           
+                sync.sync(self.map, nodes, events)
+            finally:
+                action_results.extend(sync.results())
+        
+        return action_results
+
 
     def _execute_agent_special_action(self, token, action_name, parameters, special_action_tokens):
         self.agents_manager.edit(token, 'last_action', action_name)
@@ -1409,8 +1453,7 @@ class Cycle:
         error_message = ''
         last_action_result = 'success'
 
-        action = Move(self.agents_manager.get(token),self.actions['move']['abilities'],self.actions['move']['resources'], parameters)
-
+        action = Action.create_action(self.agents_manager.get(token),'move',self.actions['move']['abilities'],self.actions['move']['resources'], parameters)
         try:
             if action_name == 'charge':
                 self._charge_agent(token, parameters)

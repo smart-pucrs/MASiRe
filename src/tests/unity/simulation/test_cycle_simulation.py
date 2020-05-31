@@ -672,13 +672,74 @@ def test_deliver_virtual_agent_cdm():
     assert not agent.virtual_storage_vector
     assert agent.virtual_storage == agent.virtual_capacity
 
+def test_match():
+    actions = [{'token': 'token3_agent', 'action': 'deliverVirtual', 'parameters': ['photo','token5_agent',1]}, {'token': 'token4_agent', 'action': 'receiveVirtual', 'parameters': ['token3_agent']}]
+    cycle.execute_actions(actions)
+    
+    assert cycle.agents_manager.get('token3_agent').last_action == 'deliverVirtual'
+    assert cycle.agents_manager.get('token3_agent').last_action_result != 'success'   
 
-def test_deliver_virtual_agent_agent():
+    assert cycle.agents_manager.get('token4_agent').last_action == 'receiveVirtual'
+    assert cycle.agents_manager.get('token4_agent').last_action_result != 'success'
+
+def test_deliver_virtual():
     cycle.agents_manager.edit('token3_agent', 'location', [10, 10])
     cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
     cycle.agents_manager.edit('token3_agent', 'virtual_storage_vector', [Item(1, 'photo', 4)])
     cycle.agents_manager.edit('token3_agent', 'virtual_storage', 10)
-    assert cycle._deliver_virtual_agent_agent('token3_agent', ['photo', 1, 'token4_agent']) is None
+
+    # assert cycle._deliver_virtual_agent_agent('token3_agent', ['photo', 1, 'token4_agent']) is None
+    actions = [{'token': 'token3_agent', 'action': 'deliverVirtual', 'parameters': ['photo','token4_agent',1]}, {'token': 'token4_agent', 'action': 'receiveVirtual', 'parameters': ['token3_agent']}]
+    cycle.execute_actions(actions)
+    
+    assert cycle.agents_manager.get('token3_agent').last_action == 'deliverVirtual'
+    assert cycle.agents_manager.get('token3_agent').last_action_result == 'success'
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector == []
+
+    assert cycle.agents_manager.get('token4_agent').last_action == 'receiveVirtual'
+    assert cycle.agents_manager.get('token4_agent').last_action_result == 'success'
+    assert cycle.agents_manager.get('token4_agent').virtual_storage_vector[0].identifier == 4
+    assert cycle.agents_manager.get('token4_agent').virtual_storage_vector[0].size == 1
+    assert cycle.agents_manager.get('token4_agent').virtual_storage_vector[0].type == 'photo'
+
+def test_deliver_virtual_parameters():
+    cycle.agents_manager.edit('token3_agent', 'location', [10, 10])
+    cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
+    cycle.agents_manager.edit('token3_agent', 'virtual_storage_vector', [Item(1, 'photo', 4)])
+    cycle.agents_manager.edit('token3_agent', 'virtual_storage', 10)
+
+    actions = [{'token': 'token3_agent', 'action': 'deliverVirtual', 'parameters': ['token4_agent',1]}, {'token': 'token4_agent', 'action': 'receiveVirtual', 'parameters': ['token3_agent']}]
+    cycle.execute_actions(actions)
+    
+    assert cycle.agents_manager.get('token3_agent').last_action == 'deliverVirtual'
+    assert cycle.agents_manager.get('token3_agent').last_action_result != 'success'
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].identifier == 4
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].size == 1
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].type == 'photo'    
+
+    assert cycle.agents_manager.get('token4_agent').last_action == 'receiveVirtual'
+    assert cycle.agents_manager.get('token4_agent').last_action_result != 'success'
+    assert cycle.agents_manager.get('token4_agent').virtual_storage_vector == []
+
+def test_deliver_virtual_constraints():
+    cycle.agents_manager.edit('token3_agent', 'location', [10, 10])
+    cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
+    cycle.agents_manager.edit('token3_agent', 'virtual_storage_vector', [Item(4, 'photo', 4)])
+    cycle.agents_manager.edit('token4_agent', 'virtual_storage', 7)
+
+    # assert cycle._deliver_virtual_agent_agent('token3_agent', ['photo', 1, 'token4_agent']) is None
+    actions = [{'token': 'token3_agent', 'action': 'deliverVirtual', 'parameters': ['photo','token4_agent',2]}, {'token': 'token4_agent', 'action': 'receiveVirtual', 'parameters': ['token3_agent']}]
+    cycle.execute_actions(actions)
+    
+    assert cycle.agents_manager.get('token3_agent').last_action == 'deliverVirtual'
+    assert cycle.agents_manager.get('token3_agent').last_action_result != 'success'
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].identifier == 4
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].size == 4
+    assert cycle.agents_manager.get('token3_agent').virtual_storage_vector[0].type == 'photo'    
+
+    assert cycle.agents_manager.get('token4_agent').last_action == 'receiveVirtual'
+    assert cycle.agents_manager.get('token4_agent').last_action_result != 'success'
+    assert cycle.agents_manager.get('token4_agent').virtual_storage_vector == []
 
 
 def test_deliver_virtual_agent_cdm_failed_less_param():
