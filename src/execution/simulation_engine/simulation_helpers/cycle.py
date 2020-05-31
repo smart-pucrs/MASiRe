@@ -3,6 +3,7 @@ import datetime
 import json
 import pathlib
 import logging
+import glob
 from math import sqrt
 
 from ..exceptions.exceptions import *
@@ -16,7 +17,8 @@ from simulation_engine.simulation_helpers.report import Report
 from ..actions.action import *
 from ..actions.move import *
 from ..actions.deliver_virtual import *
-
+from ..actions.collect import *
+from ..actions.request import *
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +286,7 @@ class Cycle:
 
         return result
 
-    def execute_actions(self, token_action_dict):
+    def execute_actions_old(self, token_action_dict):
         agents_tokens = self.agents_manager.get_tokens()
         assets_tokens = self.social_assets_manager.get_tokens()
         requests = []
@@ -298,17 +300,35 @@ class Cycle:
         sync_actions = []
         for token_action_param in token_action_dict:
             token, action, parameters = token_action_param.values()
-            if action in ['move', 'deliverVirtual', 'receiveVirtual']:
+            if action in ['requestSocialAsset', 'move', 'collectWater', 'deliverVirtual', 'receiveVirtual']:
                 tes = Action.__subclasses__()
-                action_obj = Action.create_action(self.agents_manager.get(token),action,self.actions[action]['abilities'],self.actions[action]['resources'], parameters)
+                action_obj = Action.create_action(self.agents_manager.get(token),action,self,parameters)
                 matched = False
-                if (action_obj.is_ok and action_obj.need_sync):
-                    for acts in sync_actions:
-                        if action_obj.match(acts[0]):
-                            acts.append(action_obj)
-                            matched = True
-                    if (not matched):
-                        sync_actions.append([action_obj])
+                if action_obj.is_ok: 
+                    if action_obj.need_sync:
+                        for acts in sync_actions:
+                            if action_obj.match(acts[0]):
+                                acts.append(action_obj)
+                                matched = True
+                        if (not matched):
+                            sync_actions.append([action_obj])
+                    else:
+                        name_tasks = ['victims', 'water_samples', 'photos']
+                        nodes = []
+                        events = []
+                        # tasks = {k:v for (k,v) in self.steps if k == 'water_sample' and len(v) > 0}
+                        tasks = {}
+                        tasks['water_samples'] = [w for e in self.steps for w in e['water_samples'] if not w.active]
+                        tasks['victims'] = [w for e in self.steps for w in e['victims'] if not w.active]
+                        tasks['photos'] = [w for e in self.steps for w in e['photos'] if not w.active]
+                        # tasks['water_samples'] = ((w for w in e['water_samples'] if not w.active) for e in self.steps )
+                        for i in range(self.current_step):
+                            if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                                nodes.extend(self.steps[i]['flood'].nodes)
+                                events.append(self.steps[i]['flood'].dimension)
+                        action_obj.do(self.map, nodes, events, tasks)
+                action_results.append(action_obj.result)
+
                 agents_tokens.remove(action_obj.agent.token)
                 continue
 
@@ -368,18 +388,52 @@ class Cycle:
 
         return action_results, requests
 
-    def _execute_sync_actions(self, actions):    
+    def execute_actions(self, token_action_dict):
+        requests = []
+
+        nodes = []
+        events = []
+        # tasks = {k:v for (k,v) in self.steps if k == 'water_sample' and len(v) > 0}
+        tasks = {}
+        tasks['water_samples'] = [w for e in self.steps for w in e['water_samples'] if not w.active]
+        tasks['victims'] = [w for e in self.steps for w in e['victims'] if not w.active]
+        tasks['photos'] = [w for e in self.steps for w in e['photos'] if not w.active]
+        # tasks['water_samples'] = ((w for w in e['water_samples'] if not w.active) for e in self.steps )
+        for i in range(self.current_step):
+            if self.steps[i]['flood'] and self.steps[i]['flood'].active:
+                nodes.extend(self.steps[i]['flood'].nodes)
+                events.append(self.steps[i]['flood'].dimension)
+
+        action_results = []
+        sync_actions = []
+        for token_action_param in token_action_dict:
+            token, action, parameters = token_action_param.values()
+            action_obj = Action.create_action(self.agents_manager.get(token),action,self,parameters)            
+            if action_obj.is_ok: 
+                if action_obj.need_sync:
+                    matched = False
+                    for acts in sync_actions:
+                        if action_obj.match(acts[0]):
+                            acts.append(action_obj)
+                            matched = True
+                    if (not matched):
+                        sync_actions.append([action_obj])
+                else:                    
+                    req = action_obj.do(self.map, nodes, events, tasks)
+                    if req is not None:
+                        requests.append(req)
+            action_results.append(action_obj.result)
+
+        action_results.extend(self._execute_sync_actions(sync_actions, nodes, events, tasks))   
+
+        return action_results, requests
+
+    def _execute_sync_actions(self, actions, nodes, events, tasks):    
         action_results = []
         for sync_actions in actions:
             sync = SyncActions(*sync_actions)
-            try:     
-                nodes = []
-                events = []
-                for i in range(self.current_step):
-                    if self.steps[i]['flood'] and self.steps[i]['flood'].active:
-                        nodes.extend(self.steps[i]['flood'].nodes)
-                        events.append(self.steps[i]['flood'].dimension)           
-                sync.sync(self.map, nodes, events)
+            try:            
+                sync.sync(self.map, nodes, events, tasks)
             finally:
                 action_results.extend(sync.results())
         
@@ -1453,7 +1507,7 @@ class Cycle:
         error_message = ''
         last_action_result = 'success'
 
-        action = Action.create_action(self.agents_manager.get(token),'move',self.actions['move']['abilities'],self.actions['move']['resources'], parameters)
+        action = Action.create_action(self.agents_manager.get(token),'move',self, parameters)
         try:
             if action_name == 'charge':
                 self._charge_agent(token, parameters)

@@ -8,8 +8,8 @@ from .action import Action
 
 class DeliverVirtual(Action):
    
-    def __init__(self, agent, skills, resources, parameters):
-        super(DeliverVirtual, self).__init__(agent, skills, resources, parameters, type='deliverVirtual',min_args=1, max_args=3)
+    def __init__(self, agent, game_state, parameters):
+        super(DeliverVirtual, self).__init__(agent, game_state, parameters, type='deliverVirtual',qtd_args=[1,3])
         self.mates = [("receiveVirtual",1)]
 
     def prepare(self):
@@ -20,8 +20,7 @@ class DeliverVirtual(Action):
         self.mediator.shared_memory.append(amount)
 
     def check_parameters(self):   
-        if (len(self.parameters) != 1 and len(self.parameters) != 3):
-            raise FailedWrongParam(f'wrong number of parameters, expecting 1 or 3 parameters')
+        pass
 
     def check_constraints(self):        
         if not self.mediator.shared_memory[0]:
@@ -30,7 +29,7 @@ class DeliverVirtual(Action):
     def match(self, action):
         return (action.type == 'receiveVirtual' and action.parameters[1] == self.agent.token)
 
-    def execute(self, map, nodes, events):
+    def execute(self, map, nodes, events, tasks):
         if len(self.parameters) == 3:
             self._transmit_to_agent()
         else:
@@ -46,8 +45,8 @@ class DeliverVirtual(Action):
 
 class ReceiveVirtual(Action):
    
-    def __init__(self, agent, skills, resources, parameters):
-        super(ReceiveVirtual, self).__init__(agent, skills, resources, parameters, type='receiveVirtual',min_args=1, max_args=1)
+    def __init__(self, agent, game_state, parameters):
+        super(ReceiveVirtual, self).__init__(agent, game_state, parameters, type='receiveVirtual',qtd_args=[1])
         self.mates = [("deliverVirtual",1)]
 
     def prepare(self):
@@ -73,5 +72,5 @@ class ReceiveVirtual(Action):
             for item in params:
                 self.agent.add_virtual_item(item)
 
-    def execute(self, map, nodes, events):
+    def execute(self, map, nodes, events, tasks):
         return {}

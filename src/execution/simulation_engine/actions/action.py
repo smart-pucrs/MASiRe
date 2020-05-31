@@ -86,19 +86,23 @@ class Action(object):
     def do(self, map, nodes, events, tasks):   
         if self.error_message != '': return   
 
+        request = None
         try:               
             self.validate_constraints()
 
-            new_state, exception = self.execute(map, nodes, events, tasks)
+            # new_state, exception = self.execute(map, nodes, events, tasks)
+            request = self.execute(map, nodes, events, tasks)
             exec(f'self.agent.last_action_result = "success"')
+                        
+            # for key, value in new_state.items():
+            #     exec(f'self.agent.{key} = value')
 
-            for key, value in new_state.items():
-                exec(f'self.agent.{key} = value')
-
-            if exception != None:
-                raise exception
+            # if exception != None:
+            #     raise exception
         except Exception as e:
             self._report_exception(e)
+        
+        return request
 
     def _report_exception(self, e: Exception):
         logger.critical(e,exc_info=True)

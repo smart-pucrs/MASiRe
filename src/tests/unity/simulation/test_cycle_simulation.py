@@ -131,44 +131,44 @@ def test_move_agent():
     loc[0] = loc[0] + 5
     loc[1] = loc[1] + 5
 
-    result = cycle._execute_agent_action('token3_agent', 'move', loc)
-    assert result['message'] == ''
-    assert cycle.agents_manager.get('token3_agent').route
-    assert cycle.agents_manager.get('token3_agent').destination_distance
-    old_dist = [cycle.agents_manager.get('token3_agent').destination_distance]
+    actions = [{'token': 'token3_agent', 'action': 'move', 'parameters': [*loc]}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token3_agent', results)
+    assert agent.last_action == 'move'
+    assert agent.last_action_result == 'success'
+    assert agent.location is not None
+    assert agent.route
+    assert agent.destination_distance
+    old_dist = [agent.destination_distance]
 
-    # cycle._move_agent('token3_agent', loc)
-    # cycle._move_agent('token3_agent', loc)
-    cycle._execute_agent_action('token3_agent', 'move', loc)
-    cycle._execute_agent_action('token3_agent', 'move', loc)
+    cycle.execute_actions(actions)
+    cycle.execute_actions(actions)
+
+    results = cycle.execute_actions([{'token': 'token3_agent', 'action': 'move', 'parameters': ['unknown_facility']}])
+    agent = get_result_agent('token3_agent', results)
+    assert agent.last_action == 'move'
+    assert agent.last_action_result != 'success'
+
+    results = cycle.execute_actions([{'token': 'token3_agent', 'action': 'move', 'parameters': []}])
+    agent = get_result_agent('token3_agent', results)
+    assert agent.last_action == 'move'
+    assert agent.last_action_result != 'success'
 
     loc = ['cdm']
+    results = cycle.execute_actions([{'token': 'token3_agent', 'action': 'move', 'parameters': [*loc]}])
+    agent = get_result_agent('token3_agent', results)
+    assert agent.last_action == 'move'
+    assert agent.last_action_result == 'success'
 
-    result = cycle._execute_agent_action('token3_agent', 'move', loc)
-    assert result['message'] == ''
+    cycle.agents_manager.edit('token3_agent', 'actual_battery', 0)
+    results = cycle.execute_actions([{'token': 'token3_agent', 'action': 'move', 'parameters': [*loc]}])
+    agent = get_result_agent('token3_agent', results)
+    assert agent.last_action == 'move'
+    assert agent.last_action_result != 'success'
+
     # assert cycle.agents_manager.get('token3_agent').route
     # assert cycle.agents_manager.get('token3_agent').destination_distance
     # assert old_dist[0] != cycle.agents_manager.get('token3_agent').destination_distance
-
-
-def test_move_agent_facility():
-    result = cycle._execute_agent_action('token3_agent', 'move', ['unknown_facility'])
-    assert result['message'] != ''
-
-    result = cycle._execute_agent_action('token3_agent', 'move', ['cdm'])
-    assert result['message'] == ''
-
-def test_move_agent_failed_parameters():
-    result = cycle._execute_agent_action('token3_agent', 'move', [])
-    assert result['message'] != ''
-
-    result = cycle._execute_agent_action('token3_agent', 'move', [1, 2, 3])
-    assert result['message'] != ''
-
-def test_move_agent_failed_battery():
-    cycle.agents_manager.edit('token3_agent', 'actual_battery', 0)
-    result = cycle._execute_agent_action('token3_agent', 'move', [10, 10])
-    assert result['message'] != ''
 
 def test_move_agent_failed_unable():
     cycle.connect_agent("agent")
@@ -340,7 +340,7 @@ def test_collect_water():
     agent = get_result_agent('token4_agent', results)
     assert agent.last_action == 'collectWater'
     assert agent.last_action_result == 'success'
-    
+
 def test_collect_water_asset():
     cycle.steps[0]['water_samples'][0].active = True
     loc = cycle.steps[0]['water_samples'][0].location

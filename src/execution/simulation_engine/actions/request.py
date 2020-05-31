@@ -1,3 +1,4 @@
+from math import sqrt
 from .action import Action
 from ..exceptions.exceptions import FailedSocialAssetRequest
 
@@ -21,6 +22,12 @@ class SearchSocialAsset(Action):
         exec(f'self.agent.social_assets = social_assets')
         # self.agents_manager.edit(token, 'social_assets', social_assets)
         return {}, None
+    
+    @staticmethod
+    def check_location(l1, l2, radius):
+        distance = sqrt((l1[0] - l2[0]) ** 2 + (l1[1] - l2[1]) ** 2)
+
+        return distance <= radius
 
 class RequestSocialAsset(Action):
     def __init__(self, agent, game_state, parameters):
@@ -42,7 +49,7 @@ class RequestSocialAsset(Action):
                             self.manager_asset.set_marker_status(self.parameters[0], False)
                             self.manager_asset.requests[self.agent.token] = self.parameters[0]
                             self.agent.social_assets.remove(asset)
-                            return {}, None
+                            return self.agent.token
 
                     raise FailedSocialAssetRequest('The agent dont know this social asset.')
                 raise FailedSocialAssetRequest('The social asset is not active.')
