@@ -13,16 +13,15 @@ class Mediator(ABC):
 class Action(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, agent, skills, resources, parameters, type, min_args, max_args):
+    def __init__(self, agent, game_state, parameters: list, type: str, qtd_args: list):
         logger.debug(f"action {type} created")
         self.agent = agent
         exec(f'self.agent.last_action = type')
-        self.skills = skills
-        self.resources = resources
+        self.skills = game_state.actions[type]['abilities']
+        self.resources = game_state.actions[type]['resources']
         self.parameters = parameters
         self.type = type
-        self.min_args = min_args 
-        self.max_args = max_args
+        self.qtd_args = qtd_args 
         self.mates = []
         self.error_message = ''
 
@@ -62,8 +61,8 @@ class Action(object):
 
     def validate_parameters(self):
         try:
-            if (len(self.parameters) < self.min_args or len(self.parameters) > self.max_args):
-                raise FailedWrongParam(f'wrong number of parameters, expecting among {self.min_args} and {self.max_args} parameters')
+            if len(self.parameters) not in self.qtd_args:
+                raise FailedWrongParam(f'wrong number of parameters, expecting {self.qtd_args} parameters')
         
             self.check_parameters()
         except Exception as e:            
@@ -107,10 +106,10 @@ class Action(object):
         self.error_message = str(e)
 
     @staticmethod
-    def create_action(agent, action, skills, resources, parameters):
+    def create_action(agent, action, game_state, parameters):
         for subclass in Action.__subclasses__():
             if action.lower() in subclass.__name__.lower(): 
-                return subclass(agent,skills,resources,parameters)
+                return subclass(agent,game_state,parameters)
 
 class SyncActions(Mediator):
     shared_memory = []

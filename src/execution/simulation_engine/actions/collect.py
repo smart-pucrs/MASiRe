@@ -3,8 +3,8 @@ from ..simulation_helpers.report import Report
 from ..exceptions.exceptions import FailedLocation
 
 class CollectWater(Action):   
-    def __init__(self, agent, skills, resources, parameters):
-        super(CollectWater, self).__init__(agent, skills, resources, parameters, type='collectWater',min_args=0, max_args=0)        
+    def __init__(self, agent, game_state, parameters):
+        super(CollectWater, self).__init__(agent, game_state, parameters, type='collectWater', qtd_args=[0])        
 
     def check_parameters(self):   
         pass
