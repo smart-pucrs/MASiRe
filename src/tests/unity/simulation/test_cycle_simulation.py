@@ -319,42 +319,28 @@ def test_rescue_victim_asset_failed_unknown():
         else:
             assert False
 
+def get_result_agent(token, results):
+    for r in results[0]:
+        if r['agent'].token == token:
+            return r['agent']
+    return None
 
-def test_collect_water_agent():
+def test_collect_water():
     loc = cycle.steps[0]['water_samples'][0].location
     cycle.agents_manager.edit('token4_agent', 'location', loc)
 
-    old_storage = [cycle.agents_manager.get('token4_agent').physical_storage]
-    assert cycle._collect_water_agent('token4_agent', []) is None
+    actions = [{'token': 'token4_agent', 'action': 'collectWater', 'parameters': [1]}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'collectWater'
+    assert agent.last_action_result != 'success'
 
-    agent = cycle.agents_manager.get('token4_agent')
-    assert agent.physical_storage_vector
-    assert agent.physical_storage != old_storage[0]
-
-
-def test_collect_water_agent_failed_param():
-    try:
-        cycle._collect_water_agent('token4_agent', [1])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Parameters were given.'):
-            assert True
-        else:
-            assert False
-
-
-def test_collect_water_agent_failed_unknown():
-    cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
-    try:
-        cycle._collect_water_agent('token4_agent', [])
-        assert False
-    except Exception as e:
-        if str(e).endswith('The agent is not in a location with a water sample event.'):
-            assert True
-        else:
-            assert False
-
-
+    actions = [{'token': 'token4_agent', 'action': 'collectWater', 'parameters': []}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'collectWater'
+    assert agent.last_action_result == 'success'
+    
 def test_collect_water_asset():
     cycle.steps[0]['water_samples'][0].active = True
     loc = cycle.steps[0]['water_samples'][0].location

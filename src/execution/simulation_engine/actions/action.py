@@ -57,7 +57,7 @@ class Action(object):
     def match(self, action):
         pass
     @abstractmethod
-    def execute(self, map, nodes, events):
+    def execute(self, map, nodes, events, tasks):
         pass
 
     def validate_parameters(self):
@@ -84,14 +84,14 @@ class Action(object):
 
         self.check_constraints()
 
-    def do(self, map, nodes, events):   
+    def do(self, map, nodes, events, tasks):   
         if self.error_message != '': return   
 
         try:               
             self.validate_constraints()
 
-            new_state, exception = self.execute(map, nodes, events)
-            exec(f'self.agent.last_action_result = "sucess"')
+            new_state, exception = self.execute(map, nodes, events, tasks)
+            exec(f'self.agent.last_action_result = "success"')
 
             for key, value in new_state.items():
                 exec(f'self.agent.{key} = value')
@@ -122,7 +122,7 @@ class SyncActions(Mediator):
             name, qtd = act.mates[0]
             self._expected_actions = max(self._expected_actions, qtd+1)        
     
-    def sync(self, map, nodes, events):          
+    def sync(self, map, nodes, events, tasks):          
         try:   
             if len(self._actions) < self._expected_actions: 
                 raise FailedNoMatch('Missing agents to syncronise actions.')
@@ -131,7 +131,7 @@ class SyncActions(Mediator):
 
             for act in self._actions: act.validate_constraints() 
 
-            for act in self._actions: act.execute(map, nodes, events)
+            for act in self._actions: act.execute(map, nodes, events, tasks)
 
             for act in self._actions:
                 exec(f'act.agent.last_action_result = "success"')
