@@ -249,13 +249,15 @@ def test_move_asset_failed_unable():
 
 
 def test_rescue_victim_agent():
+    cycle.steps[0]['victims'][0].active = True
     victim_loc = cycle.steps[0]['victims'][0].location
     cycle.agents_manager.edit('token4_agent', 'location', victim_loc)
 
     old_storage = [cycle.agents_manager.get('token4_agent').physical_storage]
-    assert cycle._rescue_victim_agent('token4_agent', []) is None
+    actions = [{'token': 'token4_agent', 'action': 'rescueVictim', 'parameters': []}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
 
-    agent = cycle.agents_manager.get('token4_agent')
     assert agent.physical_storage_vector
     assert agent.physical_storage != old_storage[0]
 

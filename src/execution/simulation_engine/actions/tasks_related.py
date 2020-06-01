@@ -75,3 +75,35 @@ class AnalyzePhoto(Action):
         self.agent.clear_virtual_storage()
         return None
 
+class RescueVictim(Action):   
+    def __init__(self, agent, game_state, parameters):
+        super(RescueVictim, self).__init__(agent, game_state, parameters, type='rescueVictim', qtd_args=[0])        
+
+    def check_parameters(self):   
+        pass
+
+    def check_constraints(self):        
+        pass 
+
+    def execute(self, map, nodes, events, tasks):               
+        report = Report()
+
+        for victim in tasks['victims']:
+            if map.check_location(victim.location, self.agent.location):
+                victim.active = False
+                    
+                if (victim.lifetime <= 0): report.victims.dead = 1
+                else: report.victims.alive = 1
+
+                self.agent.add_physical_item(victim)
+                return None
+
+        for photo in tasks['photos']:
+            for victim in photo.victims:
+                if map.check_location(victim.location, self.agent.location):
+                    victim.active = False
+                    self.agent.add_physical_item(victim)
+                    return None
+
+        raise FailedLocation('No victim by the given location is known.')
+
