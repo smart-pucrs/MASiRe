@@ -11,7 +11,7 @@ class Move(Action):
             if self.parameters[0] != 'cdm':
                 raise FailedUnknownFacility('Unknown facility.')
    
-    def check_constraints(self):
+    def check_constraints(self,map):
         if not self.agent.check_battery():
             raise FailedInsufficientBattery('Not enough battery to complete this step.')        
 
@@ -69,7 +69,7 @@ class Pass(Action):
     def check_parameters(self):
         pass
    
-    def check_constraints(self):
+    def check_constraints(self,map):
         pass        
 
     def execute(self, map, nodes, events, tasks):

@@ -7,12 +7,6 @@ class SearchSocialAsset(Action):
         super(SearchSocialAsset, self).__init__(agent, game_state, parameters, type='searchSocialAsset',qtd_args=[1])   
         self.manager_asset = game_state.social_assets_manager     
 
-    def check_parameters(self):   
-        pass
-
-    def check_constraints(self):        
-        pass 
-
     def execute(self, map, nodes, events, tasks):        
         social_assets = []
         for social_asset in self.manager_asset.get_assets_markers():
@@ -33,12 +27,6 @@ class RequestSocialAsset(Action):
     def __init__(self, agent, game_state, parameters):
         super(RequestSocialAsset, self).__init__(agent, game_state, parameters, type='requestSocialAsset',qtd_args=[1])   
         self.manager_asset = game_state.social_assets_manager     
-
-    def check_parameters(self):   
-        pass
-
-    def check_constraints(self):        
-        pass 
 
     def execute(self, map, nodes, events, tasks):        
         for social_asset in self.manager_asset.get_assets_markers():

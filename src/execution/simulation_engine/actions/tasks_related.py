@@ -9,7 +9,7 @@ class CollectWater(Action):
     def check_parameters(self):   
         pass
 
-    def check_constraints(self):        
+    def check_constraints(self,map):        
         pass 
 
     def execute(self, map, nodes, events, tasks):        
@@ -30,7 +30,7 @@ class TakePhoto(Action):
     def check_parameters(self):   
         pass
 
-    def check_constraints(self):        
+    def check_constraints(self,map):        
         pass 
 
     def execute(self, map, nodes, events, tasks):                
@@ -50,7 +50,7 @@ class AnalyzePhoto(Action):
     def check_parameters(self):   
         pass
 
-    def check_constraints(self):        
+    def check_constraints(self,map):        
         if len(self.agent.virtual_storage_vector) == 0:
             raise FailedItemAmount('The agent has no photos to analyze.')
 
@@ -82,7 +82,7 @@ class RescueVictim(Action):
     def check_parameters(self):   
         pass
 
-    def check_constraints(self):        
+    def check_constraints(self,map):        
         pass 
 
     def execute(self, map, nodes, events, tasks):               

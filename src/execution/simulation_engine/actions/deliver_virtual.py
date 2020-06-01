@@ -22,7 +22,7 @@ class DeliverVirtual(Action):
     def check_parameters(self):   
         pass
 
-    def check_constraints(self):        
+    def check_constraints(self,map):        
         if not self.mediator.shared_memory[0]:
             raise FailedItemAmount('The agent has no virtual items of this kind to deliver.')
       
@@ -55,7 +55,7 @@ class ReceiveVirtual(Action):
     def check_parameters(self):        
         pass
 
-    def check_constraints(self):
+    def check_constraints(self,map):
         itens = self.mediator.shared_memory[0]
         amount = self.mediator.shared_memory[1]
         if self.agent.virtual_storage < amount * itens[0].size:

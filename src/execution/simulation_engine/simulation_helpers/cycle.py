@@ -17,6 +17,7 @@ from simulation_engine.simulation_helpers.report import Report
 from ..actions.action import *
 from ..actions.move import *
 from ..actions.deliver_virtual import *
+from ..actions.deliver_physical import *
 from ..actions.tasks_related import *
 from ..actions.request import *
 

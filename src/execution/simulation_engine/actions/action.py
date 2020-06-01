@@ -50,7 +50,7 @@ class Action(object):
     def check_parameters(self):
         pass
     @abstractmethod
-    def check_constraints(self):
+    def check_constraints(self, map):
         pass
     @abstractmethod
     def match(self, action):
@@ -68,7 +68,7 @@ class Action(object):
         except Exception as e:            
             self._report_exception(e)
 
-    def validate_constraints(self):        
+    def validate_constraints(self, map):        
         def check_demand(action_demands, agent_has):
             for demand in action_demands:
                 it_is = all(s in agent_has for s in demand)
@@ -81,14 +81,14 @@ class Action(object):
         has_resources = check_demand(self.resources, self.agent.resources)
         if not has_resources: raise FailedParameterType(f'The following resources are required: {self.resources}')
 
-        self.check_constraints()
+        self.check_constraints(map)
 
     def do(self, map, nodes, events, tasks):   
         if self.error_message != '': return   
 
         request = None
         try:               
-            self.validate_constraints()
+            self.validate_constraints(map)
 
             # new_state, exception = self.execute(map, nodes, events, tasks)
             request = self.execute(map, nodes, events, tasks)
@@ -132,7 +132,7 @@ class SyncActions(Mediator):
 
             for act in self._actions: act.prepare() 
 
-            for act in self._actions: act.validate_constraints() 
+            for act in self._actions: act.validate_constraints(map) 
 
             for act in self._actions: act.execute(map, nodes, events, tasks)
 
@@ -143,6 +143,13 @@ class SyncActions(Mediator):
             for act in self._actions: 
                 exec(f'act.agent.last_action_result = e.identifier')
                 act.error_message = str(e)
+    
+    def agents_same_location(self, map):
+        location = self._actions[0].agent.location
+        for act in self._actions:
+            if not map.check_location(location, act.agent.location):
+                return False
+        return True
 
     def results(self):
         return [act.result for act in self._actions]

@@ -529,13 +529,27 @@ def test_deliver_physical_agent_cdm():
     assert agent.physical_storage == agent.physical_capacity
 
 
-def test_deliver_physical_agent_agent():
+def test_deliver_physical():
+    cycle.agents_manager.edit('token3_agent', 'abilities', ["carry", "physicalCapacity"])
+    cycle.agents_manager.edit('token4_agent', 'abilities', ["carry", "physicalCapacity"])
     cycle.agents_manager.edit('token3_agent', 'location', [10, 10])
     cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
     cycle.agents_manager.edit('token3_agent', 'physical_storage_vector', [Item(2, 'victim', 2)])
     cycle.agents_manager.edit('token3_agent', 'physical_storage', 5)
-    assert cycle._deliver_physical_agent_agent('token3_agent', ['victim', 1, 'token4_agent']) is None
 
+    actions = [{'token': 'token3_agent', 'action': 'deliverPhysical', 'parameters': ['victim','token4_agent',1]}, {'token': 'token4_agent', 'action': 'receivePhysical', 'parameters': ['token3_agent']}]
+    results = cycle.execute_actions(actions)
+    agent3 = get_result_agent('token3_agent', results)    
+    assert agent3.last_action == 'deliverPhysical'
+    assert agent3.last_action_result == 'success'
+    assert agent3.physical_storage_vector == []
+
+    agent4 = get_result_agent('token4_agent', results)    
+    assert agent4.last_action == 'receivePhysical'
+    assert agent4.last_action_result == 'success'
+    assert agent4.physical_storage_vector[0].identifier == 2
+    assert agent4.physical_storage_vector[0].size == 2
+    assert agent4.physical_storage_vector[0].type == 'victim'
 
 def test_deliver_physical_agent_cdm_failed_less_param():
     try:
