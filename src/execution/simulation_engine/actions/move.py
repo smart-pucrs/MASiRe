@@ -61,3 +61,16 @@ class Move(Action):
         self.agent.destination_distance = new_distance
 
         return None
+
+class Pass(Action):
+    def __init__(self, agent, game_state, parameters):
+        super(Pass, self).__init__(agent, game_state, parameters, type='pass',qtd_args=[0])
+
+    def check_parameters(self):
+        pass
+   
+    def check_constraints(self):
+        pass        
+
+    def execute(self, map, nodes, events, tasks):
+        return None
