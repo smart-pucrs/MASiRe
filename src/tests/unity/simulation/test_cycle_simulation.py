@@ -377,39 +377,6 @@ def test_collect_water_asset_failed_unknown():
             assert False
 
 
-def test_take_photo_agent():
-    loc = cycle.steps[0]['photos'][0].location
-    cycle.agents_manager.edit('token4_agent', 'location', loc)
-
-    old_storage = [cycle.agents_manager.get('token4_agent').virtual_storage]
-    assert cycle._take_photo_agent('token4_agent', []) is None
-
-    agent = cycle.agents_manager.get('token4_agent')
-    assert agent.virtual_storage_vector
-    assert agent.virtual_storage != old_storage
-
-
-def test_take_photo_agent_failed_param():
-    try:
-        cycle._take_photo_agent('token4_agent', [1])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Parameters were given.'):
-            assert True
-        else:
-            assert False
-
-
-def test_take_photo_agent_failed_unknown():
-    cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
-    try:
-        cycle._take_photo_agent('token4_agent', [])
-        assert False
-    except Exception as e:
-        if str(e).endswith('The agent is not in a location with a photograph event.'):
-            assert True
-        else:
-            assert False
 
 
 def test_take_photo_asset():
@@ -448,35 +415,50 @@ def test_take_photo_asset_failed_unknown():
             assert False
 
 
-def test_analyze_photo_agent():
-    assert cycle._analyze_photo_agent('token4_agent', []) is None
+@pytest.mark.dependency()
+def test_take_photo():
+    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': [1]}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'takePhoto'
+    assert agent.last_action_result != 'success'
 
-    agent = cycle.agents_manager.get('token4_agent')
+    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': []}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'takePhoto'
+    assert agent.last_action_result != 'success'
 
+    loc = cycle.steps[0]['photos'][0].location
+    cycle.agents_manager.edit('token4_agent', 'location', loc)
+    old_storage = [cycle.agents_manager.get('token4_agent').virtual_storage]
+
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'takePhoto'
+    assert agent.last_action_result == 'success'
+    assert agent.virtual_storage_vector
+    assert agent.virtual_storage != old_storage
+
+@pytest.mark.dependency(depends=["test_take_photo"])
+def test_analyze_photo():
+    test_take_photo()
+    actions = [{'token': 'token4_agent', 'action': 'analyzePhoto', 'parameters': [1]}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action == 'analyzePhoto'
+    assert agent.last_action_result != 'success'
+
+    actions = [{'token': 'token4_agent', 'action': 'analyzePhoto', 'parameters': []}]
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action_result == 'success'
     assert not agent.virtual_storage_vector
     assert agent.virtual_storage == agent.virtual_capacity
-
-
-def test_analyze_photo_agent_failed_param():
-    try:
-        cycle._analyze_photo_agent('token4_agent', [1])
-        assert False
-    except Exception as e:
-        if str(e).endswith('Parameters were given.'):
-            assert True
-        else:
-            assert False
-
-
-def test_analyze_photo_agent_failed_no_photos():
-    try:
-        cycle._analyze_photo_agent('token4_agent', [])
-        assert False
-    except Exception as e:
-        if str(e).endswith('The agent has no photos to analyze.'):
-            assert True
-        else:
-            assert False
+    
+    results = cycle.execute_actions(actions)
+    agent = get_result_agent('token4_agent', results)
+    assert agent.last_action_result != 'success'
 
 @pytest.mark.dependency(depends=["test_take_photo_asset"])
 def test_analyze_photo_asset():

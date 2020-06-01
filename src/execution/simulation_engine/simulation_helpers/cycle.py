@@ -17,7 +17,7 @@ from simulation_engine.simulation_helpers.report import Report
 from ..actions.action import *
 from ..actions.move import *
 from ..actions.deliver_virtual import *
-from ..actions.collect import *
+from ..actions.tasks_related import *
 from ..actions.request import *
 
 logger = logging.getLogger(__name__)
@@ -390,6 +390,8 @@ class Cycle:
 
     def execute_actions(self, token_action_dict):
         requests = []
+        action_results = []
+        sync_actions = []        
 
         nodes = []
         events = []
@@ -403,17 +405,21 @@ class Cycle:
             if self.steps[i]['flood'] and self.steps[i]['flood'].active:
                 nodes.extend(self.steps[i]['flood'].nodes)
                 events.append(self.steps[i]['flood'].dimension)
-
-        action_results = []
-        sync_actions = []
+        
         for token_action_param in token_action_dict:
             token, action, parameters = token_action_param.values()
-            action_obj = Action.create_action(self.agents_manager.get(token),action,self,parameters)            
-            if action_obj.is_ok: 
+            if self.agents_manager.get(token) is not None:
+                agent = self.agents_manager.get(token)
+            else:
+                agent = self.social_assets_manager.get(token)
+            action_obj = Action.create_action(agent,action,self,parameters)            
+            if not action_obj.is_ok: 
+                action_results.append(action_obj.result)
+            else:
                 if action_obj.need_sync:
                     matched = False
                     for acts in sync_actions:
-                        if action_obj.match(acts[0]):
+                        if any(map(action_obj.match, acts)):
                             acts.append(action_obj)
                             matched = True
                     if (not matched):
@@ -422,23 +428,14 @@ class Cycle:
                     req = action_obj.do(self.map, nodes, events, tasks)
                     if req is not None:
                         requests.append(req)
-            action_results.append(action_obj.result)
+                    action_results.append(action_obj.result)
 
-        action_results.extend(self._execute_sync_actions(sync_actions, nodes, events, tasks))   
+        for paired_actions in sync_actions:
+            sync = SyncActions(*paired_actions)
+            sync.sync(self.map, nodes, events, tasks)
+            action_results.extend(sync.results())
 
         return action_results, requests
-
-    def _execute_sync_actions(self, actions, nodes, events, tasks):    
-        action_results = []
-        for sync_actions in actions:
-            sync = SyncActions(*sync_actions)
-            try:            
-                sync.sync(self.map, nodes, events, tasks)
-            finally:
-                action_results.extend(sync.results())
-        
-        return action_results
-
 
     def _execute_agent_special_action(self, token, action_name, parameters, special_action_tokens):
         self.agents_manager.edit(token, 'last_action', action_name)
