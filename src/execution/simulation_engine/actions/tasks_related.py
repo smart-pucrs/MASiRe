@@ -14,7 +14,7 @@ class CollectWater(Action):
 
     def execute(self, map, nodes, events, tasks):        
         for t in tasks['water_samples']:                         
-            if not t.active and map.check_location(t.location, self.agent.location):
+            if map.check_location(t.location, self.agent.location):
                 t.active = False
                 report = Report()
                 report.samples.collected = 1

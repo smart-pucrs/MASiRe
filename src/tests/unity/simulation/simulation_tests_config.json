@@ -67,7 +67,7 @@
       "virtualCapacity": 0
     },
     "photographer": {
-      "abilities": ["groundMovement", "virtualCapacity", "physicalCapacity"],
+      "abilities": ["groundMovement", "virtualCapacity", "physicalCapacity", "carry"],
       "resources": ["memory", "strength"],
       "minSize": 65,
       "maxSize": 73,

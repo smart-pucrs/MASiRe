@@ -11,6 +11,7 @@ class AgentsManager:
         self.agents = {}
         self.cdm_location = cdm_location
         self.roles = self.generate_roles(roles_info)
+        self.assets = None
 
     def restart(self, roles_info, cdm_location):
         """Restart the class by erasing all the agents and recreating them with the same tokens.
@@ -121,7 +122,11 @@ class AgentsManager:
         :param token: The identifier of the requested agent.
         :return Agent|None: Return the Agent object or None if not found."""
 
-        return self.agents.get(token)
+        if self.agents.get(token) is not None: 
+            return self.agents.get(token)
+        else:
+            return self.assets.get(token)
+        # return self.agents.get(token)
 
     def get_tokens(self):
         """Get all the connected tokens.

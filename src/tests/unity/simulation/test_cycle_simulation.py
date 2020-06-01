@@ -326,6 +326,7 @@ def get_result_agent(token, results):
     return None
 
 def test_collect_water():
+    cycle.steps[0]['water_samples'][0].active = True
     loc = cycle.steps[0]['water_samples'][0].location
     cycle.agents_manager.edit('token4_agent', 'location', loc)
 
@@ -385,9 +386,10 @@ def test_take_photo_asset():
     cycle.social_assets_manager.edit('token1_asset', 'location', loc)
 
     old_storage = [cycle.social_assets_manager.get('token1_asset').virtual_storage]
-    assert cycle._take_photo_asset('token1_asset', []) is None
+    action = [{'token': 'token1_asset', 'action': 'takePhoto', 'parameters': []}]
+    results = cycle.execute_actions(action)
+    asset = get_result_agent('token1_asset', results)
 
-    asset = cycle.social_assets_manager.get('token1_asset')
     assert asset.virtual_storage_vector
     assert asset.virtual_storage != old_storage
 
@@ -423,16 +425,18 @@ def test_take_photo():
     assert agent.last_action == 'takePhoto'
     assert agent.last_action_result != 'success'
 
-    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': []}]
+    actions = [{'token': 'token1_asset', 'action': 'takePhoto', 'parameters': []}]
     results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
+    agent = get_result_agent('token1_asset', results)
     assert agent.last_action == 'takePhoto'
     assert agent.last_action_result != 'success'
 
+    cycle.steps[0]['photos'][0].active = True
     loc = cycle.steps[0]['photos'][0].location
     cycle.agents_manager.edit('token4_agent', 'location', loc)
     old_storage = [cycle.agents_manager.get('token4_agent').virtual_storage]
 
+    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': []}]
     results = cycle.execute_actions(actions)
     agent = get_result_agent('token4_agent', results)
     assert agent.last_action == 'takePhoto'

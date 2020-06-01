@@ -39,6 +39,7 @@ class Cycle:
         self.steps = generator.generate_events(self.map)
         self.social_assets_manager = SocialAssetsManager(config['map'], config['socialAssets'],
                                                          generator.generate_social_assets())
+        self.agents_manager.assets = self.social_assets_manager
 
         if write_sim:
             hour = datetime.datetime.now().hour
@@ -397,9 +398,9 @@ class Cycle:
         events = []
         # tasks = {k:v for (k,v) in self.steps if k == 'water_sample' and len(v) > 0}
         tasks = {}
-        tasks['water_samples'] = [w for e in self.steps for w in e['water_samples'] if not w.active]
-        tasks['victims'] = [w for e in self.steps for w in e['victims'] if not w.active]
-        tasks['photos'] = [w for e in self.steps for w in e['photos'] if not w.active]
+        tasks['water_samples'] = [w for e in self.steps for w in e['water_samples'] if w.active]
+        tasks['victims'] = [w for e in self.steps for w in e['victims'] if w.active]
+        tasks['photos'] = [w for e in self.steps for w in e['photos'] if w.active]
         # tasks['water_samples'] = ((w for w in e['water_samples'] if not w.active) for e in self.steps )
         for i in range(self.current_step):
             if self.steps[i]['flood'] and self.steps[i]['flood'].active:
@@ -408,11 +409,7 @@ class Cycle:
         
         for token_action_param in token_action_dict:
             token, action, parameters = token_action_param.values()
-            if self.agents_manager.get(token) is not None:
-                agent = self.agents_manager.get(token)
-            else:
-                agent = self.social_assets_manager.get(token)
-            action_obj = Action.create_action(agent,action,self,parameters)            
+            action_obj = Action.create_action(self.agents_manager.get(token),action,self,parameters)            
             if not action_obj.is_ok: 
                 action_results.append(action_obj.result)
             else:
