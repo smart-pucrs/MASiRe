@@ -1,5 +1,5 @@
 import logging
-from abc import ABC, ABCMeta, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod, abstractproperty
 from ..exceptions.exceptions import FailedWrongParam, FailedParameterType, FailedNoMatch
 
 logger = logging.getLogger(__name__)
@@ -10,9 +10,9 @@ class Mediator(ABC):
     def sync(self, sender: object, event: str, params):
         pass
 
-class Action(object):
-    __metaclass__ = ABCMeta
-
+class Action():
+    __metaclass__=ABCMeta
+    
     def __init__(self, agent, game_state, parameters: list, type: str, qtd_args: list):
         logger.debug(f"action {type} created")
         self.agent = agent
@@ -26,6 +26,10 @@ class Action(object):
         self.error_message = ''
 
         self.validate_parameters()
+
+    @abstractproperty
+    def action(self):
+        raise NotImplementedError
 
     @property
     def mediator(self) -> Mediator:
@@ -112,8 +116,24 @@ class Action(object):
     @staticmethod
     def create_action(agent, action, game_state, parameters):
         for subclass in Action.__subclasses__():
-            if action.lower() in subclass.__name__.lower(): 
+            if action.lower() in subclass.action[0].lower() and len(parameters) in subclass.action[1]: 
                 return subclass(agent,game_state,parameters)
+        logger.error(f"{agent.token}'s action {action} was not found")
+        return NoAction(agent, action)
+            # if action.lower() in subclass.__name__.lower(): 
+            #     return subclass(agent,game_state,parameters)
+
+class NoAction():
+    def __init__(self, agent, action):
+        self.agent = agent
+        self.agent.last_action = action
+        self.agent.last_action_result = 'action_not_found'
+    @property
+    def is_ok(self) -> bool:
+        return False
+    @property
+    def result(self) -> dict:
+        return {'agent': self.agent, 'message': f"{self.agent.last_action} not found check action's parameters"}
 
 class SyncActions(Mediator):
     shared_memory = []

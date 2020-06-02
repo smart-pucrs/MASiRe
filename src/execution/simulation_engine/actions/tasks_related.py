@@ -3,6 +3,7 @@ from ..simulation_helpers.report import Report
 from ..exceptions.exceptions import FailedLocation, FailedItemAmount
 
 class CollectWater(Action):   
+    action = ('collectWater',[0])
     def __init__(self, agent, game_state, parameters):
         super(CollectWater, self).__init__(agent, game_state, parameters, type='collectWater', qtd_args=[0])        
 
@@ -24,6 +25,7 @@ class CollectWater(Action):
         raise FailedLocation('The agent is not in a location with a water sample event.')
 
 class TakePhoto(Action):   
+    action = ('takePhoto',[0])
     def __init__(self, agent, game_state, parameters):
         super(TakePhoto, self).__init__(agent, game_state, parameters, type='takePhoto', qtd_args=[0])        
 
@@ -44,6 +46,7 @@ class TakePhoto(Action):
         raise FailedLocation('The agent is not in a location with a photograph event.')
 
 class AnalyzePhoto(Action):   
+    action = ('analyzePhoto',[0])
     def __init__(self, agent, game_state, parameters):
         super(AnalyzePhoto, self).__init__(agent, game_state, parameters, type='analyzePhoto', qtd_args=[0])        
         self.game_state = game_state
@@ -76,6 +79,7 @@ class AnalyzePhoto(Action):
         return None
 
 class RescueVictim(Action):   
+    action = ('rescueVictim',[0])
     def __init__(self, agent, game_state, parameters):
         super(RescueVictim, self).__init__(agent, game_state, parameters, type='rescueVictim', qtd_args=[0])        
 

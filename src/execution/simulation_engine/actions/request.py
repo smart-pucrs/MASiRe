@@ -3,6 +3,7 @@ from .action import Action
 from ..exceptions.exceptions import FailedSocialAssetRequest
 
 class SearchSocialAsset(Action):
+    action = ('searchSocialAsset',[1])
     def __init__(self, agent, game_state, parameters):
         super(SearchSocialAsset, self).__init__(agent, game_state, parameters, type='searchSocialAsset',qtd_args=[1])   
         self.manager_asset = game_state.social_assets_manager     
@@ -24,6 +25,7 @@ class SearchSocialAsset(Action):
         return distance <= radius
 
 class RequestSocialAsset(Action):
+    action = ('requestSocialAsset',[1])
     def __init__(self, agent, game_state, parameters):
         super(RequestSocialAsset, self).__init__(agent, game_state, parameters, type='requestSocialAsset',qtd_args=[1])   
         self.manager_asset = game_state.social_assets_manager     

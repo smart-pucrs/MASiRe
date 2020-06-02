@@ -7,7 +7,7 @@ from .action import Action
 
 
 class DeliverVirtual(Action):
-   
+    action = ('deliverVirtual',[3])
     def __init__(self, agent, game_state, parameters):
         super(DeliverVirtual, self).__init__(agent, game_state, parameters, type='deliverVirtual',qtd_args=[1,3])
         self.mates = [("receiveVirtual",1)]
@@ -44,7 +44,7 @@ class DeliverVirtual(Action):
         self.mediator.notify(self, "removed_items", items)
 
 class ReceiveVirtual(Action):
-   
+    action = ('receiveVirtual',[1])
     def __init__(self, agent, game_state, parameters):
         super(ReceiveVirtual, self).__init__(agent, game_state, parameters, type='receiveVirtual',qtd_args=[1])
         self.mates = [("deliverVirtual",1)]

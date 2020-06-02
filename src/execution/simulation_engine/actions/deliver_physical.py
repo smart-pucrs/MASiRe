@@ -6,6 +6,7 @@ from .action import Action
 
 
 class DeliverPhysical(Action):
+    action = ('deliverPhysical',[3])
     def __init__(self, agent, game_state, parameters):
         super(DeliverPhysical, self).__init__(agent, game_state, parameters, type='deliverPhysical',qtd_args=[1,2,3])
         self.mates = [("receivePhysical",1)]
@@ -37,7 +38,7 @@ class DeliverPhysical(Action):
             removed_items = self.agent.remove_physical_item(self.parameters[0], self.mediator.shared_memory[1])
             self.mediator.notify(self, "removed_items", removed_items)
         else:
-            if map.check_location(agent.location, self.cdm_location):
+            if map.check_location(self.agent.location, self.cdm_location):
                 if len(parameters) == 2:
                     delivered_items = self.agents_manager.remove_physical_item(self.parameters[0], 1) 
                 else:
@@ -46,9 +47,31 @@ class DeliverPhysical(Action):
                 self.delivered_itens.append({'token': self.agent.token, 'kind': self.parameters[0], 'items': delivered_items,'step': self.step})
             else:
                 raise FailedLocation('The agent is not located at the CDM.')
+class DeliverFacility(Action):
+    action = ('deliverPhysical',[1,2])
+    def __init__(self, agent, game_state, parameters):
+        super(DeliverFacility, self).__init__(agent, game_state, parameters, type='deliverPhysical',qtd_args=[1,2])
+        self.step = game_state.current_step
+        self.delivered_itens = game_state.delivered_items
+        self.cdm_location = game_state.cdm_location
+
+    def check_constraints(self, map):      
+        itens = [item for item in self.agent.physical_storage_vector if item.type == self.parameters[0]]  
+        if not itens:
+            raise FailedItemAmount('The agent has no physical items of this kind to deliver.')
+
+        if not map.check_location(self.agent.location, self.cdm_location):
+            raise FailedLocation('The agent is not located at the CDM.')
+
+    def execute(self, map, nodes, events, tasks):
+        amount = 1 if len(self.parameters) != 2 else self.parameters[1]
+        delivered_items = self.agent.remove_physical_item(self.parameters[0], self.parameters[1]) 
+
+        self.delivered_itens.append({'token': self.agent.token, 'kind': self.parameters[0], 'items': delivered_items,'step': self.step})
 
 
 class ReceivePhysical(Action):
+    action = ('receivePhysical',[1])
     def __init__(self, agent, game_state, parameters):
         super(ReceivePhysical, self).__init__(agent, game_state, parameters, type='receivePhysical',qtd_args=[1])
         self.mates = [("deliverPhysical",1)]

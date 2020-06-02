@@ -2,9 +2,10 @@ from .action import Action
 from ..exceptions.exceptions import *
 
 class Move(Action):
-    # __name__ = 'move'
+    action = ('move',[1,2])
+
     def __init__(self, agent, game_state, parameters):
-        super(Move, self).__init__(agent, game_state, parameters, type='move',qtd_args=[1,2])
+        super(Move, self).__init__(agent, game_state, parameters, type=action[0],qtd_args=action[1])
 
     def check_parameters(self):
         if len(self.parameters) == 1:
@@ -63,6 +64,7 @@ class Move(Action):
         return None
 
 class Pass(Action):
+    action = ('pass',[0])
     def __init__(self, agent, game_state, parameters):
         super(Pass, self).__init__(agent, game_state, parameters, type='pass',qtd_args=[0])
 

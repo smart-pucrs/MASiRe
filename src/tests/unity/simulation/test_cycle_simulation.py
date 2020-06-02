@@ -27,7 +27,6 @@ class Item:
 # @pytest.fixture(scope="session")
 @pytest.fixture(autouse=True,scope="module")
 def connect_agents():
-    print("This is a test!!!!!!!!!!")
     for i in range(1, 5):
         cycle.connect_agent(f'token{i}_agent')
 
@@ -519,14 +518,17 @@ def test_search_social_asset_agent_failed_param():
 
 def test_deliver_physical_agent_cdm():
     loc = cycle.cdm_location
-    cycle.agents_manager.edit('token4_agent', 'location', loc)
-    assert cycle._deliver_physical_agent_cdm('token4_agent', ['victim']) is None
-    assert cycle._deliver_physical_agent_cdm('token4_agent', ['water_sample']) is None
-
-    agent = cycle.agents_manager.get('token4_agent')
-
-    assert not agent.physical_storage_vector
-    assert agent.physical_storage == agent.physical_capacity
+    cycle.agents_manager.edit('token4_agent', 'location', [*loc])
+    cycle.agents_manager.edit('token4_agent', 'abilities', ["carry", "physicalCapacity"])
+    cycle.agents_manager.edit('token4_agent', 'physical_storage_vector', [Item(2, 'victim', 2)])
+    cycle.agents_manager.edit('token4_agent', 'physical_storage', 10)
+    action = [{'token': 'token4_agent', 'action': 'deliverPhysical', 'parameters': ['victim',1]}]
+    results = cycle.execute_actions(action)
+    agent = get_result_agent('token4_agent', results) 
+    assert agent.last_action == 'deliverPhysical'
+    assert agent.last_action_result == 'success'
+    assert agent.physical_storage_vector == []
+    
 
 
 def test_deliver_physical():
