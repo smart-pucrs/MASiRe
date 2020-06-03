@@ -175,6 +175,7 @@ class SyncActions(Mediator):
         return [act.result for act in self._actions]
 
     def notify(self, sender: Action, event: str, params) -> None:
-        for act in self._actions:
-            if act is not sender: 
-                act.sync(sender, event, params)
+        return [act.sync(sender, event, params) for act in self._actions if act is not sender] 
+        # for act in self._actions:
+        #     if act is not sender: 
+        #         act.sync(sender, event, params)

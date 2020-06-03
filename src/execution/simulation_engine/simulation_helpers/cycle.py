@@ -20,6 +20,7 @@ from ..actions.deliver_virtual import *
 from ..actions.deliver_physical import *
 from ..actions.tasks_related import *
 from ..actions.request import *
+from ..actions.carry import *
 
 logger = logging.getLogger(__name__)
 

@@ -889,6 +889,37 @@ def test_execute_asset_action():
     assert cycle._execute_asset_action('token1_asset', 'rescueVictim', [])[
                'message'] == 'Social asset does not have the abilities or resources to complete the action.'
 
+def test_carry_agent():
+    cycle.agents_manager.edit('token3_agent', 'abilities', ["carry", "physicalCapacity"])
+    cycle.agents_manager.edit('token3_agent', 'location', [10, 10])
+    cycle.agents_manager.edit('token4_agent', 'location', [10, 10])
+
+    actions = [{'token': 'token3_agent', 'action': 'carry', 'parameters': ['token4_agent']}, {'token': 'token4_agent', 'action': 'getCarried', 'parameters': ['token3_agent']}]
+    results = cycle.execute_actions(actions)
+    agent3 = get_result_agent('token3_agent', results)    
+    assert agent3.last_action == 'carry'
+    assert agent3.last_action_result == 'success'
+    assert agent3.physical_storage_vector != []
+    agent4 = get_result_agent('token4_agent', results) 
+    assert agent4.last_action == 'getCarried'
+    assert agent4.last_action_result == 'success'
+    assert agent4.carried == True
+
+def test_deliver_agent():
+    test_carry_agent()
+    cycle.agents_manager.edit('token3_agent', 'location', [20, 20])
+
+    actions = [{'token': 'token3_agent', 'action': 'deliverAgent', 'parameters': ['token4_agent']}, {'token': 'token4_agent', 'action': 'deliverRequest', 'parameters': ['token3_agent']}]
+    results = cycle.execute_actions(actions)
+    agent3 = get_result_agent('token3_agent', results)    
+    assert agent3.last_action == 'deliverAgent'
+    assert agent3.last_action_result == 'success'
+    assert agent3.physical_storage_vector == []
+    agent4 = get_result_agent('token4_agent', results) 
+    assert agent4.last_action == 'deliverRequest'
+    assert agent4.last_action_result == 'success'
+    assert agent4.carried == False
+    assert agent4.location == [20,20]
 
 def test_execute_special_actions():
     cycle.execute_actions([{'token': 'token2_agent', 'action': 'searchSocialAsset', 'parameters': [50000]}])
