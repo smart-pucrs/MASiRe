@@ -38,6 +38,39 @@ def connect_agents():
     cycle.connect_social_asset('token2_agent', 'token2_asset')
     pass
 
+@pytest.fixture
+def game_state():
+    from src.execution.simulation_engine.simulation_helpers.cycle import Cycle
+    config_path = pathlib.Path(__file__).parent / 'simulation_tests_config.json'
+    config_json = json.load(open(config_path, 'r'))
+    return Cycle(config_json, False, False)
+def create_agent(game_state, token):
+    game_state.connect_agent(token)
+    return game_state.agents_manager.get(token)
+def create_asset(game_state, agent, token):
+    game_state.execute_actions([{'token': agent.token, 'action': 'searchSocialAsset', 'parameters': [1000]}])
+    game_state.execute_actions([{'token': agent.token, 'action': 'requestSocialAsset', 'parameters': [0]}])
+    game_state.connect_social_asset(agent.token, token)
+    return game_state.agents_manager.get(token)
+@pytest.fixture
+def agent1(game_state):
+    return create_agent(game_state,'token1_agent')
+@pytest.fixture
+def agent2(game_state):
+    return create_agent(game_state,'token2_agent')
+@pytest.fixture
+def agent3(game_state):
+    return create_agent(game_state,'token3_agent')
+@pytest.fixture
+def agent4(game_state):
+    return create_agent(game_state,'token4_agent')
+@pytest.fixture
+def asset1(game_state, agent1):
+    return create_asset(game_state, agent1, 'token1_asset')
+@pytest.fixture
+def asset1(game_state, agent2):
+    return create_asset(game_state, agent2, 'token2_asset')
+
 def test_connection():
     assert cycle.connect_agent('token_temp')
     assert cycle.disconnect_agent('token_temp')
@@ -326,22 +359,20 @@ def get_result_agent(token, results):
             return r['agent']
     return None
 
-def test_collect_water():
-    cycle.steps[0]['water_samples'][0].active = True
-    loc = cycle.steps[0]['water_samples'][0].location
-    cycle.agents_manager.edit('token4_agent', 'location', loc)
+def test_collect_water(game_state, agent4):
+    game_state.steps[0]['water_samples'][0].active = True
+    loc = game_state.steps[0]['water_samples'][0].location
+    agent4.location = loc
 
     actions = [{'token': 'token4_agent', 'action': 'collectWater', 'parameters': [1]}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action == 'collectWater'
-    assert agent.last_action_result != 'success'
+    game_state.execute_actions(actions)
+    assert agent4.last_action == 'collectWater'
+    assert agent4.last_action_result != 'success'
 
     actions = [{'token': 'token4_agent', 'action': 'collectWater', 'parameters': []}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action == 'collectWater'
-    assert agent.last_action_result == 'success'
+    game_state.execute_actions(actions)
+    assert agent4.last_action == 'collectWater'
+    assert agent4.last_action_result == 'success'
 
 def test_collect_water_asset():
     cycle.steps[0]['water_samples'][0].active = True
@@ -419,51 +450,44 @@ def test_take_photo_asset_failed_unknown():
 
 
 @pytest.mark.dependency()
-def test_take_photo():
-    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': [1]}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action == 'takePhoto'
-    assert agent.last_action_result != 'success'
+def test_take_photo(game_state, agent4, asset1):
+    actions = [{'token': agent4.token, 'action': 'takePhoto', 'parameters': [1]}]
+    game_state.execute_actions(actions)
+    assert agent4.last_action == 'takePhoto'
+    assert agent4.last_action_result != 'success'
 
-    actions = [{'token': 'token1_asset', 'action': 'takePhoto', 'parameters': []}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token1_asset', results)
-    assert agent.last_action == 'takePhoto'
-    assert agent.last_action_result != 'success'
+    actions = [{'token': asset1.token, 'action': 'takePhoto', 'parameters': []}]
+    game_state.execute_actions(actions)
+    assert asset1.last_action == 'takePhoto'
+    assert asset1.last_action_result != 'success'
 
-    cycle.steps[0]['photos'][0].active = True
-    loc = cycle.steps[0]['photos'][0].location
-    cycle.agents_manager.edit('token4_agent', 'location', loc)
-    old_storage = [cycle.agents_manager.get('token4_agent').virtual_storage]
+    game_state.steps[0]['photos'][0].active = True
+    agent4.location = game_state.steps[0]['photos'][0].location
+    old_storage = [agent4.virtual_storage]
 
-    actions = [{'token': 'token4_agent', 'action': 'takePhoto', 'parameters': []}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action == 'takePhoto'
-    assert agent.last_action_result == 'success'
-    assert agent.virtual_storage_vector
-    assert agent.virtual_storage != old_storage
+    actions = [{'token': agent4.token, 'action': 'takePhoto', 'parameters': []}]
+    game_state.execute_actions(actions)
+    assert agent4.last_action == 'takePhoto'
+    assert agent4.last_action_result == 'success'
+    assert agent4.virtual_storage_vector
+    assert agent4.virtual_storage != old_storage
 
 @pytest.mark.dependency(depends=["test_take_photo"])
-def test_analyze_photo():
-    test_take_photo()
-    actions = [{'token': 'token4_agent', 'action': 'analyzePhoto', 'parameters': [1]}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action == 'analyzePhoto'
-    assert agent.last_action_result != 'success'
+def test_analyze_photo(game_state, agent4, asset1):
+    test_take_photo(game_state, agent4, asset1)
+    actions = [{'token': agent4.token, 'action': 'analyzePhoto', 'parameters': [1]}]
+    game_state.execute_actions(actions)
+    assert agent4.last_action == 'analyzePhoto'
+    assert agent4.last_action_result != 'success'
 
-    actions = [{'token': 'token4_agent', 'action': 'analyzePhoto', 'parameters': []}]
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action_result == 'success'
-    assert not agent.virtual_storage_vector
-    assert agent.virtual_storage == agent.virtual_capacity
+    actions = [{'token': agent4.token, 'action': 'analyzePhoto', 'parameters': []}]
+    game_state.execute_actions(actions)
+    assert agent4.last_action_result == 'success'
+    assert not agent4.virtual_storage_vector
+    assert agent4.virtual_storage == agent4.virtual_capacity
     
-    results = cycle.execute_actions(actions)
-    agent = get_result_agent('token4_agent', results)
-    assert agent.last_action_result != 'success'
+    game_state.execute_actions(actions)
+    assert agent4.last_action_result != 'success'
 
 @pytest.mark.dependency(depends=["test_take_photo_asset"])
 def test_analyze_photo_asset():
