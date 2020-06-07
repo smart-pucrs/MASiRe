@@ -129,6 +129,21 @@ class Map:
         """
         return self.euclidean_distance(p1, p2) > max_dist
 
+    def _get_straight_route_to_node(self, node_id, loc, speed, reduction, events, reverse=False)->list:
+        node_lat_lon = self.router.nodeLatLon(node_id)
+        if (node_lat_lon[0] != loc[0] or node_lat_lon[1] != loc[1]):
+            if reverse:
+                r_to = node_lat_lon
+                r_from = loc
+            else:
+                r_to = loc
+                r_from = node_lat_lon 
+            if self.check_coord_in_events(loc, events):
+                return self.generate_straight_route(r_from, r_to, speed-reduction, True)
+            else:
+                return self.generate_straight_route(r_from, r_to, speed, False)
+        return []
+
     def generate_ground_route(self, start_coord, end_coord, speed, list_of_nodes, events):
         """ Generate route for ground movement.
 
@@ -143,12 +158,9 @@ class Map:
         """
         reduction = self.movement_restrictions['groundMovement'] / 100 * speed
 
-        # if self.check_coord_in_events(start_coord, events) and self.check_coord_in_events(start_coord, events):
-        #     start_node = start_coord
-        #     end_node = end_coord
-        # else:
-        #     start_node = self.get_closest_node(*start_coord)
-        #     end_node = self.get_closest_node(*end_coord)
+        if self.check_coord_in_events(start_coord, events) and self.check_coord_in_events(end_coord, events):
+            return True, self.generate_straight_route(start_coord, end_coord, speed - reduction, True), self.euclidean_distance(start_coord, end_coord)
+
         start_node = self.get_closest_node(*start_coord)
         end_node = self.get_closest_node(*end_coord)
 
@@ -165,12 +177,14 @@ class Map:
             return True, self.generate_straight_route(start_coord, end_coord, speed, False), \
                    self.euclidean_distance(start_coord, end_coord)
 
-        route = []
+        # route = []
+        route = self._get_straight_route_to_node(start_node, start_coord, speed, reduction, events)
         min_dist = speed / self.measure_unit
         current_node_coord = self.get_node_coord(nodes[0])
         event_area = nodes[0] in list_of_nodes
 
-        for node in nodes[1:-1]:
+        # for node in nodes[1:-1]:
+        for node in nodes[1:]:
             node_coord = self.get_node_coord(node)
 
             if self.is_out(node_coord):
@@ -201,10 +215,13 @@ class Map:
                     route.append((*node_coord, False))
                     current_node_coord = node_coord
 
+
         if event_area:
             route.extend(self.generate_straight_route(current_node_coord, end_coord, speed - reduction, True))
         else:
             route.extend(self.generate_straight_route(current_node_coord, end_coord, speed, False))
+
+        # route.extend(self._get_straight_route_to_node(end_node, end_coord, speed, reduction, events, reverse=True))
 
         return True, route, self.euclidean_distance(start_coord, end_coord)
 
@@ -350,7 +367,7 @@ class Map:
         return events_in_range
 
     def nodes_in_radius(self, coord, radius):
-        """Get all the nodes in a circle around the coordinate given.
+        """Get all the nodes in a circle around the given coordinate.
 
         :param coord: Central coordinate.
         :param radius: The radius of the circle.
@@ -359,7 +376,7 @@ class Map:
         result = []
         for node in self.router.rnodes:
             node_coord = self.get_node_coord(node)
-            if self.euclidean_distance(node_coord, coord) <= radius:
+            if abs(self.euclidean_distance(node_coord, coord)) <= radius:
                 if not self.is_out(node_coord):
                     result.append(node)
         return result
