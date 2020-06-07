@@ -16,7 +16,7 @@ class SearchSocialAsset(Action):
 
         exec(f'self.agent.social_assets = social_assets')
         # self.agents_manager.edit(token, 'social_assets', social_assets)
-        return {}, None
+        # return None
     
     @staticmethod
     def check_location(l1, l2, radius):

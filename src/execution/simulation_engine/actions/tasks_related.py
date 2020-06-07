@@ -20,7 +20,7 @@ class CollectWater(Action):
                 report = Report()
                 report.samples.collected = 1
                 self.agent.add_physical_item(t)
-                return {}, None
+                return None
 
         raise FailedLocation('The agent is not in a location with a water sample event.')
 
