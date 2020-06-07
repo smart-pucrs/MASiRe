@@ -36,6 +36,14 @@ class SocialAsset:
 
         return self.min_size + (self.physical_capacity - self.physical_storage)
 
+    @property
+    def role(self):
+        return self.profession
+    def check_battery(self):
+        return True
+    def discharge(self):
+        pass
+
     def add_physical_item(self, item):
         """Add a physical item to the storage of the social asset.
 

@@ -1,7 +1,8 @@
 """This module formats the different events to send to the agents and social assets.
 
 Note: The response does not have agent or social asset as key until they are processed."""
-
+import logging
+logger = logging.getLogger(__name__)
 
 def initial_percepts_format(response, token):
     info = {'type': 'initial_percepts', 'map_percepts': {}, 'agent_percepts': {}}
@@ -57,19 +58,35 @@ def percepts_format(response, token):
             info['result'] = True
 
             found_index = 0
+            logger.debug(f"total of actors {len(response['actors'])}")
             for idx, actor in enumerate(response['actors']):
-                if 'agent' in actor:
-                    if actor['agent']['token'] == token:
+                # if 'agent' in actor:
+                #     if actor['agent']['token'] == token:
+                #         info['agent'] = agent_variables(actor['agent'])
+                #         info['message'] = actor['message']
+                #         found_index = idx
+                #         break
+                # else:
+                #     if actor['asset']['token'] == token:
+                #         info['agent'] = asset_variables(actor['asset'])
+                #         info['message'] = actor['message']
+                #         found_index = idx
+                #         break
+                # if 'agent' in actor:
+                #     logger.debug(f"actor agent api {actor['agent']['token']}")
+                # else:
+                #     logger.debug(f"actor asset api {actor['asset']['token']}")
+                if 'asset' in actor:
+                    test = 'uhull'
+
+                if 'agent' in actor and actor['agent']['token'] == token:
+                    if actor['agent']['type'] != 'social_asset':
                         info['agent'] = agent_variables(actor['agent'])
-                        info['message'] = actor['message']
-                        found_index = idx
-                        break
-                else:
-                    if actor['asset']['token'] == token:
-                        info['agent'] = asset_variables(actor['asset'])
-                        info['message'] = actor['message']
-                        found_index = idx
-                        break
+                    else:
+                        info['agent'] = asset_variables(actor['agent'])
+                    info['message'] = actor['message']
+                    found_index = idx
+                    break
 
             if 'agent' not in info:
                 return event_error_format('Actor not found in response. ')
@@ -126,10 +143,14 @@ def initial_percepts_monitor_format(response):
 def percepts_monitor_format(response):
     actors = []
     for actor in response['actors']:
-        if 'agent' in actor:
+        # if 'agent' in actor:
+        #     actors.append(monitor_agent_info(actor['agent']))
+        # else:
+        #     actors.append(monitor_asset_info(actor['asset']))
+        if actor['agent']['type'] != 'social_asset':
             actors.append(monitor_agent_info(actor['agent']))
         else:
-            actors.append(monitor_asset_info(actor['asset']))
+            actors.append(monitor_asset_info(actor['agent']))
 
     environment = response['environment']
 

@@ -181,7 +181,8 @@ class JsonFormatter:
             json_actors = []
             if response is not None:
                 for agent in response:
-                    json_actors.append({'asset': self.jsonify_asset(agent), 'message': 'Social asset connected'})
+                    # json_actors.append({'asset': self.jsonify_asset(agent), 'message': 'Social asset connected'})
+                    json_actors.append({'agent': self.jsonify_asset(agent), 'message': 'Social asset connected'})
 
             Logger.normal('Social assets connection finished.')
 
@@ -311,11 +312,13 @@ class JsonFormatter:
                 return {'status': 1, 'message': 'Simulation finished.'}
 
             json_actors = []
+            logger.debug(f'total of actors {len(response[0])}')
             for obj in response[0]:
                 if 'agent' in obj:
                     json_actors.append({'agent': self.jsonify_agent(obj['agent']), 'message': obj['message']})
                 else:
-                    json_actors.append({'asset': self.jsonify_asset(obj['social_asset']), 'message': obj['message']})
+                    # json_actors.append({'asset': self.jsonify_asset(obj['social_asset']), 'message': obj['message']})
+                    json_actors.append({'agent': self.jsonify_asset(obj['social_asset']), 'message': obj['message']})
 
             json_events = self.jsonify_events(response[1])
             environment = {'events': json_events, 'step': response[2]}
@@ -413,6 +416,8 @@ class JsonFormatter:
 
         :param agent: The agent object saved in the simulation.
         :return dict: Dictionary with all the information from the agent."""
+        if (agent.type == 'social_asset'):
+            return  self.jsonify_asset(agent)
 
         json_physical_items = self.jsonify_delivered_items(agent.physical_storage_vector)
 

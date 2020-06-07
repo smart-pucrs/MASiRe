@@ -187,8 +187,8 @@
       "minPeriod": 40,
       "maxPeriod": 80,
       "circle": {
-        "minRadius": 2000.0,
-        "maxRadius": 2000.0
+        "minRadius": 200.0,
+        "maxRadius": 200.0
       },
       "propagation": true,
       "propagationInfo": {
