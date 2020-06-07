@@ -1,6 +1,6 @@
 import logging
 from abc import ABC, ABCMeta, abstractmethod, abstractproperty
-from ..exceptions.exceptions import FailedWrongParam, FailedParameterType, FailedNoMatch
+from ..exceptions.exceptions import MASiReException, FailedWrongParam, FailedParameterType, FailedNoMatch
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +69,8 @@ class Action():
                 raise FailedWrongParam(f'wrong number of parameters, expecting {self.qtd_args} parameters')
         
             self.check_parameters()
+        except MASiReException as e:
+            self._report_masire_exception(e)
         except Exception as e:            
             self._report_exception(e)
 
@@ -96,21 +98,27 @@ class Action():
 
             # new_state, exception = self.execute(map, nodes, events, tasks)
             request = self.execute(map, nodes, events, tasks)
-            exec(f'self.agent.last_action_result = "success"')
+            self.agent.last_action_result = 'success'
                         
             # for key, value in new_state.items():
             #     exec(f'self.agent.{key} = value')
 
             # if exception != None:
             #     raise exception
+        except MASiReException as e:
+            self._report_masire_exception(e)
         except Exception as e:
             self._report_exception(e)
         
         return request
 
+    def _report_masire_exception(self, e: MASiReException):
+        logger.debug(e)
+        self.agent.last_action_result = e.identifier
+        self.error_message = str(e)
     def _report_exception(self, e: Exception):
         logger.critical(e,exc_info=True)
-        exec(f'self.agent.last_action_result = e.identifier')
+        self.agent.last_action_result = 'internalError' 
         self.error_message = str(e)
 
     @staticmethod
@@ -127,7 +135,7 @@ class NoAction():
     def __init__(self, agent, action):
         self.agent = agent
         self.agent.last_action = action
-        self.agent.last_action_result = 'action_not_found'
+        self.agent.last_action_result = 'actionNotFound'
     @property
     def is_ok(self) -> bool:
         return False
@@ -158,10 +166,15 @@ class SyncActions(Mediator):
 
             for act in self._actions:
                 exec(f'act.agent.last_action_result = "success"')
+        except MASiReException as e:
+            logger.debug(e)
+            for act in self._actions: 
+                act.agent.last_action_result = e.identifier
+                act.error_message = str(e)
         except Exception as e:            
             logger.critical(e,exc_info=True)
             for act in self._actions: 
-                exec(f'act.agent.last_action_result = e.identifier')
+                act.agent.last_action_result = 'internalError'
                 act.error_message = str(e)
     
     def agents_same_location(self, map):

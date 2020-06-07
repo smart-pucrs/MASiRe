@@ -1,138 +1,63 @@
-class FailedWrongParam(Exception):
+class MASiReException(Exception):
+    def __init__(self, id:str, message=None):
+        self.message = message
+        self.identifier = id
 
+    def __str__(self):
+        return f'{self.__class__.__name__}: ' + self.message
+
+class FailedWrongParam(MASiReException):
     def __init__(self, message=None):
-        self.message = message
-        self.identifier = 'wrongParam'
+        super(FailedWrongParam, self).__init__(id='wrongParam', message=message)
 
-    def __str__(self):
-        return 'FailedWrongParam: ' + self.message
-
-
-class FailedUnknownFacility(Exception):
-
+class FailedUnknownFacility(MASiReException):
     def __init__(self, message=None):
-        self.message = message
-        self.identifier = 'unknownFacility'
+        super(FailedUnknownFacility, self).__init__(id='unknownFacility', message=message)
 
-    def __str__(self):
-        return 'FailedUnknownFacility: ' + self.message
-
-
-class FailedNoRoute(Exception):
-
+class FailedNoRoute(MASiReException):
     def __init__(self, message=None):
-        self.message = message
-        self.identifier = 'noRoute'
+        super(FailedNoRoute, self).__init__(id='noRoute', message=message)
 
-    def __str__(self):
-        return 'FailedNoRoute: ' + self.message
+class FailedCapacity(MASiReException):
+    def __init__(self, message=None):
+        super(FailedCapacity, self).__init__(id='noCapacity', message=message)
 
+class FailedLocation(MASiReException):
+    def __init__(self, message=None):
+        super(FailedLocation, self).__init__(id='noLocation', message=message)
 
-class FailedCapacity(Exception):
+class FailedUnknownItem(MASiReException):
+    def __init__(self, message=None):
+        super(FailedUnknownItem, self).__init__(id='unknownItem', message=message)
 
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'noCapacity'
+class FailedItemAmount(MASiReException):
+    def __init__(self, message=None):
+        super(FailedItemAmount, self).__init__(id='itemAmount', message=message)
 
-    def __str__(self):
-        return 'FailedCapacity: ' + self.message
+class FailedInvalidKind(MASiReException):
+    def __init__(self, message=None):
+        super(FailedInvalidKind, self).__init__(id='invalidType', message=message)
 
+class FailedInsufficientBattery(MASiReException):
+    def __init__(self, message=None):
+        super(FailedInsufficientBattery, self).__init__(id='noBattery', message=message)
 
-class FailedLocation(Exception):
+class FailedNoSocialAsset(MASiReException):
+    def __init__(self, message=None):
+        super(FailedNoSocialAsset, self).__init__(id='noSocialAsset', message=message)
 
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'noLocation'
+class FailedUnknownToken(MASiReException):
+    def __init__(self, message=None):
+        super(FailedUnknownToken, self).__init__(id='unknownToken', message=message)
 
-    def __str__(self):
-        return 'FailedLocation: ' + self.message
+class FailedSocialAssetRequest(MASiReException):
+    def __init__(self, message=None):
+        super(FailedSocialAssetRequest, self).__init__(id='socialAssetRequest', message=message)
 
+class FailedNoMatch(MASiReException):
+    def __init__(self, message=None):
+        super(FailedNoMatch, self).__init__(id='noMatch', message=message)
 
-class FailedUnknownItem(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'unknownItem'
-
-    def __str__(self):
-        return 'FailedUnknownItem: ' + self.message
-
-
-class FailedItemAmount(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'itemAmount'
-
-    def __str__(self):
-        return 'FailedItemAmount: ' + self.message
-
-
-class FailedInvalidKind(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'invalidKind'
-
-    def __str__(self):
-        return 'FailedInvalidKind: ' + self.message
-
-
-class FailedInsufficientBattery(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'insufficientBattery'
-
-    def __str__(self):
-        return 'FailedInsufficientBattery: ' + self.message
-
-
-class FailedNoSocialAsset(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'noSocialAsset'
-
-    def __str__(self):
-        return 'FailedNoSocialAsset: ' + self.message
-
-
-class FailedUnknownToken(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'unknownToken'
-
-    def __str__(self):
-        return 'FailedUnknownToken: ' + self.message
-
-
-class FailedSocialAssetRequest(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'socialAssetRequest'
-
-    def __str__(self):
-        return 'FailedSocialAssetRequest: ' + self.message
-
-
-class FailedNoMatch(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'noMatch'
-
-    def __str__(self):
-        return 'FailedNoMatch: ' + self.message
-
-
-class FailedParameterType(Exception):
-
-    def __init__(self, message):
-        self.message = message
-        self.identifier = 'parameterType'
-
-    def __str__(self):
-        return 'FailedParameterType: ' + self.message
+class FailedParameterType(MASiReException):
+    def __init__(self, message=None):
+        super(FailedParameterType, self).__init__(id='parameterType', message=message)
