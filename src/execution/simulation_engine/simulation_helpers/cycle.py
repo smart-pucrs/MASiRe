@@ -404,7 +404,7 @@ class Cycle:
         tasks['victims'] = [w for e in self.steps for w in e['victims'] if w.active]
         tasks['photos'] = [w for e in self.steps for w in e['photos'] if w.active]
         # tasks['water_samples'] = ((w for w in e['water_samples'] if not w.active) for e in self.steps )
-        for i in range(self.current_step):
+        for i in range(self.current_step+1):
             if self.steps[i]['flood'] and self.steps[i]['flood'].active:
                 nodes.extend(self.steps[i]['flood'].nodes)
                 events.append(self.steps[i]['flood'].dimension)
@@ -434,6 +434,7 @@ class Cycle:
             sync.sync(self.map, nodes, events, tasks)
             action_results.extend(sync.results())
 
+        logger.debug(f'actions processed: {len(action_results)}')
         return action_results, requests
 
     def _execute_agent_special_action(self, token, action_name, parameters, special_action_tokens):
