@@ -1,10 +1,12 @@
 import types
+import logging
 from symbol import parameters
 
 from ..exceptions.exceptions import (FailedCapacity, FailedItemAmount,
                                      FailedNoMatch, FailedWrongParam)
 from .action import Action
 
+logger = logging.getLogger(__name__)
 
 class DeliverVirtual(Action):
     action = ('deliverVirtual',[3])
@@ -14,7 +16,7 @@ class DeliverVirtual(Action):
 
     def prepare(self):
         amount = max(0, self.parameters[2])
-        items = [item for item in self.agent.virtual_storage_vector if item.type == self.parameters[0]]
+        items = [item for item in self.agent.virtual_storage_vector if item.type == self.parameters[1]]
 
         self.mediator.shared_memory.append(items)
         self.mediator.shared_memory.append(amount)
@@ -27,7 +29,13 @@ class DeliverVirtual(Action):
             raise FailedItemAmount('The agent has no virtual items of this kind to deliver.')
       
     def match(self, action):
-        return (action.type == 'receiveVirtual' and action.parameters[1] == self.agent.token)
+        if (action.type == 'receiveVirtual' and action.parameters[0] == self.agent.token):
+            if (self.parameters[0] == action.agent.token):
+                return True
+        logger.debug(f'failed to match my {self.parameters} with {action.parameters}')
+        logger.debug(f'my token {self.agent.token}')
+        logger.debug(f'{action.type} others token {action.agent.token}')
+        return False
 
     def execute(self, map, nodes, events, tasks):
         if len(self.parameters) == 3:
@@ -39,7 +47,7 @@ class DeliverVirtual(Action):
         return {}
     def _transmit_to_agent(self):
         amount = self.mediator.shared_memory[1]
-        items = self.agent.remove_virtual_item(self.parameters[0], amount)
+        items = self.agent.remove_virtual_item(self.parameters[1], amount)
 
         self.mediator.notify(self, "removed_items", items)
 
@@ -62,9 +70,12 @@ class ReceiveVirtual(Action):
             raise FailedCapacity('The receiving agent does not have enough virtual storage.')
 
     def match(self, action):
-        if (action.type == 'deliverVirtual' and action.parameters[1] == self.agent.token):
+        if (action.type == 'deliverVirtual' and action.parameters[0] == self.agent.token):
             if (self.parameters[0] == action.agent.token):
                 return True
+        logger.debug(f'failed to match my {self.parameters} with {action.parameters}')
+        logger.debug(f'my token {self.agent.token}')
+        logger.debug(f'{action.type} others token {action.agent.token}')
         return False
 
     def sync(self, sender, event, params):

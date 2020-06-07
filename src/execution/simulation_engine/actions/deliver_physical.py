@@ -15,7 +15,7 @@ class DeliverPhysical(Action):
 
     def prepare(self):
         amount = 0 if self.parameters[2] < 0 else self.parameters[2]
-        items = [item for item in self.agent.physical_storage_vector if item.type == self.parameters[0]]
+        items = [item for item in self.agent.physical_storage_vector if item.type == self.parameters[1]]
 
         self.mediator.shared_memory.append(items)
         self.mediator.shared_memory.append(amount)
@@ -31,11 +31,11 @@ class DeliverPhysical(Action):
             raise FailedLocation('agents in different locations.')
       
     def match(self, action):
-        return (action.type == 'receivePhysical' and action.parameters[1] == self.agent.token)
+        return (action.type == 'receivePhysical' and action.parameters[0] == self.agent.token)
 
     def execute(self, map, nodes, events, tasks):
         if len(self.parameters) == 3:
-            removed_items = self.agent.remove_physical_item(self.parameters[0], self.mediator.shared_memory[1])
+            removed_items = self.agent.remove_physical_item(self.parameters[1], self.mediator.shared_memory[1])
             self.mediator.notify(self, "removed_items", removed_items)
         else:
             if map.check_location(self.agent.location, self.cdm_location):
@@ -89,7 +89,7 @@ class ReceivePhysical(Action):
             raise FailedCapacity('The receiving agent does not have enough physical storage.')
 
     def match(self, action):
-        if (action.type == 'deliverPhysical' and action.parameters[1] == self.agent.token):
+        if (action.type == 'deliverPhysical' and action.parameters[0] == self.agent.token):
             if (self.parameters[0] == action.agent.token):
                 return True
         return False
