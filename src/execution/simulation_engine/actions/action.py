@@ -1,6 +1,6 @@
 import logging
 from abc import ABC, ABCMeta, abstractmethod, abstractproperty
-from ..exceptions.exceptions import MASiReException, FailedWrongParam, FailedParameterType, FailedNoMatch
+from ..exceptions.exceptions import MASiReException, NoActionsAllowed, NotActive, FailedWrongParam, FailedParameterType, FailedNoMatch
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +24,7 @@ class Action():
         self.qtd_args = qtd_args 
         self.mates = []
         self.error_message = ''
+        self.any_time_action = False
 
         self.validate_parameters()
 
@@ -80,6 +81,12 @@ class Action():
                 it_is = all(s in agent_has for s in demand)
                 if it_is: return it_is
             return False
+        
+        if self.agent.carried and not self.any_time_action:
+            raise NoActionsAllowed('Agent being carried.')
+
+        # if not self.agent.is_active and not self.agent.last_action == 'deliverRequest':
+        #     raise NotActive('Agent is not active.')
 
         has_skills = check_demand(self.skills, self.agent.abilities)
         if not has_skills: raise FailedParameterType(f'The following skills are required: {self.skills}')

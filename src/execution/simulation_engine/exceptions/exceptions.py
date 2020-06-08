@@ -61,3 +61,11 @@ class FailedNoMatch(MASiReException):
 class FailedParameterType(MASiReException):
     def __init__(self, message=None):
         super(FailedParameterType, self).__init__(id='parameterType', message=message)
+
+class NoActionsAllowed(MASiReException):
+    def __init__(self, message=None):
+        super(NoActionsAllowed, self).__init__(id='cannotPerformActions', message=message)
+
+class NotActive(MASiReException):
+    def __init__(self, message=None):
+        super(NotActive, self).__init__(id='agentNotActive', message=message)

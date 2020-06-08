@@ -54,6 +54,7 @@ class Pass(Action):
     action = ('pass',[0])
     def __init__(self, agent, game_state, parameters):
         super(Pass, self).__init__(agent, game_state, parameters, type='pass',qtd_args=[0])
+        self.any_time_action = True
 
     def check_parameters(self):
         pass

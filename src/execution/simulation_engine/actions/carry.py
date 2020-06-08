@@ -62,6 +62,7 @@ class RequestDelivery(Action):
     def __init__(self, agent, game_state, parameters):
         super(RequestDelivery, self).__init__(agent, game_state, parameters, type='deliverRequest',qtd_args=[1])
         self.mates = [("deliverAgent",1)]
+        self.any_time_action = True
 
     def match(self, action):
         if (action.type == 'deliverAgent' and action.parameters[0] == self.agent.token):
