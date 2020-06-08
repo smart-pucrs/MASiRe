@@ -86,7 +86,7 @@ class ReceivePhysical(Action):
         itens = self.mediator.shared_memory[0]
         amount = self.mediator.shared_memory[1]
         if self.agent.physical_storage < amount * itens[0].size:
-            raise FailedCapacity('The receiving agent does not have enough physical storage.')
+            raise FailedCapacity(f'The receiving agent has {self.agent.physical_storage} of physical storage demand is {amount * itens[0].size}')
 
     def match(self, action):
         if (action.type == 'deliverPhysical' and action.parameters[0] == self.agent.token):

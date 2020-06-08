@@ -144,8 +144,8 @@ class NoAction():
         return {'agent': self.agent, 'message': f"{self.agent.last_action} not found check action's parameters"}
 
 class SyncActions(Mediator):
-    shared_memory = []
     def __init__(self, *actions: Action) -> None:
+        self.shared_memory = []
         self._expected_actions = 0
         self._actions = actions
         for act in self._actions:
