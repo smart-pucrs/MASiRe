@@ -76,6 +76,26 @@ var agentDroneIcon = L.icon({
     iconSize: [50, 55],
     iconAnchor: [25, 27]
 });
+var helicopterIcon = L.icon({
+    iconUrl: '/static/images/helicopter.png',
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
+});
+var collectorIcon = L.icon({
+    iconUrl: '/static/images/motorcycle.png',
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
+});
+var truckIcon = L.icon({
+    iconUrl: '/static/images/truck.png',
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
+});
+var analyserIcon = L.icon({
+    iconUrl: '/static/images/truck_connected.png',
+    iconSize: [50, 55],
+    iconAnchor: [25, 27]
+});
 
 var doctorIcon = L.icon({
     iconUrl: '/static/images/doctor.png',
@@ -403,19 +423,19 @@ function process_simulation_data(data) {
                     marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
                     break;
                 case 'analyser':
-                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
+                    marker = L.marker(agent_location_formated, { icon: analyserIcon });
                     break;
                 case 'collector':
-                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
+                    marker = L.marker(agent_location_formated, { icon: collectorIcon });
                     break;
                 case 'truck':
-                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
+                    marker = L.marker(agent_location_formated, { icon: truckIcon });
                     break;
                 case 'ugv':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
+                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
                     break;
                 case 'helicopter':
-                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
+                    marker = L.marker(agent_location_formated, { icon: helicopterIcon });
                     break;
                 default:
                     logError('Role not found.');
@@ -439,7 +459,7 @@ function process_simulation_data(data) {
                     marker = L.marker(agent_location_formated, { icon: photographerIcon });
                     break;
                 case 'vonlunteer':
-                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
+                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
                     break;
                 default:
                     logError('Profession not found.');
