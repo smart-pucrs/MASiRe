@@ -9,129 +9,15 @@ var btnLogId = '#btn-log';
 var btnPauseId = '#btn-pause';
 var entityBoxId = '#entity-box';
 var playing = true;
-var iconLength = [28, 35];
-var iconAncor = [17, 18];
 var currentEntity = {'type': null, 'id': null, 'active': false};
 
 var currentStep = 0;
 var currentMatch = 0;
 
-// Markers Icons
-var floodIcon = L.icon({
-    iconUrl: '/static/images/flood.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
+import icons from './util/icons';
 
-var photoIcon = L.icon({
-    iconUrl: '/static/images/photo.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon0 = L.icon({
-    iconUrl: '/static/images/victim_0.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon1 = L.icon({
-    iconUrl: '/static/images/victim_1.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon2 = L.icon({
-    iconUrl: '/static/images/victim_2.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon3 = L.icon({
-    iconUrl: '/static/images/victim_3.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var waterSampleIcon = L.icon({
-    iconUrl: '/static/images/water_sample.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var agentCarIcon = L.icon({
-    iconUrl: '/static/images/car.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentBoatIcon = L.icon({
-    iconUrl: '/static/images/boat.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentDroneIcon = L.icon({
-    iconUrl: '/static/images/drone.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var helicopterIcon = L.icon({
-    iconUrl: '/static/images/helicopter.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var collectorIcon = L.icon({
-    iconUrl: '/static/images/motorcycle.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var truckIcon = L.icon({
-    iconUrl: '/static/images/truck.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var analyserIcon = L.icon({
-    iconUrl: '/static/images/truck_connected.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var doctorIcon = L.icon({
-    iconUrl: '/static/images/doctor.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var nurseIcon = L.icon({
-    iconUrl: '/static/images/nurse.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var pharmacistIcon = L.icon({
-    iconUrl: '/static/images/pharmacist.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var photographerIcon = L.icon({
-    iconUrl: '/static/images/photographer.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var teacherIcon = L.icon({
-    iconUrl: '/static/images/teacher.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var centralIcon = L.icon({
-    iconUrl: '/static/images/central.png',
-    iconSize: [40, 50],
-    iconAnchor: [20, 25]
-});
+import ApiController from './services/Api';
+const api = new ApiController();
 
 /**
  * Handle error in Json Requests
@@ -143,28 +29,27 @@ function handleError(error){
 /**
  * Start draw the current match.
  */
-function startMatch(){
+async function startMatch() {
     currentStep = 0;
     currentMatch = 0;
 
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
-        }
-    }).then(result => {
-        fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-            if(response.status == 200){
-                response.json().then(data => setMapConfig(data));
-    
-                clearInterval(startMatchFunctionId);
-                updateStateFunctionId = setInterval(nextStep, stepSpeed);
-            }else{
-                response.json().then(error => handleError(error));
-            }
-        });
-    });
+    const response = await api.getMatchInfo($SCRIPT_ROOT);
+
+    if(response.success) {
+        setMatchInfo(response.data);
+
+        const results = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+
+        if (results.success) { 
+            setMapConfig(results.data);
+            clearInterval(startMatchFunctionId);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
+        } else { 
+            handleError(results.data) 
+        };  
+    } else {
+        handleError(response.data);
+    }
 }
 
 var pos_lat, pos_lon;
@@ -180,54 +65,27 @@ document.getElementById("mapid").addEventListener("contextmenu", function (event
 });
 
 /**
- * Get next step from the Flask and refresh the graphic interface.
+ * update step from the Flask and refresh the graphic interface.
  */
-function nextStep() {
-    currentStep++;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if (response.status == 200) {
-            response.json().then(data =>{
-                process_simulation_data(data);
-            });
-        } else {
-            response.json().then(error => handleError(error));
-            currentStep--;
-        }
-    });
-
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
-        }
-    });
-}
-
-
-/**
- * Get previous step from the Flask and refresh the graphic interface.
- */
-function prevStep() {
-    currentStep--;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if(response.status == 200){
-            response.json().then(data => {
-                process_simulation_data(data);
-            });
-        }else{
-            response.json().then(error => handleError(error));
-            currentStep++;
-        }
-    });
+async function updateStep(step = +1) {
+    currentStep += step;
     
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
-        }
-    });
+    const stepResponse = await api.getCurrentStep($SCRIPT_ROOT, currentMatch, currentStep);
+    
+    if (stepResponse.success) {
+        process_simulation_data(stepResponse.data);
+    } else {
+        handleError(stepResponse.data);
+        currentStep-= step;
+    }
+
+    const matchResponse = await api.getMatchInfo($SCRIPT_ROOT);
+
+    if(matchResponse.success) {
+        setMatchInfo(matchResponse.data);
+    } else {
+        handleError(matchResponse.data);
+    }
 }
 
 /**
@@ -250,11 +108,11 @@ function nextMatch() {
     currentStep = -1;
 
     fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-        if(response.status == 200){
+        if(response.status == 200) {
             response.json().then(data => setMapConfig(data));
 
-            nextStep();
-        }else{
+            updateStep();
+        } else {
             response.json().then(error => handleError(error));
             currentMatch--;
             currentStep = oldStepValue;
@@ -266,7 +124,7 @@ function nextMatch() {
  * Get previous match and refresh the graphic interface.
  */
 function prevMatch() {
-    if(currentMatch == 0){
+    if(currentMatch == 0) {
         logError("Already in the first step.");
         return;
     }
@@ -276,11 +134,11 @@ function prevMatch() {
     currentStep = -1;
 
     fetch($SCRIPT_ROOT + "/simulator/match/"+currentMatch+"/info/map").then(response => {
-        if(response.status == 200){
+        if(response.status == 200) {
             response.json().then(data => setMapConfig(data));
 
-            nextStep();
-        }else{
+            updateStep();
+        } else {
             response.json().then(error => console.log("asdas"));
             currentMatch++;
             currentStep = oldStepValue;
@@ -359,7 +217,7 @@ function process_simulation_data(data) {
         marker = null;
         switch (events[i]['type']) {
             case 'flood':
-                marker = L.marker(event_location_formatted, { icon: floodIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.floodIcon });
                 L.circle(event_location_formatted, {
                     color: '#504E0F',
                     fillColor: '#504E0F',
@@ -369,30 +227,28 @@ function process_simulation_data(data) {
                 break;
             case 'victim':
                 if (events[i]['lifetime'] == 0) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon3 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon3 });
                 }
                 else if (events[i]['lifetime'] < 5) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon2 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon2 });
                 } else if (events[i]['lifetime'] < 10) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon1 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon1 });
                 } else {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon0 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon0 });
                 }
                 break;
             case 'photo':
-                marker = L.marker(event_location_formatted, { icon: photoIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.photoIcon });
                 break;
             case 'water_sample':
-                marker = L.marker(event_location_formatted, { icon: waterSampleIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.waterSampleIcon });
                 break;
             default:
                 continue;
         }
-
-        if (events[i]['type'] == currentEntity['type']){
-            if (events[i]['identifier'] == currentEntity['id']){
-                setCurrentEntity(events[i]);
-            }
+        
+        if (events[i]['identifier'] == currentEntity['id'] && events[i]['type'] == currentEntity['type']) {
+            setCurrentEntity(events[i]);
         }
 
         marker.on('click', function (e) {setCurrentEntity(e.sourceTarget.info)});  
@@ -400,8 +256,11 @@ function process_simulation_data(data) {
         marker.addTo(variablesMarkerGroup);
     }
 
-    let actors = data['actors'];
+    const actors = data['actors'];
     $('#active-agents').text(actors.length);
+
+    const validRoles = ['drone', 'car', 'boat', 'analyser', 'collector', 'truck', 'ugv', 'helicopter'];
+    const validProfessions = ['doctor', 'nurse', 'pharmacist', 'teacher', 'photographer', 'volunteer'];
 
     for (let i=0; i < actors.length; i++) {
         type = actors[i]['type'];
@@ -411,66 +270,32 @@ function process_simulation_data(data) {
         agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
         marker = null;
-        if (type == 'agent'){
-            switch(actors[i]['role']){
-                case 'drone':
-                    marker = L.marker(agent_location_formated, { icon: agentDroneIcon });
-                    break;
-                case 'car':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
-                    break;
-                case 'boat':
-                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
-                    break;
-                case 'analyser':
-                    marker = L.marker(agent_location_formated, { icon: analyserIcon });
-                    break;
-                case 'collector':
-                    marker = L.marker(agent_location_formated, { icon: collectorIcon });
-                    break;
-                case 'truck':
-                    marker = L.marker(agent_location_formated, { icon: truckIcon });
-                    break;
-                case 'ugv':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
-                    break;
-                case 'helicopter':
-                    marker = L.marker(agent_location_formated, { icon: helicopterIcon });
-                    break;
-                default:
-                    logError('Role not found.');
-                    continue;
+        if (type === 'agent') {
+            if (validRoles.includes(type)) {
+                let role = actor[i]['role'].toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, firstLetter => firstLetter.toUpperCase()); // Deixa a primeira letra como maiuscula, para bater com o nome dos icones, facilita identificacao 
+
+                if (role === 'Ugv') role = 'Car';
+
+                marker = L.marker(agent_location_formated, { icon: icons[role]});
+            } else {
+                logError('Role not found.');
+                continue;
             }
-        }else{
-            switch(actors[i]['profession']){
-                case 'doctor':
-                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
-                    break;
-                case 'nurse':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
-                    break;
-                case 'pharmacist':
-                    marker = L.marker(agent_location_formated, { icon: pharmacistIcon });
-                    break;
-                case 'teacher':
-                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
-                    break;
-                case 'photographer':
-                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
-                    break;
-                case 'vonlunteer':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
-                    break;
-                default:
-                    logError('Profession not found.');
-                    continue;
+        } else {
+            if (validProfessions.includes(type)) { 
+                let profession = actors[i]['profession'];
+
+                if (profession === 'volunteer') profession = 'nurse';
+
+                marker = L.marker(agent_location_formated, { icon: icons[profession]});
+            } else {
+                logError('Profession not found.');
+                continue;
             }
         }
 
-        if (actors[i]['type'] == currentEntity['type']){
-            if (actors[i]['token'] == currentEntity['id']){
-                setCurrentEntity(actors[i]);
-            }
+        if (type === currentEntity['type'] && actors[i]['token'] === currentEntity['id']) {
+            setCurrentEntity(actors[i]);
         }
 
         marker.on('click', onClickMarkerHandler);  
@@ -478,10 +303,9 @@ function process_simulation_data(data) {
         marker.addTo(variablesMarkerGroup);
 
         printRoute(actors[i]['route']);
-
     }
 
-    if (!currentEntity['active']){
+    if (!currentEntity['active']) {
         $(entityBoxId).hide();
     }
 }
@@ -490,9 +314,8 @@ function process_simulation_data(data) {
  * Handler for all 'onClick' event from markers.
  */
 function onClickMarkerHandler(event){
-    if (event.sourceTarget.info != undefined){
+    if (event.sourceTarget.info != undefined) 
         setCurrentEntity(event.sourceTarget.info);
-    }
 }
 
 /**
@@ -501,9 +324,9 @@ function onClickMarkerHandler(event){
 function setCurrentEntity(info){
     $("#entity-list-info").empty();
 
-    if ($(entityBoxId).is(':hidden')){
+    if ($(entityBoxId).is(':hidden'))
         $(entityBoxId).show();
-    }
+
     let value;
 
     for (let key in info){
@@ -513,7 +336,7 @@ function setCurrentEntity(info){
                 break;
             case 'route':
                 value = []
-                for(let i=0; i<info[key].length; i++){
+                for(let i=0; i<info[key].length; i++) {
                     value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
                 }
                 break;
@@ -523,7 +346,7 @@ function setCurrentEntity(info){
             case 'social_assets':
                 value = [];
                 let location, temp;
-                for (let i=0; i<info[key].length; i++){
+                for (let i=0; i<info[key].length; i++) {
                     temp = info[key][i];
                     delete temp['location'];
                     value.push(temp);
@@ -541,9 +364,10 @@ function setCurrentEntity(info){
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
-    if (info['type'] == 'agent' || info['type'] == 'social_asset'){
+
+    if (info['type'] == 'agent' || info['type'] == 'social_asset') {
         currentEntity['id'] = info['token'];
-    }else{
+    } else {
         currentEntity['id'] = info['identifier'];
     }
 }
@@ -551,11 +375,9 @@ function setCurrentEntity(info){
 /**
  * Check whether the entered location is within the array given.
  */
-function containsLocation(locations, location){
+function containsLocation(locations, location) {
     for (let i=0; i < locations.length; i++){
-        if (locations[i]['lat'] == location['lat']){
-            if (locations[i]['lon'] == location['lon']) return true;
-        }
+        if (locations[i]['lon'] == location['lon'] && locations[i]['lat'] == location['lat']) return true;
     }
 
     return false;
@@ -566,7 +388,7 @@ function containsLocation(locations, location){
  */
 function format_location(event_location, old_locations){
     let new_location = event_location;
-    let alfa = 0.0001;
+    const alfa = 0.0001;
 
     while (containsLocation(old_locations, new_location)){
         new_location['lat'] += alfa;
@@ -630,7 +452,7 @@ function pause() {
     } else {
         logNormal('Playing.');
 
-        updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        updateStateFunctionId = setInterval(updateStep, stepSpeed);
         $(btnPauseId).text('Pause');
         playing = true;
     }
@@ -660,9 +482,9 @@ $(function () {
     $('#speed input[type=radio]').change(function(){
         stepSpeed = parseInt(this.value);
         
-        if (playing){
+        if (playing) {
             clearInterval(updateStateFunctionId);
-            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
         }
 
         logNormal("Step speed change to " + $(this).val() + " ms");
