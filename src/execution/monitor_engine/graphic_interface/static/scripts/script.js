@@ -16,7 +16,7 @@ var currentEntity = {'type': null, 'id': null, 'active': false};
 var currentStep = 0;
 var currentMatch = 0;
 
-import ApiController from './services/ApiController';
+import ApiController from './services/ApiController.js';
 const api = new ApiController();
 
 // Markers Icons
@@ -150,37 +150,37 @@ async function startMatch(){
     currentStep = 0;
     currentMatch = 0;
 
-    try {
-        const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
-        setMatchInfo(matchInfo);
+    // try {
+    //     const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+    //     setMatchInfo(matchInfo);
 
-        const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
-        setMapConfig(mapInfo);
+    //     const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+    //     setMapConfig(mapInfo);
 
-        clearInterval(startMatchFunctionId);
-        updateStateFunctionId = setInterval(nextStep, stepSpeed);
-    } catch (err) {
-        handleError(err);
-    }
+    //     clearInterval(startMatchFunctionId);
+    //     updateStateFunctionId = setInterval(nextStep, stepSpeed);
+    // } catch (err) {
+    //     handleError('start match '+err);
+    // }
 
-    // fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-    //     if(response.status == 200){
-    //         response.json().then(data => setMatchInfo(data));
-    //     }else{
-    //         response.json().then(error => handleError(error));
-    //     }
-    // }).then(result => {
-    //     fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-    //         if(response.status == 200){
-    //             response.json().then(data => setMapConfig(data));
+    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
+        if(response.status == 200){
+            response.json().then(data => setMatchInfo(data));
+        }else{
+            response.json().then(error => handleError(error));
+        }
+    }).then(result => {
+        fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
+            if(response.status == 200){
+                response.json().then(data => setMapConfig(data));
     
-    //             clearInterval(startMatchFunctionId);
-    //             updateStateFunctionId = setInterval(nextStep, stepSpeed);
-    //         }else{
-    //             response.json().then(error => handleError(error));
-    //         }
-    //     });
-    // });
+                clearInterval(startMatchFunctionId);
+                updateStateFunctionId = setInterval(nextStep, stepSpeed);
+            }else{
+                response.json().then(error => handleError(error));
+            }
+        });
+    });
 }
 
 var pos_lat, pos_lon;
@@ -206,7 +206,7 @@ function nextStep() {
                 process_simulation_data(data);
             });
         } else {
-            response.json().then(error => handleError(error));
+            response.json().then(error => handleError('next step '+error));
             currentStep--;
         }
     });
@@ -215,7 +215,7 @@ function nextStep() {
         if(response.status == 200){
             response.json().then(data => setMatchInfo(data));
         }else{
-            response.json().then(error => handleError(error));
+            response.json().then(error => handleError('next step 2 '+error));
         }
     });
 }
@@ -232,7 +232,7 @@ function prevStep() {
                 process_simulation_data(data);
             });
         }else{
-            response.json().then(error => handleError(error));
+            response.json().then(error => handleError('prev step '+error));
             currentStep++;
         }
     });
@@ -241,7 +241,7 @@ function prevStep() {
         if(response.status == 200){
             response.json().then(data => setMatchInfo(data));
         }else{
-            response.json().then(error => handleError(error));
+            response.json().then(error => handleError('prev step 2 '+error));
         }
     });
 }
@@ -270,7 +270,7 @@ function nextMatch() {
 
             nextStep();
         }else{
-            response.json().then(error => handleError(error));
+            response.json().then(error => handleError('next match '+error));
             currentMatch--;
             currentStep = oldStepValue;
         }
@@ -601,7 +601,7 @@ function init() {
             response.json().then(data => setSimulationInfo(data));
             startMatchFunctionId = setInterval(startMatch, stepSpeed);
         }else{
-            response.json().then(error => handleError(error.message));
+            response.json().then(error => handleError('init '+error.message));
         }
     });
 
@@ -709,5 +709,5 @@ function logCritical(message) {
 $(entityBoxId).hide();
 
 window.onload = function () {
-    this.init();
+    init();
 };
