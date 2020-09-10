@@ -357,6 +357,9 @@ function setMapConfig(config) {
  */
 function process_simulation_data(data) {
     logNormal('Processing simulation data');
+    logNormal('Quantidade de agentes: ' + data['actors'].length);
+    logNormal(data);
+    console.log(data);
 
     variablesMarkerGroup.clearLayers();
     currentEntity['active'] = false;
@@ -416,10 +419,12 @@ function process_simulation_data(data) {
     }
 
     let actors = data['actors'];
+    console.log("Agentes : " + actors);
     $('#active-agents').text(actors.length);
 
     for (let i=0; i < actors.length; i++) {
         type = actors[i]['type'];
+        console.log("Tipo do agente: " + type);
 
         agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
