@@ -368,13 +368,13 @@ function process_simulation_data(data) {
     let old_locations = [];
     let marker;
     for (let i=0; i < events.length; i++) {
-        event_location = events[i]['location'];
+        let event_location = events[i]['location'];
 
         event_location = format_location(event_location, old_locations);
         old_locations.push(event_location);
-        event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
+        let event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-        marker = null;
+        let marker = null;
         switch (events[i]['type']) {
             case 'flood':
                 marker = L.marker(event_location_formatted, { icon: floodIcon });
@@ -423,14 +423,14 @@ function process_simulation_data(data) {
     $('#active-agents').text(actors.length);
 
     for (let i=0; i < actors.length; i++) {
-        type = actors[i]['type'];
+        let type = actors[i]['type'];
         console.log("Tipo do agente: " + type);
 
-        agent_location = format_location(actors[i]['location'], old_locations);
+        let agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
-        agent_location_formated = [agent_location['lat'], agent_location['lon']];
+        let agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
-        marker = null;
+        let marker = null;
         if (type == 'agent'){
             switch(actors[i]['role']){
                 case 'drone':
