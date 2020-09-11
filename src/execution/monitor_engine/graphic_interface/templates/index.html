@@ -1,9 +1,6 @@
 <html>
-
 <head>
-
     <title>Disaster Simulator</title>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -75,9 +72,9 @@
         
                 <br>
                 <div id="simulation-controller">
-                    <button id="btn-prev" onclick="prevStep()"> << </button>
+                    <button id="btn-prev" onclick="updateStep(-1)"> << </button>
                     <button id="btn-pause" onclick="pause()">Pause</button>
-                    <button id="btn-next" onclick="nextStep()"> >> </button>
+                    <button id="btn-next" onclick="updateStep()"> >> </button>
                 </div>
                 <br>
 
@@ -93,8 +90,8 @@
 
                 <br>
 	            <div id="matchs">
-	                <button class="btn-match" id="btn-previous-match" onclick="prevMatch()">Previous match</button>
-	                <button class="btn-match" id="btn-next-match" onclick="nextMatch()">Next match</button>
+	                <button class="btn-match" id="btn-previous-match" onclick="updateMatch(-1)">Previous match</button>
+	                <button class="btn-match" id="btn-next-match" onclick="updateMatch()">Next match</button>
 	            </div>
 
                 <div id="log-box">

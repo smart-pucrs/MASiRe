@@ -150,37 +150,23 @@ async function startMatch(){
     currentStep = 0;
     currentMatch = 0;
 
-    // try {
-    //     const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
-    //     setMatchInfo(matchInfo);
+    try {
+        const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+        setMatchInfo(matchInfo);
 
-    //     const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
-    //     setMapConfig(mapInfo);
+        try {
+            const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+            setMapConfig(mapInfo);
 
-    //     clearInterval(startMatchFunctionId);
-    //     updateStateFunctionId = setInterval(nextStep, stepSpeed);
-    // } catch (err) {
-    //     handleError('start match '+err);
-    // }
-
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
+            clearInterval(startMatchFunctionId);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
+        } catch (err) {
+            // FIX: Always shows invalid LatLng error before match starts
+            handleError(`[START MATCH | MAP INFO]: ${err}`);
         }
-    }).then(result => {
-        fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-            if(response.status == 200){
-                response.json().then(data => setMapConfig(data));
-    
-                clearInterval(startMatchFunctionId);
-                updateStateFunctionId = setInterval(nextStep, stepSpeed);
-            }else{
-                response.json().then(error => handleError(error));
-            }
-        });
-    });
+    } catch (err) {
+        handleError(`[START MATCH | MATCH INFO]: ${err}`);
+    }
 }
 
 var pos_lat, pos_lon;
@@ -197,53 +183,28 @@ document.getElementById("mapid").addEventListener("contextmenu", function (event
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
+ * @params: stepValue -> increment or decrement the step, default is 1, to prevStep use -1
  */
-function nextStep() {
-    currentStep++;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if (response.status == 200) {
-            response.json().then(data =>{
-                process_simulation_data(data);
-            });
-        } else {
-            response.json().then(error => handleError('next step '+error));
-            currentStep--;
-        }
-    });
+async function updateStep(stepValue = 1) {
+    currentStep += stepValue;
 
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError('next step 2 '+error));
-        }
-    });
-}
+    try {
+        const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
+        process_simulation_data(simulationData);
 
-
-/**
- * Get previous step from the Flask and refresh the graphic interface.
- */
-function prevStep() {
-    currentStep--;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if(response.status == 200){
-            response.json().then(data => {
-                process_simulation_data(data);
-            });
-        }else{
-            response.json().then(error => handleError('prev step '+error));
-            currentStep++;
+        try {
+            const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+            setMatchInfo(matchInfo);
+        } catch (err) {
+            handleError(`[UPDATE STEP | MATCH INFO]: ${err}`)
         }
-    });
-    
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError('prev step 2 '+error));
+    } catch (err) {
+        // Api always throws a TypeError, ignore it and handle other errors
+        if (!(err instanceof TypeError)) {
+            handleError(`[UPDATE STEP | SIMULATION DATA]: ${err}`);
+            currentStep -= stepValue;
         }
-    });
+    }
 }
 
 /**
@@ -257,50 +218,29 @@ function handle_new_match(data) {
 
 /**
  * Get next match and refresh the graphic interface.
+ * @params: matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
-function nextMatch() {
-    currentMatch++;
-
-    var oldStepValue = currentStep;
-    currentStep = -1;
-
-    fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMapConfig(data));
-
-            nextStep();
-        }else{
-            response.json().then(error => handleError('next match '+error));
-            currentMatch--;
-            currentStep = oldStepValue;
-        }
-    });
-}
-
-/**
- * Get previous match and refresh the graphic interface.
- */
-function prevMatch() {
-    if(currentMatch == 0){
+async function updateMatch(matchValue = 1) {
+    if(currentMatch === 0 && matchValue === -1){
         logError("Already in the first step.");
         return;
     }
 
-    currentMatch--;
-    var oldStepValue = currentStep;
+    currentMatch += matchValue;
+    
+    const oldStepValue = currentStep;
     currentStep = -1;
 
-    fetch($SCRIPT_ROOT + "/simulator/match/"+currentMatch+"/info/map").then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMapConfig(data));
+    try {
+        const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+        setMapConfig(mapInfo);
 
-            nextStep();
-        }else{
-            response.json().then(error => console.log("asdas"));
-            currentMatch++;
-            currentStep = oldStepValue;
-        }
-    });
+        updateStep();
+    } catch (err) {
+        handleError(`[NEXT MATCH | MAP INFO]: ${err}`);
+        currentMatch -= matchValue;
+        currentStep = oldStepValue;
+    }
 }
 
 /**
@@ -357,9 +297,6 @@ function setMapConfig(config) {
  */
 function process_simulation_data(data) {
     logNormal('Processing simulation data');
-    logNormal('Quantidade de agentes: ' + data['actors'].length);
-    logNormal(data);
-    console.log(data);
 
     variablesMarkerGroup.clearLayers();
     currentEntity['active'] = false;
@@ -367,7 +304,7 @@ function process_simulation_data(data) {
     let events = data['environment']['events'];
     let old_locations = [];
     let marker;
-    for (let i=0; i < events.length; i++) {
+    for (let i = 0; i < events.length; i++) {
         let event_location = events[i]['location'];
 
         event_location = format_location(event_location, old_locations);
@@ -419,10 +356,9 @@ function process_simulation_data(data) {
     }
 
     let actors = data['actors'];
-    console.log("Agentes : " + actors);
     $('#active-agents').text(actors.length);
 
-    for (let i=0; i < actors.length; i++) {
+    for (let i = 0; i < actors.length; i++) {
         let type = actors[i]['type'];
         console.log("Tipo do agente: " + type);
 
@@ -431,7 +367,7 @@ function process_simulation_data(data) {
         let agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
         let marker = null;
-        if (type == 'agent'){
+        if (type == 'agent') {
             switch(actors[i]['role']){
                 case 'drone':
                     marker = L.marker(agent_location_formated, { icon: agentDroneIcon });
@@ -498,7 +434,6 @@ function process_simulation_data(data) {
         marker.addTo(variablesMarkerGroup);
 
         printRoute(actors[i]['route']);
-
     }
 
     if (!currentEntity['active']){
@@ -650,7 +585,7 @@ function pause() {
     } else {
         logNormal('Playing.');
 
-        updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        updateStateFunctionId = setInterval(updateStep, stepSpeed);
         $(btnPauseId).text('Pause');
         playing = true;
     }
@@ -682,7 +617,7 @@ $(function () {
         
         if (playing){
             clearInterval(updateStateFunctionId);
-            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
         }
 
         logNormal("Step speed change to " + $(this).val() + " ms");

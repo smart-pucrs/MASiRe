@@ -1,25 +1,26 @@
 class ApiController{
     async fetchData(url){
         const response = await fetch(url);
+        
         return await response.json();
     }
 
     async getMatchInfo(apiUrl){
-        const url = '${apiUrl}/simulator/info/matches';
-        const data = await this.fetchData(url);
-        return data
+        const url = `${apiUrl}/simulator/info/matches`;
+
+        return await this.fetchData(url);
     }
 
     async getMapInfo(apiUrl, currentMatch){
-        const url = '${apiUrl}/simulator/match/${currentMatch}/info/map';
-        const data = await this.fetchData(url);
-        return data
+        const url = `${apiUrl}/simulator/match/${currentMatch}/info/map`;
+
+        return await this.fetchData(url);
     }
 
-    async getCurrentStep(apiUrl, currentMatch, currentStep){
-        const url = '${apiUrl}/simulator/match/${currentMatch}/step/${currentStep}';
-        const data = await this.fetchData(url);
-        return data
+    async getSimulationData(apiUrl, currentMatch, currentStep){
+        const url = `${apiUrl}/simulator/match/${currentMatch}/step/${currentStep}`;
+        
+        return await this.fetchData(url);
     }
 }
-export default ApiController
+export default ApiController;
