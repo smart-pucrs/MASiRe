@@ -183,7 +183,7 @@ document.getElementById("mapid").addEventListener("contextmenu", function (event
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
- * @params: stepValue -> increment or decrement the step, default is 1, to prevStep use -1
+ * @params stepValue -> increment or decrement the step, default (nextStep) is 1, to prevStep use -1
  */
 async function updateStep(stepValue = 1) {
     currentStep += stepValue;
@@ -217,8 +217,8 @@ function handle_new_match(data) {
 }
 
 /**
- * Get next match and refresh the graphic interface.
- * @params: matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
+ * Update Match and refresh the graphic interface.
+ * @params matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
     if(currentMatch === 0 && matchValue === -1){
