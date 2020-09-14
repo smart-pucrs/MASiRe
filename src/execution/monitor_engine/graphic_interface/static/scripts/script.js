@@ -1,140 +1,32 @@
+import ApiController from './services/ApiController.js';
+import icons from './utils/icons.js';
+
 var mymap = null;
 var variablesMarkerGroup = null;
 var constantsMarkerGroup = null;
 var startMatchFunctionId = null;
 var updateStateFunctionId = null;
 var stepSpeed = 1000;
-var logId = '#log';
-var btnLogId = '#btn-log';
-var btnPauseId = '#btn-pause';
-var entityBoxId = '#entity-box';
 var playing = true;
-var iconLength = [28, 35];
-var iconAncor = [17, 18];
-var currentEntity = {'type': null, 'id': null, 'active': false};
-
 var currentStep = 0;
 var currentMatch = 0;
+var currentEntity = {
+    'type': null, 
+    'id': null, 
+    'active': false
+};
 
-import ApiController from './services/ApiController.js';
 const api = new ApiController();
-
-// Markers Icons
-var floodIcon = L.icon({
-    iconUrl: '/static/images/flood.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var photoIcon = L.icon({
-    iconUrl: '/static/images/photo.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon0 = L.icon({
-    iconUrl: '/static/images/victim_0.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon1 = L.icon({
-    iconUrl: '/static/images/victim_1.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon2 = L.icon({
-    iconUrl: '/static/images/victim_2.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon3 = L.icon({
-    iconUrl: '/static/images/victim_3.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var waterSampleIcon = L.icon({
-    iconUrl: '/static/images/water_sample.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var agentCarIcon = L.icon({
-    iconUrl: '/static/images/car.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentBoatIcon = L.icon({
-    iconUrl: '/static/images/boat.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentDroneIcon = L.icon({
-    iconUrl: '/static/images/drone.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var helicopterIcon = L.icon({
-    iconUrl: '/static/images/helicopter.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var collectorIcon = L.icon({
-    iconUrl: '/static/images/motorcycle.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var truckIcon = L.icon({
-    iconUrl: '/static/images/truck.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var analyserIcon = L.icon({
-    iconUrl: '/static/images/truck_connected.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var doctorIcon = L.icon({
-    iconUrl: '/static/images/doctor.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var nurseIcon = L.icon({
-    iconUrl: '/static/images/nurse.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var pharmacistIcon = L.icon({
-    iconUrl: '/static/images/pharmacist.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var photographerIcon = L.icon({
-    iconUrl: '/static/images/photographer.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var teacherIcon = L.icon({
-    iconUrl: '/static/images/teacher.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var centralIcon = L.icon({
-    iconUrl: '/static/images/central.png',
-    iconSize: [40, 50],
-    iconAnchor: [20, 25]
-});
+const logId = '#log';
+const btnLogId = '#btn-log';
+const btnPauseId = '#btn-pause';
+const entityBoxId = '#entity-box';
+const urls = {
+    matchInfo: `${$SCRIPT_ROOT}/simulator/info/matches`,
+    mapInfo: `${$SCRIPT_ROOT}/simulator/match/${currentMatch}/info/map`,
+    simulationData: `${$SCRIPT_ROOT}/simulator/match/${currentMatch}/step/${currentStep}`,
+    simulationConfig: `${$SCRIPT_ROOT}/simulator/info/config`,
+}
 
 /**
  * Handle error in Json Requests
@@ -146,16 +38,16 @@ function handleError(error){
 /**
  * Start draw the current match.
  */
-async function startMatch(){
+async function startMatch() {
     currentStep = 0;
     currentMatch = 0;
 
     try {
-        const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+        const matchInfo = await api.fetchData(urls.matchInfo);
         setMatchInfo(matchInfo);
 
         try {
-            const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+            const mapInfo = await api.fetchData(urls.mapInfo);
             setMapConfig(mapInfo);
 
             clearInterval(startMatchFunctionId);
@@ -183,17 +75,17 @@ document.getElementById("mapid").addEventListener("contextmenu", function (event
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
- * @params stepValue -> increment or decrement the step, default (nextStep) is 1, to prevStep use -1
+ * @params stepValue -> increment or decrement the step, default (updateStep) is +1, to prevStep use -1
  */
-async function updateStep(stepValue = 1) {
+async function updateStep(stepValue = +1) {
     currentStep += stepValue;
 
     try {
-        const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
+        const simulationData = await api.fetchData(urls.simulationData);
         process_simulation_data(simulationData);
 
         try {
-            const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+            const matchInfo = await api.fetchData(urls.matchInfo);
             setMatchInfo(matchInfo);
         } catch (err) {
             handleError(`[UPDATE STEP | MATCH INFO]: ${err}`)
@@ -221,10 +113,8 @@ function handle_new_match(data) {
  * @params matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
-    if(currentMatch === 0 && matchValue === -1){
-        logError("Already in the first step.");
-        return;
-    }
+    if(currentMatch === 0 && matchValue === -1) 
+        return logError("Already in the first step.");
 
     currentMatch += matchValue;
     
@@ -232,7 +122,7 @@ async function updateMatch(matchValue = 1) {
     currentStep = -1;
 
     try {
-        const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+        const mapInfo = await api.fetchData(urls.mapInfo);
         setMapConfig(mapInfo);
 
         updateStep();
@@ -255,9 +145,8 @@ function setMatchInfo(match_info) {
  * Set information in Map fields.
  */
 function setMapConfig(config) {
-    if (mymap != null) {
+    if (mymap !== null) 
         mymap.remove();
-    }
 
     mymap = L.map('mapid');
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -276,13 +165,12 @@ function setMapConfig(config) {
 
     mymap.setView([lat, lon], 17);
 
-    L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
+    L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
     let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
     L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
         console.info(e);
     }).addTo(constantsMarkerGroup);
-    console.log(config);
 
     mymap.addEventListener('mousemove', function(ev) {
         pos_lat = ev.latlng.lat;
@@ -304,6 +192,7 @@ function process_simulation_data(data) {
     let events = data['environment']['events'];
     let old_locations = [];
     let marker;
+
     for (let i = 0; i < events.length; i++) {
         let event_location = events[i]['location'];
 
@@ -314,7 +203,7 @@ function process_simulation_data(data) {
         let marker = null;
         switch (events[i]['type']) {
             case 'flood':
-                marker = L.marker(event_location_formatted, { icon: floodIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.floodIcon });
                 L.circle(event_location_formatted, {
                     color: '#504E0F',
                     fillColor: '#504E0F',
@@ -323,34 +212,31 @@ function process_simulation_data(data) {
                 }).addTo(variablesMarkerGroup);
                 break;
             case 'victim':
-                if (events[i]['lifetime'] == 0) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon3 });
+                if (events[i]['lifetime'] === 0) {
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon3 });
                 }
                 else if (events[i]['lifetime'] < 5) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon2 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon2 });
                 } else if (events[i]['lifetime'] < 10) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon1 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon1 });
                 } else {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon0 });
+                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon0 });
                 }
                 break;
             case 'photo':
-                marker = L.marker(event_location_formatted, { icon: photoIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.photoIcon });
                 break;
             case 'water_sample':
-                marker = L.marker(event_location_formatted, { icon: waterSampleIcon });
+                marker = L.marker(event_location_formatted, { icon: icons.waterSampleIcon });
                 break;
             default:
                 continue;
         }
 
-        if (events[i]['type'] == currentEntity['type']){
-            if (events[i]['identifier'] == currentEntity['id']){
-                setCurrentEntity(events[i]);
-            }
-        }
+        if (events[i]['type'] === currentEntity['type'] && events[i]['identifier'] == currentEntity['id'])
+            setCurrentEntity(events[i]);
 
-        marker.on('click', function (e) {setCurrentEntity(e.sourceTarget.info)});  
+        marker.on('click', function (e) { setCurrentEntity(e.sourceTarget.info) });  
         marker.info = events[i];
         marker.addTo(variablesMarkerGroup);
     }
@@ -360,7 +246,6 @@ function process_simulation_data(data) {
 
     for (let i = 0; i < actors.length; i++) {
         let type = actors[i]['type'];
-        console.log("Tipo do agente: " + type);
 
         let agent_location = format_location(actors[i]['location'], old_locations);
         old_locations.push(agent_location);
@@ -368,54 +253,54 @@ function process_simulation_data(data) {
 
         let marker = null;
         if (type == 'agent') {
-            switch(actors[i]['role']){
+            switch(actors[i]['role']) {
                 case 'drone':
-                    marker = L.marker(agent_location_formated, { icon: agentDroneIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.agentDroneIcon });
                     break;
                 case 'car':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.agentCarIcon });
                     break;
                 case 'boat':
-                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.agentBoatIcon });
                     break;
                 case 'analyser':
-                    marker = L.marker(agent_location_formated, { icon: analyserIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.analyserIcon });
                     break;
                 case 'collector':
-                    marker = L.marker(agent_location_formated, { icon: collectorIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.collectorIcon });
                     break;
                 case 'truck':
-                    marker = L.marker(agent_location_formated, { icon: truckIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.truckIcon });
                     break;
                 case 'ugv':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.agentCarIcon });
                     break;
                 case 'helicopter':
-                    marker = L.marker(agent_location_formated, { icon: helicopterIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.helicopterIcon });
                     break;
                 default:
                     logError('Role not found.');
                     continue;
             }
-        }else{
+        } else {
             switch(actors[i]['profession']){
                 case 'doctor':
-                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.doctorIcon });
                     break;
                 case 'nurse':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.nurseIcon });
                     break;
                 case 'pharmacist':
-                    marker = L.marker(agent_location_formated, { icon: pharmacistIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.pharmacistIcon });
                     break;
                 case 'teacher':
-                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.teacherIcon });
                     break;
                 case 'photographer':
-                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.photographerIcon });
                     break;
                 case 'vonlunteer':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
+                    marker = L.marker(agent_location_formated, { icon: icons.nurseIcon });
                     break;
                 default:
                     logError('Profession not found.');
@@ -423,10 +308,8 @@ function process_simulation_data(data) {
             }
         }
 
-        if (actors[i]['type'] == currentEntity['type']){
-            if (actors[i]['token'] == currentEntity['id']){
-                setCurrentEntity(actors[i]);
-            }
+        if (actors[i]['type'] === currentEntity['type'] && actors[i]['token'] === currentEntity['id']) {
+            setCurrentEntity(actors[i]);
         }
 
         marker.on('click', onClickMarkerHandler);  
@@ -436,18 +319,16 @@ function process_simulation_data(data) {
         printRoute(actors[i]['route']);
     }
 
-    if (!currentEntity['active']){
+    if (!currentEntity['active'])
         $(entityBoxId).hide();
-    }
 }
 
 /**
  * Handler for all 'onClick' event from markers.
  */
 function onClickMarkerHandler(event){
-    if (event.sourceTarget.info != undefined){
+    if (event.sourceTarget.info != undefined)
         setCurrentEntity(event.sourceTarget.info);
-    }
 }
 
 /**
@@ -456,12 +337,12 @@ function onClickMarkerHandler(event){
 function setCurrentEntity(info){
     $("#entity-list-info").empty();
 
-    if ($(entityBoxId).is(':hidden')){
+    if ($(entityBoxId).is(':hidden'))
         $(entityBoxId).show();
-    }
+
     let value;
 
-    for (let key in info){
+    for (let key in info) {
         switch (key) {
             case 'location':
                 value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
@@ -496,9 +377,9 @@ function setCurrentEntity(info){
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
-    if (info['type'] == 'agent' || info['type'] == 'social_asset'){
+    if (info['type'] == 'agent' || info['type'] == 'social_asset') {
         currentEntity['id'] = info['token'];
-    }else{
+    } else {
         currentEntity['id'] = info['identifier'];
     }
 }
@@ -506,9 +387,9 @@ function setCurrentEntity(info){
 /**
  * Check whether the entered location is within the array given.
  */
-function containsLocation(locations, location){
-    for (let i=0; i < locations.length; i++){
-        if (locations[i]['lat'] == location['lat']){
+function containsLocation(locations, location) {
+    for (let i=0; i < locations.length; i++) {
+        if (locations[i]['lat'] == location['lat']) {
             if (locations[i]['lon'] == location['lon']) return true;
         }
     }
@@ -519,9 +400,9 @@ function containsLocation(locations, location){
 /**
  * Format the location incrementing the lat coordination by 1/10000.
  */
-function format_location(event_location, old_locations){
+function format_location(event_location, old_locations) {
     let new_location = event_location;
-    let alfa = 0.0001;
+    const alfa = 0.0001;
 
     while (containsLocation(old_locations, new_location)){
         new_location['lat'] += alfa;
@@ -533,25 +414,24 @@ function format_location(event_location, old_locations){
 /**
  * Initialize the simulator info fields.
  */
-function init() {
+async function init() {
     logNormal('Initializing variables.');
 
-    fetch($SCRIPT_ROOT + '/simulator/info/config').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setSimulationInfo(data));
-            startMatchFunctionId = setInterval(startMatch, stepSpeed);
-        }else{
-            response.json().then(error => handleError('init '+error.message));
-        }
-    });
+    try {
+        const simulationInfo = await api.fetchData(urls.simulationConfig);
+        setSimulationInfo(simulationInfo);
 
+        startMatchFunctionId = setInterval(startMatch, stepSpeed);
+    } catch (err) {
+        handleError(`[INIT]: ${err}`);
+    }
 }
 
 /**
  * Draw the route given with red circles.
  */
 function printRoute(route){
-    for (let i=0; i<route.length; i++){
+    for (let i=0; i<route.length; i++) {
         L.circle([route[i]['lat'], route[i]['lon']], {
                 color: 'red',
                 radius: 10
@@ -612,15 +492,15 @@ function setLog() {
  * Event handler for radio box field.
  */
 $(function () {
-    $('#speed input[type=radio]').change(function(){
+    $('#speed input[type=radio]').change(function() {
         stepSpeed = parseInt(this.value);
         
-        if (playing){
+        if (playing) {
             clearInterval(updateStateFunctionId);
             updateStateFunctionId = setInterval(updateStep, stepSpeed);
         }
 
-        logNormal("Step speed change to " + $(this).val() + " ms");
+        logNormal(`Step speed changed to ${$(this).val()} ms`);
   
     })
 })
@@ -635,15 +515,15 @@ function log(tag, message) {
 }
 
 function logNormal(message) {
-    log('NORMAL', message);
+    log(`NORMAL: ${message}`);
 }
 
 function logError(message) {
-    log('ERROR', message);
+    log(`ERROR: ${message}`);
 }
 
 function logCritical(message) {
-    log('CRITICAL', message);
+    log(`CRITICAL: ${message}`);
 }
 
 $(entityBoxId).hide();
