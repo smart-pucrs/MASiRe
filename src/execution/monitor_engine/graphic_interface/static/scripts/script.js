@@ -515,15 +515,15 @@ function log(tag, message) {
 }
 
 function logNormal(message) {
-    log(`NORMAL: ${message}`);
+    log('NORMAL', message);
 }
 
 function logError(message) {
-    log(`ERROR: ${message}`);
+    log('ERROR', message);
 }
 
 function logCritical(message) {
-    log(`CRITICAL: ${message}`);
+    log('CRITICAL', message);
 }
 
 $(entityBoxId).hide();
