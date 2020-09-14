@@ -349,9 +349,8 @@ function setCurrentEntity(info){
                 break;
             case 'route':
                 value = []
-                for(let i=0; i<info[key].length; i++){
+                for(let i=0; i<info[key].length; i++)
                     value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
-                }
                 break;
             case 'destination_distance':
                 value = (info[key] * 100).toFixed(2).toString() + ' km';
@@ -359,7 +358,7 @@ function setCurrentEntity(info){
             case 'social_assets':
                 value = [];
                 let location, temp;
-                for (let i=0; i<info[key].length; i++){
+                for (let i=0; i<info[key].length; i++) {
                     temp = info[key][i];
                     delete temp['location'];
                     value.push(temp);
@@ -390,7 +389,8 @@ function setCurrentEntity(info){
 function containsLocation(locations, location) {
     for (let i=0; i < locations.length; i++) {
         if (locations[i]['lat'] == location['lat']) {
-            if (locations[i]['lon'] == location['lon']) return true;
+            if (locations[i]['lon'] == location['lon']) 
+                return true;
         }
     }
 
@@ -430,7 +430,7 @@ async function init() {
 /**
  * Draw the route given with red circles.
  */
-function printRoute(route){
+function printRoute(route) {
     for (let i=0; i<route.length; i++) {
         L.circle([route[i]['lat'], route[i]['lon']], {
                 color: 'red',
