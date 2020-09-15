@@ -21,12 +21,6 @@ const logId = '#log';
 const btnLogId = '#btn-log';
 const btnPauseId = '#btn-pause';
 const entityBoxId = '#entity-box';
-const urls = {
-    matchInfo: `${$SCRIPT_ROOT}/simulator/info/matches`,
-    mapInfo: `${$SCRIPT_ROOT}/simulator/match/${currentMatch}/info/map`,
-    simulationData: `${$SCRIPT_ROOT}/simulator/match/${currentMatch}/step/${currentStep}`,
-    simulationConfig: `${$SCRIPT_ROOT}/simulator/info/config`,
-}
 
 /**
  * Handle error in Json Requests
@@ -43,17 +37,18 @@ async function startMatch() {
     currentMatch = 0;
 
     try {
-        const matchInfo = await api.fetchData(urls.matchInfo);
+        const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
         setMatchInfo(matchInfo);
 
         try {
-            const mapInfo = await api.fetchData(urls.mapInfo);
+            const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
             setMapConfig(mapInfo);
 
             clearInterval(startMatchFunctionId);
             updateStateFunctionId = setInterval(updateStep, stepSpeed);
         } catch (err) {
             // FIX: Always shows invalid LatLng error before match starts
+            console.log(err.toString());
             handleError(`[START MATCH | MAP INFO]: ${err}`);
         }
     } catch (err) {
@@ -75,17 +70,17 @@ document.getElementById("mapid").addEventListener("contextmenu", function (event
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
- * @params stepValue -> increment or decrement the step, default (updateStep) is +1, to prevStep use -1
+ * @params stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
  */
-async function updateStep(stepValue = +1) {
+async function updateStep(stepValue = 1) {
     currentStep += stepValue;
 
     try {
-        const simulationData = await api.fetchData(urls.simulationData);
+        const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
         process_simulation_data(simulationData);
 
         try {
-            const matchInfo = await api.fetchData(urls.matchInfo);
+            const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
             setMatchInfo(matchInfo);
         } catch (err) {
             handleError(`[UPDATE STEP | MATCH INFO]: ${err}`)
@@ -122,7 +117,7 @@ async function updateMatch(matchValue = 1) {
     currentStep = -1;
 
     try {
-        const mapInfo = await api.fetchData(urls.mapInfo);
+        const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
         setMapConfig(mapInfo);
 
         updateStep();
@@ -418,7 +413,7 @@ async function init() {
     logNormal('Initializing variables.');
 
     try {
-        const simulationInfo = await api.fetchData(urls.simulationConfig);
+        const simulationInfo = await api.getSimulationConfig($SCRIPT_ROOT);
         setSimulationInfo(simulationInfo);
 
         startMatchFunctionId = setInterval(startMatch, stepSpeed);
