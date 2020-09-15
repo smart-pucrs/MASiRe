@@ -1,16 +1,16 @@
 import ApiController from './services/ApiController.js';
 import icons from './utils/icons.js';
 
-var mymap = null;
-var variablesMarkerGroup = null;
-var constantsMarkerGroup = null;
-var startMatchFunctionId = null;
-var updateStateFunctionId = null;
-var stepSpeed = 1000;
-var playing = true;
-var currentStep = 0;
-var currentMatch = 0;
-var currentEntity = {
+let mymap = null;
+let variablesMarkerGroup = null;
+let constantsMarkerGroup = null;
+let startMatchFunctionId = null;
+let updateStateFunctionId = null;
+let stepSpeed = 1000;
+let playing = true;
+let currentStep = 0;
+let currentMatch = 0;
+let currentEntity = {
     'type': null, 
     'id': null, 
     'active': false
@@ -21,11 +21,12 @@ const logId = '#log';
 const btnLogId = '#btn-log';
 const btnPauseId = '#btn-pause';
 const entityBoxId = '#entity-box';
+const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 
 /**
  * Handle error in Json Requests
  */
-function handleError(error){
+function handleError(error) {
     logError(error);
 }
 
@@ -47,16 +48,15 @@ async function startMatch() {
             clearInterval(startMatchFunctionId);
             updateStateFunctionId = setInterval(updateStep, stepSpeed);
         } catch (err) {
-            // FIX: Always shows invalid LatLng error before match starts
-            console.log(err.toString());
-            handleError(`[START MATCH | MAP INFO]: ${err}`);
+            if (err.toString() !== invalidStartError)
+                handleError(`[START MATCH | MAP INFO]: ${err}`);
         }
     } catch (err) {
         handleError(`[START MATCH | MATCH INFO]: ${err}`);
     }
 }
 
-var pos_lat, pos_lon;
+let pos_lat, pos_lon;
 document.getElementById("mapid").addEventListener("contextmenu", function (event) {
     // Prevent the browser's context menu from appearing
     event.preventDefault();
@@ -83,7 +83,7 @@ async function updateStep(stepValue = 1) {
             const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
             setMatchInfo(matchInfo);
         } catch (err) {
-            handleError(`[UPDATE STEP | MATCH INFO]: ${err}`)
+            handleError(`[UPDATE STEP | MATCH INFO]: ${err}`);
         }
     } catch (err) {
         // Api always throws a TypeError, ignore it and handle other errors
@@ -132,8 +132,8 @@ async function updateMatch(matchValue = 1) {
  * Set information in match fields.
  */
 function setMatchInfo(match_info) {
-    $('#step').text((currentStep + 1) + ' of ' + match_info['total_steps']);
-    $('#current-match').text((currentMatch + 1) + ' of ' + match_info['total_matches']);
+    $('#step').text(`${currentStep + 1} of ${match_info['total_steps']}`);
+    $('#current-match').text(`${currentMatch + 1} of ${match_info['total_matches']}`);
 }
 
 /**
@@ -228,7 +228,7 @@ function process_simulation_data(data) {
                 continue;
         }
 
-        if (events[i]['type'] === currentEntity['type'] && events[i]['identifier'] == currentEntity['id'])
+        if (events[i]['type'] === currentEntity['type'] && events[i]['identifier'] === currentEntity['id'])
             setCurrentEntity(events[i]);
 
         marker.on('click', function (e) { setCurrentEntity(e.sourceTarget.info) });  
@@ -247,7 +247,7 @@ function process_simulation_data(data) {
         let agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
         let marker = null;
-        if (type == 'agent') {
+        if (type === 'agent') {
             switch(actors[i]['role']) {
                 case 'drone':
                     marker = L.marker(agent_location_formated, { icon: icons.agentDroneIcon });
@@ -303,9 +303,8 @@ function process_simulation_data(data) {
             }
         }
 
-        if (actors[i]['type'] === currentEntity['type'] && actors[i]['token'] === currentEntity['id']) {
+        if (actors[i]['type'] === currentEntity['type'] && actors[i]['token'] === currentEntity['id'])
             setCurrentEntity(actors[i]);
-        }
 
         marker.on('click', onClickMarkerHandler);  
         marker.info = actors[i];
@@ -322,7 +321,7 @@ function process_simulation_data(data) {
  * Handler for all 'onClick' event from markers.
  */
 function onClickMarkerHandler(event){
-    if (event.sourceTarget.info != undefined)
+    if (event.sourceTarget.info !== undefined)
         setCurrentEntity(event.sourceTarget.info);
 }
 
@@ -344,7 +343,7 @@ function setCurrentEntity(info){
                 break;
             case 'route':
                 value = []
-                for(let i=0; i<info[key].length; i++)
+                for(let i = 0; i < info[key].length; i++)
                     value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
                 break;
             case 'destination_distance':
@@ -353,7 +352,7 @@ function setCurrentEntity(info){
             case 'social_assets':
                 value = [];
                 let location, temp;
-                for (let i=0; i<info[key].length; i++) {
+                for (let i = 0; i < info[key].length; i++) {
                     temp = info[key][i];
                     delete temp['location'];
                     value.push(temp);
@@ -371,23 +370,20 @@ function setCurrentEntity(info){
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
-    if (info['type'] == 'agent' || info['type'] == 'social_asset') {
+    if (info['type'] === 'agent' || info['type'] === 'social_asset')
         currentEntity['id'] = info['token'];
-    } else {
+    else
         currentEntity['id'] = info['identifier'];
-    }
 }
 
 /**
  * Check whether the entered location is within the array given.
  */
 function containsLocation(locations, location) {
-    for (let i=0; i < locations.length; i++) {
-        if (locations[i]['lat'] == location['lat']) {
-            if (locations[i]['lon'] == location['lon']) 
-                return true;
-        }
-    }
+    locations.map(item => {
+        if (item['lat'] === location['lat'] && item['lon'] === location['lon'])
+            return true;
+    });
 
     return false;
 }
@@ -399,7 +395,7 @@ function format_location(event_location, old_locations) {
     let new_location = event_location;
     const alfa = 0.0001;
 
-    while (containsLocation(old_locations, new_location)){
+    while (containsLocation(old_locations, new_location)) {
         new_location['lat'] += alfa;
     }
 
@@ -410,7 +406,7 @@ function format_location(event_location, old_locations) {
  * Initialize the simulator info fields.
  */
 async function init() {
-    logNormal('Initializing variables.');
+    logNormal('Initializing the simulation');
 
     try {
         const simulationInfo = await api.getSimulationConfig($SCRIPT_ROOT);
@@ -426,13 +422,10 @@ async function init() {
  * Draw the route given with red circles.
  */
 function printRoute(route) {
-    for (let i=0; i<route.length; i++) {
-        L.circle([route[i]['lat'], route[i]['lon']], {
-                color: 'red',
-                radius: 10
-        }).addTo(variablesMarkerGroup);
-    }
-
+    route.map(item => L.circle([item['lat'], item['lon']], {
+        color: 'red',
+        radius: 10
+    }).addTo(variablesMarkerGroup));
 }
 
 /**
@@ -495,7 +488,7 @@ $(function () {
             updateStateFunctionId = setInterval(updateStep, stepSpeed);
         }
 
-        logNormal(`Step speed changed to ${$(this).val()} ms`);
+        logNormal(`Step speed changed to ${$(this).val()}ms`);
   
     })
 })
@@ -504,8 +497,8 @@ $(function () {
  * Add log in text area.
  */
 function log(tag, message) {
-    var oldText = $(logId).val();
-    var formattedText = oldText + '\n[ ' + tag + ' ] ## ' + message;
+    let oldText = $(logId).val();
+    let formattedText = `${oldText} \n[${tag}]: ${message}`;
     $(logId).focus().val(formattedText);
 }
 
@@ -523,6 +516,6 @@ function logCritical(message) {
 
 $(entityBoxId).hide();
 
-window.onload = function () {
+window.onload = () => {
     init();
 };
