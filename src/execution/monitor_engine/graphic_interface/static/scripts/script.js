@@ -1,4 +1,5 @@
 import ApiController from './services/ApiController.js';
+import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
 import icons from './utils/icons.js';
 
 let mymap = null;
@@ -184,134 +185,54 @@ function process_simulation_data(data) {
     variablesMarkerGroup.clearLayers();
     currentEntity['active'] = false;
 
-    let events = data['environment']['events'];
+    const events = data['environment']['events'];
     let old_locations = [];
-    let marker;
 
-    for (let i = 0; i < events.length; i++) {
-        let event_location = events[i]['location'];
-
-        event_location = format_location(event_location, old_locations);
+    events.map(event => {
+        const event_location = format_location(event['location'], old_locations);
         old_locations.push(event_location);
-        let event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-        let marker = null;
-        switch (events[i]['type']) {
-            case 'flood':
-                marker = L.marker(event_location_formatted, { icon: icons.floodIcon });
-                L.circle(event_location_formatted, {
-                    color: '#504E0F',
-                    fillColor: '#504E0F',
-                    fillOpacity: 0.65,
-                    radius: events[i]['radius'] * 109000
-                }).addTo(variablesMarkerGroup);
-                break;
-            case 'victim':
-                if (events[i]['lifetime'] === 0) {
-                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon3 });
-                }
-                else if (events[i]['lifetime'] < 5) {
-                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon2 });
-                } else if (events[i]['lifetime'] < 10) {
-                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon1 });
-                } else {
-                    marker = L.marker(event_location_formatted, { icon: icons.victimIcon0 });
-                }
-                break;
-            case 'photo':
-                marker = L.marker(event_location_formatted, { icon: icons.photoIcon });
-                break;
-            case 'water_sample':
-                marker = L.marker(event_location_formatted, { icon: icons.waterSampleIcon });
-                break;
-            default:
-                continue;
+        const event_location_formatted = [event['location']['lat'], event['location']['lon']];
+        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
+        const type = event['type'];
+
+        if (type === 'flood') {
+            L.circle(event_location_formatted, {
+                color: '#504E0F',
+                fillColor: '#504E0F',
+                fillOpacity: 0.65,
+                radius: event['radius'] * 109000
+            }).addTo(variablesMarkerGroup);
         }
 
-        if (events[i]['type'] === currentEntity['type'] && events[i]['identifier'] === currentEntity['id'])
-            setCurrentEntity(events[i]);
+        if (type === currentEntity['type'] && event['identifier'] === currentEntity['id']) {
+            setCurrentEntity(event);
+        }
 
         marker.on('click', function (e) { setCurrentEntity(e.sourceTarget.info) });  
-        marker.info = events[i];
+        marker.info = event;
         marker.addTo(variablesMarkerGroup);
-    }
+    })
 
-    let actors = data['actors'];
+    const actors = data['actors'];
     $('#active-agents').text(actors.length);
 
-    for (let i = 0; i < actors.length; i++) {
-        let type = actors[i]['type'];
-
-        let agent_location = format_location(actors[i]['location'], old_locations);
+    actors.map(actor => {
+        const agent_location = format_location(actor['location'], old_locations);
         old_locations.push(agent_location);
-        let agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
-        let marker = null;
-        if (type === 'agent') {
-            switch(actors[i]['role']) {
-                case 'drone':
-                    marker = L.marker(agent_location_formated, { icon: icons.agentDroneIcon });
-                    break;
-                case 'car':
-                    marker = L.marker(agent_location_formated, { icon: icons.agentCarIcon });
-                    break;
-                case 'boat':
-                    marker = L.marker(agent_location_formated, { icon: icons.agentBoatIcon });
-                    break;
-                case 'analyser':
-                    marker = L.marker(agent_location_formated, { icon: icons.analyserIcon });
-                    break;
-                case 'collector':
-                    marker = L.marker(agent_location_formated, { icon: icons.collectorIcon });
-                    break;
-                case 'truck':
-                    marker = L.marker(agent_location_formated, { icon: icons.truckIcon });
-                    break;
-                case 'ugv':
-                    marker = L.marker(agent_location_formated, { icon: icons.agentCarIcon });
-                    break;
-                case 'helicopter':
-                    marker = L.marker(agent_location_formated, { icon: icons.helicopterIcon });
-                    break;
-                default:
-                    logError('Role not found.');
-                    continue;
-            }
-        } else {
-            switch(actors[i]['profession']){
-                case 'doctor':
-                    marker = L.marker(agent_location_formated, { icon: icons.doctorIcon });
-                    break;
-                case 'nurse':
-                    marker = L.marker(agent_location_formated, { icon: icons.nurseIcon });
-                    break;
-                case 'pharmacist':
-                    marker = L.marker(agent_location_formated, { icon: icons.pharmacistIcon });
-                    break;
-                case 'teacher':
-                    marker = L.marker(agent_location_formated, { icon: icons.teacherIcon });
-                    break;
-                case 'photographer':
-                    marker = L.marker(agent_location_formated, { icon: icons.photographerIcon });
-                    break;
-                case 'vonlunteer':
-                    marker = L.marker(agent_location_formated, { icon: icons.nurseIcon });
-                    break;
-                default:
-                    logError('Profession not found.');
-                    continue;
-            }
-        }
-
-        if (actors[i]['type'] === currentEntity['type'] && actors[i]['token'] === currentEntity['id'])
-            setCurrentEntity(actors[i]);
+        const agent_location_formated = [agent_location['lat'], agent_location['lon']];
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(actor) });
+        
+        if (actor['type'] === currentEntity['type'] && actor['token'] === currentEntity['id'])
+            setCurrentEntity(actor);
 
         marker.on('click', onClickMarkerHandler);  
-        marker.info = actors[i];
+        marker.info = actor;
         marker.addTo(variablesMarkerGroup);
 
-        printRoute(actors[i]['route']);
-    }
+        printRoute(actor['route']);
+    });
 
     if (!currentEntity['active'])
         $(entityBoxId).hide();
@@ -320,7 +241,7 @@ function process_simulation_data(data) {
 /**
  * Handler for all 'onClick' event from markers.
  */
-function onClickMarkerHandler(event){
+function onClickMarkerHandler(event) {
     if (event.sourceTarget.info !== undefined)
         setCurrentEntity(event.sourceTarget.info);
 }
