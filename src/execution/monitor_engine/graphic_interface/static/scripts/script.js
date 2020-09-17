@@ -11,11 +11,6 @@ let stepSpeed = 1000;
 let playing = true;
 let currentStep = 0;
 let currentMatch = 0;
-let currentEntity = {
-    'type': null, 
-    'id': null, 
-    'active': false
-};
 
 const api = new ApiController();
 const logId = '#log';
@@ -23,6 +18,11 @@ const btnLogId = '#btn-log';
 const btnPauseId = '#btn-pause';
 const entityBoxId = '#entity-box';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
+const currentEntity = {
+    'type': null, 
+    'id': null, 
+    'active': false
+};
 
 /**
  * Handle error in Json Requests
@@ -156,19 +156,19 @@ function setMapConfig(config) {
     variablesMarkerGroup = L.layerGroup().addTo(mymap);
     constantsMarkerGroup = L.layerGroup().addTo(mymap);
 
-    let lat = parseFloat(config['centerLat']);
-    let lon = parseFloat(config['centerLon']);
+    const lat = parseFloat(config['centerLat']);
+    const lon = parseFloat(config['centerLon']);
 
     mymap.setView([lat, lon], 17);
 
     L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
-    let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
+    const bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
-    L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
+    L.rectangle(bounds, { weight: 1 }).on('click', (e) => {
         console.info(e);
     }).addTo(constantsMarkerGroup);
 
-    mymap.addEventListener('mousemove', function(ev) {
+    mymap.addEventListener('mousemove', (ev) => {
         pos_lat = ev.latlng.lat;
         pos_lon = ev.latlng.lng;
     });
@@ -186,7 +186,7 @@ function process_simulation_data(data) {
     currentEntity['active'] = false;
 
     const events = data['environment']['events'];
-    let old_locations = [];
+    const old_locations = [];
 
     events.map(event => {
         const event_location = format_location(event['location'], old_locations);
@@ -256,32 +256,28 @@ function setCurrentEntity(info){
         $(entityBoxId).show();
 
     let value;
-
     for (let key in info) {
         switch (key) {
             case 'location':
-                value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
+                value = `[${info[key]['lat']}, ${info[key]['lon']}]`;
                 break;
             case 'route':
                 value = []
                 for(let i = 0; i < info[key].length; i++)
-                    value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
+                    value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
                 break;
             case 'destination_distance':
-                value = (info[key] * 100).toFixed(2).toString() + ' km';
+            case 'radius':
+                value = `${(info[key] * 100).toFixed(2).toString()} km`;
                 break;
             case 'social_assets':
                 value = [];
-                let location, temp;
                 for (let i = 0; i < info[key].length; i++) {
-                    temp = info[key][i];
+                    const temp = info[key][i];
                     delete temp['location'];
                     value.push(temp);
                 }
 
-                break;
-            case 'radius':
-                value = (info[key] * 100).toFixed(2).toString() + ' km';
                 break;
             default:
                 value = info[key];
@@ -291,6 +287,7 @@ function setCurrentEntity(info){
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
+
     if (info['type'] === 'agent' || info['type'] === 'social_asset')
         currentEntity['id'] = info['token'];
     else
@@ -301,10 +298,8 @@ function setCurrentEntity(info){
  * Check whether the entered location is within the array given.
  */
 function containsLocation(locations, location) {
-    locations.map(item => {
-        if (item['lat'] === location['lat'] && item['lon'] === location['lon'])
-            return true;
-    });
+    if (locations.some(item => item['lat'] === location['lat'] && item['lon'] === location['lon']))
+        return true;
 
     return false;
 }
@@ -313,7 +308,7 @@ function containsLocation(locations, location) {
  * Format the location incrementing the lat coordination by 1/10000.
  */
 function format_location(event_location, old_locations) {
-    let new_location = event_location;
+    const new_location = event_location;
     const alfa = 0.0001;
 
     while (containsLocation(old_locations, new_location)) {
@@ -418,8 +413,8 @@ $(function () {
  * Add log in text area.
  */
 function log(tag, message) {
-    let oldText = $(logId).val();
-    let formattedText = `${oldText} \n[${tag}]: ${message}`;
+    const oldText = $(logId).val();
+    const formattedText = `${oldText} \n[${tag}]: ${message}`;
     $(logId).focus().val(formattedText);
 }
 
