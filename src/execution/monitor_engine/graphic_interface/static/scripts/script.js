@@ -61,8 +61,8 @@ let pos_lat, pos_lon;
 document.getElementById("mapid").addEventListener("contextmenu", (event) => {
     // Prevent the browser's context menu from appearing
     event.preventDefault();
-    
-    alert('Lat: '+pos_lat + '\nLon:' + pos_lon);
+
+    alert(`Lat: ${pos_lat} \nLon: ${pos_lon}`);
 
     return false; // To disable default popup.
 });
@@ -280,7 +280,7 @@ function setCurrentEntity(info){
             default:
                 value = info[key];
         }
-        $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
+        $("#entity-list-info").append(`<li><b>${key}:</b> ${value}</li>`);
     }
 
     currentEntity['type'] = info['type'];
