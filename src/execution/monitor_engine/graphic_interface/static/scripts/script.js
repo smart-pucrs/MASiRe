@@ -58,12 +58,10 @@ async function startMatch() {
 }
 
 let pos_lat, pos_lon;
-document.getElementById("mapid").addEventListener("contextmenu", function (event) {
+document.getElementById("mapid").addEventListener("contextmenu", (event) => {
     // Prevent the browser's context menu from appearing
     event.preventDefault();
-
-    // Add marker
-    // L.marker([lat, lng], ....).addTo(map);
+    
     alert('Lat: '+pos_lat + '\nLon:' + pos_lon);
 
     return false; // To disable default popup.
@@ -209,7 +207,7 @@ function process_simulation_data(data) {
             setCurrentEntity(event);
         }
 
-        marker.on('click', function (e) { setCurrentEntity(e.sourceTarget.info) });  
+        marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info) });  
         marker.info = event;
         marker.addTo(variablesMarkerGroup);
     })
