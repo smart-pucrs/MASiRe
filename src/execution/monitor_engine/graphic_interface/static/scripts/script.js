@@ -430,6 +430,9 @@ function logCritical(message) {
 
 $(entityBoxId).hide();
 
+// Export functions
+export { pause, updateStep };
+
 window.onload = () => {
     init();
 };
