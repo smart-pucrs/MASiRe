@@ -18,6 +18,7 @@ const btnLogId = '#btn-log';
 const btnPauseId = '#btn-pause';
 const entityBoxId = '#entity-box';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
+const invalidStepError = 'The current match dont have this step yet.';
 const currentEntity = {
     'type': null, 
     'id': null, 
@@ -76,6 +77,12 @@ async function updateStep(stepValue = 1) {
 
     try {
         const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
+        
+        if (simulationData.message === invalidStepError) {
+            currentStep -= stepValue;
+            return;
+        }
+
         process_simulation_data(simulationData);
 
         try {
@@ -85,7 +92,6 @@ async function updateStep(stepValue = 1) {
             handleError(`[UPDATE STEP | MATCH INFO]: ${err}`);
         }
     } catch (err) {
-        // Api always throws a TypeError, ignore it and handle other errors
         if (!(err instanceof TypeError)) {
             handleError(`[UPDATE STEP | SIMULATION DATA]: ${err}`);
             currentStep -= stepValue;
@@ -178,6 +184,8 @@ function setMapConfig(config) {
  * Handle the step data drawing all markers in map.
  */
 function process_simulation_data(data) {
+    if (!data) return;
+    
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
@@ -228,8 +236,9 @@ function process_simulation_data(data) {
         marker.on('click', onClickMarkerHandler);  
         marker.info = actor;
         marker.addTo(variablesMarkerGroup);
-
-        printRoute(actor['route']);
+        
+        if (actor['route'])
+            printRoute(actor['route']);
     });
 
     if (!currentEntity['active'])
@@ -430,9 +439,9 @@ function logCritical(message) {
 
 $(entityBoxId).hide();
 
-// Export functions
-export { pause, updateStep };
-
 window.onload = () => {
     init();
 };
+
+// Export functions
+export { pause, updateStep };

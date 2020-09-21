@@ -10,8 +10,7 @@ const actions = {
 /** Handles the click, calling the right function */
 function handleClick(event) {
     const action = actions[event.target.id];
-
-    return action();
+    action();
 }
 
 /** Add the onClick event for all buttons */

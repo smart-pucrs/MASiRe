@@ -46,7 +46,6 @@ class ApiController{
 
         return await this.fetchData(url);
     }
-
-    
 }
+
 export default ApiController;
