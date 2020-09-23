@@ -1,4 +1,4 @@
-import { pause, updateStep, updateMatch, setLog } from "./script.js";
+import { pause, updateStep, updateMatch } from "./script.js";
 
 /** actions for the buttons, when called execute a function */
 const actions = {
@@ -7,7 +7,6 @@ const actions = {
     'btn-next': () => updateStep(),
     'btn-next-match': () => updateMatch(),
     'btn-previous-match': () => updateMatch(-1),
-    'btn-log': () => setLog()
 };
 
 /** Handles the click, calling the right function */

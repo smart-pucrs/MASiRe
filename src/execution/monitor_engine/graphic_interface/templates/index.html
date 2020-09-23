@@ -17,96 +17,137 @@
     <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script>
 </head> 
 <body>
-	<div id="container">
+
             <!-- Simulation box div -->
-            <div id="simulation-box">
-                <h3 class="title">Simulation Data</h3>
-        
-                <div id="simulation-info">
-                    <div class="key-value">
-                        <label>Simulation url: </label>
-                        <label id="simulation-url"></label >
+           
+            <div id="options">
+                <div id="option-content">
+                    <div class="option-item">
+                        <h3>Step</h3>
+                        <div class="button-wrapper">
+                            <input type="number" />
+                            <button class="btn">+1</button>
+                            <button class="btn">+10</button>
+                            <button class="btn">End</button>
+                        </div>
                     </div>
-                    <div class="key-value">
-                        <label>Api url: </label>
-                        <label id="api-url"></label >
-                    </div>
-                    <div class="key-value">
-                        <label>Max agent amount: </label>
-                        <label id="max-agents"></label >
-                    </div>
-                    <div class="key-value">
-                        <label>First step time: </label>
-                        <label id="first-step-time"></label >
-                    </div>
-                    <div class="key-value">
-                        <label>Time per step: </label>
-                        <label id="step-time"></label >
-                    </div>
-                    <div class="key-value">
-                        <label>Social asset timeout: </label>
-                        <label id="social-asset-timeout"></label >
-                    </div>
-                </div>
-        
-                <h3 class="title">Current Data</h3>
-                  
-                <div id="current-info">
-                    <div class="key-value">
-                        <label>Step: </label>
-                        <label id="step">NULL</label >
-                    </div>
-                    <div class="key-value">
-                        <label>Match: </label>
-                        <label id="current-match">NULL</label >
-                    </div>
-                    <div class="key-value">
-                        <label>Map: </label>
-                        <label id="current-map">NULL</label >
-                    </div>
-                    <div class="key-value">
-                        <label>Active agents: </label>
-                        <label id="active-agents">NULL</label >
-                    </div>
-                </div>
-        
-                <br>
-                <div id="simulation-controller">
-                    <button id="btn-prev" class="btn"> << </button>
-                    <button id="btn-pause" class="btn">Pause</button>
-                    <button id="btn-next" class="btn"> >> </button>
-                </div>
-                <br>
 
-                <div id="speed-controller">
-                    <fieldset id="speed">
-                        <input type="radio" name="speed" value="2000">.25x
-                        <input type="radio" name="speed" value="1500">.50x
-                        <input type="radio" name="speed" value="1000" checked=true>1x
-                        <input type="radio" name="speed" value="500">1.5x
-                        <input type="radio" name="speed" value="250">2x
-                    </fieldset>
-                </div>
+                    <div class="option-item">
+                        <h3>Speed</h3>
+                        <div class="button-wrapper">
+                            <button class="btn">+</button>
+                            <button class="btn">-</button>
+                        </div>
+                    </div>
 
-                <br>
-	            <div id="matchs">
-	                <button class="btn btn-match" id="btn-previous-match">Previous match</button>
-	                <button class="btn btn-match" id="btn-next-match">Next match</button>
-	            </div>
-
-                <div id="log-box">
-                    <button class="btn" id="btn-log">Hide log</button>
-                    <br>
-                    <textarea id="log"></textarea>
+                    <div class="option-item">
+                        <h3>Options</h3>
+                        <div class="button-wrapper">
+                            <button class="btn">Pause</button>
+                            <button class="btn">Expand</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Map div -->
-            <div id="mapid"></div>
             
-            <div id="entity-box">
-                <ul id="entity-list-info"></ul>
-            </div>
+            <div id="container">
+                <div class="info">
+                    <div id="global-info">
+                        <h3 id="title">Global Info</h3>
+                        <p>Mapa: <span id="current-map">?</span></p>
+                        <br>
+                        <p>Total agents: <span id="active-agents">?</span></p>
+                        <br>
+                        <p>Metrics: <span id="current-map">?</span></p>
+                    </div>
+
+                    <div id="agent-info">
+                        <h3 id="title">Agents Info</h3>
+                        <span>lore ipsum</span>
+                    </div>
+                </div>
+
+                <!-- Map div -->
+                <div id="mapid"></div>
+                <!-- <div id="simulation-box">
+                    <h3 class="title">Simulation Data</h3>
+            
+                    <div id="simulation-info">
+                        <div class="key-value">
+                            <label>Simulation url: </label>
+                            <label id="simulation-url"></label >
+                        </div>
+                        <div class="key-value">
+                            <label>Api url: </label>
+                            <label id="api-url"></label >
+                        </div>
+                        <div class="key-value">
+                            <label>Max agent amount: </label>
+                            <label id="max-agents"></label >
+                        </div>
+                        <div class="key-value">
+                            <label>First step time: </label>
+                            <label id="first-step-time"></label >
+                        </div>
+                        <div class="key-value">
+                            <label>Time per step: </label>
+                            <label id="step-time"></label >
+                        </div>
+                        <div class="key-value">
+                            <label>Social asset timeout: </label>
+                            <label id="social-asset-timeout"></label >
+                        </div>
+                    </div>
+            
+                    <h3 class="title">Current Data</h3>
+                    
+                    <div id="current-info">
+                        <div class="key-value">
+                            <label>Step: </label>
+                            <label id="step">NULL</label >
+                        </div>
+                        <div class="key-value">
+                            <label>Match: </label>
+                            <label id="current-match">NULL</label >
+                        </div>
+                        <div class="key-value">
+                            <label>Map: </label>
+                            <label id="current-map">NULL</label >
+                        </div>
+                        <div class="key-value">
+                            <label>Active agents: </label>
+                            <label id="active-agents">NULL</label >
+                        </div>
+                    </div>
+            
+                    <br>
+                    <div id="simulation-controller">
+                        <button id="btn-prev" class="btn"> << </button>
+                        <button id="btn-pause" class="btn">Pause</button>
+                        <button id="btn-next" class="btn"> >> </button>
+                    </div>
+                    <br>
+
+                    <div id="speed-controller">
+                        <fieldset id="speed">
+                            <input type="radio" name="speed" value="2000">.25x
+                            <input type="radio" name="speed" value="1500">.50x
+                            <input type="radio" name="speed" value="1000" checked=true>1x
+                            <input type="radio" name="speed" value="500">1.5x
+                            <input type="radio" name="speed" value="250">2x
+                        </fieldset>
+                    </div>
+
+                    <br>
+                    <div id="matchs">
+                        <button class="btn btn-match" id="btn-previous-match">Previous match</button>
+                        <button class="btn btn-match" id="btn-next-match">Next match</button>
+                    </div>
+                </div> -->
+                
+                <!-- <div id="entity-box">
+                    <ul id="entity-list-info"></ul>
+                </div> -->
         </div>
         <!-- <script type="text/javascript" src="static/scripts/script.js?v=2"></script> -->
         <script type="module" src="static/scripts/script.js"></script>

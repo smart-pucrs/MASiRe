@@ -13,8 +13,6 @@ let currentStep = 0;
 let currentMatch = 0;
 
 const api = new ApiController();
-const logId = '#log';
-const btnLogId = '#btn-log';
 const btnPauseId = '#btn-pause';
 const entityBoxId = '#entity-box';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
@@ -383,23 +381,6 @@ function pause() {
 }
 
 /**
- * Hide or Show the log field.
- */
-function setLog() {
-    if ($(logId).is(':hidden')) {
-        logNormal('Hiding Log.');
-
-        $(logId).show();
-        $(btnLogId).text('Hide log');
-    } else {
-        logNormal('Showing Log.');
-
-        $(logId).hide();
-        $(btnLogId).text('Show log');
-    }
-}
-
-/**
  * Event handler for radio box field.
  */
 $(function () {
@@ -420,9 +401,8 @@ $(function () {
  * Add log in text area.
  */
 function log(tag, message) {
-    const oldText = $(logId).val();
-    const formattedText = `${oldText} \n[${tag}]: ${message}`;
-    $(logId).focus().val(formattedText);
+    const formattedText = `[${tag}]: ${message}`;
+    console.log(formattedText);
 }
 
 function logNormal(message) {
@@ -444,4 +424,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep, updateMatch, setLog };
+export { pause, updateStep, updateMatch };
