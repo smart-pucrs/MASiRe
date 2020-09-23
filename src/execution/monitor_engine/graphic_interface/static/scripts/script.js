@@ -84,7 +84,7 @@ async function updateStep(stepValue = 1) {
         }
 
         process_simulation_data(simulationData);
-
+        
         try {
             const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
             setMatchInfo(matchInfo);
@@ -444,4 +444,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep };
+export { pause, updateStep, updateMatch, setLog };
