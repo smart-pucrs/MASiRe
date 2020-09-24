@@ -1,233 +1,102 @@
-var mymap = null;
-var variablesMarkerGroup = null;
-var constantsMarkerGroup = null;
-var startMatchFunctionId = null;
-var updateStateFunctionId = null;
-var stepSpeed = 1000;
-var logId = '#log';
-var btnLogId = '#btn-log';
-var btnPauseId = '#btn-pause';
-var entityBoxId = '#entity-box';
-var playing = true;
-var iconLength = [28, 35];
-var iconAncor = [17, 18];
-var currentEntity = {'type': null, 'id': null, 'active': false};
+import ApiController from './services/ApiController.js';
+import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
+import icons from './utils/icons.js';
 
-var currentStep = 0;
-var currentMatch = 0;
+let mymap = null;
+let variablesMarkerGroup = null;
+let constantsMarkerGroup = null;
+let startMatchFunctionId = null;
+let updateStateFunctionId = null;
+let stepSpeed = 1000;
+let playing = true;
+let currentStep = 0;
+let currentMatch = 0;
 
-// Markers Icons
-var floodIcon = L.icon({
-    iconUrl: '/static/images/flood.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var photoIcon = L.icon({
-    iconUrl: '/static/images/photo.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon0 = L.icon({
-    iconUrl: '/static/images/victim_0.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon1 = L.icon({
-    iconUrl: '/static/images/victim_1.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon2 = L.icon({
-    iconUrl: '/static/images/victim_2.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var victimIcon3 = L.icon({
-    iconUrl: '/static/images/victim_3.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var waterSampleIcon = L.icon({
-    iconUrl: '/static/images/water_sample.png',
-    iconSize: iconLength,
-    iconAnchor: iconAncor
-});
-
-var agentCarIcon = L.icon({
-    iconUrl: '/static/images/car.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentBoatIcon = L.icon({
-    iconUrl: '/static/images/boat.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var agentDroneIcon = L.icon({
-    iconUrl: '/static/images/drone.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var helicopterIcon = L.icon({
-    iconUrl: '/static/images/helicopter.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var collectorIcon = L.icon({
-    iconUrl: '/static/images/motorcycle.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var truckIcon = L.icon({
-    iconUrl: '/static/images/truck.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-var analyserIcon = L.icon({
-    iconUrl: '/static/images/truck_connected.png',
-    iconSize: [50, 55],
-    iconAnchor: [25, 27]
-});
-
-var doctorIcon = L.icon({
-    iconUrl: '/static/images/doctor.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var nurseIcon = L.icon({
-    iconUrl: '/static/images/nurse.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var pharmacistIcon = L.icon({
-    iconUrl: '/static/images/pharmacist.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var photographerIcon = L.icon({
-    iconUrl: '/static/images/photographer.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var teacherIcon = L.icon({
-    iconUrl: '/static/images/teacher.png',
-    iconSize: [40, 45],
-    iconAnchor: [15, 13]
-});
-
-var centralIcon = L.icon({
-    iconUrl: '/static/images/central.png',
-    iconSize: [40, 50],
-    iconAnchor: [20, 25]
-});
+const api = new ApiController();
+const logId = '#log';
+const btnLogId = '#btn-log';
+const btnPauseId = '#btn-pause';
+const entityBoxId = '#entity-box';
+const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
+const invalidStepError = 'The current match dont have this step yet.';
+const currentEntity = {
+    'type': null, 
+    'id': null, 
+    'active': false
+};
 
 /**
  * Handle error in Json Requests
  */
-function handleError(error){
+function handleError(error) {
     logError(error);
 }
 
 /**
  * Start draw the current match.
  */
-function startMatch(){
+async function startMatch() {
     currentStep = 0;
     currentMatch = 0;
 
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
+    try {
+        const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+        setMatchInfo(matchInfo);
+
+        try {
+            const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+            setMapConfig(mapInfo);
+
+            clearInterval(startMatchFunctionId);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
+        } catch (err) {
+            if (err.toString() !== invalidStartError)
+                handleError(`[START MATCH | MAP INFO]: ${err}`);
         }
-    }).then(result => {
-        fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-            if(response.status == 200){
-                response.json().then(data => setMapConfig(data));
-    
-                clearInterval(startMatchFunctionId);
-                updateStateFunctionId = setInterval(nextStep, stepSpeed);
-            }else{
-                response.json().then(error => handleError(error));
-            }
-        });
-    });
+    } catch (err) {
+        handleError(`[START MATCH | MATCH INFO]: ${err}`);
+    }
 }
 
-var pos_lat, pos_lon;
-document.getElementById("mapid").addEventListener("contextmenu", function (event) {
+let pos_lat, pos_lon;
+document.getElementById("mapid").addEventListener("contextmenu", (event) => {
     // Prevent the browser's context menu from appearing
     event.preventDefault();
 
-    // Add marker
-    // L.marker([lat, lng], ....).addTo(map);
-    alert('Lat: '+pos_lat + '\nLon:' + pos_lon);
+    alert(`Lat: ${pos_lat} \nLon: ${pos_lon}`);
 
     return false; // To disable default popup.
 });
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
+ * @params stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
  */
-function nextStep() {
-    currentStep++;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if (response.status == 200) {
-            response.json().then(data =>{
-                process_simulation_data(data);
-            });
-        } else {
-            response.json().then(error => handleError(error));
-            currentStep--;
-        }
-    });
+async function updateStep(stepValue = 1) {
+    currentStep += stepValue;
 
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
+    try {
+        const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
+        
+        if (simulationData.message === invalidStepError) {
+            currentStep -= stepValue;
+            return;
         }
-    });
-}
 
-
-/**
- * Get previous step from the Flask and refresh the graphic interface.
- */
-function prevStep() {
-    currentStep--;
-    fetch($SCRIPT_ROOT + '/simulator/match/' + currentMatch + '/step/' + currentStep).then(response => {
-        if(response.status == 200){
-            response.json().then(data => {
-                process_simulation_data(data);
-            });
-        }else{
-            response.json().then(error => handleError(error));
-            currentStep++;
+        process_simulation_data(simulationData);
+        
+        try {
+            const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
+            setMatchInfo(matchInfo);
+        } catch (err) {
+            handleError(`[UPDATE STEP | MATCH INFO]: ${err}`);
         }
-    });
-    
-    fetch($SCRIPT_ROOT + '/simulator/info/matches').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMatchInfo(data));
-        }else{
-            response.json().then(error => handleError(error));
+    } catch (err) {
+        if (!(err instanceof TypeError)) {
+            handleError(`[UPDATE STEP | SIMULATION DATA]: ${err}`);
+            currentStep -= stepValue;
         }
-    });
+    }
 }
 
 /**
@@ -239,70 +108,45 @@ function handle_new_match(data) {
     process_simulation_data(data['step_info']);
 }
 
-
 /**
- * Get next match and refresh the graphic interface.
+ * Update Match and refresh the graphic interface.
+ * @params matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
-function nextMatch() {
-    currentMatch++;
+async function updateMatch(matchValue = 1) {
+    if(currentMatch === 0 && matchValue === -1) 
+        return logError("Already in the first step.");
 
-    var oldStepValue = currentStep;
+    currentMatch += matchValue;
+    
+    const oldStepValue = currentStep;
     currentStep = -1;
 
-    fetch($SCRIPT_ROOT + '/simulator/match/'+currentMatch+'/info/map').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMapConfig(data));
+    try {
+        const mapInfo = await api.getMapInfo($SCRIPT_ROOT, currentMatch);
+        setMapConfig(mapInfo);
 
-            nextStep();
-        }else{
-            response.json().then(error => handleError(error));
-            currentMatch--;
-            currentStep = oldStepValue;
-        }
-    });
-}
-
-/**
- * Get previous match and refresh the graphic interface.
- */
-function prevMatch() {
-    if(currentMatch == 0){
-        logError("Already in the first step.");
-        return;
+        updateStep();
+    } catch (err) {
+        handleError(`[NEXT MATCH | MAP INFO]: ${err}`);
+        currentMatch -= matchValue;
+        currentStep = oldStepValue;
     }
-
-    currentMatch--;
-    var oldStepValue = currentStep;
-    currentStep = -1;
-
-    fetch($SCRIPT_ROOT + "/simulator/match/"+currentMatch+"/info/map").then(response => {
-        if(response.status == 200){
-            response.json().then(data => setMapConfig(data));
-
-            nextStep();
-        }else{
-            response.json().then(error => console.log("asdas"));
-            currentMatch++;
-            currentStep = oldStepValue;
-        }
-    });
 }
 
 /**
  * Set information in match fields.
  */
 function setMatchInfo(match_info) {
-    $('#step').text((currentStep + 1) + ' of ' + match_info['total_steps']);
-    $('#current-match').text((currentMatch + 1) + ' of ' + match_info['total_matches']);
+    $('#step').text(`${currentStep + 1} of ${match_info['total_steps']}`);
+    $('#current-match').text(`${currentMatch + 1} of ${match_info['total_matches']}`);
 }
 
 /**
  * Set information in Map fields.
  */
 function setMapConfig(config) {
-    if (mymap != null) {
+    if (mymap !== null) 
         mymap.remove();
-    }
 
     mymap = L.map('mapid');
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -316,20 +160,19 @@ function setMapConfig(config) {
     variablesMarkerGroup = L.layerGroup().addTo(mymap);
     constantsMarkerGroup = L.layerGroup().addTo(mymap);
 
-    let lat = parseFloat(config['centerLat']);
-    let lon = parseFloat(config['centerLon']);
+    const lat = parseFloat(config['centerLat']);
+    const lon = parseFloat(config['centerLon']);
 
     mymap.setView([lat, lon], 17);
 
-    L.marker([lat, lon], { icon: centralIcon }).addTo(constantsMarkerGroup);
-    let bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
+    L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
+    const bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
-    L.rectangle(bounds, { weight: 1 }).on('click', function (e) {
+    L.rectangle(bounds, { weight: 1 }).on('click', (e) => {
         console.info(e);
     }).addTo(constantsMarkerGroup);
-    console.log(config);
 
-    mymap.addEventListener('mousemove', function(ev) {
+    mymap.addEventListener('mousemove', (ev) => {
         pos_lat = ev.latlng.lat;
         pos_lon = ev.latlng.lng;
     });
@@ -341,158 +184,73 @@ function setMapConfig(config) {
  * Handle the step data drawing all markers in map.
  */
 function process_simulation_data(data) {
+    if (!data) return;
+    
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
     currentEntity['active'] = false;
 
-    let events = data['environment']['events'];
-    let old_locations = [];
-    let marker;
-    for (let i=0; i < events.length; i++) {
-        event_location = events[i]['location'];
+    const events = data['environment']['events'];
+    const old_locations = [];
 
-        event_location = format_location(event_location, old_locations);
+    events.map(event => {
+        const event_location = format_location(event['location'], old_locations);
         old_locations.push(event_location);
-        event_location_formatted = [events[i]['location']['lat'], events[i]['location']['lon']];
 
-        marker = null;
-        switch (events[i]['type']) {
-            case 'flood':
-                marker = L.marker(event_location_formatted, { icon: floodIcon });
-                L.circle(event_location_formatted, {
-                    color: '#504E0F',
-                    fillColor: '#504E0F',
-                    fillOpacity: 0.65,
-                    radius: events[i]['radius'] * 109000
-                }).addTo(variablesMarkerGroup);
-                break;
-            case 'victim':
-                if (events[i]['lifetime'] == 0) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon3 });
-                }
-                else if (events[i]['lifetime'] < 5) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon2 });
-                } else if (events[i]['lifetime'] < 10) {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon1 });
-                } else {
-                    marker = L.marker(event_location_formatted, { icon: victimIcon0 });
-                }
-                break;
-            case 'photo':
-                marker = L.marker(event_location_formatted, { icon: photoIcon });
-                break;
-            case 'water_sample':
-                marker = L.marker(event_location_formatted, { icon: waterSampleIcon });
-                break;
-            default:
-                continue;
+        const event_location_formatted = [event['location']['lat'], event['location']['lon']];
+        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
+        const type = event['type'];
+
+        if (type === 'flood') {
+            L.circle(event_location_formatted, {
+                color: '#504E0F',
+                fillColor: '#504E0F',
+                fillOpacity: 0.65,
+                radius: event['radius'] * 109000
+            }).addTo(variablesMarkerGroup);
         }
 
-        if (events[i]['type'] == currentEntity['type']){
-            if (events[i]['identifier'] == currentEntity['id']){
-                setCurrentEntity(events[i]);
-            }
+        if (type === currentEntity['type'] && event['identifier'] === currentEntity['id']) {
+            setCurrentEntity(event);
         }
 
-        marker.on('click', function (e) {setCurrentEntity(e.sourceTarget.info)});  
-        marker.info = events[i];
+        marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info) });  
+        marker.info = event;
         marker.addTo(variablesMarkerGroup);
-    }
+    })
 
-    let actors = data['actors'];
+    const actors = data['actors'];
     $('#active-agents').text(actors.length);
 
-    for (let i=0; i < actors.length; i++) {
-        type = actors[i]['type'];
-
-        agent_location = format_location(actors[i]['location'], old_locations);
+    actors.map(actor => {
+        const agent_location = format_location(actor['location'], old_locations);
         old_locations.push(agent_location);
-        agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
-        marker = null;
-        if (type == 'agent'){
-            switch(actors[i]['role']){
-                case 'drone':
-                    marker = L.marker(agent_location_formated, { icon: agentDroneIcon });
-                    break;
-                case 'car':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
-                    break;
-                case 'boat':
-                    marker = L.marker(agent_location_formated, { icon: agentBoatIcon });
-                    break;
-                case 'analyser':
-                    marker = L.marker(agent_location_formated, { icon: analyserIcon });
-                    break;
-                case 'collector':
-                    marker = L.marker(agent_location_formated, { icon: collectorIcon });
-                    break;
-                case 'truck':
-                    marker = L.marker(agent_location_formated, { icon: truckIcon });
-                    break;
-                case 'ugv':
-                    marker = L.marker(agent_location_formated, { icon: agentCarIcon });
-                    break;
-                case 'helicopter':
-                    marker = L.marker(agent_location_formated, { icon: helicopterIcon });
-                    break;
-                default:
-                    logError('Role not found.');
-                    continue;
-            }
-        }else{
-            switch(actors[i]['profession']){
-                case 'doctor':
-                    marker = L.marker(agent_location_formated, { icon: doctorIcon });
-                    break;
-                case 'nurse':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
-                    break;
-                case 'pharmacist':
-                    marker = L.marker(agent_location_formated, { icon: pharmacistIcon });
-                    break;
-                case 'teacher':
-                    marker = L.marker(agent_location_formated, { icon: teacherIcon });
-                    break;
-                case 'photographer':
-                    marker = L.marker(agent_location_formated, { icon: photographerIcon });
-                    break;
-                case 'vonlunteer':
-                    marker = L.marker(agent_location_formated, { icon: nurseIcon });
-                    break;
-                default:
-                    logError('Profession not found.');
-                    continue;
-            }
-        }
-
-        if (actors[i]['type'] == currentEntity['type']){
-            if (actors[i]['token'] == currentEntity['id']){
-                setCurrentEntity(actors[i]);
-            }
-        }
+        const agent_location_formated = [agent_location['lat'], agent_location['lon']];
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(actor) });
+        
+        if (actor['type'] === currentEntity['type'] && actor['token'] === currentEntity['id'])
+            setCurrentEntity(actor);
 
         marker.on('click', onClickMarkerHandler);  
-        marker.info = actors[i];
+        marker.info = actor;
         marker.addTo(variablesMarkerGroup);
+        
+        if (actor['route'])
+            printRoute(actor['route']);
+    });
 
-        printRoute(actors[i]['route']);
-
-    }
-
-    if (!currentEntity['active']){
+    if (!currentEntity['active'])
         $(entityBoxId).hide();
-    }
 }
 
 /**
  * Handler for all 'onClick' event from markers.
  */
-function onClickMarkerHandler(event){
-    if (event.sourceTarget.info != undefined){
+function onClickMarkerHandler(event) {
+    if (event.sourceTarget.info !== undefined)
         setCurrentEntity(event.sourceTarget.info);
-    }
 }
 
 /**
@@ -501,62 +259,54 @@ function onClickMarkerHandler(event){
 function setCurrentEntity(info){
     $("#entity-list-info").empty();
 
-    if ($(entityBoxId).is(':hidden')){
+    if ($(entityBoxId).is(':hidden'))
         $(entityBoxId).show();
-    }
-    let value;
 
-    for (let key in info){
+    let value;
+    for (let key in info) {
         switch (key) {
             case 'location':
-                value = "[ " + info[key]['lat'] + ", " + info[key]['lon'] + " ]";
+                value = `[${info[key]['lat']}, ${info[key]['lon']}]`;
                 break;
             case 'route':
                 value = []
-                for(let i=0; i<info[key].length; i++){
-                    value.push("["+info[key][i]['lat']+","+info[key][i]['lon']+"]");
-                }
+                for(let i = 0; i < info[key].length; i++)
+                    value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
                 break;
             case 'destination_distance':
-                value = (info[key] * 100).toFixed(2).toString() + ' km';
+            case 'radius':
+                value = `${(info[key] * 100).toFixed(2).toString()} km`;
                 break;
             case 'social_assets':
                 value = [];
-                let location, temp;
-                for (let i=0; i<info[key].length; i++){
-                    temp = info[key][i];
+                for (let i = 0; i < info[key].length; i++) {
+                    const temp = info[key][i];
                     delete temp['location'];
                     value.push(temp);
                 }
 
                 break;
-            case 'radius':
-                value = (info[key] * 100).toFixed(2).toString() + ' km';
-                break;
             default:
                 value = info[key];
         }
-        $("#entity-list-info").append("<li><b>"+key+":</b> "+value+"</li>");
+        $("#entity-list-info").append(`<li><b>${key}:</b> ${value}</li>`);
     }
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
-    if (info['type'] == 'agent' || info['type'] == 'social_asset'){
+
+    if (info['type'] === 'agent' || info['type'] === 'social_asset')
         currentEntity['id'] = info['token'];
-    }else{
+    else
         currentEntity['id'] = info['identifier'];
-    }
 }
 
 /**
  * Check whether the entered location is within the array given.
  */
-function containsLocation(locations, location){
-    for (let i=0; i < locations.length; i++){
-        if (locations[i]['lat'] == location['lat']){
-            if (locations[i]['lon'] == location['lon']) return true;
-        }
-    }
+function containsLocation(locations, location) {
+    if (locations.some(item => item['lat'] === location['lat'] && item['lon'] === location['lon']))
+        return true;
 
     return false;
 }
@@ -564,11 +314,11 @@ function containsLocation(locations, location){
 /**
  * Format the location incrementing the lat coordination by 1/10000.
  */
-function format_location(event_location, old_locations){
-    let new_location = event_location;
-    let alfa = 0.0001;
+function format_location(event_location, old_locations) {
+    const new_location = event_location;
+    const alfa = 0.0001;
 
-    while (containsLocation(old_locations, new_location)){
+    while (containsLocation(old_locations, new_location)) {
         new_location['lat'] += alfa;
     }
 
@@ -578,31 +328,27 @@ function format_location(event_location, old_locations){
 /**
  * Initialize the simulator info fields.
  */
-function init() {
-    logNormal('Initializing variables.');
+async function init() {
+    logNormal('Initializing the simulation');
 
-    fetch($SCRIPT_ROOT + '/simulator/info/config').then(response => {
-        if(response.status == 200){
-            response.json().then(data => setSimulationInfo(data));
-            startMatchFunctionId = setInterval(startMatch, stepSpeed);
-        }else{
-            response.json().then(error => handleError(error.message));
-        }
-    });
+    try {
+        const simulationInfo = await api.getSimulationConfig($SCRIPT_ROOT);
+        setSimulationInfo(simulationInfo);
 
+        startMatchFunctionId = setInterval(startMatch, stepSpeed);
+    } catch (err) {
+        handleError(`[INIT]: ${err}`);
+    }
 }
 
 /**
  * Draw the route given with red circles.
  */
-function printRoute(route){
-    for (let i=0; i<route.length; i++){
-        L.circle([route[i]['lat'], route[i]['lon']], {
-                color: 'red',
-                radius: 10
-        }).addTo(variablesMarkerGroup);
-    }
-
+function printRoute(route) {
+    route.map(item => L.circle([item['lat'], item['lon']], {
+        color: 'red',
+        radius: 10
+    }).addTo(variablesMarkerGroup));
 }
 
 /**
@@ -630,7 +376,7 @@ function pause() {
     } else {
         logNormal('Playing.');
 
-        updateStateFunctionId = setInterval(nextStep, stepSpeed);
+        updateStateFunctionId = setInterval(updateStep, stepSpeed);
         $(btnPauseId).text('Pause');
         playing = true;
     }
@@ -657,15 +403,15 @@ function setLog() {
  * Event handler for radio box field.
  */
 $(function () {
-    $('#speed input[type=radio]').change(function(){
+    $('#speed input[type=radio]').change(function() {
         stepSpeed = parseInt(this.value);
         
-        if (playing){
+        if (playing) {
             clearInterval(updateStateFunctionId);
-            updateStateFunctionId = setInterval(nextStep, stepSpeed);
+            updateStateFunctionId = setInterval(updateStep, stepSpeed);
         }
 
-        logNormal("Step speed change to " + $(this).val() + " ms");
+        logNormal(`Step speed changed to ${$(this).val()}ms`);
   
     })
 })
@@ -674,8 +420,8 @@ $(function () {
  * Add log in text area.
  */
 function log(tag, message) {
-    var oldText = $(logId).val();
-    var formattedText = oldText + '\n[ ' + tag + ' ] ## ' + message;
+    const oldText = $(logId).val();
+    const formattedText = `${oldText} \n[${tag}]: ${message}`;
     $(logId).focus().val(formattedText);
 }
 
@@ -693,6 +439,9 @@ function logCritical(message) {
 
 $(entityBoxId).hide();
 
-window.onload = function () {
-    this.init();
+window.onload = () => {
+    init();
 };
+
+// Export functions
+export { pause, updateStep, updateMatch, setLog };

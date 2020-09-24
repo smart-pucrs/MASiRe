@@ -1,9 +1,6 @@
 <html>
-
 <head>
-
     <title>Disaster Simulator</title>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,13 +8,13 @@
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="">
     <link rel="stylesheet" href="static/css/style.css">
-
+    <!-- <link rel="shortcut icon" href="#" /> -->
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
         integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
         crossorigin=""></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-    <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script> 
+    <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script>
 </head> 
 <body>
 	<div id="container">
@@ -75,9 +72,9 @@
         
                 <br>
                 <div id="simulation-controller">
-                    <button id="btn-prev" onclick="prevStep()"> << </button>
-                    <button id="btn-pause" onclick="pause()">Pause</button>
-                    <button id="btn-next" onclick="nextStep()"> >> </button>
+                    <button id="btn-prev" class="btn"> << </button>
+                    <button id="btn-pause" class="btn">Pause</button>
+                    <button id="btn-next" class="btn"> >> </button>
                 </div>
                 <br>
 
@@ -93,12 +90,12 @@
 
                 <br>
 	            <div id="matchs">
-	                <button class="btn-match" id="btn-previous-match" onclick="prevMatch()">Previous match</button>
-	                <button class="btn-match" id="btn-next-match" onclick="nextMatch()">Next match</button>
+	                <button class="btn btn-match" id="btn-previous-match">Previous match</button>
+	                <button class="btn btn-match" id="btn-next-match">Next match</button>
 	            </div>
 
                 <div id="log-box">
-                    <button id="btn-log" onclick="setLog()">Hide log</button>
+                    <button class="btn" id="btn-log">Hide log</button>
                     <br>
                     <textarea id="log"></textarea>
                 </div>
@@ -110,8 +107,10 @@
             <div id="entity-box">
                 <ul id="entity-list-info"></ul>
             </div>
-    	</div>
-        <script type="text/javascript" src="static/scripts/script.js?v=2"></script>
+        </div>
+        <!-- <script type="text/javascript" src="static/scripts/script.js?v=2"></script> -->
+        <script type="module" src="static/scripts/script.js"></script>
+        <script type="module" src="static/scripts/actionButtons.js"></script>
     </body>
 
 </html>
