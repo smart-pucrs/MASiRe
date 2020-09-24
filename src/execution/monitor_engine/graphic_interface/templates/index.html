@@ -23,11 +23,11 @@
             <div id="options">
                 <div id="option-content">
                     <div class="option-item">
-                        <h3>Step</h3>
+                        <h3>Step <span id="step"></span></h3>
                         <div class="button-wrapper">
                             <input type="number" />
-                            <button class="btn">+1</button>
-                            <button class="btn">+10</button>
+                            <button class="btn" id="btn-next-1">+1</button>
+                            <button class="btn" id="btn-next-10">+10</button>
                             <button class="btn">End</button>
                         </div>
                     </div>
@@ -35,15 +35,15 @@
                     <div class="option-item">
                         <h3>Speed</h3>
                         <div class="button-wrapper">
-                            <button class="btn">+</button>
-                            <button class="btn">-</button>
+                            <button class="btn" id="inc-speed">+</button>
+                            <button class="btn" id="dec-speed">-</button>
                         </div>
                     </div>
 
                     <div class="option-item">
                         <h3>Options</h3>
                         <div class="button-wrapper">
-                            <button class="btn">Pause</button>
+                            <button class="btn" id="btn-pause">Pause</button>
                             <button class="btn">Expand</button>
                         </div>
                     </div>
@@ -52,18 +52,17 @@
             
             <div id="container">
                 <div class="info">
-                    <div id="global-info">
-                        <h3 id="title">Global Info</h3>
-                        <p>Mapa: <span id="current-map">?</span></p>
-                        <br>
-                        <p>Total agents: <span id="active-agents">?</span></p>
-                        <br>
-                        <p>Metrics: <span id="current-map">?</span></p>
+                    <div class="card" id="global-info">
+                        <h3>Global Info</h3>
+                        <p>Map: <span id="current-map"></span></p>
+                        <p>Total agents: <span id="active-agents"></span></p>
+                        <p>Metrics: <span><ul id="metrics"></ul></span></p>
                     </div>
 
-                    <div id="agent-info">
-                        <h3 id="title">Agents Info</h3>
-                        <span>lore ipsum</span>
+                    <div class="card" id="agent-info">
+                        <h3>Agent Info: </h3>
+                        <span id="no-agent-text">No agent selected</span>
+                        <span><ul id="entity-list-info"></ul></span>
                     </div>
                 </div>
 

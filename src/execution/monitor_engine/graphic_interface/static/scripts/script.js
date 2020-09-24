@@ -14,7 +14,7 @@ let currentMatch = 0;
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
-const entityBoxId = '#entity-box';
+const noAgentText = '#no-agent-text';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
 const currentEntity = {
@@ -58,17 +58,17 @@ async function startMatch() {
 
 let pos_lat, pos_lon;
 document.getElementById("mapid").addEventListener("contextmenu", (event) => {
-    // Prevent the browser's context menu from appearing
     event.preventDefault();
 
     alert(`Lat: ${pos_lat} \nLon: ${pos_lon}`);
-
-    return false; // To disable default popup.
+    
+    // disable default popup
+    return false;
 });
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
- * @params stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
+ * @param stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
  */
 async function updateStep(stepValue = 1) {
     currentStep += stepValue;
@@ -108,7 +108,7 @@ function handle_new_match(data) {
 
 /**
  * Update Match and refresh the graphic interface.
- * @params matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
+ * @param matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
     if(currentMatch === 0 && matchValue === -1) 
@@ -239,8 +239,8 @@ function process_simulation_data(data) {
             printRoute(actor['route']);
     });
 
-    if (!currentEntity['active'])
-        $(entityBoxId).hide();
+    if (currentEntity['active'])
+        $(noAgentText).hide();
 }
 
 /**
@@ -256,9 +256,7 @@ function onClickMarkerHandler(event) {
  */
 function setCurrentEntity(info){
     $("#entity-list-info").empty();
-
-    if ($(entityBoxId).is(':hidden'))
-        $(entityBoxId).show();
+    $(noAgentText).hide();
 
     let value;
     for (let key in info) {
@@ -381,21 +379,19 @@ function pause() {
 }
 
 /**
- * Event handler for radio box field.
+ * Event handler for the speed options.
+ * @param speed The speed value, default is 250. To increase the simulation speed use -250
  */
-$(function () {
-    $('#speed input[type=radio]').change(function() {
-        stepSpeed = parseInt(this.value);
-        
-        if (playing) {
-            clearInterval(updateStateFunctionId);
-            updateStateFunctionId = setInterval(updateStep, stepSpeed);
-        }
+function updateSpeed(speed = 250) {
+    stepSpeed += speed;
+    
+    if (playing) {
+        clearInterval(updateStateFunctionId);
+        updateStateFunctionId = setInterval(updateStep, stepSpeed);
+    }
 
-        logNormal(`Step speed changed to ${$(this).val()}ms`);
-  
-    })
-})
+    logNormal(`Step speed changed to ${stepSpeed}ms`);
+}
 
 /**
  * Add log in text area.
@@ -417,11 +413,11 @@ function logCritical(message) {
     log('CRITICAL', message);
 }
 
-$(entityBoxId).hide();
+$(noAgentText).show();
 
 window.onload = () => {
     init();
 };
 
 // Export functions
-export { pause, updateStep, updateMatch };
+export { pause, updateStep, updateMatch, updateSpeed };
