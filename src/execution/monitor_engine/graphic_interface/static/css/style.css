@@ -41,6 +41,7 @@ h3 {
     font-size: 15px;
     margin-top: 0px;
     text-align: center;
+    font-weight: bold;
 }
 
 #options .option-item + .option-item {
@@ -93,9 +94,9 @@ h3 {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    height: 100%;
+    height: 700px;
     padding: 15px;
-    margin-top: -80px;
+    margin-top: -100px;
 }
 
 .card {
@@ -113,36 +114,44 @@ h3 {
     margin-bottom: 15px;
 }
 
-.card p span {
+.card p #current-map {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  width: 240px;
+  width: 235px;
+  font-size: 14px;
+}
+
+.list {
+    overflow: hidden; 
+    overflow-y: scroll;
+    font-size: 14px;
+    list-style-type: none;
 }
 
 .card span ul {
-    padding: 20px 5px 5px 5px;
-    margin: 0 0 0 -80px;
-    list-style-type: none;
-    height: 200px;
+    padding: 5px 0;
+    margin: 23px 5px 5px -80px;
+    height: 275px;
     width: 220px;
-    overflow: hidden; 
-    overflow-y: scroll;
+}
+
+#metrics {
+    padding: 0;
+    margin: -10px 0 0 0;
 }
 
 #global-info {
-    height: 350px;
+    height: 400px;
+}
+
+#global-info #global-itens {
+    margin-top: -15px;
 }
 
 #agent-info {
-    height: 300px;
-}
-
-@media screen and (min-width: 1220px) {
-    #container {
-        height: 80%;
-    }
+    height: 400px;
 }
 
 #mapid {

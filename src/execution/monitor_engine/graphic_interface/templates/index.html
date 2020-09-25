@@ -25,10 +25,10 @@
                     <div class="option-item">
                         <h3>Step <span id="step"></span></h3>
                         <div class="button-wrapper">
-                            <input type="number" />
+                            <input type="number" id="exact-step" />
                             <button class="btn" id="btn-next-1">+1</button>
                             <button class="btn" id="btn-next-10">+10</button>
-                            <button class="btn">End</button>
+                            <button class="btn" id="go-to-last-step">End</button>
                         </div>
                     </div>
 
@@ -54,15 +54,17 @@
                 <div class="info">
                     <div class="card" id="global-info">
                         <h3>Global Info</h3>
-                        <p>Map: <span id="current-map"></span></p>
-                        <p>Total agents: <span id="active-agents"></span></p>
-                        <p>Metrics: <span><ul id="metrics"></ul></span></p>
+                        <div id="global-itens">
+                            <p>Map: <span id="current-map"></span></p>
+                            <p>Total agents: <span id="active-agents"></span></p>
+                            <p>Metrics: <span><ul id="metrics" class="list"></ul></span></p>
+                        </div>
                     </div>
 
                     <div class="card" id="agent-info">
                         <h3>Agent Info: </h3>
                         <span id="no-agent-text">No agent selected</span>
-                        <span><ul id="entity-list-info"></ul></span>
+                        <span><ul id="entity-list-info" class="list"></ul></span>
                     </div>
                 </div>
 

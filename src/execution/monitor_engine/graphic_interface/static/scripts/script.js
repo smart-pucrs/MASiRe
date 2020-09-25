@@ -1,6 +1,7 @@
 import ApiController from './services/ApiController.js';
 import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
 import icons from './utils/icons.js';
+import containsMetric from './utils/containsMetric.js';
 
 let mymap = null;
 let variablesMarkerGroup = null;
@@ -10,6 +11,7 @@ let updateStateFunctionId = null;
 let stepSpeed = 1000;
 let playing = true;
 let currentStep = 0;
+let totalSteps = 0;
 let currentMatch = 0;
 
 const api = new ApiController();
@@ -17,6 +19,7 @@ const btnPauseId = '#btn-pause';
 const noAgentText = '#no-agent-text';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
+const metrics = [];
 const currentEntity = {
     'type': null, 
     'id': null, 
@@ -69,9 +72,16 @@ document.getElementById("mapid").addEventListener("contextmenu", (event) => {
 /**
  * Get next step from the Flask and refresh the graphic interface.
  * @param stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
+ * @param exactStep -> Go to the desired step, default is null
  */
-async function updateStep(stepValue = 1) {
-    currentStep += stepValue;
+async function updateStep(stepValue = 1, exactStep = null) {
+    if (exactStep)
+        currentStep = parseInt(exactStep);
+    else
+        currentStep += stepValue; 
+
+    if (currentStep > totalSteps)
+        currentStep -= totalSteps;
 
     try {
         const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
@@ -95,6 +105,11 @@ async function updateStep(stepValue = 1) {
             currentStep -= stepValue;
         }
     }
+}
+
+function goToLastStep() {
+    updateStep(0, totalSteps-1);
+    pause();
 }
 
 /**
@@ -135,7 +150,9 @@ async function updateMatch(matchValue = 1) {
  * Set information in match fields.
  */
 function setMatchInfo(match_info) {
-    $('#step').text(`${currentStep + 1} of ${match_info['total_steps']}`);
+    totalSteps = match_info['total_steps'];
+
+    $('#step').text(`${currentStep + 1} of ${totalSteps}`);
     $('#current-match').text(`${currentMatch + 1} of ${match_info['total_matches']}`);
 }
 
@@ -181,9 +198,7 @@ function setMapConfig(config) {
 /**
  * Handle the step data drawing all markers in map.
  */
-function process_simulation_data(data) {
-    if (!data) return;
-    
+function process_simulation_data(data) {    
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
@@ -209,14 +224,28 @@ function process_simulation_data(data) {
             }).addTo(variablesMarkerGroup);
         }
 
-        if (type === currentEntity['type'] && event['identifier'] === currentEntity['id']) {
+        if (type === currentEntity['type'] && event['identifier'] === currentEntity['id'])
             setCurrentEntity(event);
-        }
+
+        
 
         marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info) });  
         marker.info = event;
         marker.addTo(variablesMarkerGroup);
-    })
+
+        let metric = { 
+            identifier: event['identifier'], 
+            type: type,
+        }
+
+        if (type === 'victim') {
+            metric = { ...metric, alive: event.lifetime > 0 }
+        }
+
+        addToMetrics(metric);
+    });
+
+    updateMetricsInScreen();
 
     const actors = data['actors'];
     $('#active-agents').text(actors.length);
@@ -321,6 +350,48 @@ function format_location(event_location, old_locations) {
     return new_location;
 }
 
+
+/**
+ * Verify if a metric was already added and if not, then add the metric to the metrics list, otherwise, update it
+ * @param metric -> the metric to be added
+ */
+function addToMetrics(metric) {
+    const isPresent = containsMetric(metric, metrics);
+    if (isPresent !== -1) {
+        metrics[isPresent] = metric;
+        console.log(metrics);
+    } else {
+        metrics.push(metric);
+        console.log(metrics);
+    }
+}
+
+
+/**
+ * Update the metric list in index.html
+ */
+function updateMetricsInScreen() {
+    let countedTypes = [];
+
+    let str = '';
+    metrics.map(metric => {
+        const { type, alive } = metric;
+
+        if (type === 'victim' && !(countedTypes.includes({ type, alive }))) {            
+            const sameMetricCount = metrics.filter(item => type === item.type && alive === item.alive).length;
+                    
+            str += `<li><b>${type} ${alive ? "alive" : "dead"}:</b> ${sameMetricCount}</li>`;
+            countedTypes.push({ type, alive });
+        } else if (!(countedTypes.includes({ type }))) {
+            const sameMetricCount = metrics.filter(item => type === item.type).length;
+            str += `<li><b>${type}:</b> ${sameMetricCount}</li>`;
+            countedTypes.push({ type });
+        }
+    });
+
+    $("#metrics").html(str);
+}
+
 /**
  * Initialize the simulator info fields.
  */
@@ -420,4 +491,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep, updateMatch, updateSpeed };
+export { pause, updateStep, goToLastStep, updateMatch, updateSpeed };
