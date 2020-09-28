@@ -169,7 +169,9 @@ function setMapConfig(config) {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
             '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
             'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets'
+        id: 'mapbox.streets',
+        zoomControl: false,
+        attributionControl: false,
     }).addTo(mymap);
 
     variablesMarkerGroup = L.layerGroup().addTo(mymap);
@@ -227,45 +229,34 @@ function process_simulation_data(data) {
         if (type === currentEntity['type'] && event['identifier'] === currentEntity['id'])
             setCurrentEntity(event);
 
-        
-
         marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info) });  
         marker.info = event;
         marker.addTo(variablesMarkerGroup);
 
-        let metric = { 
-            identifier: event['identifier'], 
-            type: type,
-        }
-
-        if (type === 'victim') {
-            metric = { ...metric, alive: event.lifetime > 0 }
-        }
-
-        addToMetrics(metric);
+        updateMetrics(data['partial_report']);
     });
-
-    updateMetricsInScreen();
 
     const actors = data['actors'];
     $('#active-agents').text(actors.length);
 
     actors.map(actor => {
-        const agent_location = format_location(actor['location'], old_locations);
+        const agentInfo = actor['agent'];
+
+        const agent_location = format_location(agentInfo['location'], old_locations);
         old_locations.push(agent_location);
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
-        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(actor) });
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
         
-        if (actor['type'] === currentEntity['type'] && actor['token'] === currentEntity['id'])
-            setCurrentEntity(actor);
+        if (agentInfo['type'] === currentEntity['type'] && agentInfo['token'] === currentEntity['id'])
+            setCurrentEntity(agentInfo);
 
         marker.on('click', onClickMarkerHandler);  
-        marker.info = actor;
+        marker.info = agentInfo;
         marker.addTo(variablesMarkerGroup);
         
-        if (actor['route'])
-            printRoute(actor['route']);
+        if (agentInfo['route'])
+            printRoute(agentInfo['route']);
     });
 
     if (currentEntity['active'])
@@ -350,45 +341,23 @@ function format_location(event_location, old_locations) {
     return new_location;
 }
 
-
-/**
- * Verify if a metric was already added and if not, then add the metric to the metrics list, otherwise, update it
- * @param metric -> the metric to be added
- */
-function addToMetrics(metric) {
-    const isPresent = containsMetric(metric, metrics);
-    if (isPresent !== -1) {
-        metrics[isPresent] = metric;
-        console.log(metrics);
-    } else {
-        metrics.push(metric);
-        console.log(metrics);
-    }
-}
-
-
 /**
  * Update the metric list in index.html
+ * @param data -> the partial_info with the metrics from that step
  */
-function updateMetricsInScreen() {
-    let countedTypes = [];
-
+function updateMetrics(data) {
+    const formattedData = JSON.parse(data);
     let str = '';
-    metrics.map(metric => {
-        const { type, alive } = metric;
 
-        if (type === 'victim' && !(countedTypes.includes({ type, alive }))) {            
-            const sameMetricCount = metrics.filter(item => type === item.type && alive === item.alive).length;
-                    
-            str += `<li><b>${type} ${alive ? "alive" : "dead"}:</b> ${sameMetricCount}</li>`;
-            countedTypes.push({ type, alive });
-        } else if (!(countedTypes.includes({ type }))) {
-            const sameMetricCount = metrics.filter(item => type === item.type).length;
-            str += `<li><b>${type}:</b> ${sameMetricCount}</li>`;
-            countedTypes.push({ type });
+    for (const item in formattedData) {
+        const obj = formattedData[item];
+        for (const props in obj) {
+            str += `<li><b>${item} ${props}:</b> ${formattedData[item][props]}</li>`;
         }
-    });
+    }
 
+            
+    
     $("#metrics").html(str);
 }
 
