@@ -17,9 +17,9 @@ let currentMatch = 0;
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
 const noAgentText = '#no-agent-text';
+const extendMenuId = '#extend-menu';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
-const metrics = [];
 const currentEntity = {
     'type': null, 
     'id': null, 
@@ -76,7 +76,7 @@ document.getElementById("mapid").addEventListener("contextmenu", (event) => {
  */
 async function updateStep(stepValue = 1, exactStep = null) {
     if (exactStep)
-        currentStep = parseInt(exactStep);
+        currentStep = parseInt(exactStep) - 1;
     else
         currentStep += stepValue; 
 
@@ -108,8 +108,7 @@ async function updateStep(stepValue = 1, exactStep = null) {
 }
 
 function goToLastStep() {
-    updateStep(0, totalSteps-1);
-    pause();
+    updateStep(0, totalSteps - 1);
 }
 
 /**
@@ -163,15 +162,16 @@ function setMapConfig(config) {
     if (mymap !== null) 
         mymap.remove();
 
-    mymap = L.map('mapid');
+    mymap = L.map('mapid', {
+        zoomControl: false,
+        attributionControl: false
+    });
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 19,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
             '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
             'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         id: 'mapbox.streets',
-        zoomControl: false,
-        attributionControl: false,
     }).addTo(mymap);
 
     variablesMarkerGroup = L.layerGroup().addTo(mymap);
@@ -407,13 +407,13 @@ function pause() {
         logNormal('Paused.');
 
         clearInterval(updateStateFunctionId);
-        $(btnPauseId).text('Play');
+        $(btnPauseId).html('<img src="static/images/play_button.svg" height="13" width="13" alt="Resume Match" />');
         playing = false;
     } else {
         logNormal('Playing.');
 
         updateStateFunctionId = setInterval(updateStep, stepSpeed);
-        $(btnPauseId).text('Pause');
+        $(btnPauseId).html('<img src="static/images/pause_button.svg" height="14" width="14" alt="Pause Match" />');
         playing = true;
     }
 }
@@ -431,6 +431,28 @@ function updateSpeed(speed = 250) {
     }
 
     logNormal(`Step speed changed to ${stepSpeed}ms`);
+}
+
+function animateButton() {
+    const button = document.getElementById('expand-button');
+    if (button.classList.contains('animate-open')) {
+        button.classList.remove('animate-open');
+        button.classList.add('animate-close');
+    } else {
+        button.classList.remove('animate-close');
+        button.classList.add('animate-open');
+    }
+}
+
+function expandMenu() {
+    if ($(extendMenuId).css('display') === 'none')
+        $(extendMenuId).css('display', 'flex');
+    else
+        $(extendMenuId).css('display', 'none');
+
+    if (playing) pause();
+
+    return animateButton();
 }
 
 /**
@@ -460,4 +482,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep, goToLastStep, updateMatch, updateSpeed };
+export { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu };

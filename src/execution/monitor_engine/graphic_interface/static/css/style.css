@@ -12,7 +12,7 @@ body {
 #mapid {
     position: absolute;
     top: 0;
-    left: 15;
+    left: 0;
     padding: 0;
     margin: 0;
     width: 100vw;
@@ -86,12 +86,12 @@ h3 {
     padding: 5px;
 }
 
-#options .option-item .button-wrapper input {
+.button-wrapper input {
     width: 55px;
     height: 25px;
 }
 
-#options .option-item .button-wrapper button {
+.btn {
     width: 55px;
     height: 25px;
     margin: 0 5px;
@@ -104,12 +104,12 @@ h3 {
     transition: opacity .1s ease-in-out;
 }
 
-#options .option-item .button-wrapper button:hover {
+.btn:hover {
     opacity: 0.7;
 }
 
-#options .option-item .button-wrapper button:active {
-    transform: translateY(.3px);
+.btn:active {
+    transform: translateY(.2px);
 }
 
 #container {
@@ -186,4 +186,41 @@ h3 {
 
 #agent-info h3 {
     padding-bottom: 10px;
+}
+
+#extend-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    bottom: 20;
+    right: 20;
+}
+
+#extend-menu-match-list {
+    height: 180px;
+    border-bottom: .5px solid #505050;
+    margin-bottom: 10px;
+}
+
+#extend-menu-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#extend-menu-options div {
+    padding: 8px;
+}
+
+#extend-menu-speed {
+    margin-bottom: 10px;
+}
+
+#resume {
+    width: 100% !important;
+}
+
+button img {
+    pointer-events: none;
 }
