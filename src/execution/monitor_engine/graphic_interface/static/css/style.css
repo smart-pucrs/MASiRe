@@ -141,7 +141,8 @@ h3 {
     color: #505050;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     width: 250px;
-    min-height: 220px;
+    min-height: 100px;
+    max-height: 400px;
     margin-bottom: 15px;
     z-index: 1;
 }
@@ -160,28 +161,23 @@ h3 {
     overflow-y: scroll;
     font-size: 14px;
     list-style-type: none;
-    padding: 5px 0;
-    margin: 23px 5px 5px -80px;
-    height: 275px;
+    padding: 5px 10px;
     width: 220px;
+    margin: -5px 0 0 0 !important;
 }
 
 #metrics {
-    padding: 0 !important;
-    margin: -10px 0 0 0 !important;
-    height: 135px;
-}
-
-#global-info {
-    height: 400px;
+    padding: 0 0 0 10px !important;
+    max-height: 135px;
 }
 
 #global-info #global-itens {
     margin-top: -15px;
 }
 
-#agent-info {
-    height: 400px;
+#agent-info .list {
+    max-height: 230px;
+    padding: 0 0 0 5px !important;
 }
 
 #agent-info h3 {
@@ -191,9 +187,11 @@ h3 {
 #extend-menu {
     display: none;
     flex-direction: column;
-    position: absolute;
-    bottom: 20;
-    right: 20;
+    position: fixed;
+    top: 25%;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
 }
 
 #extend-menu-match-list {

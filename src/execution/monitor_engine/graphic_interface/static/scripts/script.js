@@ -1,7 +1,6 @@
 import ApiController from './services/ApiController.js';
 import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
 import icons from './utils/icons.js';
-import containsMetric from './utils/containsMetric.js';
 
 let mymap = null;
 let variablesMarkerGroup = null;
@@ -214,7 +213,7 @@ function process_simulation_data(data) {
         old_locations.push(event_location);
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
-        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
+        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event), riseOnHover: true });
         const type = event['type'];
 
         if (type === 'flood') {
@@ -229,7 +228,7 @@ function process_simulation_data(data) {
         if (type === currentEntity['type'] && event['identifier'] === currentEntity['id'])
             setCurrentEntity(event);
 
-        marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info) });  
+        marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info, marker) });  
         marker.info = event;
         marker.addTo(variablesMarkerGroup);
 
@@ -246,14 +245,14 @@ function process_simulation_data(data) {
         old_locations.push(agent_location);
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
-        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo), riseOnHover: true });
         
         if (agentInfo['type'] === currentEntity['type'] && agentInfo['token'] === currentEntity['id'])
-            setCurrentEntity(agentInfo);
+            setCurrentEntity(agentInfo, marker);
 
-        marker.on('click', onClickMarkerHandler);  
+        marker.on('click', () => setCurrentEntity(agentInfo, marker));  
         marker.info = agentInfo;
-        marker.addTo(variablesMarkerGroup);
+            marker.addTo(variablesMarkerGroup);
         
         if (agentInfo['route'])
             printRoute(agentInfo['route']);
@@ -264,17 +263,9 @@ function process_simulation_data(data) {
 }
 
 /**
- * Handler for all 'onClick' event from markers.
+ * Set information in entity info fields and highlights the marker.
  */
-function onClickMarkerHandler(event) {
-    if (event.sourceTarget.info !== undefined)
-        setCurrentEntity(event.sourceTarget.info);
-}
-
-/**
- * Set information in entity info fields.
- */
-function setCurrentEntity(info){
+function setCurrentEntity(info) {
     $("#entity-list-info").empty();
     $(noAgentText).hide();
 
@@ -445,12 +436,13 @@ function animateButton() {
 }
 
 function expandMenu() {
-    if ($(extendMenuId).css('display') === 'none')
+    if ($(extendMenuId).css('display') === 'none') {
         $(extendMenuId).css('display', 'flex');
-    else
+        if (playing) pause();
+    } else {
         $(extendMenuId).css('display', 'none');
-
-    if (playing) pause();
+        if (!playing) pause();
+    }
 
     return animateButton();
 }

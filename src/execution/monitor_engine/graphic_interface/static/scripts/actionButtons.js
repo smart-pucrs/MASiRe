@@ -14,10 +14,7 @@ const actions = {
     'inc-speed': () => updateSpeed(-250),
     'dec-speed': () => updateSpeed(),
     'expand-button': ()=> expandMenu(),
-    'resume': ()=>  {
-        expandMenu()
-        return pause();
-    }
+    'resume': ()=> expandMenu(),
 };
 
 /** Handles the click, calling the right function */
