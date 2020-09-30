@@ -12,6 +12,7 @@ let playing = true;
 let currentStep = 0;
 let totalSteps = 0;
 let currentMatch = 0;
+let selectedMarker = {};
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
@@ -19,6 +20,7 @@ const noAgentText = '#no-agent-text';
 const extendMenuId = '#extend-menu';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
+const typesWithTokens = ['agent', 'social_asset'];
 const currentEntity = {
     'type': null, 
     'id': null, 
@@ -213,7 +215,7 @@ function process_simulation_data(data) {
         old_locations.push(event_location);
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
-        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event), riseOnHover: true });
+        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
         const type = event['type'];
 
         if (type === 'flood') {
@@ -225,12 +227,10 @@ function process_simulation_data(data) {
             }).addTo(variablesMarkerGroup);
         }
 
-        if (type === currentEntity['type'] && event['identifier'] === currentEntity['id'])
-            setCurrentEntity(event);
-
-        marker.on('click', (e) => { setCurrentEntity(e.sourceTarget.info, marker) });  
+        marker.on('click', () => setCurrentEntity(event, marker));  
         marker.info = event;
         marker.addTo(variablesMarkerGroup);
+        marker.bindTooltip(event.type);
 
         updateMetrics(data['partial_report']);
     });
@@ -245,14 +245,15 @@ function process_simulation_data(data) {
         old_locations.push(agent_location);
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
-        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo), riseOnHover: true });
-        
-        if (agentInfo['type'] === currentEntity['type'] && agentInfo['token'] === currentEntity['id'])
-            setCurrentEntity(agentInfo, marker);
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
 
         marker.on('click', () => setCurrentEntity(agentInfo, marker));  
         marker.info = agentInfo;
-            marker.addTo(variablesMarkerGroup);
+        marker.addTo(variablesMarkerGroup);
+
+        const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession
+
+        marker.bindTooltip(socialName);
         
         if (agentInfo['route'])
             printRoute(agentInfo['route']);
@@ -265,9 +266,17 @@ function process_simulation_data(data) {
 /**
  * Set information in entity info fields and highlights the marker.
  */
-function setCurrentEntity(info) {
+function setCurrentEntity(info, marker) {
     $("#entity-list-info").empty();
     $(noAgentText).hide();
+    
+    const token = typesWithTokens.includes(info.type) ? info.token : info.identifier;
+
+    if (token === selectedMarker.token) {
+        resetMarkerSize();
+    } else {
+        highlightMarker(marker);
+    }
 
     let value;
     for (let key in info) {
@@ -351,6 +360,46 @@ function updateMetrics(data) {
     
     $("#metrics").html(str);
 }
+
+/** Hightlight the marker
+ * @param marker -> THe marker to be highlighted
+ */
+function highlightMarker(marker) {
+        resetMarkerSize();
+        const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
+
+        const newIcon = marker.getIcon();
+        newIcon.options.iconSize = [85, 92];
+        newIcon.options.iconAnchor = [73, 74];
+        marker.setIcon(newIcon);
+
+        const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
+
+        selectedMarker = {
+            marker,
+            token
+        }
+
+        selectedMarker.marker.defaultSize = defaultSize;
+        selectedMarker.marker.defaultAnchor = defaultAnchor;
+}
+
+/**
+ *  Resets the last highlighted Marker size and cleans the object
+ */
+function resetMarkerSize() {
+    const oldMarker = selectedMarker.marker;
+
+    if (oldMarker) {
+        const oldIcon = oldMarker.getIcon();
+        oldIcon.options.iconSize = oldMarker.defaultSize;
+        oldIcon.options.iconAnchor = oldMarker.defaultAnchor;
+        oldMarker.setIcon(oldIcon);
+    }
+
+    selectedMarker = {};
+}
+
 
 /**
  * Initialize the simulator info fields.
