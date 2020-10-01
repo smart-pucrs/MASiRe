@@ -52,8 +52,9 @@ async function startMatch() {
             clearInterval(startMatchFunctionId);
             updateStateFunctionId = setInterval(updateStep, stepSpeed);
         } catch (err) {
-            if (err.toString() !== invalidStartError)
+            if (err.toString() !== invalidStartError) {
                 handleError(`[START MATCH | MAP INFO]: ${err}`);
+            }
         }
     } catch (err) {
         handleError(`[START MATCH | MATCH INFO]: ${err}`);
@@ -76,13 +77,11 @@ document.getElementById("mapid").addEventListener("contextmenu", (event) => {
  * @param exactStep -> Go to the desired step, default is null
  */
 async function updateStep(stepValue = 1, exactStep = null) {
-    if (exactStep)
-        currentStep = parseInt(exactStep) - 1;
-    else
-        currentStep += stepValue; 
+    currentStep = exactStep ? parseInt(exactStep) - 1 : currentStep + stepValue;
 
-    if (currentStep > totalSteps)
-        currentStep -= totalSteps;
+    if (currentStep > totalSteps) {
+        goToLastStep();
+    }
 
     try {
         const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
@@ -126,8 +125,9 @@ function handle_new_match(data) {
  * @param matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
-    if(currentMatch === 0 && matchValue === -1) 
+    if(currentMatch === 0 && matchValue === -1) {
         return logError("Already in the first step.");
+    }
 
     currentMatch += matchValue;
     
@@ -160,8 +160,9 @@ function setMatchInfo(match_info) {
  * Set information in Map fields.
  */
 function setMapConfig(config) {
-    if (mymap !== null) 
+    if (mymap !== null) {
         mymap.remove();
+    }
 
     mymap = L.map('mapid', {
         zoomControl: false,
@@ -188,6 +189,7 @@ function setMapConfig(config) {
 
     L.rectangle(bounds, { weight: 1 }).on('click', (e) => {
         console.info(e);
+        resetMarkerSize();
     }).addTo(constantsMarkerGroup);
 
     mymap.addEventListener('mousemove', (ev) => {
@@ -255,12 +257,14 @@ function process_simulation_data(data) {
 
         marker.bindTooltip(socialName);
         
-        if (agentInfo['route'])
+        if (agentInfo['route']) {
             printRoute(agentInfo['route']);
+        }
     });
 
-    if (currentEntity['active'])
+    if (currentEntity['active']) {
         $(noAgentText).hide();
+    }
 }
 
 /**
@@ -311,18 +315,20 @@ function setCurrentEntity(info, marker) {
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
 
-    if (info['type'] === 'agent' || info['type'] === 'social_asset')
+    if (info['type'] === 'agent' || info['type'] === 'social_asset') {
         currentEntity['id'] = info['token'];
-    else
+    } else {
         currentEntity['id'] = info['identifier'];
+    }
 }
 
 /**
  * Check whether the entered location is within the array given.
  */
 function containsLocation(locations, location) {
-    if (locations.some(item => item['lat'] === location['lat'] && item['lon'] === location['lon']))
+    if (locations.some(item => item['lat'] === location['lat'] && item['lon'] === location['lon'])) {
         return true;
+    }
 
     return false;
 }
