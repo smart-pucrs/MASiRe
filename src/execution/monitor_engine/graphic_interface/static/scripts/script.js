@@ -17,7 +17,7 @@ let selectedMarker = {};
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
-const noAgentText = '#no-agent-text';
+const noEntityTextId = '#no-entity-text';
 const extendMenuId = '#extend-menu';
 const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
@@ -264,7 +264,7 @@ function process_simulation_data(data) {
     });
 
     if (currentEntity['active']) {
-        $(noAgentText).hide();
+        $(noEntityTextId).hide();
     }
 }
 
@@ -273,7 +273,7 @@ function process_simulation_data(data) {
  */
 function setCurrentEntity(info, marker) {
     $("#entity-list-info").empty();
-    $(noAgentText).hide();
+    $(noEntityTextId).hide();
     
     const token = typesWithTokens.includes(info.type) ? info.token : info.identifier;
 
@@ -524,7 +524,7 @@ function logCritical(message) {
     log('CRITICAL', message);
 }
 
-$(noAgentText).show();
+$(noEntityTextId).show();
 
 window.onload = () => {
     init();
