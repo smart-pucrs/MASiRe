@@ -1,5 +1,6 @@
 import ApiController from './services/ApiController.js';
 import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
+import defineRouteRadius from './utils/route/defineRouteRadius.js';
 import icons from './utils/icons.js';
 
 let mymap = null;
@@ -367,7 +368,7 @@ function updateMetrics(data) {
     $("#metrics").html(str);
 }
 
-/** Hightlight the marker
+/** Hightlight the marker and set the selectedMarker object
  * @param marker -> THe marker to be highlighted
  */
 function highlightMarker(marker) {
@@ -406,7 +407,6 @@ function resetMarkerSize() {
     selectedMarker = {};
 }
 
-
 /**
  * Initialize the simulator info fields.
  */
@@ -427,9 +427,11 @@ async function init() {
  * Draw the route given with red circles.
  */
 function printRoute(route) {
+    const radius = defineRouteRadius(mymap.getZoom());
+
     route.map(item => L.circle([item['lat'], item['lon']], {
         color: 'red',
-        radius: 10
+        radius,
     }).addTo(variablesMarkerGroup));
 }
 
