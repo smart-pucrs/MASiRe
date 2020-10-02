@@ -14,6 +14,7 @@ let currentStep = 0;
 let totalSteps = 0;
 let currentMatch = 0;
 let selectedMarker = {};
+let pos_lat, pos_lon;
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
@@ -62,13 +63,11 @@ async function startMatch() {
     }
 }
 
-let pos_lat, pos_lon;
-document.getElementById("mapid").addEventListener("contextmenu", (event) => {
-    event.preventDefault();
+document.getElementById("mapid").addEventListener("contextmenu", (e) => {
+    e.preventDefault();
 
     alert(`Lat: ${pos_lat} \nLon: ${pos_lon}`);
     
-    // disable default popup
     return false;
 });
 
@@ -169,6 +168,7 @@ function setMapConfig(config) {
         zoomControl: false,
         attributionControl: false
     });
+    
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 19,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -186,6 +186,7 @@ function setMapConfig(config) {
     mymap.setView([lat, lon], 17);
 
     L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
+
     const bounds = [[config['minLat'], config['minLon']], [config['maxLat'], config['maxLon']]];
 
     L.rectangle(bounds, { weight: 1 }).on('click', (e) => {
@@ -193,9 +194,9 @@ function setMapConfig(config) {
         resetMarkerSize();
     }).addTo(constantsMarkerGroup);
 
-    mymap.addEventListener('mousemove', (ev) => {
-        pos_lat = ev.latlng.lat;
-        pos_lon = ev.latlng.lng;
+    mymap.addEventListener('mousemove', (e) => {
+        pos_lat = e.latlng.lat;
+        pos_lon = e.latlng.lng;
     });
 
     $('#current-map').text(config['osm']);
@@ -211,14 +212,18 @@ function process_simulation_data(data) {
     currentEntity['active'] = false;
 
     const events = data['environment']['events'];
+    
     const old_locations = [];
 
     events.map(event => {
         const event_location = format_location(event['location'], old_locations);
+        
         old_locations.push(event_location);
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
+        
         const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
+
         const type = event['type'];
 
         if (type === 'flood') {
@@ -229,9 +234,9 @@ function process_simulation_data(data) {
                 radius: event['radius'] * 109000
             }).addTo(variablesMarkerGroup);
         }
-
-        marker.on('click', () => setCurrentEntity(event, marker));  
+        
         marker.info = event;
+        marker.on('click', () => setCurrentEntity(event, marker));  
         marker.addTo(variablesMarkerGroup);
         marker.bindTooltip(event.type);
 
@@ -245,13 +250,15 @@ function process_simulation_data(data) {
         const agentInfo = actor['agent'];
 
         const agent_location = format_location(agentInfo['location'], old_locations);
+
         old_locations.push(agent_location);
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
+
         const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
 
-        marker.on('click', () => setCurrentEntity(agentInfo, marker));  
         marker.info = agentInfo;
+        marker.on('click', () => setCurrentEntity(agentInfo, marker));  
         marker.addTo(variablesMarkerGroup);
 
         const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession
@@ -283,16 +290,17 @@ function setCurrentEntity(info, marker) {
         highlightMarker(marker);
     }
 
-    let value;
+    let value = null;
     for (let key in info) {
         switch (key) {
             case 'location':
                 value = `[${info[key]['lat']}, ${info[key]['lon']}]`;
                 break;
             case 'route':
-                value = []
-                for(let i = 0; i < info[key].length; i++)
+                value = [];
+                for (let i = 0; i < info[key].length; i++) {
                     value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
+                }
                 break;
             case 'destination_distance':
             case 'radius':
@@ -305,11 +313,11 @@ function setCurrentEntity(info, marker) {
                     delete temp['location'];
                     value.push(temp);
                 }
-
                 break;
             default:
                 value = info[key];
         }
+
         $("#entity-list-info").append(`<li><b>${key}:</b> ${value}</li>`);
     }
 
@@ -363,8 +371,6 @@ function updateMetrics(data) {
         }
     }
 
-            
-    
     $("#metrics").html(str);
 }
 
