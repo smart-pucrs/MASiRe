@@ -73,8 +73,8 @@ document.getElementById("mapid").addEventListener("contextmenu", (e) => {
 
 /**
  * Get next step from the Flask and refresh the graphic interface.
- * @param stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
- * @param exactStep -> Go to the desired step, default is null
+ * @param {Number} stepValue -> increment or decrement the step, default (updateStep) is 1, to prevStep use -1
+ * @param {Number} exactStep -> Go to the desired step, default is null
  */
 async function updateStep(stepValue = 1, exactStep = null) {
     currentStep = exactStep ? parseInt(exactStep) - 1 : currentStep + stepValue;
@@ -113,6 +113,7 @@ function goToLastStep() {
 
 /**
  * Set the information of the match, the map and all events.
+ * @param {object} data data to initialize the next match
  */
 function handle_new_match(data) {
     setMatchInfo(data['match_info']);
@@ -122,7 +123,7 @@ function handle_new_match(data) {
 
 /**
  * Update Match and refresh the graphic interface.
- * @param matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
+ * @param {Number} matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
     if (currentMatch === 0 && matchValue === -1) {
@@ -148,6 +149,7 @@ async function updateMatch(matchValue = 1) {
 
 /**
  * Set information in match fields.
+ * @param {object} match_info information of the current match
  */
 function setMatchInfo(match_info) {
     totalSteps = match_info['total_steps'];
@@ -158,6 +160,7 @@ function setMatchInfo(match_info) {
 
 /**
  * Set information in Map fields.
+ * @param {object} config the map config 
  */
 function setMapConfig(config) {
     if (mymap !== null) {
@@ -204,6 +207,7 @@ function setMapConfig(config) {
 
 /**
  * Handle the step data drawing all markers in map.
+ * @param {object} data - api data to processed
  */
 function process_simulation_data(data) {
     logNormal('Processing simulation data');
@@ -275,6 +279,10 @@ function process_simulation_data(data) {
     });
 }
 
+/**
+ * Checks if the agent/event is active and calls updateEntityInfo to update information on screen in step time
+ * @param {info} info from the agent/event to check if is the active one
+ */
 function checkIfIsSelected(info) {
     if (currentEntity['id'] === info['token'] || currentEntity['id'] === info['identifier']) {
         updateEntityInfo(info);
@@ -283,6 +291,8 @@ function checkIfIsSelected(info) {
 
 /**
  * Set information in entity info fields and highlights the marker.
+ * @param {object} info info to be updated in the screen
+ * @param {object} marker marker to be highlighted
  */
 function setCurrentEntity(info, marker) {
     const id = typesWithTokens.includes(info.type) ? info.token : info.identifier;
@@ -300,6 +310,55 @@ function setCurrentEntity(info, marker) {
     updateEntityInfo(info);
 }
 
+/** Highlight the marker and set the selectedMarker object
+ * @param {object} marker the marker to be highlighted
+ */
+function highlightMarker(marker) {
+    resetMarker();
+    const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
+
+    const newIcon = marker.getIcon();
+    newIcon.options.iconSize = [85, 92];
+    newIcon.options.iconAnchor = [73, 74];
+    marker.setIcon(newIcon);
+
+    const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
+
+    selectedMarker = {
+        marker,
+        token
+    }
+
+    selectedMarker.marker.defaultSize = defaultSize;
+    selectedMarker.marker.defaultAnchor = defaultAnchor;
+}
+
+/**
+ *  Resets the last highlighted Marker size and cleans the object
+ */
+function resetMarker() {
+    const oldMarker = selectedMarker.marker;
+
+    if (oldMarker) {
+        const oldIcon = oldMarker.getIcon();
+        oldIcon.options.iconSize = oldMarker.defaultSize;
+        oldIcon.options.iconAnchor = oldMarker.defaultAnchor;
+        oldMarker.setIcon(oldIcon);
+
+        selectedMarker = {};
+
+        currentEntity['active'] = false;
+        currentEntity['type'] = null;
+        currentEntity['id'] = null;
+
+        updateEntityInfo();
+    }
+}
+
+/**
+ * Updates the entity info on the screen
+ * @param {object} info information to be updated in the screen, default is null to show 'no agent selected'
+ */
 function updateEntityInfo(info = null) {
     $("#entity-list-info").empty();
 
@@ -368,7 +427,7 @@ function format_location(event_location, old_locations) {
 
 /**
  * Update the metric list in index.html
- * @param data -> the partial_info with the metrics from that step
+ * @param {object} data -> the partial_info with the metrics from that step
  */
 function updateMetrics(data) {
     const formattedData = JSON.parse(data);
@@ -381,7 +440,8 @@ function updateMetrics(data) {
             str += "<ul>";
 
             for (const props in obj) {
-                str += `<li>${props}: ${obj[props]}</li>`;
+                const key = props.replace(/_/g, " ");
+                str += `<li>${key}: ${obj[props]}</li>`;
             }
 
             str += "</ul>";
@@ -392,51 +452,6 @@ function updateMetrics(data) {
     }
 
     $("#metrics").html(str);
-}
-
-/** Highlight the marker and set the selectedMarker object
- * @param marker -> THe marker to be highlighted
- */
-function highlightMarker(marker) {
-    resetMarker();
-    const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
-
-    const newIcon = marker.getIcon();
-    newIcon.options.iconSize = [85, 92];
-    newIcon.options.iconAnchor = [73, 74];
-    marker.setIcon(newIcon);
-
-    const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
-
-    selectedMarker = {
-        marker,
-        token
-    }
-
-    selectedMarker.marker.defaultSize = defaultSize;
-    selectedMarker.marker.defaultAnchor = defaultAnchor;
-}
-
-/**
- *  Resets the last highlighted Marker size and cleans the object
- */
-function resetMarker() {
-    const oldMarker = selectedMarker.marker;
-
-    if (oldMarker) {
-        const oldIcon = oldMarker.getIcon();
-        oldIcon.options.iconSize = oldMarker.defaultSize;
-        oldIcon.options.iconAnchor = oldMarker.defaultAnchor;
-        oldMarker.setIcon(oldIcon);
-
-        selectedMarker = {};
-
-        currentEntity['active'] = false;
-        currentEntity['type'] = null;
-        currentEntity['id'] = null;
-
-        updateEntityInfo();
-    }
 }
 
 /**
@@ -500,7 +515,7 @@ function pause() {
 
 /**
  * Event handler for the speed options.
- * @param speed The speed value, default is 250. To increase the simulation speed use -250
+ * @param {Number} speed The speed value, default is 250. To increase the simulation speed use -250
  */
 function updateSpeed(speed = 250) {
     const newSpeed = stepSpeed + speed;
