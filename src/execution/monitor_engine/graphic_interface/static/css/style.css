@@ -149,12 +149,15 @@ h3 {
 }
 
 .card p #current-map {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  display: inline-block;
-  width: 235px;
-  font-size: 14px;
+    display: inline-block;
+    position: absolute;
+    width: 190px;
+    font-size: 14px;
+    margin-top: 1px;
+    padding-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .list {
@@ -167,9 +170,23 @@ h3 {
     margin: -5px 0 0 0 !important;
 }
 
+.list ul {
+    list-style-type: none;
+    margin-bottom: 5px;
+}
+
+.list ul li {
+    margin-top: 2px;
+    margin-left: -25px;
+}
+
 #metrics {
     padding: 0 0 0 10px !important;
-    max-height: 150px;
+    max-height: 200px;
+}
+
+#global-info p {
+    margin-bottom: 7px;
 }
 
 #global-info #global-itens {
@@ -179,6 +196,7 @@ h3 {
 #entity-info .list {
     max-height: 230px;
     padding: 0 0 0 5px !important;
+    animation: height .5s ease-in-out;
 }
 
 #entity-info h3 {

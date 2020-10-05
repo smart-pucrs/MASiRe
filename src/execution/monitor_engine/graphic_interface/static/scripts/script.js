@@ -24,8 +24,8 @@ const invalidStartError = 'Error: Invalid LatLng object: (NaN, NaN)';
 const invalidStepError = 'The current match dont have this step yet.';
 const typesWithTokens = ['agent', 'social_asset'];
 const currentEntity = {
-    'type': null, 
-    'id': null, 
+    'type': null,
+    'id': null,
     'active': false
 };
 
@@ -67,7 +67,7 @@ document.getElementById("mapid").addEventListener("contextmenu", (e) => {
     e.preventDefault();
 
     alert(`Lat: ${pos_lat} \nLon: ${pos_lon}`);
-    
+
     return false;
 });
 
@@ -85,14 +85,14 @@ async function updateStep(stepValue = 1, exactStep = null) {
 
     try {
         const simulationData = await api.getSimulationData($SCRIPT_ROOT, currentMatch, currentStep);
-        
+
         if (simulationData.message === invalidStepError) {
             currentStep -= stepValue;
             return;
         }
 
         process_simulation_data(simulationData);
-        
+
         try {
             const matchInfo = await api.getMatchInfo($SCRIPT_ROOT);
             setMatchInfo(matchInfo);
@@ -125,12 +125,12 @@ function handle_new_match(data) {
  * @param matchValue -> increment or decrement the currentMatch, default (nextMatch) is 1, to prevMatch use -1
  */
 async function updateMatch(matchValue = 1) {
-    if(currentMatch === 0 && matchValue === -1) {
+    if (currentMatch === 0 && matchValue === -1) {
         return logError("Already in the first step.");
     }
 
     currentMatch += matchValue;
-    
+
     const oldStepValue = currentStep;
     currentStep = -1;
 
@@ -168,7 +168,7 @@ function setMapConfig(config) {
         zoomControl: false,
         attributionControl: false
     });
-    
+
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 19,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -191,7 +191,7 @@ function setMapConfig(config) {
 
     L.rectangle(bounds, { weight: 1 }).on('click', (e) => {
         console.info(e);
-        resetMarkerSize();
+        resetMarker();
     }).addTo(constantsMarkerGroup);
 
     mymap.addEventListener('mousemove', (e) => {
@@ -205,23 +205,23 @@ function setMapConfig(config) {
 /**
  * Handle the step data drawing all markers in map.
  */
-function process_simulation_data(data) {    
+function process_simulation_data(data) {
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
     currentEntity['active'] = false;
 
     const events = data['environment']['events'];
-    
+
     const old_locations = [];
 
     events.map(event => {
         const event_location = format_location(event['location'], old_locations);
-        
+
         old_locations.push(event_location);
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
-        
+
         const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
 
         const type = event['type'];
@@ -234,11 +234,13 @@ function process_simulation_data(data) {
                 radius: event['radius'] * 109000
             }).addTo(variablesMarkerGroup);
         }
-        
+
         marker.info = event;
-        marker.on('click', () => setCurrentEntity(event, marker));  
+        marker.on('click', () => setCurrentEntity(event, marker));
         marker.addTo(variablesMarkerGroup);
         marker.bindTooltip(event.type);
+
+        checkIfIsSelected(event);
 
         updateMetrics(data['partial_report']);
     });
@@ -258,76 +260,84 @@ function process_simulation_data(data) {
         const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
 
         marker.info = agentInfo;
-        marker.on('click', () => setCurrentEntity(agentInfo, marker));  
+        marker.on('click', () => setCurrentEntity(agentInfo, marker));
         marker.addTo(variablesMarkerGroup);
 
         const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession
 
         marker.bindTooltip(socialName);
-        
+
+        checkIfIsSelected(agentInfo);
+
         if (agentInfo['route']) {
             printRoute(agentInfo['route']);
         }
     });
+}
 
-    if (currentEntity['active']) {
-        $(noEntityTextId).hide();
-    }
+function checkIfIsSelected(info) {
+    if (currentEntity['id'] === info['token'] || currentEntity['id'] === info['identifier']) {
+        updateEntityInfo(info);
+    };
 }
 
 /**
  * Set information in entity info fields and highlights the marker.
  */
 function setCurrentEntity(info, marker) {
-    $("#entity-list-info").empty();
-    $(noEntityTextId).hide();
-    
-    const token = typesWithTokens.includes(info.type) ? info.token : info.identifier;
+    const id = typesWithTokens.includes(info.type) ? info.token : info.identifier;
 
-    if (token === selectedMarker.token) {
-        resetMarkerSize();
-    } else {
-        highlightMarker(marker);
+    if (id === selectedMarker.token) {
+        return resetMarker();
     }
 
-    let value = null;
-    for (let key in info) {
-        switch (key) {
-            case 'location':
-                value = `[${info[key]['lat']}, ${info[key]['lon']}]`;
-                break;
-            case 'route':
-                value = [];
-                for (let i = 0; i < info[key].length; i++) {
-                    value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
-                }
-                break;
-            case 'destination_distance':
-            case 'radius':
-                value = `${(info[key] * 100).toFixed(2).toString()} km`;
-                break;
-            case 'social_assets':
-                value = [];
-                for (let i = 0; i < info[key].length; i++) {
-                    const temp = info[key][i];
-                    delete temp['location'];
-                    value.push(temp);
-                }
-                break;
-            default:
-                value = info[key];
-        }
-
-        $("#entity-list-info").append(`<li><b>${key}:</b> ${value}</li>`);
-    }
+    highlightMarker(marker);
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
+    currentEntity['id'] = id;
 
-    if (info['type'] === 'agent' || info['type'] === 'social_asset') {
-        currentEntity['id'] = info['token'];
+    updateEntityInfo(info);
+}
+
+function updateEntityInfo(info = null) {
+    $("#entity-list-info").empty();
+
+    if (info) {
+        $(noEntityTextId).hide();
+
+        let value = null;
+        for (let key in info) {
+            switch (key) {
+                case 'location':
+                    value = `[${info[key]['lat']}, ${info[key]['lon']}]`;
+                    break;
+                case 'route':
+                    value = [];
+                    for (let i = 0; i < info[key].length; i++) {
+                        value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
+                    }
+                    break;
+                case 'destination_distance':
+                case 'radius':
+                    value = `${(info[key] * 100).toFixed(2).toString()} km`;
+                    break;
+                case 'social_assets':
+                    value = [];
+                    for (let i = 0; i < info[key].length; i++) {
+                        const temp = info[key][i];
+                        delete temp['location'];
+                        value.push(temp);
+                    }
+                    break;
+                default:
+                    value = info[key];
+            }
+
+            $("#entity-list-info").append(`<li><b>${key}:</b> ${value}</li>`);
+        }
     } else {
-        currentEntity['id'] = info['identifier'];
+        $(noEntityTextId).show();
     }
 }
 
@@ -366,41 +376,51 @@ function updateMetrics(data) {
 
     for (const item in formattedData) {
         const obj = formattedData[item];
-        for (const props in obj) {
-            str += `<li><b>${item} ${props}:</b> ${formattedData[item][props]}</li>`;
+        str += `<li><b>${item}: </b>`;
+        if (obj instanceof Object) {
+            str += "<ul>";
+
+            for (const props in obj) {
+                str += `<li>${props}: ${obj[props]}</li>`;
+            }
+
+            str += "</ul>";
+        } else {
+            str += obj;
         }
+        str += "</li>";
     }
 
     $("#metrics").html(str);
 }
 
-/** Hightlight the marker and set the selectedMarker object
+/** Highlight the marker and set the selectedMarker object
  * @param marker -> THe marker to be highlighted
  */
 function highlightMarker(marker) {
-        resetMarkerSize();
-        const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
+    resetMarker();
+    const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
 
-        const newIcon = marker.getIcon();
-        newIcon.options.iconSize = [85, 92];
-        newIcon.options.iconAnchor = [73, 74];
-        marker.setIcon(newIcon);
+    const newIcon = marker.getIcon();
+    newIcon.options.iconSize = [85, 92];
+    newIcon.options.iconAnchor = [73, 74];
+    marker.setIcon(newIcon);
 
-        const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
+    const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
 
-        selectedMarker = {
-            marker,
-            token
-        }
+    selectedMarker = {
+        marker,
+        token
+    }
 
-        selectedMarker.marker.defaultSize = defaultSize;
-        selectedMarker.marker.defaultAnchor = defaultAnchor;
+    selectedMarker.marker.defaultSize = defaultSize;
+    selectedMarker.marker.defaultAnchor = defaultAnchor;
 }
 
 /**
  *  Resets the last highlighted Marker size and cleans the object
  */
-function resetMarkerSize() {
+function resetMarker() {
     const oldMarker = selectedMarker.marker;
 
     if (oldMarker) {
@@ -408,9 +428,15 @@ function resetMarkerSize() {
         oldIcon.options.iconSize = oldMarker.defaultSize;
         oldIcon.options.iconAnchor = oldMarker.defaultAnchor;
         oldMarker.setIcon(oldIcon);
-    }
 
-    selectedMarker = {};
+        selectedMarker = {};
+
+        currentEntity['active'] = false;
+        currentEntity['type'] = null;
+        currentEntity['id'] = null;
+
+        updateEntityInfo();
+    }
 }
 
 /**
@@ -477,8 +503,9 @@ function pause() {
  * @param speed The speed value, default is 250. To increase the simulation speed use -250
  */
 function updateSpeed(speed = 250) {
-    stepSpeed += speed;
-    
+    const newSpeed = stepSpeed + speed;
+    stepSpeed = newSpeed < 250 ? 250 : newSpeed;
+
     if (playing) {
         clearInterval(updateStateFunctionId);
         updateStateFunctionId = setInterval(updateStep, stepSpeed);
@@ -529,8 +556,6 @@ function logError(message) {
 function logCritical(message) {
     log('CRITICAL', message);
 }
-
-$(noEntityTextId).show();
 
 window.onload = () => {
     init();
