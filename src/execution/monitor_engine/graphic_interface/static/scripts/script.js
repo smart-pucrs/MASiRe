@@ -1,6 +1,7 @@
 import ApiController from './services/ApiController.js';
 import { defineEventIcon, defineActorIcon } from './utils/marker/defineMarkerIcon.js';
 import defineRouteRadius from './utils/route/defineRouteRadius.js';
+import getSpeedMultiplier from './utils/getSpeedMultiplier.js';
 import icons from './utils/icons.js';
 
 let mymap = null;
@@ -13,7 +14,7 @@ let playing = true;
 let currentStep = 0;
 let totalSteps = 0;
 let currentMatch = 0;
-let selectedMarker = {};
+let selectedMarker = null;
 let pos_lat, pos_lon;
 
 const api = new ApiController();
@@ -154,8 +155,12 @@ async function updateMatch(matchValue = 1) {
 function setMatchInfo(match_info) {
     totalSteps = match_info['total_steps'];
 
+    const speedMultiplier = getSpeedMultiplier(stepSpeed);
+
     $('#step').text(`${currentStep + 1} of ${totalSteps}`);
+    $('#speed').text(`${speedMultiplier}x`);
     $('#current-match').text(`${currentMatch + 1} of ${match_info['total_matches']}`);
+
 }
 
 /**
@@ -226,7 +231,7 @@ function process_simulation_data(data) {
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
 
-        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event) });
+        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event), id: event.identifier });
 
         const type = event['type'];
 
@@ -240,7 +245,7 @@ function process_simulation_data(data) {
         }
 
         marker.info = event;
-        marker.on('click', () => setCurrentEntity(event, marker));
+        marker.on('click', () => setCurrentEntity(event));
         marker.addTo(variablesMarkerGroup);
         marker.bindTooltip(event.type);
 
@@ -261,7 +266,7 @@ function process_simulation_data(data) {
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
-        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo) });
+        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo), id: agentInfo.token });
 
         marker.info = agentInfo;
         marker.on('click', () => setCurrentEntity(agentInfo, marker));
@@ -275,7 +280,7 @@ function process_simulation_data(data) {
 
         if (agentInfo['route']) {
             printRoute(agentInfo['route']);
-        }
+        };
     });
 }
 
@@ -291,17 +296,17 @@ function checkIfIsSelected(info) {
 
 /**
  * Set information in entity info fields and highlights the marker.
- * @param {object} info info to be updated in the screen
+ * @param {object} info the agent/event info
  * @param {object} marker marker to be highlighted
  */
-function setCurrentEntity(info, marker) {
+function setCurrentEntity(info) {
     const id = typesWithTokens.includes(info.type) ? info.token : info.identifier;
 
-    if (id === selectedMarker.token) {
+    if (selectedMarker && id === selectedMarker.id) {
         return resetMarker();
     }
 
-    highlightMarker(marker);
+    highlightMarker(id);
 
     currentEntity['type'] = info['type'];
     currentEntity['active'] = true;
@@ -311,47 +316,52 @@ function setCurrentEntity(info, marker) {
 }
 
 /** Highlight the marker and set the selectedMarker object
- * @param {object} marker the marker to be highlighted
+ * @param {object} id identifier of the marker to be highlighted
  */
-function highlightMarker(marker) {
+function highlightMarker(id) {
     resetMarker();
-    const { iconSize: defaultSize, iconAnchor: defaultAnchor } = marker.options.icon.options;
 
-    const newIcon = marker.getIcon();
-    newIcon.options.iconSize = [85, 92];
-    newIcon.options.iconAnchor = [73, 74];
-    marker.setIcon(newIcon);
+    mymap.eachLayer((layer) => {
+        if (layer.options.id === id) {
+            const iconOptions = layer.options.icon.options;
 
-    const token = typesWithTokens.includes(marker.info.type) ? marker.info.token : marker.info.identifier;
+            const { iconSize: defaultSize, iconAnchor: defaultAnchor } = iconOptions;
 
-    selectedMarker = {
-        marker,
-        token
-    }
+            selectedMarker = {
+                id,
+                defaultSize,
+                defaultAnchor
+            }
 
-    selectedMarker.marker.defaultSize = defaultSize;
-    selectedMarker.marker.defaultAnchor = defaultAnchor;
+            iconOptions.iconSize = [80, 85];
+            iconOptions.iconAnchor = [55, 57];
+        }
+    });
 }
 
 /**
- *  Resets the last highlighted Marker size and cleans the object
+ *  Resets the last highlighted Marker size and cleans the selectedMarker object
  */
 function resetMarker() {
-    const oldMarker = selectedMarker.marker;
+    if (selectedMarker) {
+        const { id, defaultSize, defaultAnchor } = selectedMarker;
 
-    if (oldMarker) {
-        const oldIcon = oldMarker.getIcon();
-        oldIcon.options.iconSize = oldMarker.defaultSize;
-        oldIcon.options.iconAnchor = oldMarker.defaultAnchor;
-        oldMarker.setIcon(oldIcon);
+        mymap.eachLayer((layer) => {
+            if (layer.options.id === id) {
+                const iconOptions = layer.options.icon.options;
 
-        selectedMarker = {};
+                iconOptions.iconSize = defaultSize;
+                iconOptions.iconAnchor = defaultAnchor;
 
-        currentEntity['active'] = false;
-        currentEntity['type'] = null;
-        currentEntity['id'] = null;
+                selectedMarker = null;
 
-        updateEntityInfo();
+                currentEntity['active'] = false;
+                currentEntity['type'] = null;
+                currentEntity['id'] = null;
+
+                updateEntityInfo();
+            }
+        });
     }
 }
 
@@ -415,6 +425,8 @@ function containsLocation(locations, location) {
 
 /**
  * Format the location incrementing the lat coordination by 1/10000.
+ * @param {Array<object>} old_locations the array of old locations
+ * @param {object} event_location the new location of the event
  */
 function format_location(event_location, old_locations) {
     const new_location = event_location;
@@ -523,7 +535,14 @@ function pause() {
  */
 function updateSpeed(speed = 250) {
     const newSpeed = stepSpeed + speed;
-    stepSpeed = newSpeed < 250 ? 250 : newSpeed;
+
+    if (newSpeed < 250) {
+        stepSpeed = 250;
+    } else if (newSpeed > 1750) {
+        stepSpeed = 1750;
+    } else {
+        stepSpeed = newSpeed;
+    }
 
     if (playing) {
         clearInterval(updateStateFunctionId);

@@ -152,8 +152,7 @@ h3 {
     display: inline-block;
     position: absolute;
     width: 190px;
-    font-size: 14px;
-    margin-top: 1px;
+    font-size: 15px;
     padding-left: 5px;
     white-space: nowrap;
     overflow: hidden;
@@ -196,7 +195,6 @@ h3 {
 #entity-info .list {
     max-height: 230px;
     padding: 0 0 0 5px !important;
-    animation: height .5s ease-in-out;
 }
 
 #entity-info h3 {

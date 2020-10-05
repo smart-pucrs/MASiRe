@@ -1,25 +1,28 @@
 <html>
+
 <head>
     <title>Disaster Simulator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin="">
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="">
     <link rel="stylesheet" href="static/css/style.css">
     <!-- <link rel="shortcut icon" href="#" /> -->
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-    crossorigin=""></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script>
-</head> 
+</head>
+
 <body>
     <!-- Map div -->
     <div id="mapid"></div>
-    
+
     <div id="options">
         <div id="option-content">
             <div class="option-item">
@@ -27,43 +30,49 @@
                 <div class="button-wrapper">
                     <button class="btn" id="btn-prev-10">-10</button>
                     <button class="btn" id="btn-prev">-1</button>
-                    <button class="btn" id="btn-pause"><img src="static/images/pause_button.svg" height="13" width="13" alt="Pause Match"></button>
+                    <button class="btn" id="btn-pause"><img src="static/images/pause_button.svg" height="13" width="13"
+                            alt="Pause Match"></button>
                     <button class="btn" id="btn-next">+1</button>
                     <button class="btn" id="btn-next-10">+10</button>
                 </div>
             </div>
-            
+
             <div class="option-item">
-                <h3>Speed</h3>
+                <h3>Speed <span id="speed"></span></h3>
                 <div class="button-wrapper">
                     <button class="btn" id="dec-speed">-</button>
                     <button class="btn" id="inc-speed">+</button>
                 </div>
             </div>
-            
+
             <div class="option-item" id="expand-div">
                 <h3>Expand</h3>
                 <div class="button-wrapper">
-                    <button class="btn" id="expand-button" ><img src="static/images/arrow_down.svg" height="18" width="18" alt="Expand content"></button>
+                    <button class="btn" id="expand-button"><img src="static/images/arrow_down.svg" height="18"
+                            width="18" alt="Expand content"></button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div id="container">
         <div class="info">
             <div class="card" id="global-info">
                 <div id="global-itens">
                     <p>Map: <span id="current-map"></span></p>
                     <p>Total agents: <span id="active-agents"></span></p>
-                    <p>Metrics: <span><ul id="metrics" class="list"></ul></span></p>
+                    <p>Metrics: <span>
+                            <ul id="metrics" class="list"></ul>
+                        </span></p>
                 </div>
             </div>
-            
+
             <div class="card" id="entity-info">
                 <h3>Entity Information</h3>
                 <span id="no-entity-text">No entity selected</span>
-                <span><ul id="entity-list-info" class="list"></ul></span>
+                <span>
+                    <ul id="entity-list-info" class="list"></ul>
+                </span>
             </div>
         </div>
     </div>
@@ -71,7 +80,9 @@
     <div class="card" id="extend-menu">
         <div id="extend-menu-match-list">
             <h3>Match: </h3>
-            <span><ul id="match-list" class="list"></ul></span>
+            <span>
+                <ul id="match-list" class="list"></ul>
+            </span>
         </div>
         <div id="extend-menu-options">
             <div id="extend-menu-step">
@@ -84,10 +95,10 @@
 
             <div id="extend-menu-speed">
                 <h3>Speed</h3>
-                    <div class="button-wrapper">
-                        <button class="btn" id="dec-speed">-</button>
-                        <button class="btn" id="inc-speed">+</button>
-                    </div>
+                <div class="button-wrapper">
+                    <button class="btn" id="dec-speed">-</button>
+                    <button class="btn" id="inc-speed">+</button>
+                </div>
             </div>
             <button class="btn" id="resume">Resume</button>
         </div>
