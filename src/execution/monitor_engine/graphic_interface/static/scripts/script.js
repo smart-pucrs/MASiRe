@@ -402,6 +402,8 @@ function updateEntityInfo(info = null) {
 
 /**
  * Check whether the entered location is within the array given.
+ * @param {Array<object>} locations the array of objects to be checked
+ * @param {object} location the location to be checked within the array
  */
 function containsLocation(locations, location) {
     if (locations.some(item => item['lat'] === location['lat'] && item['lon'] === location['lon'])) {
@@ -436,6 +438,7 @@ function updateMetrics(data) {
     for (const item in formattedData) {
         const obj = formattedData[item];
         str += `<li><b>${item}: </b>`;
+
         if (obj instanceof Object) {
             str += "<ul>";
 
@@ -448,6 +451,7 @@ function updateMetrics(data) {
         } else {
             str += obj;
         }
+
         str += "</li>";
     }
 
