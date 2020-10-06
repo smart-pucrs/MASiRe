@@ -59,21 +59,31 @@ class AnalyzePhoto(Action):
 
     def execute(self, map, nodes, events, tasks):     
         report = Report()
-        photo_identifiers = []
-        victim_identifiers = []
         for photo in self.agent.virtual_storage_vector:
             for victim in photo.victims:
-                victim_identifiers.append(victim.identifier)
+                victim.active = True
+                for step in self.game_state.steps[:self.game_state.current_step]:
+                    if step['flood'] != None and step['flood'].id == victim.flood_id:
+                        step['victims'].append(victim)
+                        break
+            photo.analyzed = True
             report.photos.analysed = 1
-            photo_identifiers.append(photo.identifier)
 
-        for photo in tasks['photos']:
-            if photo.identifier in photo_identifiers:
-                photo_identifiers.remove(photo.identifier)
-                photo.analyzed = True
-                for victim in photo.victims:
-                    victim.active = True
-                    self.game_state.steps[self.game_state.current_step]['victims'].append(victim)
+        # photo_identifiers = []
+        # victim_identifiers = []
+        # for photo in self.agent.virtual_storage_vector:
+        #     for victim in photo.victims:
+        #         victim_identifiers.append(victim.identifier)
+        #     report.photos.analysed = 1
+        #     photo_identifiers.append(photo.identifier)
+
+        # for photo in tasks['photos']:
+        #     if photo.identifier in photo_identifiers:
+        #         photo_identifiers.remove(photo.identifier)
+        #         photo.analyzed = True
+        #         for victim in photo.victims:
+        #             victim.active = True
+        #             self.game_state.steps[self.game_state.current_step]['victims'].append(victim)
         
         self.agent.clear_virtual_storage()
         return None
