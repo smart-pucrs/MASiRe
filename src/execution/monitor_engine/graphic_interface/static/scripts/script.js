@@ -269,7 +269,7 @@ function process_simulation_data(data) {
         const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo), id: agentInfo.token });
 
         marker.info = agentInfo;
-        marker.on('click', () => setCurrentEntity(agentInfo, marker));
+        marker.on('click', () => setCurrentEntity(agentInfo));
         marker.addTo(variablesMarkerGroup);
 
         const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession
@@ -321,11 +321,13 @@ function setCurrentEntity(info) {
 function highlightMarker(id) {
     resetMarker();
 
-    mymap.eachLayer((layer) => {
-        if (layer.options.id === id) {
-            const iconOptions = layer.options.icon.options;
+    variablesMarkerGroup.eachLayer((layer) => {
+        const layerId = layer.options.id;
 
-            const { iconSize: defaultSize, iconAnchor: defaultAnchor } = iconOptions;
+        if (layerId === id) {
+            const oldIcon = layer.getIcon();
+
+            const { iconSize: defaultSize, iconAnchor: defaultAnchor } = oldIcon.options;
 
             selectedMarker = {
                 id,
@@ -333,8 +335,17 @@ function highlightMarker(id) {
                 defaultAnchor
             }
 
-            iconOptions.iconSize = [80, 85];
-            iconOptions.iconAnchor = [55, 57];
+            const { _latlng } = layer;
+
+            const newLayer = L.marker(_latlng, { icon: oldIcon, id: layerId });
+            newLayer.info = { ...layer.info };
+            newLayer.on('click', () => setCurrentEntity(newLayer.info));
+
+            const options = newLayer.options.icon.options;
+            options.iconSize = [100, 105];
+            options.iconAnchor = [75, 77];
+
+            updateLayer(layer, newLayer);
         }
     });
 }
@@ -346,12 +357,21 @@ function resetMarker() {
     if (selectedMarker) {
         const { id, defaultSize, defaultAnchor } = selectedMarker;
 
-        mymap.eachLayer((layer) => {
-            if (layer.options.id === id) {
-                const iconOptions = layer.options.icon.options;
+        variablesMarkerGroup.eachLayer((layer) => {
+            const layerId = layer.options.id;
 
-                iconOptions.iconSize = defaultSize;
-                iconOptions.iconAnchor = defaultAnchor;
+            if (layerId === id) {
+                const { _latlng } = layer;
+
+                const oldIcon = layer.getIcon();
+
+                const newLayer = L.marker(_latlng, { icon: oldIcon, id: layerId });
+                newLayer.info = { ...layer.info };
+                newLayer.on('click', () => setCurrentEntity(newLayer.info));
+
+                const options = newLayer.options.icon.options;
+                options.iconSize = defaultSize;
+                options.iconAnchor = defaultAnchor;
 
                 selectedMarker = null;
 
@@ -360,9 +380,21 @@ function resetMarker() {
                 currentEntity['id'] = null;
 
                 updateEntityInfo();
+
+                updateLayer(layer, newLayer);
             }
         });
     }
+}
+
+/**
+ * Updates the variablesMarkerGroup layer information
+ * @param {Object} layer the layer to be updated
+ * @param {Object} newLayer the new layer to be add
+ */
+function updateLayer(layer, newLayer) {
+    variablesMarkerGroup.removeLayer(layer);
+    variablesMarkerGroup.addLayer(newLayer);
 }
 
 /**
@@ -393,11 +425,25 @@ function updateEntityInfo(info = null) {
                     break;
                 case 'social_assets':
                     value = [];
-                    for (let i = 0; i < info[key].length; i++) {
-                        const temp = info[key][i];
-                        delete temp['location'];
-                        value.push(temp);
-                    }
+                    info[key].map(item => {
+                        const temp = item;
+                        delete temp.location;
+                        if (temp instanceof Object) {
+                            value.push(temp.profession || temp.type);
+                        } else {
+                            value.push(temp);
+                        }
+                    });
+                    break;
+                case 'physical_storage_vector':
+                    value = '';
+                    info[key].map((item, index) => {
+                        if (item instanceof Object) {
+                            value += item.type;
+                        }
+
+                        if (index !== info[key].length - 1) value += ", ";
+                    });
                     break;
                 default:
                     value = info[key];
@@ -589,10 +635,6 @@ function logNormal(message) {
 
 function logError(message) {
     log('ERROR', message);
-}
-
-function logCritical(message) {
-    log('CRITICAL', message);
 }
 
 window.onload = () => {
