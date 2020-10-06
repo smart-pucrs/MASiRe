@@ -218,7 +218,6 @@ function process_simulation_data(data) {
     logNormal('Processing simulation data');
 
     variablesMarkerGroup.clearLayers();
-    currentEntity['active'] = false;
 
     const events = data['environment']['events'];
 
@@ -231,11 +230,11 @@ function process_simulation_data(data) {
 
         const event_location_formatted = [event['location']['lat'], event['location']['lon']];
 
-        const marker = L.marker(event_location_formatted, { icon: defineEventIcon(event), id: event.identifier });
+        const icon = selectedMarker && selectedMarker.id === event.identifier ? selectedMarker.icon : defineEventIcon(event);
 
-        const type = event['type'];
+        const marker = L.marker(event_location_formatted, { icon, id: event.identifier });
 
-        if (type === 'flood') {
+        if (event['type'] === 'flood') {
             L.circle(event_location_formatted, {
                 color: '#504E0F',
                 fillColor: '#504E0F',
@@ -246,11 +245,10 @@ function process_simulation_data(data) {
 
         marker.info = event;
         marker.on('click', () => setCurrentEntity(event));
-        marker.addTo(variablesMarkerGroup);
         marker.bindTooltip(event.type);
+        marker.addTo(variablesMarkerGroup);
 
         checkIfIsSelected(event);
-
         updateMetrics(data['partial_report']);
     });
 
@@ -266,15 +264,17 @@ function process_simulation_data(data) {
 
         const agent_location_formated = [agent_location['lat'], agent_location['lon']];
 
-        const marker = L.marker(agent_location_formated, { icon: defineActorIcon(agentInfo), id: agentInfo.token });
+        const icon = selectedMarker && selectedMarker.id === agentInfo.token ? selectedMarker.icon : defineActorIcon(agentInfo);
+
+        const marker = L.marker(agent_location_formated, { icon, id: agentInfo.token });
+
+        if (selectedMarker) console.log(selectedMarker.icon);
+        const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession;
 
         marker.info = agentInfo;
         marker.on('click', () => setCurrentEntity(agentInfo));
-        marker.addTo(variablesMarkerGroup);
-
-        const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession
-
         marker.bindTooltip(socialName);
+        marker.addTo(variablesMarkerGroup);
 
         checkIfIsSelected(agentInfo);
 
@@ -325,25 +325,27 @@ function highlightMarker(id) {
         const layerId = layer.options.id;
 
         if (layerId === id) {
-            const oldIcon = layer.getIcon();
+            const oldIconObjCopy = JSON.parse(JSON.stringify(layer.getIcon()));
+            const oldIcon = L.icon(oldIconObjCopy.options);
 
             const { iconSize: defaultSize, iconAnchor: defaultAnchor } = oldIcon.options;
-
-            selectedMarker = {
-                id,
-                defaultSize,
-                defaultAnchor
-            }
 
             const { _latlng } = layer;
 
             const newLayer = L.marker(_latlng, { icon: oldIcon, id: layerId });
-            newLayer.info = { ...layer.info };
+            newLayer.info = layer.info;
             newLayer.on('click', () => setCurrentEntity(newLayer.info));
 
             const options = newLayer.options.icon.options;
             options.iconSize = [100, 105];
             options.iconAnchor = [75, 77];
+
+            selectedMarker = {
+                id,
+                defaultSize,
+                defaultAnchor,
+                icon: L.icon(options),
+            }
 
             updateLayer(layer, newLayer);
         }
@@ -363,10 +365,11 @@ function resetMarker() {
             if (layerId === id) {
                 const { _latlng } = layer;
 
-                const oldIcon = layer.getIcon();
+                const oldIconObjCopy = JSON.parse(JSON.stringify(layer.getIcon()));
+                const oldIcon = L.icon(oldIconObjCopy.options);
 
                 const newLayer = L.marker(_latlng, { icon: oldIcon, id: layerId });
-                newLayer.info = { ...layer.info };
+                newLayer.info = layer.info;
                 newLayer.on('click', () => setCurrentEntity(newLayer.info));
 
                 const options = newLayer.options.icon.options;
@@ -415,9 +418,9 @@ function updateEntityInfo(info = null) {
                     break;
                 case 'route':
                     value = [];
-                    for (let i = 0; i < info[key].length; i++) {
-                        value.push(`[${info[key][i]['lat']}, ${info[key][i]['lon']}]`);
-                    }
+                    info[key].map(nextRoute => {
+                        value.push(`[${nextRoute.lat}, ${nextRoute.lon}]`);
+                    });
                     break;
                 case 'destination_distance':
                 case 'radius':
