@@ -65,6 +65,7 @@ class AnalyzePhoto(Action):
                 for step in self.game_state.steps[:self.game_state.current_step]:
                     if step['flood'] != None and step['flood'].id == victim.flood_id:
                         step['victims'].append(victim)
+                        report.victims.discovered = 1
                         break
             photo.analyzed = True
             report.photos.analysed = 1
