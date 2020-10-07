@@ -155,10 +155,7 @@ async function updateMatch(matchValue = 1) {
 function setMatchInfo(match_info) {
     totalSteps = match_info['total_steps'];
 
-    const speedMultiplier = getSpeedMultiplier(stepSpeed);
-
     $('#step').text(`${currentStep + 1} of ${totalSteps}`);
-    $('#speed').text(`${speedMultiplier}x`);
     $('#current-match').text(`${currentMatch + 1} of ${match_info['total_matches']}`);
 
 }
@@ -593,10 +590,16 @@ function updateSpeed(speed = 250) {
         stepSpeed = newSpeed;
     }
 
-    if (playing) {
-        clearInterval(updateStateFunctionId);
-        updateStateFunctionId = setInterval(updateStep, stepSpeed);
+    clearInterval(updateStateFunctionId);
+    updateStateFunctionId = setInterval(updateStep, stepSpeed);
+
+    if (!playing) {
+        playing = true;
+        pause();
     }
+
+    const speedMultiplier = getSpeedMultiplier(stepSpeed);
+    $('#speed').text(`${speedMultiplier}x`);
 
     logNormal(`Step speed changed to ${stepSpeed}ms`);
 }
