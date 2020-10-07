@@ -16,6 +16,7 @@ let totalSteps = 0;
 let currentMatch = 0;
 let selectedMarker = null;
 let pos_lat, pos_lon;
+let mapCenter;
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
@@ -193,6 +194,7 @@ function setMapConfig(config) {
     const lon = parseFloat(config['centerLon']);
 
     mymap.setView([lat, lon], 17);
+    mapCenter = [lat, lon];
 
     L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
 
@@ -388,6 +390,7 @@ function resetMarker() {
                 updateEntityInfo();
 
                 updateLayer(layer, newLayer);
+                moveMap(mapCenter);
             }
         });
     }
