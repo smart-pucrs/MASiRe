@@ -78,7 +78,11 @@ document.getElementById("mapid").addEventListener("contextmenu", (e) => {
  * @param {Number} exactStep -> Go to the desired step, default is null
  */
 async function updateStep(stepValue = 1, exactStep = null) {
-    currentStep = exactStep ? parseInt(exactStep) - 1 : currentStep + stepValue;
+    if (exactStep && exactStep <= 0) {
+        currentStep = stepValue;
+    } else {
+        currentStep = exactStep ? parseInt(exactStep) - 1 : currentStep + stepValue;
+    }
 
     if (currentStep > totalSteps) {
         goToLastStep();
@@ -599,9 +603,16 @@ function updateSpeed(speed = 250) {
     }
 
     const speedMultiplier = getSpeedMultiplier(stepSpeed);
-    $('#speed').text(`${speedMultiplier}x`);
 
-    logNormal(`Step speed changed to ${stepSpeed}ms`);
+    let str = `${speedMultiplier}x`;
+
+    if (stepSpeed === 1750) {
+        str += " (min)";
+    } else if (stepSpeed === 250) {
+        str += " (max)";
+    }
+
+    $('#speed').text(str);
 }
 
 function animateButton() {
