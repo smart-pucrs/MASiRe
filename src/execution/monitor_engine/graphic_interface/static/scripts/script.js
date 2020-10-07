@@ -269,7 +269,6 @@ function process_simulation_data(data) {
 
         const marker = L.marker(agent_location_formated, { icon, id: agentInfo.token });
 
-        if (selectedMarker) console.log(selectedMarker.icon);
         const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession;
 
         marker.info = agentInfo;
@@ -292,6 +291,7 @@ function process_simulation_data(data) {
 function checkIfIsSelected(info) {
     if (currentEntity['id'] === info['token'] || currentEntity['id'] === info['identifier']) {
         updateEntityInfo(info);
+        moveMap(info.location);
     };
 }
 
@@ -338,17 +338,19 @@ function highlightMarker(id) {
             newLayer.on('click', () => setCurrentEntity(newLayer.info));
 
             const options = newLayer.options.icon.options;
-            options.iconSize = [100, 105];
-            options.iconAnchor = [75, 77];
+            options.iconSize = [70, 75];
+            options.iconAnchor = [45, 47];
 
             selectedMarker = {
                 id,
                 defaultSize,
                 defaultAnchor,
                 icon: L.icon(options),
+                _latlng
             }
 
             updateLayer(layer, newLayer);
+            moveMap(_latlng);
         }
     });
 }
@@ -389,6 +391,14 @@ function resetMarker() {
             }
         });
     }
+}
+
+/**
+ * Moves the map to a specific parameter
+ * @param {Object | Array} _latlng 
+ */
+function moveMap(_latlng) {
+    mymap.flyTo(_latlng);
 }
 
 /**
