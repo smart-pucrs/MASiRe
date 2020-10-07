@@ -24,6 +24,7 @@ class _Victim(object):
         self._hidden = 0
         self._rescued_alive = 0
         self._rescued_dead = 0
+        self._discovered = 0
 
     @property
     def total(self):
@@ -44,6 +45,13 @@ class _Victim(object):
         self._hidden += value
     
     @property
+    def discovered(self):
+        return self._hidden
+    @discovered.setter
+    def discovered(self, value):
+        self._discovered += value
+    
+    @property
     def dead(self):
         return self._rescued_dead
     @dead.setter
@@ -61,7 +69,7 @@ class _Victim(object):
     def ignored(self):
         return self.total - (self._rescued_alive+self._rescued_dead)
     def dict(self):
-        return {'total': self.total, 'rescued_alive': self.alive, 'rescued_dead': self.dead}
+        return {'known': self.known, 'hidden': self.hidden, 'discovered': self.discovered, 'rescued_alive': self.alive, 'rescued_dead': self.dead}
 
 class _Sample(object):
     def __init__(self):
