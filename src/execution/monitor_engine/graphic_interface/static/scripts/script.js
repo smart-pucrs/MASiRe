@@ -16,6 +16,8 @@ let totalSteps = 0;
 let currentMatch = 0;
 let selectedMarker = null;
 let pos_lat, pos_lon;
+let mapCenter;
+let followUnit = true;
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
@@ -112,8 +114,19 @@ async function updateStep(stepValue = 1, exactStep = null) {
     }
 }
 
+/**
+ * Go to the last step of the simulation
+ */
 function goToLastStep() {
     updateStep(0, totalSteps - 1);
+}
+
+/**
+ * Toggle the option of following a highlighted unit
+ */
+function toggleFollowUnit() {
+    followUnit = !followUnit;
+    console.log(followUnit);
 }
 
 /**
@@ -193,6 +206,7 @@ function setMapConfig(config) {
     const lon = parseFloat(config['centerLon']);
 
     mymap.setView([lat, lon], 17);
+    mapCenter = [lat, lon];
 
     L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
 
@@ -269,7 +283,6 @@ function process_simulation_data(data) {
 
         const marker = L.marker(agent_location_formated, { icon, id: agentInfo.token });
 
-        if (selectedMarker) console.log(selectedMarker.icon);
         const socialName = agentInfo.role ? agentInfo.role : agentInfo.profession;
 
         marker.info = agentInfo;
@@ -292,6 +305,7 @@ function process_simulation_data(data) {
 function checkIfIsSelected(info) {
     if (currentEntity['id'] === info['token'] || currentEntity['id'] === info['identifier']) {
         updateEntityInfo(info);
+        return followUnit && moveMap(info.location);
     };
 }
 
@@ -338,17 +352,19 @@ function highlightMarker(id) {
             newLayer.on('click', () => setCurrentEntity(newLayer.info));
 
             const options = newLayer.options.icon.options;
-            options.iconSize = [100, 105];
-            options.iconAnchor = [75, 77];
+            options.iconSize = [70, 75];
+            options.iconAnchor = [45, 47];
 
             selectedMarker = {
                 id,
                 defaultSize,
                 defaultAnchor,
                 icon: L.icon(options),
+                _latlng
             }
 
             updateLayer(layer, newLayer);
+            return followUnit && moveMap(_latlng);
         }
     });
 }
@@ -389,6 +405,14 @@ function resetMarker() {
             }
         });
     }
+}
+
+/**
+ * Moves the map to a specific parameter
+ * @param {Object | Array} _latlng 
+ */
+function moveMap(_latlng) {
+    mymap.flyTo(_latlng);
 }
 
 /**
@@ -659,4 +683,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu };
+export { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu, toggleFollowUnit };
