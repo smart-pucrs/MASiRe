@@ -16,7 +16,6 @@ let totalSteps = 0;
 let currentMatch = 0;
 let selectedMarker = null;
 let pos_lat, pos_lon;
-let mapCenter;
 let followUnit = true;
 
 const api = new ApiController();
@@ -206,7 +205,6 @@ function setMapConfig(config) {
     const lon = parseFloat(config['centerLon']);
 
     mymap.setView([lat, lon], 17);
-    mapCenter = [lat, lon];
 
     L.marker([lat, lon], { icon: icons.centralIcon }).addTo(constantsMarkerGroup);
 

@@ -211,11 +211,11 @@ h3 {
     margin: 0 auto;
 }
 
-#extend-menu-match-list {
+/* #extend-menu-match-list {
     height: 180px;
     border-bottom: .5px solid #505050;
     margin-bottom: 10px;
-}
+} */
 
 #extend-menu-options {
     display: flex;
@@ -233,6 +233,7 @@ h3 {
 }
 
 #resume {
+    margin-top: 10px;
     width: 100% !important;
 }
 
