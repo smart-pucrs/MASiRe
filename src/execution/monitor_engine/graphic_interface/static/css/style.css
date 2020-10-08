@@ -75,7 +75,7 @@ h3 {
     margin-left: -50px;
 }
 
-#expand-div{
+#expand-div {
     margin-left: -120px !important;
     margin-right: -85px;
 }
@@ -228,8 +228,8 @@ h3 {
     padding: 8px;
 }
 
-#extend-menu-speed {
-    margin-bottom: 10px;
+#extend-menu-follow {
+    text-align: center;
 }
 
 #resume {

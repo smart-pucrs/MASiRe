@@ -1,4 +1,4 @@
-import { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu } from "./script.js";
+import { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu, toggleFollowUnit } from "./script.js";
 
 /** actions for the buttons, when called execute a function */
 const actions = {
@@ -13,8 +13,9 @@ const actions = {
     'btn-previous-match': () => updateMatch(-1),
     'inc-speed': () => updateSpeed(-250),
     'dec-speed': () => updateSpeed(),
-    'expand-button': ()=> expandMenu(),
-    'resume': ()=> expandMenu(),
+    'expand-button': () => expandMenu(),
+    'follow-unit': () => toggleFollowUnit(),
+    'resume': () => expandMenu(),
 };
 
 /** Handles the click, calling the right function */

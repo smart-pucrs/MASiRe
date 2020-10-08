@@ -17,6 +17,7 @@ let currentMatch = 0;
 let selectedMarker = null;
 let pos_lat, pos_lon;
 let mapCenter;
+let followUnit = true;
 
 const api = new ApiController();
 const btnPauseId = '#btn-pause';
@@ -113,8 +114,19 @@ async function updateStep(stepValue = 1, exactStep = null) {
     }
 }
 
+/**
+ * Go to the last step of the simulation
+ */
 function goToLastStep() {
     updateStep(0, totalSteps - 1);
+}
+
+/**
+ * Toggle the option of following a highlighted unit
+ */
+function toggleFollowUnit() {
+    followUnit = !followUnit;
+    console.log(followUnit);
 }
 
 /**
@@ -293,7 +305,7 @@ function process_simulation_data(data) {
 function checkIfIsSelected(info) {
     if (currentEntity['id'] === info['token'] || currentEntity['id'] === info['identifier']) {
         updateEntityInfo(info);
-        moveMap(info.location);
+        return followUnit && moveMap(info.location);
     };
 }
 
@@ -352,7 +364,7 @@ function highlightMarker(id) {
             }
 
             updateLayer(layer, newLayer);
-            moveMap(_latlng);
+            return followUnit && moveMap(_latlng);
         }
     });
 }
@@ -390,7 +402,6 @@ function resetMarker() {
                 updateEntityInfo();
 
                 updateLayer(layer, newLayer);
-                moveMap(mapCenter);
             }
         });
     }
@@ -672,4 +683,4 @@ window.onload = () => {
 };
 
 // Export functions
-export { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu };
+export { pause, updateStep, goToLastStep, updateMatch, updateSpeed, expandMenu, toggleFollowUnit };
