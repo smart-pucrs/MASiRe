@@ -1,6 +1,4 @@
 ## [Unreleased]
-
-## 14/10/2020
 ### Added
 - Changelog to keep track of changes
 - New metrics: victim discovered, hidden, known
