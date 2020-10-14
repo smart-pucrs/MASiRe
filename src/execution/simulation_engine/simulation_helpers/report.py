@@ -1,16 +1,22 @@
+import json 
 class Report(object):
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Report, cls).__new__(cls)
             cls.total_events = 0
-            cls._victim = _Victim()
-            cls.victims = property(fget=lambda self: self._victim)
-            cls._photo = _Photo()
-            cls.photos = property(fget=lambda self: self._photo)
-            cls._sample = _Sample()
-            cls.samples = property(fget=lambda self: self._sample)
+            cls.instance.victim = _Victim()
+            cls.victims = property(fget=lambda self: self.victim)
+            cls.instance.photo = _Photo()
+            cls.photos = property(fget=lambda self: self.photo)
+            cls.instance.sample = _Sample()
+            cls.samples = property(fget=lambda self: self.sample)
         return cls.instance
+    
+    def dict(self):
+        return self.__dict__.copy()
+    def to_json(self):
+        return json.dumps(self.dict(), default=lambda o: o.dict())
 
 class _Victim(object):
     def __init__(self):
@@ -18,6 +24,7 @@ class _Victim(object):
         self._hidden = 0
         self._rescued_alive = 0
         self._rescued_dead = 0
+        self._discovered = 0
 
     @property
     def total(self):
@@ -38,6 +45,13 @@ class _Victim(object):
         self._hidden += value
     
     @property
+    def discovered(self):
+        return self._hidden
+    @discovered.setter
+    def discovered(self, value):
+        self._discovered += value
+    
+    @property
     def dead(self):
         return self._rescued_dead
     @dead.setter
@@ -54,6 +68,8 @@ class _Victim(object):
     @property
     def ignored(self):
         return self.total - (self._rescued_alive+self._rescued_dead)
+    def dict(self):
+        return {'known': self.known, 'hidden': self.hidden, 'discovered': self.discovered, 'rescued_alive': self.alive, 'rescued_dead': self.dead}
 
 class _Sample(object):
     def __init__(self):
@@ -77,6 +93,8 @@ class _Sample(object):
     @property
     def ignored(self):
         return self._request - self._collected
+    def dict(self):
+        return {'requested': self.request, 'collected': self.collected}
 
 class _Photo(object):
     def __init__(self):
@@ -108,6 +126,8 @@ class _Photo(object):
     @property
     def ignored(self):
         return self._request - self._collected
+    def dict(self):
+        return {'requested': self.request, 'collected': self.collected, 'analysed': self.analysed}
 
 
 

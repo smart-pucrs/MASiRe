@@ -567,12 +567,13 @@ def notify_monitor(event, response):
         url = f'{url}/match/{match}/info/map'
 
     elif event == percepts_event:
-        info = json_formatter.percepts_monitor_format(response)
-        match = controller.get_current_match()
-        url = f'{url}/match/{match}/step'
+        # info = json_formatter.percepts_monitor_format(response)
+        info = { key: response[key] for key in ['environment', 'actors', 'partial_report'] }
+        # match = controller.get_current_match()
+        url = f'{url}/match/{controller.get_current_match()}/step'
 
     elif event == end_event:
-        info = json_formatter.end_monitor_format(response)
+        info = json_formatter.end_monitor_format(response)        
         match = controller.get_current_match()
         url = f'{url}/match/{match}/info/report'
 

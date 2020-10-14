@@ -5,6 +5,7 @@ import pathlib
 import traceback
 from simulation_engine.copycat import CopyCat
 from simulation_engine.simulation_helpers.logger import Logger
+from simulation_engine.simulation_helpers.report import Report
 import logging
 
 logger = logging.getLogger(__name__)
@@ -112,7 +113,7 @@ class JsonFormatter:
 
             if response:
                 response['agents'] = [{'asset': self.jsonify_asset(initial_percepts['agent_percepts'])}]
-                response['map_percepts'] = initial_percepts['map_percepts']
+                response['map_percepts'] = initial_percepts['map_percepts']                
                 response['status'] = 1
                 response['message'] = 'Social asset connected.'
 
@@ -268,7 +269,7 @@ class JsonFormatter:
             Logger.normal(message)
 
             return {'status': 1, 'actors': json_actors, 'environment': environment,
-                    'map_percepts': map_percepts, 'message': message}
+                    'map_percepts': map_percepts, 'partial_report': Report().to_json(), 'message': message}
 
         except Exception as e:
             logger.error(e,exc_info=True)
@@ -332,11 +333,11 @@ class JsonFormatter:
                 # return {'status': 2, 'requests': response[3], 'messages': messages,
                 #         'current_step': current_step, 'message': 'Step completed.'}
                 return {'status': 2, 'requests': response[3], 'messages': messages,
-                        'current_step': current_step, 'message': 'Step completed.','actors': json_actors,'environment': environment}
+                        'current_step': current_step, 'message': 'Step completed.','actors': json_actors,'environment': environment, 'partial_report': Report().to_json()}
 
             Logger.normal('Step processed.')
 
-            return {'status': 1, 'actors': json_actors, 'environment': environment, 'message': 'Step completed.'}
+            return {'status': 1, 'actors': json_actors, 'environment': environment, 'partial_report': Report().to_json(), 'message': 'Step completed.'}
 
         except Exception as e:            
             logger.error(e,exc_info=True)

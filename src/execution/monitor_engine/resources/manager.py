@@ -13,7 +13,7 @@ monitor_manager = MonitorManager()
 def record_simulation():
     current_date = date.today().strftime('%d-%m-%Y')
     hours = time.strftime("%H:%M:%S")
-    file_name = f'REPLAY_of_{current_date}_at_{hours}.txt'
+    file_name = f'REPLAY_of_{current_date}_at_{hours}.json'
 
     abs_path = os.getcwd() + '/replays/' + file_name
 
