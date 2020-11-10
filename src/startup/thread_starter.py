@@ -5,6 +5,7 @@ from multiprocessing import Process
 from src.startup.environment_handler import Handler
 from src.startup.arguments_parser import Parser
 from src.startup.configuration_checker import Checker
+import os
 
 
 class Starter:
@@ -104,15 +105,15 @@ class Starter:
 
         Note that this method only returns when the processes end."""
 
-        api_path = str((self.root / 'execution' / 'api.py').absolute())
+        api_path = os.getcwd() + '/masire/api.py'
         api_process_arguments = (api_path, api_arguments, self.env_handler.venv_path, python_version)
         api_process = Process(target=self.start_api, args=api_process_arguments, daemon=True)
 
-        simulation_path = str((self.root / 'execution' / 'simulation.py').absolute())
+        simulation_path = os.getcwd() + '/masire/simulation.py'
         simulation_process_arguments = (simulation_path, simulation_arguments, self.env_handler.venv_path, python_version)
         simulation_process = Process(target=self.start_simulation, args=simulation_process_arguments, daemon=True)
 
-        monitor_path = str((self.root / 'execution' / 'monitor.py').absolute())
+        monitor_path = os.getcwd() + '/monitor/monitor.py'
         monitor_process_arguments = (monitor_path, monitor_arguments, self.env_handler.venv_path, python_version)
         monitor_process = Process(target=self.start_monitor, args=monitor_process_arguments, daemon=True)
 

@@ -21,7 +21,7 @@ if __name__ == '__main__':
     monitor_arguments, python_version = parser.get_arguments()
     env_handler.create_environment('', python_version)
 
-    monitor_path = os.getcwd() + '/src/execution/monitor.py'
+    monitor_path = os.getcwd() + '/monitor/monitor.py'
     monitor_process_arguments = (monitor_path, monitor_arguments, env_handler.venv_path, python_version)
     monitor_process = Process(target=start_monitor, args=monitor_process_arguments, daemon=True)
 
