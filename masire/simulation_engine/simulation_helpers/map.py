@@ -12,7 +12,7 @@ class Map:
     """Class that represents the map of the simulation, it holds all the functions about location and the map itself."""
 
     def __init__(self, map_config, proximity, movement_restrictions):
-        map_location = str((pathlib.Path(__file__).parents[4] / map_config['osm']).absolute())
+        map_location = str((pathlib.Path(__file__).parents[3] / map_config['osm']).absolute())
         self.router = pyroutelib3.Router("car", map_location)
         self.measure_unit = 100000
         self.proximity = proximity / self.measure_unit
