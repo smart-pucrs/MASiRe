@@ -1,4 +1,4 @@
-from monitor_engine.helpers.match import Match
+from helpers.match import Match
 
 
 class MonitorManager:

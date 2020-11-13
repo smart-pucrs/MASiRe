@@ -5,7 +5,7 @@ from datetime import date
 
 from flask import request
 from flask_restful import Resource, abort
-from monitor_engine.controllers.monitor_manager import MonitorManager
+from controllers.monitor_manager import MonitorManager
 
 monitor_manager = MonitorManager()
 
@@ -15,7 +15,7 @@ def record_simulation():
     hours = time.strftime("%H:%M:%S")
     file_name = f'REPLAY_of_{current_date}_at_{hours}.json'
 
-    abs_path = os.getcwd() + '/replays/' + file_name
+    abs_path = os.getcwd() + '/monitor/replays/' + file_name
 
     formatted_data = monitor_manager.format_simulation_data()
 

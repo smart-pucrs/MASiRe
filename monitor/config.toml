@@ -1,0 +1,15 @@
+record = true
+secret = "2D2CO1p4LVtdqhxXYRrG"
+config_path = "config/demonstration.json"
+replay_folder = "replay"
+
+[monitor]
+url = "127.0.0.1"
+port = "8000"
+
+[api]
+url = "127.0.0.1"
+port = "12345"
+
+
+  

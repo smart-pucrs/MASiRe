@@ -10,11 +10,13 @@
 - Hovering now displays the unit type
 - New icons for some menu options
 - Params in functions description to be more clear what is expected to receive
+- Configuration files as TOML files
 ### Changed
 - Graphical interface
 - Inline functions to arrow functions for better readability
 - Concatenated strings to string literals
 - Event listeners for buttons instead of JS functions in HTML
+- Decouples applications
 ### Fixed
 - Analysed photo was not adding the victims in the step perceptions
 - Route path was not changing size when zooming out the map
