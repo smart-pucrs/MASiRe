@@ -10,8 +10,8 @@ from helpers.logger import Logger
 from flask_restful import Api
 from resources.manager import SimulationManager, MatchInfoManager, MatchStepManager
 
-PATH_TEMPLATES = 'monitor_engine/graphic_interface/templates'
-PATH_STATIC = 'monitor_engine/graphic_interface/static'
+PATH_TEMPLATES = 'graphic_interface/templates'
+PATH_STATIC = 'graphic_interface/static'
 PATH_CONFIG = 'monitor/config.toml'
 
 logging.basicConfig(format="[MONITOR] [%(levelname)s] %(message)s",level=logging.DEBUG)
