@@ -216,5 +216,22 @@
       "professions": ["doctor", "teacher", "nurse", "pharmacist", "photographer"]
     },
     "step_unit": 1
-  }
+  },
+  "facilities": [
+    {
+      "name": "Posto de Comando",
+      "lat": -20.1726,
+      "lon": -44.2104,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Area de Espera", 
+            "dist": [0,5] 
+        }
+      ],
+      "sub": 25  
+    }
+  ]
 }
+ 
