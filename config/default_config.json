@@ -227,7 +227,22 @@
       [
         {
             "name": "Area de Espera", 
-            "dist": [0,5] 
+            "dist": [0,5]
+        }
+      ],
+      "sub": 25  
+            
+    },
+    {
+      "name": "Base",
+      "lat": -20.1726,
+      "lon": -44.2104,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Area de Espera", 
+            "dist": [0,5]
         }
       ],
       "sub": 25  
