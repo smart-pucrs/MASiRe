@@ -235,17 +235,87 @@
     },
     {
       "name": "Base",
+      "lat": -20.3546,
+      "lon": -44.2264,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Posto de Comando", 
+            "dist": [0,0]
+        }
+      ],
+      "sub": 36  
+    },
+    {
+      "name": "Area de Espera",
+      "lat": -20.1826,
+      "lon": -44.2784,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Posto de Comando", 
+            "dist": [0,5]
+        }
+      ],
+      "sub": 18  
+    },
+    {
+      "name": "Area de Concentracao de Vitimas",
+      "lat": -20.1744,
+      "lon": -44.2134,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Base", 
+            "dist": [1,7]
+        }
+      ],
+      "sub": 63  
+    },
+    {
+      "name": "Acampamento",
+      "lat": -20.1646,
+      "lon": -44.2894,
+      "comunication": false,
+      "proxi":
+      [
+        {
+            "name": "Base", 
+            "dist": [0,18]
+        }
+      ],
+      "sub": 15  
+    },
+    {
+      "name": "Helibase",
+      "lat": -20.1946,
+      "lon": -44.2364,
+      "comunication": true,
+      "proxi":
+      [
+        {
+            "name": "Heliponto", 
+            "dist": [0,0]
+        }
+      ],
+      "sub": 29  
+    }
+    {
+      "name": "Heliponto",
       "lat": -20.1726,
       "lon": -44.2104,
       "comunication": true,
       "proxi":
       [
         {
-            "name": "Area de Espera", 
-            "dist": [0,5]
+            "name": "Helibase", 
+            "dist": [0,0]
         }
       ],
-      "sub": 25  
+      "sub": 29  
     }
   ]
 }
