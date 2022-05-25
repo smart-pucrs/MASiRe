@@ -13,7 +13,7 @@ Jinja2==2.10.1
 MarkupSafe==1.1.1
 monotonic==1.5
 osmapi==1.2.2
-PyJWT==1.7.1
+PyJWT==2.4.0
 pyroutelib3==1.1
 pytest==5.0.0
 python-dateutil==2.8.0
